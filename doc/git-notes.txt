@@ -1,3 +1,4 @@
+PJM 2013-02-15
 
 
 Notes on SpaceWarps git repository
@@ -6,9 +7,12 @@ Notes on SpaceWarps git repository
 SpaceWarps is a repo with two branches:
 
   master   = the development area
-  gh-pages = the published version, visible at 
+  gh-pages = the published web version, visible at 
                http://drphilmarshall.github.com/SpaceWarps
-               
+
+Both can be visualized at https://github.com/drphilmarshall/SpaceWarps, by
+clicking the "branch" button in the top left hand corner. 
+
 The workflow is:
   * Create and edit files in master
   * Commit changes, and push to origin master for others to pull down
@@ -16,20 +20,21 @@ The workflow is:
   
 gh-pages represents a stable version of the repository, that we are willing
 the world to see. It contains some additional directories and files, used in
-the formatting of the index.html page. The prototype webpages should be as
-clean as possible, to make it easy for the Zoo builders to take what they need
-from them.
+the formatting of the index.html page (javascripts, stylesheets, images, and
+params.json). The prototype webpages are very simply formatted, plain white on
+black, to make it easy for the Zoo builders to take what they need from them.
 
-To publish, you need to switch to the gh-pages branch, and merge master into
-it, like this:
+To publish the gh-pages website, you need to switch to the gh-pages branch,
+and merge master into it, like this:
 
 $  git checkout gh-pages
 $  git merge master
 
-The checkout command switches us to the master branch. At this point the
-master branch will no longer be visible in your local directory - git checkout
-is like a unix cd to a different virtual directory. To see which branch you
-are in at any given time, you can do 
+The checkout command switches us to the master branch, non-destructively. At
+this point the versions of the files in the master branch will no longer be
+visible in your local directory - git checkout is like a unix cd to a
+different virtual directory. To see which branch you are in at any given time,
+you can do 
 
 $ git branch
  * master
@@ -45,4 +50,9 @@ $  git push origin gh-pages
 
 Next time you push from the gh-pages branch, you won't need to specify the
 destimation like this, you can just git push.
-  
+
+Files can be edited on the github site itself, and this is to be encouraged -
+some people are not comfortable with command-line git operation. We must
+expect this, and remember to git pull regularly - and keep our command line
+commits and pushes frequent.
+

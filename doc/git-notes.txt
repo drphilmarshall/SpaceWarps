@@ -27,13 +27,22 @@ $  git checkout gh-pages
 $  git merge master
 
 The checkout command switches us to the master branch. At this point the
-master branch is no longer visible. The merge command takes the new files and
-changes and merges them in to the gh-pages folder. If everything is cool, you
-can then push to the remote github server, to update the website. You do this
-with git push - but because you are not pushing to the default destination, 
-origin master, you need to tell git where to push to:
+master branch will no longer be visible in your local directory - git checkout
+is like a unix cd to a different virtual directory. To see which branch you
+are in at any given time, you can do 
+
+$ git branch
+ * master
+   gh-pages
+
+The merge command takes the new files and changes and merges them in to the
+gh-pages folder. If everything is cool, you can then push to the remote github
+server, to update the website. You do this with git push - but the first time
+you do this you'll need to tell git where to push to, because you are not
+pushing to the default destination, origin master:
 
 $  git push origin gh-pages
 
-
+Next time you push from the gh-pages branch, you won't need to specify the
+destimation like this, you can just git push.
   

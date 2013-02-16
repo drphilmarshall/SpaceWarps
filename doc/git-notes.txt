@@ -1,0 +1,39 @@
+
+
+Notes on SpaceWarps git repository
+----------------------------------
+
+SpaceWarps is a repo with two branches:
+
+  master   = the development area
+  gh-pages = the published version, visible at 
+               http://drphilmarshall.github.com/SpaceWarps
+               
+The workflow is:
+  * Create and edit files in master
+  * Commit changes, and push to origin master for others to pull down
+  * When we want to "publish" webpages, merge master into gh-pages
+  
+gh-pages represents a stable version of the repository, that we are willing
+the world to see. It contains some additional directories and files, used in
+the formatting of the index.html page. The prototype webpages should be as
+clean as possible, to make it easy for the Zoo builders to take what they need
+from them.
+
+To publish, you need to switch to the gh-pages branch, and merge master into
+it, like this:
+
+$  git checkout gh-pages
+$  git merge master
+
+The checkout command switches us to the master branch. At this point the
+master branch is no longer visible. The merge command takes the new files and
+changes and merges them in to the gh-pages folder. If everything is cool, you
+can then push to the remote github server, to update the website. You do this
+with git push - but because you are not pushing to the default destination, 
+origin master, you need to tell git where to push to:
+
+$  git push origin gh-pages
+
+
+  

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<!-- ===================================================================== -->
+<head>
+	<meta charset='utf-8' />
+	<title>SpaceWarps: Playground</title>
+
+	<script type="text/javascript" src="https://raw.github.com/slowe/lensjs/master/lens.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/slowe/lensjs/master/canvas.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/jasondavies/conrec.js/master/conrec.js"></script>
+	<script type="text/javascript" src="https://raw.github.com/slowe/LensToy/master/lenstoy.js"></script>
+	<!--[if lt IE 9]><script src="excanvas.min.js"></script><![endif]-->
+	<script type="text/javascript">
+
+	window.onload = function(e){ 
+
+		// Create three LensToy objects. Their IDs are that of their <div>s
+        // Attach a function to the load event, and then load a particular
+		// model.
+        
+        var toygalaxy = new LensToy({id:'galaxy'});
+		var toygalaxyoffmsg = "This is a massive galaxy.";
+		toygalaxy.bind("mouseout",function(){
+			this.setStatus(toygalaxyoffmsg);
+		}).bind("loadimage",function(){
+			this.setStatus(toygalaxyoffmsg);
+		});
+		toygalaxy.init('CFHTLS-galaxy');
+
+        var toycluster = new LensToy({id:'cluster'});
+		var toyclusteroffmsg = "This is a cluster of galaxies.";
+		toycluster.bind("mouseout",function(){
+			this.setStatus(toyclusteroffmsg);
+		}).bind("loadimage",function(){
+			this.setStatus(toyclusteroffmsg);
+		});
+		toycluster.init('CFHTLS4-cluster');
+
+        var toyfield = new LensToy({id:'field'});
+		var toyfieldoffmsg = "This is a field of galaxies.";
+		toyfield.bind("mouseout",function(){
+			this.setStatus(toyfieldoffmsg);
+		}).bind("loadimage",function(){
+			this.setStatus(toyfieldoffmsg);
+		});
+		toyfield.init('CFHTLS4-field');
+
+	}
+	</script>
+
+	<style>
+	body {
+		font-family: 'Myriad Pro',Calibri,Helvetica,Arial,sans-serif;
+		background-color: black;
+		color: white;
+	}
+	h1, h2, h3, h4 { font-family: 'Lucida Grande','Calibri',Helvetica,Arial,sans-serif; }
+	h1 { margin-bottom: 0.5em; }
+	a { color: #5555aa; }
+	#galaxy { border: 2px solid #606060; }
+	#galaxyimg { border: 2px solid #606060; }
+	#cluster { border: 2px solid #606060; }
+	#clusterimg { border: 2px solid #606060; }
+	#field { border: 2px solid #606060; }
+	#fieldimg { border: 2px solid #606060; }
+	code { color: #5555aa; }
+	pre { color: #5555aa; }
+    
+	#intro { margin-bottom: 0.5em; height: 80px; width: 900px; margin-bottom: 1em; }
+	
+    #individuals { position: relative; height:450px; width: 900px; }
+    
+    #first { position: absolute; left: 25px; bottom: 50px; height:400px; width: 400px; cursor: crosshair; }
+    #second { position: absolute; left: 475px; bottom: 50px; height:400px; width: 400px; cursor: crosshair; }
+
+	#galaxy, #galaxyimg { width:400px; height:400px; }
+	#cluster, #clusterimg { width:400px; height:400px; }
+	#field, #fieldimg { width:400px; height:400px; }
+	
+    #forkme_banner {
+		background: url("http://slowe.github.com/graph/images/blacktocat.png") no-repeat scroll 95% 50% #0090FF;
+		border-bottom-left-radius: 2px;
+		border-bottom-right-radius: 2px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+		color: #FFFFFF;
+		display: block;
+		font-weight: 700;
+		padding: 10px 50px 10px 10px;
+		position: absolute;
+		right: 10px;
+		top: 0;
+		z-index: 10;
+		text-decoration: none;
+	}
+	#page {
+		margin: 20px;
+	}
+	</style>
+
+</head>
+<!-- ===================================================================== -->
+<body>
+
+	<div id="page">
+		<header class="inner">
+			<h3>SpaceWarps</h1>
+            <h1>Gravitational Lens Playground</p>
+		</header>
+
+		<div id="intro">
+            <p>Below are three images from the CFHTLS survey, that do not
+            contain any gravitational lenses. But what would the images  look
+            like if there really was a distant faint blue galaxy right behind 
+            one of the massive yellow galaxies shown? Well, you can find out
+            by moving your mouse over each image. Have fun, spotters!
+            </p>
+        </div>
+
+        <div id="individuals">
+            <div id="first">
+			    <img id="galaxyimg" src="https://raw.github.com/slowe/LensToy/master/SL2SJ140156+554446_irg_100x100.png" style="z-index:1;position:absolute;"/>
+                <div id="galaxy" style="z-index:10;position:absolute;"></div>
+            </div>
+
+            <div id="second">
+			    <img id="clusterimg" src="https://raw.github.com/slowe/LensToy/master/SL2SJ140156+554446_irg_100x100.png" style="z-index:1;position:absolute;"/>
+                <div id="cluster" style="z-index:10;position:absolute;"></div>
+		    </div>
+		</div>
+        
+        <div id="individuals">
+            <div id="first">
+                <p>In the two images above, we've zoomed in on two types of
+                lens,  a massive galaxy (above left) and a cluster of galaxies
+                (above right). To see these lenses in context, we've simulated 
+                the lensing effects in one of the CFHTLS survey images, on the
+                right. Notice the size of the arcs and rings!</p> 
+            </div>
+
+            <div id="second">
+			    <img id="fieldimg" src="https://raw.github.com/slowe/LensToy/master/SL2SJ140156+554446_irg_100x100.png" style="z-index:1;position:absolute;"/>
+                <div id="field" style="z-index:10;position:absolute;"></div>
+		    </div>
+		</div>
+        
+        
+        <p align="left"><font size=-1>The LensToy software used in these
+        simulations can be found at <a href="https://github.com/slowe/LensToy">https://github.com/slowe/LensToy</a></p>
+	
+	</div>
+
+</body>
+</html>

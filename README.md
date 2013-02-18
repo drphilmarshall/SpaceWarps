@@ -19,3 +19,4 @@ Contact
 * Phil Marshall ([Physics Department, University of Oxford](http://www2.physics.ox.ac.uk/research/astrophysics))
 * Aprajita Verma ([Physics Department, University of Oxford](http://www2.physics.ox.ac.uk/research/astrophysics))
 * Anupreeta More ([Kavli IPMU, University of Tokyo](http://www.ipmu.jp/))
+* Stuart Lowe ([LCOGT](http://lcogt.net/))

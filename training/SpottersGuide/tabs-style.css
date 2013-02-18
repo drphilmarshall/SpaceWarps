@@ -53,7 +53,7 @@ From date: 2013-02-16
 
 #boxes{
 	position: relative;
-	min-height: 450px;
+	min-height: 500px;
 }
 
 #boxes h1, #boxes h2, #boxes h3{
@@ -73,7 +73,7 @@ From date: 2013-02-16
 	top:0;
 	left:0;
 	width: 850px;
-	min-height: 400px;
+	min-height: 450px;
 	background: #202020;
 }
 

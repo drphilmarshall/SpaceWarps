@@ -1,9 +1,24 @@
-<!DOCTYPE html>
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <!-- ===================================================================== -->
-<head>
+
+<head profile="http://gmpg.org/xfn/11">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8" /><!--[if lte IE 7]><meta http-equiv="X-UA-Compatible" content="chrome=1"><![endif]--> 
+
 	<meta charset='utf-8' />
+    
 	<title>SpaceWarps: Spotter's Guide</title>
+
+    <!-- Original stylesheets:
+	<link rel="stylesheet" href="http://htmlrockstarsdemo.com/playground/tab-example/reset.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="http://htmlrockstarsdemo.com/playground/tab-example/style.css" type="text/css" media="screen" />
+	-->
+    
+    <!-- Tweaked versions! -->
+    <link rel="stylesheet" href="tabs-reset.css" type="text/css" media="screen" />
+	<link rel="stylesheet" href="tabs-style.css" type="text/css" media="screen" />
 
 	<style type="text/css">
 	body {
@@ -14,17 +29,15 @@
 	h1, h2, h3, h4 { font-family: 'Lucida Grande','Calibri',Helvetica,Arial,sans-serif; }
 	h1 { margin-bottom: 0.5em; }
 	a { color: #5555aa; }
-	#lenstoy { border: 2px solid #606060; }
-	#lensimg { border: 2px solid #606060; }
 	code { color: #5555aa; }
 	pre { color: #5555aa; }
-	#main { position: relative; height:auto; }
-	#status { margin-bottom: 0.5em; }
-	#lenstoy, #lensimg { width:400px; height:400px; cursor: crosshair; }
+	#main { position: relative; height: 50px; }
+	#box { position: absolute; left: 50px; top: -80px; }
 	#page {
 		margin: 20px;
 	}
 	</style>
+
 </head>
 <!-- ===================================================================== -->
 <body>
@@ -36,10 +49,45 @@
 		</header>
 
 		<div id="main">
-        	<p>Content to come!</p>
+        	<p>Explanatory text here?</p>
+
+		    <div id="box">
+
+	            <ul id="menu">
+		            <li><a href="#lenses">Lenses</a></li>
+		            <li><a href="#maybes">Maybes</a></li>
+		            <li><a href="#nonlenses">Non-Lenses</a></li>
+	            </ul><!-- e tab menu -->
+
+	            <ul id="boxes">
+
+		            <li id="lenses" class="box">
+			            <h2>Lenses</h2>
+			            <p>This is where a carousel of lenses will go</p>
+			            <span></span>
+		            </li>
+		            <li id="maybes" class="box">
+			            <h2>Maybes</h2>
+			            <p>This is where a carousel of things that might be lenses will go</p>
+			            <span></span>
+		            </li>
+		            <li id="nonlenses" class="box">
+			            <h2>Non-lenses</h2>
+			            <p>This is where a carousel of non-lenses will go</p>
+			            <span></span>
+		            </li>
+
+	            </ul><!-- e: boxes -->
+
+
+	        </div><!-- e: global wrapping #box -->
         </div>
-	
+
 	</div>
 
 </body>
+<!--[if lt IE 7]><script type="text/javascript" src="scripts/unitpngfix.js"></script><![endif]-->
 </html>
+
+<!-- ===================================================================== -->
+

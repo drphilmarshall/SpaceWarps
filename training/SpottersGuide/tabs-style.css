@@ -87,19 +87,37 @@ From date: 2013-02-16
 	z-index:0;
 }
 
-#lenses span{			
+#lensedquasars span{			
+	left:100px;
+	width: 100px;
+	background: #00ff00;
+}
+
+#galaxylenses span{			
 	left:0;
 	width: 100px;
 	background: #00ff00;
 }
 
-#maybes span{			
+#clusterlenses span{			
 	left:100px;
 	width: 100px;
-	background: #ffcc00;
+	background: #00ff00;
 }
 
-#nonlenses span{			
+#spiralsandrings span{			
+	left:200px;
+	width: 100px;
+	background: #ff0000;
+}	
+
+#loners span{			
+	left:200px;
+	width: 100px;
+	background: #ff0000;
+}	
+
+#lightweights span{			
 	left:200px;
 	width: 100px;
 	background: #ff0000;

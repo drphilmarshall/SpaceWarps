@@ -18,32 +18,32 @@
         // Attach a function to the load event, and then load a particular
 		// model.
         
-        var toygalaxy = new LensToy({id:'galaxy'});
+        var toygalaxy = new LensToy({id:'galaxy', pixscale:0.186/4.0});
 		var toygalaxyoffmsg = "This is a massive galaxy.";
 		toygalaxy.bind("mouseout",function(){
 			this.setStatus(toygalaxyoffmsg);
 		}).bind("loadimage",function(){
 			this.setStatus(toygalaxyoffmsg);
 		});
-		toygalaxy.init('CFHTLS-galaxy');
+		toygalaxy.init('CFHTLS_galaxy');
 
-        var toycluster = new LensToy({id:'cluster'});
-		var toyclusteroffmsg = "This is a cluster of galaxies.";
+        var toycluster = new LensToy({id:'cluster', pixscale:0.186/2.0});
+		var toyclusteroffmsg = "This is a small cluster of galaxies.";
 		toycluster.bind("mouseout",function(){
 			this.setStatus(toyclusteroffmsg);
 		}).bind("loadimage",function(){
 			this.setStatus(toyclusteroffmsg);
 		});
-		toycluster.init('CFHTLS4-cluster');
+		toycluster.init('CFHTLS_group');
 
-        var toyfield = new LensToy({id:'field'});
-		var toyfieldoffmsg = "This is a field of galaxies.";
+        var toyfield = new LensToy({id:'field', pixscale:0.186/1.0});
+		var toyfieldoffmsg = "This is the CFHTLS image that contains these objects.";
 		toyfield.bind("mouseout",function(){
 			this.setStatus(toyfieldoffmsg);
 		}).bind("loadimage",function(){
 			this.setStatus(toyfieldoffmsg);
 		});
-		toyfield.init('CFHTLS4-field');
+		toyfield.init('CFHTLS_field');
 
 	}
 	</script>
@@ -73,9 +73,9 @@
     #first { position: absolute; left: 25px; bottom: 50px; height:400px; width: 400px; cursor: crosshair; }
     #second { position: absolute; left: 475px; bottom: 50px; height:400px; width: 400px; cursor: crosshair; }
 
-	#galaxy, #galaxyimg { width:400px; height:400px; }
-	#cluster, #clusterimg { width:400px; height:400px; }
-	#field, #fieldimg { width:400px; height:400px; }
+	#galaxy, #galaxyimg { width:440px; height:440px; }
+	#cluster, #clusterimg { width:440px; height:440px; }
+	#field, #fieldimg { width:440px; height:440px; }
 	
     #forkme_banner {
 		background: url("http://slowe.github.com/graph/images/blacktocat.png") no-repeat scroll 95% 50% #0090FF;
@@ -118,12 +118,12 @@
 
         <div id="individuals">
             <div id="first">
-			    <img id="galaxyimg" src="https://raw.github.com/slowe/LensToy/master/SL2SJ140156+554446_irg_100x100.png" style="z-index:1;position:absolute;"/>
+			    <img id="galaxyimg" src="https://raw.github.com/slowe/LensToy/master/CFHTLS_galaxy_110x110.png" style="z-index:1;position:absolute;"/>
                 <div id="galaxy" style="z-index:10;position:absolute;"></div>
             </div>
 
             <div id="second">
-			    <img id="clusterimg" src="https://raw.github.com/slowe/LensToy/master/SL2SJ140156+554446_irg_100x100.png" style="z-index:1;position:absolute;"/>
+			    <img id="clusterimg" src="https://raw.github.com/slowe/LensToy/master/CFHTLS_group_220x220.png" style="z-index:1;position:absolute;"/>
                 <div id="cluster" style="z-index:10;position:absolute;"></div>
 		    </div>
 		</div>
@@ -138,7 +138,7 @@
             </div>
 
             <div id="second">
-			    <img id="fieldimg" src="https://raw.github.com/slowe/LensToy/master/SL2SJ140156+554446_irg_100x100.png" style="z-index:1;position:absolute;"/>
+			    <img id="fieldimg" src="https://raw.github.com/slowe/LensToy/master/CFHTLS_field_440x440.png" style="z-index:1;position:absolute;"/>
                 <div id="field" style="z-index:10;position:absolute;"></div>
 		    </div>
 		</div>

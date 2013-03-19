@@ -1,0 +1,223 @@
+goto MAKEGUIDEEXAMPLES
+# ==============================================================================
+# 2013-02-21 (Thursday) 21:33 GMT
+# 
+# First go at images for spotters guide. 3 tabs, yes, no and maybe. 
+# Don't have lenses yet for yes's, but pull out good non-lenses at least.
+
+cd data/nonlensd
+
+# Non-lenses
+cp CFHTLS_008_10921_6476_b_gri.png   ../../nonlens1.png
+cp CFHTLS_022_14405_13384_b_gri.png  ../../nonlens2.png
+cp CFHTLS_036_2134_6479_b_gri.png    ../../nonlens3.png
+cp CFHTLS_050_8615_13075_b_gri.png   ../../nonlens4.png
+cp CFHTLS_077_9972_10681_b_gri.png   ../../nonlens5.png
+cp CFHTLS_084_6943_2087_b_gri.png    ../../nonlens6.png
+cp CFHTLS_101_10091_10348_b_gri.png  ../../nonlens7.png
+cp CFHTLS_110_1042_7688_b_gri.png    ../../nonlens8.png
+
+# Maybes
+cp CFHTLS_015_2408_17415_b_gri.png   ../../maybe1.png
+cp CFHTLS_018_5881_1770_b_gri.png    ../../maybe2.png
+cp CFHTLS_037_14149_5348_b_gri.png   ../../maybe3.png
+cp CFHTLS_042_9918_12888_b_gri.png   ../../maybe4.png
+cp CFHTLS_067_14065_10114_b_gri.png  ../../maybe5.png
+cp CFHTLS_077_14988_7659_b_gri.png   ../../maybe6.png
+cp CFHTLS_127_14761_12379_b_gri.png  ../../maybe7.png
+cp CFHTLS_152_7089_17977_b_gri.png   ../../maybe8.png
+
+# ==============================================================================
+# 2013-03-01 (Friday) 13:43 GMT
+# 
+# Email from Anu:
+# 
+# 
+#    Hi Phil and Aprajita,
+# 
+#    I think its best that I send you tar files of the pngs and we maintain our
+#    own catalogs with our comments/remarks/votes -- let's decide beforehand
+#    what keywords/categories to use and what to vote and how.
+# 
+#    Once we all are done, we combine our catalogs and share it online.
+# 
+#    You will find the tar files here:
+# 
+#    1. Claude's sample
+# 
+#    http://member.ipmu.jp/anupreeta.more/claudepngs.tgz -- most of them are
+#    ring galaxies or face on spirals, some are known sarcs / ring lenses
+# 
+#    2. Rings sample
+# 
+#    http://member.ipmu.jp/anupreeta.more/ringpngs.tgz -- most look fine to me,
+#    so they might be worth adding.
+# 
+#    Note some candidates are repeated since they are at the edges of the
+#    cutouts.
+# 
+#    3. Sarcs sample
+# 
+#    http://member.ipmu.jp/anupreeta.more/sarcspngs.tgz sorry, I don't have a
+#    well maintained list of followed-up list. There's a "good" candidate list
+#    based on average ranking but I've included the all A/B/C category lens
+#    candidates. If some candidates are not interesting (from any point of
+#    view), we can simply exclude them.
+# 
+#    cheers,
+# 
+#    Anu
+
+wget http://member.ipmu.jp/anupreeta.more/claudepngs.tgz
+wget http://member.ipmu.jp/anupreeta.more/ringpngs.tgz
+wget http://member.ipmu.jp/anupreeta.more/sarcspngs.tgz
+
+# Unpack tarballs from Anu, make galleries:
+
+gallery.pl -pdf -x 3 -y 3 -t -s 15 -o claudepngs_gallery.pdf claudepngs/CFHTLS_*gri.png
+gallery.pl -pdf -x 3 -y 3 -t -s 15 -o ringpngs_gallery.pdf ringpngs/CFHTLS_*gri.png
+gallery.pl -pdf -x 3 -y 3 -t -s 15 -o sarcspngs_gallery.pdf sarcspngs/CFHTLS_*gri.png
+
+# OK, pull out nice arcs, rings and multiples:
+
+# Arcs: bright, curved, aligned. Group-scale. Sarcs.
+
+set arcs = ( \
+CFHTLS_001_1554 \
+CFHTLS_010_0185 \
+CFHTLS_037_1973 \
+CFHTLS_045_1236 \
+CFHTLS_052_1191 \
+CFHTLS_082_0780 \
+CFHTLS_121_0769 \
+CFHTLS_085_0354 \
+)
+set pngs = ()
+foreach arc ($arcs )
+  set pngs = ( $pngs sarcspngs/${arc}_gri.png )
+end
+gallery.pl -pdf -x 3 -y 3 -t -s 15 -o Top8arcs_gallery.pdf $pngs
+
+# Rings: bright, curved, aligned. Galaxy-scale. Rings
+
+set rings = ( \
+CFHTLS_039_1471 \
+CFHTLS_102_0141 \
+CFHTLS_105_1740 \
+CFHTLS_106_0865 \
+CFHTLS_109_1055 \
+CFHTLS_119_0705 \
+CFHTLS_124_0182 \
+CFHTLS_169_0217 \
+)
+set pngs = ()
+foreach ring ($rings )
+  set pngs = ( $pngs ringpngs/${ring}_gri.png )
+end
+gallery.pl -pdf -x 3 -y 3 -t -s 15 -o Top8rings_gallery.pdf $pngs
+
+# Multiples: bright, point sources, arranged. Galaxy-scale.
+
+# None in Claude's list. Need sims!!
+
+# Non-lenses:
+
+gallery.pl -pdf -x 3 -y 3 -t -s 15 -o nonlensd_gallery.pdf nonlensd/CFHTLS_*gri.png
+
+# ==============================================================================
+# 2013-03-02 (Saturday) 21:37 GMT
+
+# OK, pick 9 non-lenses and 9 lenses for guide. Avoid maybes for now as they are
+# potentially confusing...
+# Make zooms, and copy images into subdirs.
+
+# NB! convert measures x and y from TOP LEFT HAND CORNER OF IMAGE!
+#  -----> x
+# |
+# |
+# |
+# V
+# y
+# -crop WXxWY+X0+Y0  where
+#  WX and WY are the width and height of the cropped image, and
+#  (X0,Y0) is the top left hand corner of the crop box in pixel coords.
+
+
+MAKEGUIDEEXAMPLES:
+
+cd data
+
+mkdir -p ../lenses/galaxy-galaxy ../lenses/cluster-galaxy ../lenses/galaxy-quasar
+mkdir -p ../non-lenses/spirals-rings ../non-lenses/loners ../non-lenses/lightweights
+
+# Non-lenses:
+
+set png = nonlensd/CFHTLS_008_10921_6476_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/spirals-rings/
+
+set png = claudepngs/CFHTLS_001_1555_gri.png
+convert -crop 88x88+234+164 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/spirals-rings/
+
+set png = claudepngs/CFHTLS_074_0786_gri.png
+convert -crop 88x88+68+108 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/spirals-rings/
+
+
+set png = nonlensd/CFHTLS_050_8615_13075_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/loners/
+
+set png = nonlensd/CFHTLS_101_10091_10348_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/loners/
+
+set png = nonlensd/CFHTLS_110_1042_7688_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/loners/
+
+
+set png = nonlensd/CFHTLS_022_14405_13384_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/lightweights/
+
+set png = nonlensd/CFHTLS_084_6943_2087_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/lightweights/
+
+set png = nonlensd/CFHTLS_152_7089_17977_b_gri.png
+convert -crop 88x88+176+176 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../non-lenses/lightweights/
+
+# Lenses:
+
+set png = ringpngs/CFHTLS_105_1740_gri.png
+convert -crop 88x88+199+0 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../lenses/galaxy-galaxy/
+
+set png = ringpngs/CFHTLS_039_1471_gri.png
+convert -crop 88x88+268+216 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../lenses/galaxy-galaxy/
+
+set png = ringpngs/CFHTLS_109_1055_gri.png
+convert -crop 88x88+350+8 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../lenses/galaxy-galaxy/
+
+
+set png = sarcspngs/CFHTLS_037_1973_gri.png
+convert -crop 88x88+246+323 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../lenses/cluster-galaxy/
+
+set png = sarcspngs/CFHTLS_052_1191_gri.png
+convert -crop 88x88+218+236 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../lenses/cluster-galaxy/
+
+set png = sarcspngs/CFHTLS_001_1554_gri.png
+convert -crop 88x88+86+11 $png ${png:r}_zoom.png
+cp ${png:r}*.png ../lenses/cluster-galaxy/
+
+goto FINISH
+
+# ==============================================================================
+FINISH:

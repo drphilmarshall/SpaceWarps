@@ -1,0 +1,105 @@
+
+Email from Cliff Johnson, Wednesday April 3rd 2013:
+
+
+Hi,
+
+I've written up a basic layout of how I extracted the data I wanted and
+provide the commands I used.  This is pretty quick-and-dirty, so please let me
+know where you need more explanation/info and I'll try to fill in the gaps. 
+Good luck!
+
+Cheers,
+Cliff
+
+----------
+
+Overview:
+
+I opted to install Mongo locally on my laptop and use commands to a Mongo
+shell (JS-based) and other included utilities to output a CSV file with the
+data I wanted from the database.  Installation was easy, and fortunately for
+me the volume of data produced by Andromeda Project (AP from here on out) was
+never too much to handle on my personal machine (although this might differ
+for your project...).  Here are the basic steps I took:
+
+1) Start a local MongoDB server and restore the project DB from BSON dump
+files.
+
+2) Use a Mongo aggregation pipeline to select fields of interest from the
+"andromeda_classifications" collection.  More importantly, this was how I
+handled the fact that I wanted to extract content from embedded subdocuments
+by using the $unwind aggregation operator.  Specifically for AP: each of my
+classification documents has 0 or more object identifications that I would
+like to output as individual rows in my final CSV file.  Also, you'll see
+below that I had to perform this aggregation 25k documents at a time due to
+memory limits placed on intermediate and final aggregation results (see this
+link for a full explanation).  This is certainly the hackiest part of my
+processing, but it gets the job done.
+
+3) Place aggregation results into a new collection, which I called
+"cleanclass".
+
+4) Once the whole classification is processed, output the appropriate
+"cleanclass" fields to a CSV file using a data export utility.
+
+----------
+
+SQL-to-MongoDB Glossary:
+table = collection
+row/record = document
+column = field
+
+Mongo Aggregation Operators:
+$project = used to select columns of interest
+$unwind = extract embedded fields from within subdocuments, resulting in multiple output records from single original record
+$match = select records using conditionals
+
+----------
+
+My Input -- Example DB document for AP: see attached text file (ap_example_document.txt)
+
+My Output -- Example CSV Output:
+
+#object_id,class_id,subject_id,user_id,otype,p0x,p0y,p1x,p1y,p2x,p2y,p3x,p3y
+ObjectID(50ddcae62284bfa0d6b30fc2),ObjectID(50be70ed56175a253c00000a),ObjectID(50b781751a320e4aac000001),ObjectID(5013adf30454e27ae4000002),"cluster","0.1503448275862069","0.704","0.20551724137931035","0.718",,,,
+ObjectID(50ddcae62284bfa0d6b30fc6),ObjectID(50be70ed56175a253c00000a),ObjectID(50b781751a320e4aac000001),ObjectID(5013adf30454e27ae4000002),"cross","0.7779310344827586","0.028","0.9379310344827586","0.264","0.9434482758620689","0.046","0.7917241379310345","0.27"
+
+#Output Column = document field name of origin = field description
+object_id = _id from newly created cleanclass collection = ID for each cluster/galaxy/artifact 
+class_id = _id from original andromeda_classifications collection = ID for the classification (one per user submission), linking all objects drawn by a user during a single image classification
+subject_id = subject_ids.0  = ID for the image classified (is an array, but only ever contains one entry)
+user_id = user_id = ID for user who performed classification
+otype = annotations.species = annotation marker type (cluster, galaxy, etc)
+p0x,p0y,etc = e.g., annotations.points.0.x = output positions annotation locations (either 2 or 4, depending on marker type)
+
+----------
+
+Detailed Commands:
+
+#Start local Mongo server
+mongod
+
+#Reload from dump, where my target database is named "d4" and the d4 dir contains bson dump files
+mongorestore --db d4 d4/
+
+#Start Mongo shell with d4 db loaded
+mongo d4
+
+#Main Aggregation Pipeline: for the first 25000 documents (aka - records/rows), select the fields of interest (renaming columns in some cases), unwind annotations which are embedded as subdocuments, choose entries which have >0 annotations, and select fields of interest from the annotation subdocument.  Store the result temporarily as a variable.
+
+var result = db.andromeda_classifications.aggregate({$limit: 25000}, {$project: {_id:0,class_id:"$_id",subject_id:"$subject_ids",user_id:1,annotations:1} }, {$unwind: "$annotations"}, {$match: {"annotations.species":{$exists:1}} }, {$project: {_id:1,class_id:1,subject_id:1,user_id:1,otype:"$annotations.species",p0x:"$annotations.points.0.x",p0y:"$annotations.points.0.y",p1x:"$annotations.points.1.x",p1y:"$annotations.points.1.y",p2x:"$annotations.points.2.x",p2y:"$annotations.points.2.y",p3x:"$annotations.points.3.x",p3y:"$annotations.points.3.y"}  });
+
+#Insert the results of the aggregation pipeline into a new collection (which is created on the fly if not already existing)
+db.cleanclass.insert(result.result);
+
+#Iteration 2 & 3: same as above but for next two 25k document increments
+var result = db.andromeda_classifications.aggregate({$skip: 25000}, {$limit: 25000}, {$project: {_id:0,class_id:"$_id",subject_id:"$subject_ids",user_id:1,annotations:1} }, {$unwind: "$annotations"}, {$match: {"annotations.species":{$exists:1}} }, {$project: {_id:1,class_id:1,subject_id:1,user_id:1,otype:"$annotations.species",p0x:"$annotations.points.0.x",p0y:"$annotations.points.0.y",p1x:"$annotations.points.1.x",p1y:"$annotations.points.1.y",p2x:"$annotations.points.2.x",p2y:"$annotations.points.2.y",p3x:"$annotations.points.3.x",p3y:"$annotations.points.3.y"}  });
+db.cleanclass.insert(result.result);
+var result = db.andromeda_classifications.aggregate({$skip: 50000}, {$limit: 25000}, {$project: {_id:0,class_id:"$_id",subject_id:"$subject_ids",user_id:1,annotations:1} }, {$unwind: "$annotations"}, {$match: {"annotations.species":{$exists:1}} }, {$project: {_id:1,class_id:1,subject_id:1,user_id:1,otype:"$annotations.species",p0x:"$annotations.points.0.x",p0y:"$annotations.points.0.y",p1x:"$annotations.points.1.x",p1y:"$annotations.points.1.y",p2x:"$annotations.points.2.x",p2y:"$annotations.points.2.y",p3x:"$annotations.points.3.x",p3y:"$annotations.points.3.y"}  });
+db.cleanclass.insert(result.result);
+
+--and so on, until all documents are processed--
+
+#Quit Shell, run export utility on newly created collection, exporting specific fields
+mongoexport --csv --db d4 --collection cleanclass -f "_id","class_id","subject_id.0","user_id","otype","p0x","p0y","p1x","p1y","p2x","p2y","p3x","p3y" -o d4.csv

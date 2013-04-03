@@ -1,0 +1,95 @@
+> db.andromeda_classifications.findOne({'annotations.species':'cluster'});
+{
+	"_id" : ObjectId("50be70ed56175a253c00000a"),
+	"subject_ids" : [
+		ObjectId("50b781751a320e4aac000001")
+	],
+	"annotations" : [
+		{
+			"clientCreated" : "Tue, 04 Dec 2012 21:55:38 GMT"
+		},
+		{
+			"userAgent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/536.26.17 (KHTML, like Gecko) Version/6.0.2 Safari/536.26.17"
+		},
+		{
+			"species" : "cluster",
+			"points" : {
+				"0" : {
+					"x" : "0.1503448275862069",
+					"y" : "0.704"
+				},
+				"1" : {
+					"x" : "0.20551724137931035",
+					"y" : "0.718"
+				}
+			}
+		},
+		{
+			"species" : "cluster",
+			"points" : {
+				"0" : {
+					"x" : "0.1724137931034483",
+					"y" : "0.202"
+				},
+				"1" : {
+					"x" : "0.21655172413793103",
+					"y" : "0.216"
+				}
+			}
+		},
+		{
+			"species" : "galaxy",
+			"points" : {
+				"0" : {
+					"x" : "0.2896551724137931",
+					"y" : "0.612"
+				},
+				"1" : {
+					"x" : "0.3296551724137931",
+					"y" : "0.662"
+				}
+			}
+		},
+		{
+			"species" : "galaxy",
+			"points" : {
+				"0" : {
+					"x" : "0.8427586206896551",
+					"y" : "0.668"
+				},
+				"1" : {
+					"x" : "0.8827586206896552",
+					"y" : "0.692"
+				}
+			}
+		},
+		{
+			"species" : "cross",
+			"points" : {
+				"0" : {
+					"x" : "0.7779310344827586",
+					"y" : "0.028"
+				},
+				"1" : {
+					"x" : "0.9379310344827586",
+					"y" : "0.264"
+				},
+				"2" : {
+					"x" : "0.9434482758620689",
+					"y" : "0.046"
+				},
+				"3" : {
+					"x" : "0.7917241379310345",
+					"y" : "0.27"
+				}
+			}
+		}
+	],
+	"project_id" : ObjectId("507edef23ae74020d6000001"),
+	"workflow_id" : ObjectId("50be4f973ae7409761000001"),
+	"user_ip" : "78.86.87.135",
+	"user_id" : ObjectId("5013adf30454e27ae4000002"),
+	"tutorial" : true,
+	"created_at" : ISODate("2012-12-04T21:53:49.727Z"),
+	"updated_at" : ISODate("2012-12-04T21:53:49.727Z")
+}

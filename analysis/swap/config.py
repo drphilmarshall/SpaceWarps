@@ -1,0 +1,126 @@
+# ===========================================================================
+
+import os, glob
+
+# ======================================================================
+
+class Configuration(object):
+    """
+    NAME
+        Configuration
+
+    PURPOSE
+        Structure of metadata supplied by the SWAP user to define 
+        the analysis they want to do.
+
+    COMMENTS
+
+    INITIALISATION
+        configfile    Plain text file containing desired values of pars
+    
+    METHODS
+        read(self): from configfile, get par names and values
+        
+        convert(self): strings to numbers, and expand paths
+        
+        prepare(self): set up workspace
+        
+        getLightconePickleName(self,flavor,pointing=None): 
+
+    BUGS
+
+    AUTHORS
+      This file is part of the Space Warps project, and is distributed 
+      under the GPL v2 by the Space Warps Science Team.
+      http://spacewarps.org/
+
+      SWAP configuration is modelled on that written for the
+      Pangloss project, by Tom Collett (IoA) and Phil Marshall (Oxford).
+      https://github.com/drphilmarshall/Pangloss/blob/master/pangloss/config.py
+
+    HISTORY
+      2013-04-03  Started Marshall (Oxford)
+    """
+
+    def __init__(self,configfile):
+        self.file = configfile
+        self.parameters = {}
+        self.read()
+        self.convert()
+        self.prepare()
+        return
+
+    # ------------------------------------------------------------------
+    # Read in values by keyword and populate the parameters dictionary.
+
+    def read(self):
+        thisfile = open(self.file)
+        for line in thisfile:
+            # Ignore empty lines and comments:
+            if line[0:2] == '\n': continue
+            if line[0] == '#': continue
+            line.strip()
+            line = line.split('#')[0]
+            # Remove whitespace and interpret Name:Value pairs:
+            line = ''.join(line.split())
+            line = line.split(':')
+            Name, Value = line[0], line[1]
+            self.parameters[Name] = Value
+        thisfile.close()
+        return
+
+    # ------------------------------------------------------------------
+    # Convert string values into floats/ints where necessary, and expand
+    # environment variables.
+
+    def convert(self):
+
+        # Some values need to be floats or integers:
+        for key in self.parameters.keys():
+            try:
+                self.parameters[key] = float(self.parameters[key])
+            except ValueError:
+                pass
+                
+#         # Integers:
+
+#         intkeys = ['NCalibrationLightcones','NRealisations']
+#         for key in intkeys:
+#             self.parameters[key] = int(self.parameters[key])
+
+#         # Now sort out filenames etc:
+#         pathkeys = ['CalibrationCatalogs', 'CalibrationKappamaps',
+#                     'ObservedCatalog', 'CalibrationFolder', 'HMFfile']
+#         for key in pathkeys:
+#             paths = self.parameters[key]
+#             # Expand environment variables (eg $PANGLOSS_DIR)
+#             paths = os.path.expandvars(paths)
+#             # Expand wildcards - glob returns [] if no files found...
+#             found = glob.glob(paths)
+#             if len(found) > 0: paths = found
+#             # Make sure all paths are lists, for consistency:
+#             if len(paths[0]) == 1: paths = [paths]
+#             # Replace parameters:
+#             self.parameters[key] = paths
+# 
+#         # Calibration catalogs and kappa maps must come in pairs...
+#         assert len(self.parameters['CalibrationCatalogs']) == \
+#                len(self.parameters['CalibrationKappamaps'])
+            
+        return
+
+    # ------------------------------------------------------------------
+    # Perform various other preparations.
+
+    def prepare(self):
+
+        # Make directories if necessary:
+        # folderkeys = ['CalibrationFolder']
+        # for key in folderkeys:
+        #     folder = self.parameters[key]
+        #     fail = os.system('mkdir -p '+folder[0])
+
+        return
+
+# ======================================================================
+

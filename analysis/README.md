@@ -17,5 +17,9 @@ Mongo comes with a nice command line utility to restore a database from a dump. 
     spacewarps-Y-m-d_H-M-S.tar.gz
 
 Decompress it and run:
-
+    
+    # Spin up the mongo server
+    mongod
+    
+    # Load the database
     mongorestore spacewarps-Y-m-d_H-M-S

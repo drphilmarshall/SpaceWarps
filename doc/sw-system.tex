@@ -25,35 +25,11 @@
 
 \title[\sw I]
 {\SW: Crowd-sourcing the Discovery of Gravitational Lenses. 
-I: Experiment Design, and Testing with Simulated Data}
+I: System Design}
     
 \author[The \SW Collaboration]{%
   The \SW Collaboration:
-  Phil~Marshall,$^{1}$\thanks{\pjmemail}
-  Aprajita Verma,$^{1}$
-  Anupreeta More,$^{2}$
-\newauthor{%
-  Amit Kapadia,$^{3}$
-  David Miller,$^{3}$
-  Kelly Borden,$^{3}$
-  Arfon Smith,$^{3}$}
-\newauthor{%
-  Elisabeth Baeten,
-  Claude Cornen,
-  Cecile Faure,
-  Thomas Jennings,
-  Rafael Kueng,$^{4}$}
-\newauthor{%
-  Christine Macmillan,
-  Surhud More,$^{2}$
-  Prasenjit Saha,$^{4}$
-  Julianne Wilcox,
-  Layne Wright}
-  \medskip\\
-  $^1$\oxford\\
-  $^2$\ipmu\\
-  $^3$\adler\\
-  $^4$\zurich
+  % \input{authors.tex}
 }
 
 % This list is incomplete.
@@ -120,12 +96,14 @@ produced?
 \item How accurately can gravitational lenses be located on the sky
 during the identification process?
 
-\item How quickly can lenses be detected? How many classifiers are
-needed per target, and how quickly can they mobilise?
+\item How quickly can lenses be detected, and non-lenses be rejected?
+How many classifiers are needed per target, and how quickly can they
+mobilise?
 
 \end{itemize}
 
-In \Sref{sec:overview} we...
+In \Sref{sec:design} we introduce the \sw system, describing and
+explaining its various features. We then briefly 
 
 
 
@@ -133,6 +111,54 @@ In \Sref{sec:overview} we...
 
 \section{Experiment Design}
 \label{sec:design}
+
+Unfamiliar objects: need to learn what lenses look like, fast. Rare
+objects: need to be able to reject rapidly, and get through sample.
+Confusion with non-lenses: further filtering via scientific discussion
+and further classification (voting). 
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Tutorial Material}
+\label{sec:design:tutorial}
+
+Learning what lenses do: Spotter's Guide and LensToy. Learning how
+lenses work (science page, FAQ). 
+
+Inline tutorial. Merge into stream. Instant feedback, positive and
+negative. Anecdotal support for this.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{The Classification Interface}
+\label{sec:design:classification}
+
+Image presentation. Consistency in size and appearance. 
+
+Interface fast due to pre-loading of images, and minimizing interaction.
+
+Spotting lenses: Markers to be placed. Two reasons: first, to give good
+feedback. Second, to improve quality of discussion later.
+
+Quick dashboard provides simple ways to explore further: zoom, contrast
+controls.
+
+Non-lenses marked? Favourite button instead, enabling serendipitous
+discovery of other interesting things, separate from lenses.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Collaborative Filtering with ``Talk''}
+\label{sec:design:classification}
+
+Feeding in collections, following online analysis. 
+Taking subjects to Talk individually, too.
+
+Mental modeling. Further inspection on Dashboard. Voting. 
+
+Final sample generation.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -142,24 +168,54 @@ In \Sref{sec:overview} we...
 
 Training data and test data. Refer to Paper II for CFHTLS details.
 
-Presentation of images.
+Presentation of images. Arcsinh stretch, calibration. Approximately
+optimized.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Analysis}
-\label{sec:analysis}
+\section{Identification Analysis}
+\label{sec:IDanalysis}
 
-Interpreting clicks. Online analysis: update model of each volunteer,
-and estimate probability of classification.
+In this section we outline our methodology for interpreting the
+interactions of the volunteers with the identification interface.  Each
+classification made is logged in a database, storing subject IDs,
+(anonymous) volunteer IDs, a timestamp and the classification results. 
+The {\it kind} of subject -- whether it is a training subject (a 
+simulated lens or a known non-lens) or a test subject (an unseen image
+drawn from the survey) -- is also recorded. For all subjects, the
+positions of all Markers are recorded, in pixel coordinates. For
+training subjects, we also store the ``classification'' of the subject
+as a lens, or a non-lens, and also the type of object present in the
+image. These types are summarized in \Tref{tab:objecttypes}. 
+This classification is used to provide instant feedback, but is also the
+basic measurement used in a probabilistic classification of every
+subject based on all image views to date.
 
-Training data for tracking learning, and estimating completeness and
-purity.
+We perform a ``Pseudo-online'' analysis of the classifications, 
+updating a probabilistic model of every (anonymous) volunteer's
+expertise, and every subject (in both the training and test sets), on a
+daily basis. This allows us to track the speed with which the crowd
+learns about lenses, and also gives us a dynamic estimate of the
+posterior probability for  any given  subject being a lens, given all
+classifications of it. Assigning thresholds in this lens probability
+allows us to make good decisions about whether or not to accept a
+subject into the collection of candidates visible in \Talk, and also
+whether or not to  carry on classifying a subject at all. 
+
+In this paper we focus on the training data,  investigating  how the 
+crowd's ability to identify gravitational lenses during the course of
+the project, and the completeness and purity of the lens candidate
+sample generated.
+
+Where to describe probabilistic classifier stuff? Here or in an
+appendix? Not sure.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Results}
-\label{sec:results}
+\section{Identification Results}
+\label{sec:IDresults}
 
 Understanding crowd, so we can help them learn faster. Understanding
 images given the crowd, so we can find lenses.
@@ -174,6 +230,9 @@ images given the crowd, so we can find lenses.
 \subsection{Sample completeness and purity}
 \label{sec:results:learning}
 
+Vary the acceptance and rejection thresholds, look at completeness and
+purity as a function of this. How much time can be saved by retiring
+subjects into candidate list or rejection list?
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

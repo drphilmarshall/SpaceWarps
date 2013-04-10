@@ -1,0 +1,244 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Space Warps I: Experiment Design
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[useAMS,usenatbib,a4paper]{mn2e}
+%% letterpaper
+%% a4paper
+
+\voffset=-0.6in
+
+% Packages:
+\input psfig.sty
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Macros:
+\input{macros.tex}
+\input{addresses.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[\sw I]
+{\SW: Crowd-sourcing the Discovery of Gravitational Lenses. 
+I: Experiment Design, and Testing with Simulated Data}
+    
+\author[The \SW Collaboration]{%
+  The \SW Collaboration:
+  Phil~Marshall,$^{1}$\thanks{\pjmemail}
+  Aprajita Verma,$^{1}$
+  Anupreeta More,$^{2}$
+\newauthor{%
+  Amit Kapadia,$^{3}$
+  David Miller,$^{3}$
+  Kelly Borden,$^{3}$
+  Arfon Smith,$^{3}$}
+\newauthor{%
+  Elisabeth Baeten,
+  Claude Cornen,
+  Cecile Faure,
+  Thomas Jennings,
+  Rafael Kueng,$^{4}$}
+\newauthor{%
+  Christine Macmillan,
+  Surhud More,$^{2}$
+  Prasenjit Saha,$^{4}$
+  Julianne Wilcox,
+  Layne Wright}
+  \medskip\\
+  $^1$\oxford\\
+  $^2$\ipmu\\
+  $^3$\adler\\
+  $^4$\zurich
+}
+
+% This list is incomplete.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+             
+\date{to be submitted to MNRAS? Not necessarily.}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2012}
+
+\maketitle           
+
+\label{firstpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract} 
+
+
+\end{abstract}
+
+% Full list of options at http://www.journals.uchicago.edu/ApJ/instruct.key.html
+
+\begin{keywords}
+  gravitational lensing   --
+  methods: statistical    
+\end{keywords}
+
+\setcounter{footnote}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+\label{sec:intro}
+
+Scientific motivation. Applications of lenses: group-scale arcs,
+galaxy-galaxy lenses, lensed quasars. 
+
+Problem of rarity. Imaging surveys. Problem of purity/false positives.
+
+Review of progress to date. Methods in SL2S, SQLS. Contrast with SLACS. 
+
+Scaling to wide field era. Automated methods: problems. Need for good
+training sets. Need for quality control: always present.
+
+Novel solution: crowd-sourcing. Brief review of similar problems.
+PlanetHunters. \sw as an experiment.
+
+In this paper, we describe the \sw website, an online system that
+enables crowd-sourced detection of gravitational lenses. 
+Other papers in this series will present new gravitational lenses
+discovered in our first imaging survey dataset, and investigate the
+differences between lens detections made in \sw and those made with
+automated techniques. Here, we try to answer the following questons:
+\begin{itemize}
+
+\item How reliably can we find gravitational lenses using the \sw
+system? What is the completeness of the sample produced?
+
+\item How noisy is the system? What is the purity of the sample
+produced?
+
+\item How accurately can gravitational lenses be located on the sky
+during the identification process?
+
+\item How quickly can lenses be detected? How many classifiers are
+needed per target, and how quickly can they mobilise?
+
+\end{itemize}
+
+In \Sref{sec:overview} we...
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Experiment Design}
+\label{sec:design}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data}
+\label{sec:data}
+
+Training data and test data. Refer to Paper II for CFHTLS details.
+
+Presentation of images.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Analysis}
+\label{sec:analysis}
+
+Interpreting clicks. Online analysis: update model of each volunteer,
+and estimate probability of classification.
+
+Training data for tracking learning, and estimating completeness and
+purity.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results}
+\label{sec:results}
+
+Understanding crowd, so we can help them learn faster. Understanding
+images given the crowd, so we can find lenses.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Learned Behavior}
+\label{sec:results:learning}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Sample completeness and purity}
+\label{sec:results:learning}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}
+\label{sec:discuss}
+
+Challenges for future.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusions}
+\label{sec:conclude}
+
+We draw the following conclusions:
+
+\begin{itemize} 
+
+\item Ability to detect lenses
+
+\item What we can say about the next steps
+
+\end{itemize}
+
+Summarize, end.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  ACKNOWLEDGMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Acknowledgements}
+ 
+\input{acknowledgments.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  APPENDICES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\appendix
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Probabilistic Classification Model}
+\label{appendix:probmodel}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MNRAS does not use bibtex, input .bbl file instead. 
+% Generate this in the makefile using bubble script in scriptutils:
+
+% bubble -f paper-lcr.tex references.bib 
+% \input{paper-lcr.bbl}
+
+\bibliographystyle{apj}
+\bibliography{references}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{lastpage}
+\bsp
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -1,2 +1,10 @@
 *.pyc
 *.DS_Store
+*.log
+*.aux
+*.dvi
+*.bbl
+*.blg
+*.pdf
+workspace
+attic

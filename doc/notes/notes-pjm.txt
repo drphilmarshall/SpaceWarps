@@ -1,0 +1,130 @@
+# ============================================================================
+# 2013-04-07 (Sunday) 00:58 IST
+# 
+# Get beta click database and start writing analysis code for it.
+
+cd analysis/workspace
+
+wget http://spacewarps.org.s3.amazonaws.com/data-export/spacewarps-2013-04-06_20-07-28.tar.gz
+
+tar xvfz spacewarps-2013-04-06_20-07-28.tar.gz
+
+ls spacewarps-2013-04-06_20-07-28/ouroboros_staging/
+# spacewarp_classifications.bson          spacewarp_subjects.bson
+# spacewarp_classifications.metadata.json spacewarp_subjects.metadata.json
+
+# These are files to be read into a mongoDB, using mongodbrestore.
+
+# Needs pymongo... pip install? Yep - done
+	
+# Also need binary installation of mongodb, from mongodb.org
+# Downloaded to software, linked to ~/bin
+
+mongorestore spacewarps-2013-04-06_20-07-28
+# Sun Apr  7 01:23:48.133 kern.sched unavailable
+# couldn't connect to [127.0.0.1] couldn't connect to server 127.0.0.1:27017
+
+# Hmm. Looks beyond my pay grade.
+# Try from python:
+
+cd spacewarps-2013-04-06_20-07-28/
+python ../../swap/mongodb.py 
+
+Traceback (most recent call last):
+  File "../../swap/mongodb.py", line 23, in <module>
+    m = MongoDB()
+  File "../../swap/mongodb.py", line 13, in __init__
+    self.client = MongoClient('localhost', 27017)
+  File "/usr/local/Cellar/python/2.7.2/lib/python2.7/site-packages/pymongo/mongo_client.py", line 336, in __init__
+    raise ConnectionFailure(str(e))
+pymongo.errors.ConnectionFailure: could not connect to localhost:27017: [Errno 61] Connection refused
+
+# Need to start mongodb server in the background:
+
+mongod --dbpath . &
+
+# Now python runs ok:
+
+python ../../swap/mongodb.py 
+# Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_subjects.0')
+# Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_classifications.0')
+
+# What the hell are these things?!
+# OK, open up python session and start playing.
+
+>>> import swap
+>>> m = swap.MongoDB()
+>>> m.subjects
+Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_subjects')
+>>> m.subjects.find()
+<pymongo.cursor.Cursor object at 0x101220f50>
+
+# Interesting.
+
+>>> m.subjects.find_one({'zooniverse_id' : 'ASW0000002'})
+{u'project_id': ObjectId('5101a1341a320ea77f000001'), u'classification_count':
+523, u'created_at': datetime.datetime(2013, 4, 4, 20, 29, 18, 949000),
+u'random': 0.5465496445414518, u'updated_at': datetime.datetime(2013, 4, 4,
+20, 29, 18, 975000), u'state': u'complete', u'trending': 3, u'coords': [],
+u'location': {u'thumbnail': u'', u'standard': u''}, u'zooniverse_id':
+u'ASW0000002', u'workflow_ids': [ObjectId('5101a1361a320ea77f000002')],
+u'_id': ObjectId('5101a1931a320ea77f000004'), u'tutorial': True, u'metadata':
+{}}
+
+# OK cool - here's a clue to the subject schema, and the metadata on subject
+# ASW0000002.  
+
+# How about a non-tutorial one?
+>>> m.subjects.find_one({'zooniverse_id' : 'ASW0000004'})
+{u'_id': ObjectId('515de29fe4bb216427000001'), u'classification_count': 13,
+u'created_at': datetime.datetime(2013, 4, 4, 20, 29, 19, 372000),
+u'activated_at': datetime.datetime(2013, 4, 4, 20, 32, 51, 886000),
+u'updated_at': datetime.datetime(2013, 4, 4, 20, 29, 19, 398000), u'random':
+0.1047423015104475, u'project_id': ObjectId('5101a1341a320ea77f000001'),
+u'state': u'active', u'zooniverse_id': u'ASW0000004', u'workflow_ids':
+[ObjectId('5101a1361a320ea77f000002')], u'location': {u'thumbnail':
+u'http://www.spacewarps.org/subjects/thumbnail/CFHTLS_002_0530_gri.png',
+u'standard':
+u'http://www.spacewarps.org/subjects/standard/CFHTLS_002_0530_gri.png'},
+u'group_id': ObjectId('5154a3783ae74086ab000001'), u'metadata': {u'id':
+u'CFHTLS_002_0530'}}
+
+# Nice! There's the actual image name, from Anu. And this URL is open - 
+# volunteers can grab those any time if they want to model them elsewhere.
+# Just need to expose that on the site somewhere. 
+
+# Anyway, what about classifications?
+
+>>> m.classifications.find_one()
+{u'_id': ObjectId('515de3a9390c056085000416'), u'created_at':
+datetime.datetime(2013, 4, 4, 20, 33, 45), u'updated_at':
+datetime.datetime(2013, 4, 4, 20, 33, 45, 885000), u'user_ip':
+u'163.1.174.106', u'workflow_id': ObjectId('5101a1361a320ea77f000002'),
+u'subjects': [], u'subject_ids': [ObjectId('515dd45de4bb21597c00026c')],
+u'project_id': ObjectId('5101a1341a320ea77f000001'), u'annotations':
+[{u'finished_at': u'Thu, 04 Apr 2013 20:32:19 GMT', u'started_at': u'Thu, 04
+Apr 2013 19:57:45 GMT'}, {u'user_agent': u'Mozilla/5.0 (Macintosh; Intel Mac
+OS X 10_7_5) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.43
+Safari/537.31'}]}
+
+>>> m.classifications.find({'_id':'515de3a9390c056085000416'})
+# <pymongo.cursor.Cursor object at 0x10122c050>
+
+# Hmm. A cursor seems to be some sort of cursor. Might need a bit of help
+# learning how this works!
+
+# Plan:
+# 
+# Make a list of operations that I want to do, 
+# and ask for a suggested example command from Amit?
+# 
+# 1) Return a list of users as an array of strings
+# 
+# 2) For a given user, return the IDs of all the training subjects they classified
+#     Presumably this array will be time-ordered?
+# 
+# 3) For a given user and training subject ID, return the value 1 if they succeeded in recognising it, 0 if not
+
+# Issued.
+# ============================================================================
+# ============================================================================

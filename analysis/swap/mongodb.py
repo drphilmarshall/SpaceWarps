@@ -16,9 +16,13 @@ class MongoDB(object):
     self.subjects = self.db['spacewarp_subjects']
     self.classifications = self.db['spacewarp_classifications']
     
-    for classification in self.classifications.find():
-      print classification['annotations']
+    # for subject in self.subjects.find():
+    #   print subject
+    
+    # for classification in self.classifications.find():
+    #   print classification['annotations']
 
 if __name__ == '__main__':
   m = MongoDB()
-
+  # print m.subjects
+  # print m.classifications

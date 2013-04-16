@@ -24,22 +24,18 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title[\sw I]
-{\SW: Crowd-sourcing the Discovery of Gravitational Lenses. 
-I: System Design}
+{\SW: I. Crowd-sourcing the Discovery of Gravitational Lenses}
     
-\author[The \SW Collaboration]{%
-  The \SW Collaboration:
-  % \input{authors.tex}
+\author[Marshall et al.]{%
+  \input{sw-system-authors.tex}
 }
-
-% This list is incomplete.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
              
-\date{to be submitted to MNRAS? Not necessarily.}
-\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2012}
+\date{to be submitted to MNRAS}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2013}
 
 \maketitle           
 
@@ -49,6 +45,19 @@ I: System Design}
 
 \begin{abstract} 
 
+\sw is a web-based system that enables the discovery of strong
+gravitational lenses in wide-field imaging surveys by arbitrarily large
+numbers of people. Carefully produced color composite images are
+displayed to the classifiers via a flexible interface, which records
+their estimates of the positions of candidate lensed features. Simulated
+lenses, and expert-classified non-lenses, are inserted into the stream
+at random intervals; this training set is used to give the classifiers
+feedback on their performance as well as estimate a dynamically-updated
+probability for any given image containing a lens. High probability
+systems are filtered into the Zooniverse \Talk discussion system; this
+smaller sample is further classified and analysed by volunteers into a
+final set. We analyze the classification of the training set itself, and
+find that 1) $<$volunteers learn$>$... 2) $<$the filter works$>$... 
 
 \end{abstract}
 
@@ -277,6 +286,18 @@ Summarize, end.
 
 \section{Probabilistic Classification Model}
 \label{appendix:probmodel}
+
+Our aim is to enable the construction of a sample of good lens
+candidates. Since we aspire to making logical  decisions, we define a 
+``good candidate'' as one which has a high posterior probability of
+being a lens, given the data. The data in our case are the pixel values
+of a colour image. However, we can greatly compress these complex,
+noisy  datasets by asking our classifiers what they think about them. A
+complete  classification in \sw consists of a set of Marker positions,
+or none at all. The null set represents the statement from the
+classifier that the image in question is $\saidNOT$ a lens, while the
+placement of any  Markers indicates that the classifier considers this
+image to contain a $\saidLENS$. We simplify the problem ...
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

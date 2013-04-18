@@ -25,8 +25,6 @@ class Configuration(object):
         
         prepare(self): set up workspace
         
-        getLightconePickleName(self,flavor,pointing=None): 
-
     BUGS
 
     AUTHORS

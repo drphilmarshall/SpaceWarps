@@ -49,7 +49,7 @@ python ../../swap/mongodb.py
 # Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_subjects.0')
 # Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_classifications.0')
 
-# What the hell are these things?!
+# What are these things?!
 # OK, open up python session and start playing.
 
 >>> import swap
@@ -126,4 +126,24 @@ Safari/537.31'}]}
 # 3) For a given user and training subject ID, return the value 1 if they succeeded in recognising it, 0 if not
 
 # Issued.
+
+
+# 2013-04-18 (Thursday) 12:04 BST
+# 
+# datetime objects are interesting! See http://docs.python.org/2/library/datetime.html
+# 
+# >>> import datetime
+# >>> print datetime.datetime(2013, 4, 4, 20, 29, 18, 949000)
+# 2013-04-04 20:29:18.949000
+# >>> t1 = datetime.datetime(2013, 4, 4, 20, 29, 18, 949000)
+# >>> t2 = datetime.datetime(2013, 4, 5, 8, 15, 23, 543000)
+# >>> t2 - t1
+# datetime.timedelta(0, 42364, 594000)
+# >>> t1 > t2
+# False
+# >>> t1 <= t2
+# True
+
+# Perfect!
+
 # ============================================================================

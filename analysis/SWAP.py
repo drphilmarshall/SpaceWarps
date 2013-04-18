@@ -3,7 +3,7 @@
 
 import swap
 
-import sys,getopt
+import sys,getopt,datetime
 
 # ======================================================================
 
@@ -106,7 +106,8 @@ def SWAP(argv):
         print swap.doubledashedline
         print "SWAP: taking instructions from",configfile
         print "SWAP: for the actual analysis, we need a DB and some code from Amit!"
-        print "SWAP: more soon..."
+        print "SWAP: more on this soon..."
+        print "SWAP: for now, just make some useful objects."
     else:
         print SWAP.__doc__
         return
@@ -116,8 +117,16 @@ def SWAP(argv):
     
     tonights = swap.Configuration(configfile)
     
-    if tonights.parameters['Time'] == 'Now': 
-        print "SWAP: updating all objects."
+    if tonights.parameters['Time'] == 'Now':
+        t2 = datetime.datetime.utcnow()
+        print "SWAP: updating all objects with classifications up to "+t2.__str__()
+    else:
+        raise "SWAP: analysis between 2 points in time not yet implemented"
+    
+    # ------------------------------------------------------------------
+    # Read in, or create, an object representing the crowd:
+    
+    crowd = swap.readPickle(tonights.parameters['crowdfile'],'crowd')
 
     # ------------------------------------------------------------------
 

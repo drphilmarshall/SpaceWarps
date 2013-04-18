@@ -38,19 +38,24 @@ class Crowd(object):
 # ----------------------------------------------------------------------------
 
     def __init__(self):
-        self.name = 'Group of classifiers'
         self.member = {}
         return None
 
 # ----------------------------------------------------------------------------
 
     def __str__(self):
-        return 'Crowd of %d Classifiers' % (self.size())       
+        return 'crowd of %d Classifiers' % (self.size())       
         
 # ----------------------------------------------------------------------------
 
     def size(self):
         return len(self.member)
         
+# ----------------------------------------------------------------------
+# Prepare to plot classifiers' histories:
+
+    def start_history_plot(self):
+        return 
+
 # ======================================================================
    

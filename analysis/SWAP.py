@@ -128,7 +128,54 @@ def SWAP(argv):
     
     crowd = swap.readPickle(tonights.parameters['crowdfile'],'crowd')
 
-    # ------------------------------------------------------------------
+    # Start a plot of their histories:
+    
+    crowd.start_history_plot()
+    
+    # Add a new person to the crowd:
+    
+    Name = 'Phil'
+    crowd.member[Name] = swap.Classifier(Name)
+    
+    print "SWAP: introduced a new ",crowd.member[Name]
+
+    # Record their latest result:
+    
+    X = 'LENS' ; Y = 'LENS'
+    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
+
+    X = 'LENS' ; Y = 'NOT'
+    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
+
+    X = 'LENS' ; Y = 'NOT'
+    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
+
+    X = 'LENS' ; Y = 'LENS'
+    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
+
+    X = 'LENS' ; Y = 'NOT'
+    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
+
+    X = 'LENS' ; Y = 'LENS'
+    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
+
+    print "SWAP: "+Name+"'s progress: ",crowd.member[Name].history
+
+
+
+   # ------------------------------------------------------------------
 
     
     # ------------------------------------------------------------------

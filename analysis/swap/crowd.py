@@ -2,6 +2,8 @@
 
 import swap
 
+import pylab as plt
+
 # ======================================================================
 
 class Crowd(object):
@@ -55,7 +57,28 @@ class Crowd(object):
 # Prepare to plot classifiers' histories:
 
     def start_history_plot(self):
-        return 
+    
+        plt.clf()
+        axes = plt.gca()
+        axes.set_xlim(0.5,1000.0)
+        axes.set_xscale('log')
+        axes.set_ylim(0.0,1.0)
+        axes.set_xticks([1,10,100,2000])
+        axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
+        axes.set_xlabel('No. of training subjects classified')
+        axes.set_ylabel('Expertise I (bits)')
+            
+        return axes
+
+# ----------------------------------------------------------------------
+# Prepare to plot classifiers' histories:
+
+    def finish_history_plot(self,axes,filename):
+    
+        plt.sca(axes)
+        plt.savefig(filename,dpi=300)
+            
+        return
 
 # ======================================================================
    

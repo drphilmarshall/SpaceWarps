@@ -3,6 +3,7 @@
 import swap
 
 import numpy as np
+import pylab as plt
 
 # ======================================================================
 
@@ -110,7 +111,14 @@ class Classifier(object):
 # ----------------------------------------------------------------------
 # Plot classifier's history, as an overlay on an existing plot:
 
-    def plot_history(self):
+    def plot_history(self,axes):
+    
+        plt.sca(axes)
+        N = np.linspace(1, len(self.history), len(self.history), endpoint=True)
+        print N
+        print self.history
+        plt.plot(N, self.history, color="green", alpha="0.1", linewidth=2.0, linestyle="-")
+    
         return
 
 # ======================================================================

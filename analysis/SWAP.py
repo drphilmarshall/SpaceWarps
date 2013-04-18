@@ -130,7 +130,7 @@ def SWAP(argv):
 
     # Start a plot of their histories:
     
-    crowd.start_history_plot()
+    fig1 = crowd.start_history_plot()
     
     # Add a new person to the crowd:
     
@@ -173,13 +173,18 @@ def SWAP(argv):
 
     print "SWAP: "+Name+"'s progress: ",crowd.member[Name].history
 
+    crowd.member[Name].plot_history(fig1)
 
-
-   # ------------------------------------------------------------------
+    # ------------------------------------------------------------------
 
     
     # ------------------------------------------------------------------
-   
+    # Write out plots to pngfiles:
+    
+    filename = 'history.png'
+    crowd.finish_history_plot(fig1,filename)
+    
+    
     print swap.doubledashedline
     return
 

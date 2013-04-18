@@ -19,14 +19,37 @@ def SWAP(argv):
         database, and analyse it.
 
     COMMENTS
-        Amit: can you help us get started please? Ideally I would like
-        us to read in the database as an atpy Table.
-        
-        We have various quality control metrics that need to be 
-        computed, before outputting a ranked list of lens candidates. 
-        The quality control methods make use of the numerous simulated 
-        lenses, and known "dud" fields.
+        The SW analysis is "online" in the statistical sense: we step 
+        through the classifications one by one, updating each
+        classifier's confusion matrix and each subject's lens
+        probability. The main reason for taking this approach is that
+        it is the most logical one; secondarily, it opens up the
+        possibility of performing the analysis in real time (although
+        presumably not with this piece of python).
 
+        Amit: can you help us get started please? Search for the string
+        MONGO to see where I need help extracting information from the
+        mongo DB.
+
+        Currently, the confusion matrices only depend on the
+        classifications of training subjects. Upgrading this would be a
+        nice piece of further work. Likewise, neither the Marker
+        positions, the classification  durations, nor any other
+        parameters are used in estimating lens probability - but they
+        could be. In this version, it's LENS or NOT.
+
+        Standard operation is to update the candidate list by making a
+        new, timestamped catalog of candidates - and the
+        classifications that led to them. This means we have to know
+        when the last update was made - this is done by reading in a
+        pickle of the last classification to be SWAPped. The final
+        sample of candidates could be obtained by reading  in all
+        sample pickles and taking the most up to date characterisation
+        of  each - but we might as well over-write a pickle of this
+        every time too. The crowd we have to always read in in its
+        entirety, because they can reappear any time to update their
+        confusion matrices.
+        
     FLAGS
         -h            Print this message [0]
 
@@ -34,13 +57,16 @@ def SWAP(argv):
         configfile    Plain text file containing SW experiment configuration
 
     OUTPUTS
-        stdout        Useful information, redirect this to a logfile
-        candidates    Catalog of lens candidates, with associated stats
+        stdout
+        theCrowd.pickle
+        theLensSampleFrom.DATE.pickle
+        theClassificationBatchFrom.DATE.pickle
+        theMostRecentClassification.pickle
 
     EXAMPLE
         
         cd workspace
-        SWAP.py CFHTLS-beta.config > CFHTLS-beta_SWAP.log
+        SWAP.py CFHTLS-beta-day01.config > CFHTLS-beta-day01.log
 
     BUGS
         - No capability to read MongoDB yet.
@@ -52,10 +78,11 @@ def SWAP(argv):
       http://spacewarps.org/
 
     HISTORY
-      2013-04-03 started Marshall (Oxford)
+      2013-04-03 started. Marshall (Oxford)
+      2013-04-17 implemented v1 "LENS or NOT" analysis. Marshall (Oxford)
     """
 
-    # --------------------------------------------------------------------
+    # ------------------------------------------------------------------
 
     try:
        opts, args = getopt.getopt(argv,"h",["help"])
@@ -84,25 +111,18 @@ def SWAP(argv):
         print SWAP.__doc__
         return
 
-    # --------------------------------------------------------------------
-    # Read in configuration:
+    # ------------------------------------------------------------------
+    # Read in run configuration:
     
-    # experiment = swap.Configuration(configfile)
-
-    # --------------------------------------------------------------------
-    # Load in database as a swap object:
-
-    # clicks = swap.ClickDB(experiment.DBfile)
+    tonights = swap.Configuration(configfile)
     
-    # --------------------------------------------------------------------
-    # Quality control:
+    if tonights.parameters['Time'] == 'Now': 
+        print "SWAP: updating all objects."
+
+    # ------------------------------------------------------------------
 
     
-    # --------------------------------------------------------------------
-    # Lens candidate ranking:
-
-    
-    # --------------------------------------------------------------------
+    # ------------------------------------------------------------------
    
     print swap.doubledashedline
     return

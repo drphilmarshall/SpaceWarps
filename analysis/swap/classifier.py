@@ -45,8 +45,10 @@ class Classifier(object):
         name
     
     METHODS
-        Classifier.updateExpertise()     Calculate the expected 
-                                         information per classification
+        Classifier.update_expertise()     Calculate the expected 
+                                          information per classification
+        Classifier.said(it_was=X,actually_it_was=Y)     Read report.
+        Classifier.plot_history(axes)
         
     BUGS
 
@@ -91,11 +93,13 @@ class Classifier(object):
         
 # ----------------------------------------------------------------------
 # Update confusion matrix with latest result:
-#   crowd.member[Name].reportedly(saidItWas='LENS',actuallyItWas='NOT')
+#   eg.  collaboration.member[Name].said(it_was='LENS',actually_it_was='NOT')
 
     def said(self,it_was=None,actually_it_was=None):
+
         if it_was==None or actually_it_was==None:
             pass
+
         else:
             if actually_it_was=='LENS':
                 self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
@@ -105,7 +109,9 @@ class Classifier(object):
                 self.ND += 1
             else:
                 raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
+ 
             self.history = np.append(self.history,self.update_expertise())
+
         return
 
 # ----------------------------------------------------------------------
@@ -115,8 +121,6 @@ class Classifier(object):
     
         plt.sca(axes)
         N = np.linspace(1, len(self.history), len(self.history), endpoint=True)
-        print N
-        print self.history
         plt.plot(N, self.history, color="green", alpha="0.1", linewidth=2.0, linestyle="-")
     
         return

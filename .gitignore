@@ -8,3 +8,4 @@
 *.pdf
 workspace
 attic
+*.pickle

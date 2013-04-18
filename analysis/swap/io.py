@@ -44,7 +44,7 @@ import os,cPickle,atpy
 # Read in an instance of a class, of a given flavour. Create an instance 
 # if the file does not exist.
 
-def readPickle(filename,flavour):
+def read_pickle(filename,flavour):
     
     try:
         F = open(filename,"rb")
@@ -58,8 +58,7 @@ def readPickle(filename,flavour):
             contents = swap.Crowd()
 
         elif flavour == 'collection':
-            # contents = swap.Collection()
-            raise Exception("Collection class not yet implemented")
+            contents = swap.Collection()
         
         print "SWAP: Made a new",contents
             
@@ -67,11 +66,29 @@ def readPickle(filename,flavour):
 
 # ----------------------------------------------------------------------------
 # Write out an instance of a class to file.
-def writePickle(contents,filename):
+
+def write_pickle(contents,filename):
+
     F = open(filename,"wb")
     cPickle.dump(contents,F,protocol=2)
     F.close()
+
     return
+
+# ----------------------------------------------------------------------------
+# Make up a new filename, based on tonight's parameters:
+
+def get_new_filename(pars,flavour):
+
+    head = pars['survey']+'_'+pars['t2string']+'_'+flavour
+    if flavour == 'crowd':
+        ext = 'pickle'
+    elif flavour == 'history' or flavour == 'trajectory':
+        ext = 'png'
+    else:
+        raise Exception("SWAP: io: eww - what's that flavour? "+flavour)    
+        
+    return head+'.'+ext
 
 # ----------------------------------------------------------------------------
 # 

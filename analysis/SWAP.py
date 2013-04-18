@@ -117,73 +117,119 @@ def SWAP(argv):
     
     tonights = swap.Configuration(configfile)
     
-    if tonights.parameters['Time'] == 'Now':
-        t2 = datetime.datetime.utcnow()
-        print "SWAP: updating all objects with classifications up to "+t2.__str__()
+    if tonights.parameters['time'] == 'Now':
+        tonights.parameters['t2'] = datetime.datetime.utcnow()
+        tonights.parameters['t2string'] = tonights.parameters['t2'].strftime("%Y-%m-%d_%H%M")
+        print "SWAP: updating all objects with classifications up to "+tonights.parameters['t2string']
     else:
         raise "SWAP: analysis between 2 points in time not yet implemented"
     
     # ------------------------------------------------------------------
     # Read in, or create, an object representing the crowd:
     
-    crowd = swap.readPickle(tonights.parameters['crowdfile'],'crowd')
+    collaboration = swap.read_pickle(tonights.parameters['crowdfile'],'crowd')
 
     # Start a plot of their histories:
     
-    fig1 = crowd.start_history_plot()
+    fig1 = collaboration.start_history_plot()
     
-    # Add a new person to the crowd:
+    # ------------------------------------------------------------------
+    # Read in, or create, an object representing the candidate list:
     
-    Name = 'Phil'
-    crowd.member[Name] = swap.Classifier(Name)
+    sample = swap.read_pickle(tonights.parameters['samplefile'],'collection')
     
-    print "SWAP: introduced a new ",crowd.member[Name]
-
-    # Record their latest result:
+    # Start a plot of their probabilities:
     
-    X = 'LENS' ; Y = 'LENS'
-    crowd.member[Name].said(it_was=X,actually_it_was=Y)
+    fig2 = sample.start_trajectory_plot()
+    
+    # ------------------------------------------------------------------
+   
+    # Process a fake classification:
+    
+    Name = 'Phil' ; ID = '0001' ; category = 'training' ; X = 'LENS' ; Y = 'LENS'
+    print "SWAP: subject "+ID+" was classified by "+Name
+    
+    if Name not in collaboration.list():
+        collaboration.member[Name] = swap.Classifier(Name)
+    if ID not in sample.list():
+        sample.member[ID] = swap.Subject(ID,category,kind=Y)
+    
+    collaboration.member[Name].said(it_was=X,actually_it_was=Y)
     print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
-
-    X = 'LENS' ; Y = 'NOT'
-    crowd.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
-
-    X = 'LENS' ; Y = 'NOT'
-    crowd.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
-
-    X = 'LENS' ; Y = 'LENS'
-    crowd.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
-
-    X = 'LENS' ; Y = 'NOT'
-    crowd.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
-
-    X = 'LENS' ; Y = 'LENS'
-    crowd.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        crowd.member[Name].expertise,crowd.member[Name].PL,crowd.member[Name].PD
-
-    print "SWAP: "+Name+"'s progress: ",crowd.member[Name].history
-
-    crowd.member[Name].plot_history(fig1)
+        collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
+    
+    sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
+    print "SWAP: its new probability = ",sample.member[ID].probability
+       
 
     # ------------------------------------------------------------------
-
+   
+    # Process a fake classification:
     
+    Name = 'Phil' ; ID = '0002' ; category = 'training' ; X = 'NOT' ; Y = 'LENS'
+    print "SWAP: subject "+ID+" was classified by "+Name
+    
+    if Name not in collaboration.list():
+        collaboration.member[Name] = swap.Classifier(Name)
+    if ID not in sample.list():
+        sample.member[ID] = swap.Subject(ID,category,kind=Y)
+    
+    collaboration.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
+    
+    sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
+    print "SWAP: its new probability = ",sample.member[ID].probability
+       
+
+    # ------------------------------------------------------------------
+   
+    # Process a fake classification:
+    
+    Name = 'Phil' ; ID = '0003' ; category = 'training' ; X = 'NOT' ; Y = 'NOT'
+    print "SWAP: subject "+ID+" was classified by "+Name
+    
+    if Name not in collaboration.list():
+        collaboration.member[Name] = swap.Classifier(Name)
+    if ID not in sample.list():
+        sample.member[ID] = swap.Subject(ID,category,kind=Y)
+    
+    collaboration.member[Name].said(it_was=X,actually_it_was=Y)
+    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+        collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
+    
+    sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
+    print "SWAP: its new probability = ",sample.member[ID].probability
+       
+
+    # ------------------------------------------------------------------
+    # Make plots:
+    
+    for Name in collaboration.list():
+        collaboration.member[Name].plot_history(fig1)
+        
+    for ID in sample.list():
+        sample.member[ID].plot_trajectory(fig2)
+    
+
+    # ------------------------------------------------------------------
+    # Pickle the collaboration. Hooray! 
+
+    new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
+    swap.write_pickle(collaboration,new_crowdfile)
+
+
     # ------------------------------------------------------------------
     # Write out plots to pngfiles:
     
-    filename = 'history.png'
-    crowd.finish_history_plot(fig1,filename)
+    pngfile = swap.get_new_filename(tonights.parameters,'history')
+    collaboration.finish_history_plot(fig1,pngfile)
     
+    pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
+    sample.finish_trajectory_plot(fig2,pngfile)
+    
+    
+    # ------------------------------------------------------------------
     
     print swap.doubledashedline
     return

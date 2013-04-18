@@ -50,6 +50,7 @@ def read_pickle(filename,flavour):
         F = open(filename,"rb")
         contents = cPickle.load(F)
         F.close()
+        
     except IOError:
 
         if filename != 'None': print "SWAP: "+filename+" does not exist."

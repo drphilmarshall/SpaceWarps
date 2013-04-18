@@ -119,7 +119,6 @@ class Subject(object):
         else:
             colour = 'black'
         
-        print N,self.trajectory
         plt.plot(N, self.trajectory, color=colour, alpha="0.1", linewidth=1.0, linestyle="-")
     
         return

@@ -144,62 +144,40 @@ def SWAP(argv):
     
     # ------------------------------------------------------------------
    
-    # Process a fake classification:
+    for k in range(6):
     
-    Name = 'Phil' ; ID = '0001' ; category = 'training' ; X = 'LENS' ; Y = 'LENS'
-    print "SWAP: subject "+ID+" was classified by "+Name
-    
-    if Name not in collaboration.list():
-        collaboration.member[Name] = swap.Classifier(Name)
-    if ID not in sample.list():
-        sample.member[ID] = swap.Subject(ID,category,kind=Y)
-    
-    collaboration.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
-    
-    sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
-    print "SWAP: its new probability = ",sample.member[ID].probability
-       
+        # Pull out a fake classification:
+        if k == 0: 
+            Name,ID,category,X,Y = ('Phil1','0001' ,'training','NOT','LENS')
+        if k == 1: 
+            Name,ID,category,X,Y = ('Phil2','0001' ,'training','LENS','LENS')
+        if k == 2: 
+            Name,ID,category,X,Y = ('Phil1','0002' ,'training','LENS','NOT')
+        if k == 3: 
+            Name,ID,category,X,Y = ('Phil1','0003' ,'training','LENS','LENS')
+        if k == 4: 
+            Name,ID,category,X,Y = ('Phil2','0002' ,'training','LENS','NOT')
+        if k == 5: 
+            Name,ID,category,X,Y = ('Phil2','0003' ,'training','NOT','LENS')
 
-    # ------------------------------------------------------------------
-   
-    # Process a fake classification:
-    
-    Name = 'Phil' ; ID = '0002' ; category = 'training' ; X = 'NOT' ; Y = 'LENS'
-    print "SWAP: subject "+ID+" was classified by "+Name
-    
-    if Name not in collaboration.list():
-        collaboration.member[Name] = swap.Classifier(Name)
-    if ID not in sample.list():
-        sample.member[ID] = swap.Subject(ID,category,kind=Y)
-    
-    collaboration.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
-    
-    sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
-    print "SWAP: its new probability = ",sample.member[ID].probability
-       
+        # Register new members:
+        if Name not in collaboration.list():  
+            collaboration.member[Name] = swap.Classifier(Name)
+        if ID not in sample.list():           
+            sample.member[ID] = swap.Subject(ID,category,kind=Y)    
 
-    # ------------------------------------------------------------------
-   
-    # Process a fake classification:
-    
-    Name = 'Phil' ; ID = '0003' ; category = 'training' ; X = 'NOT' ; Y = 'NOT'
-    print "SWAP: subject "+ID+" was classified by "+Name
-    
-    if Name not in collaboration.list():
-        collaboration.member[Name] = swap.Classifier(Name)
-    if ID not in sample.list():
-        sample.member[ID] = swap.Subject(ID,category,kind=Y)
-    
-    collaboration.member[Name].said(it_was=X,actually_it_was=Y)
-    print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-        collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
-    
-    sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
-    print "SWAP: its new probability = ",sample.member[ID].probability
+        # Update the classifier's confusion matrix:
+        if category == 'training':
+            collaboration.member[Name].said(it_was=X,actually_it_was=Y)
+
+        # Update the subject's lens probability:
+        sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
+
+        # Brag about it:
+        print "SWAP: subject "+ID+" was classified by "+Name
+        print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
+            collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
+        print "SWAP: its new probability = ",sample.member[ID].probability
        
 
     # ------------------------------------------------------------------

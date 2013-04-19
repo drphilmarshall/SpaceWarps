@@ -74,7 +74,7 @@ class Crowd(object):
         axes.set_xticks([1,10,100,2000])
         axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
         axes.set_xlabel('No. of training subjects classified')
-        axes.set_ylabel('Expertise (bits)')
+        axes.set_ylabel('Information per classification (bits)')
             
         return axes
 

@@ -12,20 +12,20 @@ class Crowd(object):
         Crowd
 
     PURPOSE
-        Model a group of classifiers.
+        Represent a group of volunteers by assigning each one an agent.
 
     COMMENTS
-        The members of the Crowd are all Classifiers. The Crowd knows
-        how big it is, and could, in principle, also know its mean
-        expertise, and other qualities.
+        The members of a Crowd are all agents known as Classifiers. 
+        The Crowd knows how big it is, and could, in principle, also 
+        know its mean expertise, and other qualities.
 
     INITIALISATION
         From scratch.
     
     METHODS AND VARIABLES
-        Crowd.member(Name)     Returns the Classifier called Name
-        Crowd.list             Returns the Names of the members
-        Crowd.size()           Returns the size of the Crowd
+        Crowd.member(Name)         The agent assigned to Name
+        Crowd.list                 The Names of the Crowd's members
+        Crowd.size()               The size of the Crowd
         Crowd.start_history_plot()
         Crowd.finish_history_plot()
         
@@ -49,7 +49,7 @@ class Crowd(object):
 # ----------------------------------------------------------------------------
 
     def __str__(self):
-        return 'crowd of %d classifiers' % (self.size())       
+        return 'crowd of %d classification agents' % (self.size())       
         
 # ----------------------------------------------------------------------------
 

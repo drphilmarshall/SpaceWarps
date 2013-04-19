@@ -49,10 +49,10 @@
  that enables the discovery of strong
 gravitational lenses in wide-field imaging surveys by arbitrarily large
 numbers of people. Carefully produced color composite images are
-displayed to the classifiers via a flexible interface, which records
+displayed to volunteers via a flexible interface, which records
 their estimates of the positions of candidate lensed features. Simulated
 lenses, and expert-classified non-lenses, are inserted into the stream
-at random intervals; this training set is used to give the classifiers
+at random intervals; this training set is used to give the volunteers
 feedback on their performance as well as estimate a dynamically-updated
 probability for any given image containing a lens. High probability
 systems are filtered into the Zooniverse \Talk discussion system; this
@@ -107,7 +107,7 @@ produced?
 during the identification process?
 
 \item How quickly can lenses be detected, and non-lenses be rejected?
-How many classifiers are needed per target, and how quickly can they
+How many volunteers are needed per target, and how quickly can they
 mobilise?
 
 \end{itemize}
@@ -285,28 +285,50 @@ Summarize, end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Probabilistic Classification Model}
+\section{Probabilistic Classification Data Model}
 \label{appendix:probmodel}
 
-Our aim is to enable the construction of a sample of good lens
-candidates. Since we aspire to making logical  decisions, we define a 
-``good candidate'' as one which has a high posterior probability of
-being a lens, given the data: $\pr(\LENS|\data)$. Our problem is to
-approximate this probability. The data in our case are the pixel values
-of a colour image. However, we can greatly compress these complex, noisy
-sets of data by asking each classifier what they think about them. A
-complete  classification in \sw consists of a set of Marker positions,
-or none at all. The null set represents the statement from the
-classifier that the image in question is $\saidNOT$ a lens, while the
-placement of any  Markers indicates that the classifier considers this
-image to contain a $\saidLENS$. 
+Our aim is to enable the construction of a sample of good lens candidates.
+Since we aspire to making logical  decisions, we define a  ``good candidate''
+as one which has a high posterior probability of being a lens, given the data:
+$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data
+in our case are the pixel values of a colour image. However, we can greatly
+compress these complex, noisy sets of data by asking each volunteer what they
+think about them. A complete  classification in \sw consists of a set of
+Marker positions, or none at all. The null set encodes the statement from
+the volunteer that the image in question is $\saidNOT$ a lens, while the
+placement of any  Markers indicates that the volunteer considers this image to
+contain a $\saidLENS$.  We simplify the problem by only using the Marker
+positions to assess whether the volunteer  correctly assigned the
+classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
+the training set of subjects. 
 
-We simplify the problem by only using the Marker positions to assess
-whether the classifier  correctly assigned the classification
-$\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of the
-training set of subjects. We model each classifier's expertise with a
-simple 2 by 2 ``confusion matrix,'' which is updated every time that
-volunteer classifies a training subject using the following 
+How should we model these compressed data? The circumstances of each
+classification are quite complex: the volunteers learn more about the problem
+as they go, but also inevitably make occasional mistakes (perhaps because a
+lens is difficult to see, or they became distracted by the television). To
+cope with this uncertainty, we assign a software agent to partner each
+volunteer. The agent's task is to interpret their volunteer's classification
+data as best it can, using a model that makes a number of necessary
+approximations. These interpretations will then include uncertainty arising as
+a result of the volunteer's efforts and also the agent's approximations, but
+they will have two important redeeming features. First, the interpretations
+will be quantitative (where before they were qualititative),  and thus will be
+useful in decision-making. Second, the agent will be able to predict, using
+its model, the probability of a test subject being a $\LENS$, given both its
+volunteer's classification, and its volunteer's experience. We now
+describe how each agent works.
+
+Each agent assumes that the probability of a volunteer recognising any given
+simulated lens as a lens is some number, $\pr(\saidLENS|\LENS,T)$, that
+depends only on what the volunteer is currently looking at, and all the
+previous training subjects they have seen (and not on what type of lens it is,
+how faint it is, what time it is, \etc). Likewise, it also assumes that the
+probability of a volunteer recognising any given dud image as a dud is some
+other number, $\pr(\saidNOT|\NOT,T)$, that also depends only on what the volunteer is currently looking at, and all the
+previous training subjects they have seen. These two probabilities define a 
+2 by 2 ``confusion matrix,'' which the agent updates, every time a
+volunteer classifies a training subject, using the following 
 very simple estimate:
 \be
   \pr(``X"|X,T) \approx \frac{N_{``X"}}{N_X}.
@@ -314,13 +336,14 @@ very simple estimate:
 \ee
 Here, $X$ stands for the true classification of the subject, \ie either
 $\LENS$ or $\NOT$, while $``X''$ is the corresponding classification
-made by the classifier on viewing the subject. $N_X$ is the number of
-lenses the classifier has been shown, while $N_{``X"}$ is the number of 
-times the classifier got their classifications right. $T$ stands for all
-$N_{\LENS} + N_{\NOT}$ training data that the classifier has seen to
+made by the volunteer on viewing the subject. $N_X$ is the number of
+lenses the volunteer has been shown, while $N_{``X"}$ is the number of 
+times the volunteer got their classifications of this type of training subject
+right. $T$ stands for all
+$N_{\LENS} + N_{\NOT}$ training data that the agent has heard about to
 date.
 
-The full confusion matrix of the $k^{\rm th}$ classifier is therefore:
+The full confusion matrix of the $k^{\rm th}$ volunteer's agent is therefore:
 \be
   \mathcal{M}^k = 
   \begin{bmatrix}
@@ -328,52 +351,56 @@ The full confusion matrix of the $k^{\rm th}$ classifier is therefore:
     \pr(\saidNOT |\NOT,T_k) & \pr(\saidNOT |\LENS,T_k)
   \end{bmatrix}.
 \ee
-Note that these probabilities are normalized, \eg 
+Note that these probabilities are normalized, such that
 $\pr(\saidNOT |\NOT) = 1 - \pr(\saidLENS|\NOT)$.
 
-Now, when this classifer views a test subject, 
-it is this confusion matrix that will tell us how to update the
+Now, when this volunteer views a test subject, 
+it is this confusion matrix that will allow their agent to update the
 probability of that test subject being a $\LENS$. Let us suppose that
-this subject has never been seen before: the prior probability that it
-is (or contains) a lens is 
+this subject has never been seen before: the agent assigns a 
+prior probability that it is (or contains) a lens is 
 \be
   \pr(\LENS) = p_0
 \ee
 where we have to assign a value for $p_0$. In the CFHTLS, we might expect
 something like 100 lenses in 430,000 images, so $p_0 = 2\times10^{-4}$
-is a reasonable estimate. The classifier makes a classification $C_k$ 
-($= \saidLENS or \saidNOT$).
-We can apply Bayes' Theorem to update this 
-prior probability into a posterior one using this new information:
+is a reasonable estimate. The volunteer then makes a classification $C_k$ 
+($= \saidLENS$ or $\saidNOT$).
+We can apply Bayes' Theorem to derive how the agent should
+update this prior probability into a posterior one using this new information:
 \begin{align}
-  & \pr(\LENS|C_k,T_k) = \\ \notag
+  \label{eq:app:first}
+  & \pr(\LENS|C_k,T_k) = \\
   & \frac{\pr(C_k|\LENS,T_k)\cdot\pr(\LENS)}
 {\left[ \pr(C_k|\LENS,T_k)\cdot\pr(\LENS) + \pr(C_k|\NOT,T_k)\cdot\pr(\NOT) \right]},
-  \label{eq:app:first}
+  \notag
 \end{align}
 which can be evaluated numerically using the elements of the confusion
 matrix. 
 
-As an example, suppose we have a {\it perfect} classifier, with
-confusion matrix
+As an example, suppose we have a volunteer who is always right about the true
+nature of a training subject. 
+Their agent's confusion matrix would be
 \be
   \mathcal{M}^{\rm perfect} = 
   \begin{bmatrix}
     0.0 & 1.0 \\
     1.0 & 0.0
-  \end{bmatrix},
+  \end{bmatrix}.
 \ee
-who is given a fresh subject that actually is a $\LENS$. 
-They submit $C = \saidLENS$. 
-The resulting posterior probability for the classified
-subject being a $LENS$ would be
+On being given a fresh subject that actually is a $\LENS$,
+this hypothetical volunteer would submit $C = \saidLENS$. 
+Their agent would then calculate the posterior probability for the 
+subject being a $LENS$ to be
 \begin{align}
   \pr(\LENS|\saidLENS,T_k) &= \frac{1.0 \cdot p_0}
            {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
-   &= 1.0
+   &= 1.0,
 \end{align}
-as expected. Meanwhile, an {\it obtuse} classifier, who always gets it
-wrong and has the column-swapped confusion matrix, 
+as we might expect for such a {\it perfect} classifier. 
+Meanwhile, a hypothetical volunteer who (for some reason) 
+wilfully always submits the wrong 
+classification would have an agent with the column-swapped confusion matrix
 \be
   \mathcal{M}^{\rm obtuse} = 
   \begin{bmatrix}
@@ -381,17 +408,20 @@ wrong and has the column-swapped confusion matrix,
     0.0 & 1.0
   \end{bmatrix},
 \ee
-would submit $C = \saidNOT$ for this subject, also leading to
+and would submit $C = \saidNOT$ for this subject. However, such a volunteer
+would nevertheless be submitting useful
+information, since given the above confusion matrix, their agent would
+calculate
 \begin{align}
   \pr(\LENS|\saidNOT,T_k) &= \frac{1.0 \cdot p_0}
            {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
    &= 1.0.
 \end{align}
-This shows that  classifiers who are systematically wrong can 
-nevertheless provide useful information. Indeed, the information content
-of each classification can be estimated before the next classification
-is made, and computed just from the confusion matrix. We define the 
-expected information per classification, or expertise, in bits, as
+{\it Obtuse} classifiers are as helpful as {\it perfect} ones!
+
+Indeed, the information content of each classification can be estimated by an
+agent before the next classification is made, just from its confusion matrix.
+We define the expected information per classification, or {\it expertise}, as
 \be
   \langle I_k \rangle = \frac{1}{2} 
                         \sum_{i} \left( \mathcal{M}^k_{i}  
@@ -399,39 +429,44 @@ expected information per classification, or expertise, in bits, as
   \label{eq:app:info}
 \ee
 where $i$ runs over all 4 elements of the confusion matrix 
-$\mathcal{M}^k_i$. The second term in the sum is recognisable as a
+$\mathcal{M}^k_i$, and $\langle I_k \rangle$ is measured in ``bits.'' 
+The second term in the sum is recognisable as a
 negative entropy, while the first term and the factor of 1/2
 account for the way the confusion matrix encodes the results for the
 classification of two types of subject, and that the probabilities
 associated with each type are normalised. \Eref{eq:app:info} gives the
 required result, that 
-both the {\it perfect} and
-{\it obtuse} classifiers contribute 1 bit of information each, per
-classification. 
-The only classifier that contributes the minimum
-information per classification, zero bits, is the {\it random} 
-classifier,
-whose confusion matrix elements are all 0.5.   We conservatively 
-initialise all classifiers' confusion matrices to that of  the random
-classifier, effectively assuming that all users are equally poorly
-informed about what a $\LENS$ is, and what is $\NOT$. Plotting 
-$\langle I_k \rangle$ as a function of time will illustrate the learning
-process undergone by the $k^{\rm th}$ classifier.
+both the hypothetical {\it perfect} and
+{\it obtuse} classifiers contribute 
+1 bit of information each, per classification. 
 
-Suppose the $k+1^{\rm th}$ classifier now submits a classification,
-on this subject. We can generalise \Eref{eq:app:first} by replacing the
-prior probability with the current posterior probability:
+In fact, the only classifier that contributes the minimum information per
+classification, zero bits, is the {\it random} classifier, whose agent's
+confusion matrix elements are all 0.5.   
+We conservatively initialise all the agents' confusion matrices to be that of
+the random classifier. This makes no allowance for volunteers that actually do
+have previous experience of what gravitational lenses look like, but should
+help prevent large numbers of false positives being assigned high probability.
+Plotting  $\langle I_k \rangle$ as a function of time will, to some extent,
+illustrate the
+learning process undergone by the $k^{\rm th}$ volunteer-agent partnership.
+
+Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
+subject just classified by the $k^{\rm th}$ volunteer. We can generalise
+\Eref{eq:app:first} by replacing the prior probability with the current
+posterior probability:
 \begin{align}
-  \pr(\LENS & |C_{k+1},T_{k+1},\data) = \\ \notag
+  \label{eq:app:update}
+  \pr(\LENS & |C_{k+1},T_{k+1},\data) = \\
   & \frac{1}{Z} \pr(C_{k+1}|\LENS,T_{k+1}) \cdot \pr(\LENS|\data) \\ \notag
 {\rm where}\;\; Z = & \pr(C_{k+1}|\LENS,T_{k+1})\cdot\pr(\LENS|\data) \\ \notag
-      & + \pr(C_{k+1}|\NOT,T_{k+1})\cdot\pr(\NOT|\data),
-  \label{eq:app:update}
+      & + \pr(C_{k+1}|\NOT,T_{k+1})\cdot\pr(\NOT|\data), \notag
 \end{align}
 and $\data = \{C_k,T_k\}$ is the set of all previous
-classifications, each given their classifier's training subjects.
+classifications, and the set of training subjects seen by each of those
+volunteers.
 $\pr(\LENS|\data)$ is the fundamental property of each test subject that
-we are seeking. We track $\pr(\LENS|\data)$ as a function of time,
+we are trying to infer. We track $\pr(\LENS|\data)$ as a function of time,
 and by comparing it to a lower or upper thresholds, make decisions about
 whether to retire the subject from the classification interface or
 promote it in \Talk, respectively.

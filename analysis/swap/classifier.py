@@ -13,11 +13,13 @@ class Classifier(object):
         Classifier
 
     PURPOSE
-        Model an individual classifier.
+        Provide an agent who will interpret the classifications of an 
+        individual volunteer.
 
     COMMENTS
-        The Classifier is a person, whose Name is either a userid or, if
-        that is not available, an IP address. The Classifier has a
+        A Classifier is an agent who is assigned to represent a 
+        volunteer, whose Name is either a Zooniverse userid or, if
+        that is not available, an IP address. A Classifier has a
         History of N classifications, including ND that turned out to be
         duds and NL that turned out to be lenses. (ND+NL) is the total
         number of training subjects classified, and is equal to N in the
@@ -25,20 +27,33 @@ class Classifier(object):
         "confusion matrix" parameterised by two numbers, PD and PL, the
         meaning of which is as follows:
         
-        When a Classifier sees a subject, they say:
+        A Classifier assumes that its volunteer says:
         
-        | "LENS" when it is "NOT"    "LENS" when it is a "LENS" |
-        | with probability (1-PD)    with probability PL        |
-        |                                                       |
-        | "NOT" when it is "NOT"     "NOT" when it is a "LENS"  |
-        | with probability PD        with probability (1-PL)    |
+        | "LENS" when it is NOT    "LENS" when it is a LENS  |
+        | with probability (1-PD)    with probability PL     |
+        |                                                    |
+        | "NOT" when it is NOT     "NOT" when it is a LENS   |
+        | with probability PD        with probability (1-PL) |
         
-        We make the simplest possible assignment for these
-        probabilities, namely that PX = 0.5 if NX = 0, and then update
-        from there. To make this work, we initialise all Classifiers
-        with NL = ND = 2, implying that they got 1 lens right and 1 dud
-        right before their classifications were begun. Obviously this is
-        a horrible hack. 
+        It makes the simplest possible assignment for these
+        probabilities, namely that PX = 0.5 if NX = 0, and then updates
+        from there using the training subjects such that 
+        PX = NX_correct / NX at all times. For example, if the 
+        volunteer is right about 80% of the simulated lenses they see, 
+        the agent will assign PL = Pr("LENS"|LENS) = 0.8.
+        
+        To make the numbers come out right, we initialise all 
+        Classifiers with NL = ND = 2 as well as PL = PD = 0.5, implying
+        that they got 1 lens right and 1 dud right before their 
+        classifications were begun. This is conservative (in 
+        that it probably underestimates the volunteers' natural 
+        lens-spotting talent, and also a horrible hack. 
+        
+        The big assumption the Classifier is making is that its 
+        volunteer has a single, constant PL and a single, constant 
+        PD, which it estimates using all the volunteer's data. This is
+        clearly sub-optimal, but might be good enough for a first 
+        attempt. We'll see!
         
         
     INITIALISATION
@@ -93,9 +108,9 @@ class Classifier(object):
         
 # ----------------------------------------------------------------------
 # Update confusion matrix with latest result:
-#   eg.  collaboration.member[Name].said(it_was='LENS',actually_it_was='NOT')
+#   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT')
 
-    def said(self,it_was=None,actually_it_was=None):
+    def heard(self,it_was=None,actually_it_was=None):
 
         if it_was==None or actually_it_was==None:
             pass

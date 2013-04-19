@@ -125,7 +125,8 @@ def SWAP(argv):
         raise "SWAP: analysis between 2 points in time not yet implemented"
     
     # ------------------------------------------------------------------
-    # Read in, or create, an object representing the crowd:
+    # Read in, or create, a bureau of agents who will represent the 
+    # collaboration:
     
     collaboration = swap.read_pickle(tonights.parameters['crowdfile'],'crowd')
 
@@ -148,11 +149,11 @@ def SWAP(argv):
     
         # Pull out a fake classification:
         if k == 0: 
-            Name,ID,category,X,Y = ('Phil1','0001' ,'training','NOT','LENS')
+            Name,ID,category,X,Y = ('Phil1','0001' ,'training','NOT','NOT')
         if k == 1: 
             Name,ID,category,X,Y = ('Phil2','0001' ,'training','LENS','LENS')
         if k == 2: 
-            Name,ID,category,X,Y = ('Phil1','0002' ,'training','LENS','NOT')
+            Name,ID,category,X,Y = ('Phil1','0002' ,'training','LENS','LENS')
         if k == 3: 
             Name,ID,category,X,Y = ('Phil1','0003' ,'training','LENS','LENS')
         if k == 4: 
@@ -160,24 +161,32 @@ def SWAP(argv):
         if k == 5: 
             Name,ID,category,X,Y = ('Phil2','0003' ,'training','NOT','LENS')
 
-        # Register new members:
+        # Register new volunteers, and create an agent for each one:
         if Name not in collaboration.list():  
             collaboration.member[Name] = swap.Classifier(Name)
+            # Note that a collaboration.member is an *agent*, not a 
+            # person. People exist in real life, whereas this is 
+            # just a piece of software!
+        
+        # Register newly-classified subjects:
         if ID not in sample.list():           
             sample.member[ID] = swap.Subject(ID,category,kind=Y)    
 
-        # Update the classifier's confusion matrix:
+        # Update the agent's confusion matrix, based on what it heard:
         if category == 'training':
-            collaboration.member[Name].said(it_was=X,actually_it_was=Y)
+            collaboration.member[Name].heard(it_was=X,actually_it_was=Y)
 
-        # Update the subject's lens probability:
+        # Update the subject's lens probability using input from the 
+        # collaboration member. We send that member's agent to the subject
+        # to do this.  
         sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
 
         # Brag about it:
         print "SWAP: subject "+ID+" was classified by "+Name
-        print "SWAP: he said",X," when it was ",Y,": expertise,PL,PD = ", \
-            collaboration.member[Name].expertise,collaboration.member[Name].PL,collaboration.member[Name].PD
-        print "SWAP: its new probability = ",sample.member[ID].probability
+        print "SWAP: he/she said "+X+" when it was "+Y
+        print "SWAP: their agent reckons their expertise = ",collaboration.member[Name].expertise
+        print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
+        print "SWAP: and the subject's new probability as ",sample.member[ID].probability
        
 
     # ------------------------------------------------------------------
@@ -185,6 +194,7 @@ def SWAP(argv):
     
     for Name in collaboration.list():
         collaboration.member[Name].plot_history(fig1)
+        print collaboration.member[Name].history
         
     for ID in sample.list():
         sample.member[ID].plot_trajectory(fig2)

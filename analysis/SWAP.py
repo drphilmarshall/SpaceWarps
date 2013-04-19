@@ -144,22 +144,30 @@ def SWAP(argv):
     fig2 = sample.start_trajectory_plot()
     
     # ------------------------------------------------------------------
+    # Read in a batch of classifications:
+    
+    db = swap.ToyDB(ambition=10)
+    
+    # ------------------------------------------------------------------
    
-    for k in range(6):
+    for i in range(db.size()):
     
         # Pull out a fake classification:
-        if k == 0: 
-            Name,ID,category,X,Y = ('Phil1','0001' ,'training','NOT','NOT')
-        if k == 1: 
-            Name,ID,category,X,Y = ('Phil2','0001' ,'training','LENS','LENS')
-        if k == 2: 
-            Name,ID,category,X,Y = ('Phil1','0002' ,'training','LENS','LENS')
-        if k == 3: 
-            Name,ID,category,X,Y = ('Phil1','0003' ,'training','LENS','LENS')
-        if k == 4: 
-            Name,ID,category,X,Y = ('Phil2','0002' ,'training','LENS','NOT')
-        if k == 5: 
-            Name,ID,category,X,Y = ('Phil2','0003' ,'training','NOT','LENS')
+#         if i == 0: 
+#             Name,ID,category,X,Y = ('Phil1','0001' ,'training','NOT','NOT')
+#         if i == 1: 
+#             Name,ID,category,X,Y = ('Phil2','0001' ,'training','LENS','LENS')
+#         if i == 2: 
+#             Name,ID,category,X,Y = ('Phil1','0002' ,'training','LENS','LENS')
+#         if i == 3: 
+#             Name,ID,category,X,Y = ('Phil1','0003' ,'training','LENS','LENS')
+#         if i == 4: 
+#             Name,ID,category,X,Y = ('Phil2','0002' ,'training','LENS','NOT')
+#         if i == 5: 
+#             Name,ID,category,X,Y = ('Phil2','0003' ,'training','NOT','LENS')
+        
+        Name,ID,category,X,Y = db.get_classification(i)
+        
 
         # Register new volunteers, and create an agent for each one:
         if Name not in collaboration.list():  
@@ -194,7 +202,6 @@ def SWAP(argv):
     
     for Name in collaboration.list():
         collaboration.member[Name].plot_history(fig1)
-        print collaboration.member[Name].history
         
     for ID in sample.list():
         sample.member[ID].plot_trajectory(fig2)

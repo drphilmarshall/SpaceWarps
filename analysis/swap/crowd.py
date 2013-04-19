@@ -75,6 +75,7 @@ class Crowd(object):
         axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
         axes.set_xlabel('No. of training subjects classified')
         axes.set_ylabel('Information per classification (bits)')
+        axes.set_title('Agent Histories')
             
         return axes
 

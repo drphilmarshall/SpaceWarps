@@ -72,6 +72,7 @@ class Collection(object):
         axes.set_yticks([0.00001,0.0001,0.001,0.01,0.1,1.0])
         axes.set_xlabel('No. of classifications')
         axes.set_ylabel('Posterior Probability Pr(LENS|d)')
+        axes.set_title('Subject Trajectories')
             
         return axes
 

@@ -6,3 +6,4 @@ from crowd import *
 from classifier import *
 from collection import *
 from subject import *
+from toydb import *

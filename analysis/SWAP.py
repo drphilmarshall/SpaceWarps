@@ -146,7 +146,7 @@ def SWAP(argv):
     # ------------------------------------------------------------------
     # Read in a batch of classifications:
     
-    db = swap.ToyDB(ambition=10)
+    db = swap.ToyDB(ambition=1)
     
     # ------------------------------------------------------------------
    

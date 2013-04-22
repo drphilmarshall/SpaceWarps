@@ -136,7 +136,8 @@ class Classifier(object):
     
         plt.sca(axes)
         N = np.linspace(1, len(self.history), len(self.history), endpoint=True)
-        plt.plot(N, self.history, color="green", alpha="0.1", linewidth=2.0, linestyle="-")
+        plt.plot(N, self.history, color="green", alpha=0.1, linewidth=2.0, linestyle="-")
+        plt.scatter(N[-1], self.history[-1], color="green", alpha=0.5)
     
         return
 

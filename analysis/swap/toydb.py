@@ -34,8 +34,6 @@ class ToyDB(object):
 
 # ----------------------------------------------------------------------------
 
-class ToyDB(object):
-  
     def __init__(self,ambition):
 
         self.client = "Highest bidder"
@@ -90,9 +88,10 @@ class ToyDB(object):
 
             for i in range(1000*self.ambition):
                 classification = {}
-                classification['Name'] = self.pick_one('volunteers')
                 
+                classification['Name'] = self.pick_one('volunteers')
                 subject = self.pick_one('subjects')
+                
                 classification['ID'] = subject['ID']
                 classification['category'] = subject['category']
                 classification['kind'] = subject['kind']
@@ -130,7 +129,7 @@ class ToyDB(object):
         # All toy volunteers are equally skilled! Can ignore them, and
         # just use constant P values.
         PL = 0.9
-        PD = 0.6
+        PD = 0.8
         
         if subject['kind'] == 'LENS':
             if np.random.rand() < PL: word = 'LENS'

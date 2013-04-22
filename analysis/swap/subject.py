@@ -6,7 +6,7 @@ import numpy as np
 import pylab as plt
 
 # Every subject starts with the following probability of being a LENS:
-prior = 0.001
+prior = 0.0002
 
 # ======================================================================
 
@@ -119,8 +119,9 @@ class Subject(object):
         else:
             colour = 'black'
         
-        plt.plot(N, self.trajectory, color=colour, alpha="0.1", linewidth=1.0, linestyle="-")
-    
+        plt.plot(N, self.trajectory, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")
+        plt.scatter(N[-1], self.trajectory[-1], color=colour, alpha=0.5)
+        
         return
 
 # ======================================================================

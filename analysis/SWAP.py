@@ -129,20 +129,12 @@ def SWAP(argv):
     # collaboration:
     
     collaboration = swap.read_pickle(tonights.parameters['crowdfile'],'crowd')
-
-    # Start a plot of their histories:
-    
-    fig1 = collaboration.start_history_plot()
-    
+   
     # ------------------------------------------------------------------
     # Read in, or create, an object representing the candidate list:
     
     sample = swap.read_pickle(tonights.parameters['samplefile'],'collection')
-    
-    # Start a plot of their probabilities:
-    
-    fig2 = sample.start_trajectory_plot()
-    
+        
     # ------------------------------------------------------------------
     # Read in a batch of classifications:
     
@@ -200,30 +192,28 @@ def SWAP(argv):
     # ------------------------------------------------------------------
     # Make plots:
     
+    # Agent histories:
+    
+    fig1 = collaboration.start_history_plot()
     for Name in collaboration.list():
         collaboration.member[Name].plot_history(fig1)
+    pngfile = swap.get_new_filename(tonights.parameters,'history')
+    collaboration.finish_history_plot(fig1,pngfile)
         
+    # Subject probabilities:
+    
+    fig2 = sample.start_trajectory_plot()
     for ID in sample.list():
         sample.member[ID].plot_trajectory(fig2)
+    pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
+    sample.finish_trajectory_plot(fig2,pngfile)
     
-
     # ------------------------------------------------------------------
     # Pickle the collaboration. Hooray! 
 
     new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
     swap.write_pickle(collaboration,new_crowdfile)
 
-
-    # ------------------------------------------------------------------
-    # Write out plots to pngfiles:
-    
-    pngfile = swap.get_new_filename(tonights.parameters,'history')
-    collaboration.finish_history_plot(fig1,pngfile)
-    
-    pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
-    sample.finish_trajectory_plot(fig2,pngfile)
-    
-    
     # ------------------------------------------------------------------
     
     print swap.doubledashedline

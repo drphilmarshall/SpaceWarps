@@ -147,3 +147,15 @@ Safari/537.31'}]}
 # Perfect!
 
 # ============================================================================
+# 2013-04-22 (Monday) 23:24 BST
+
+# Getting data out of mongodb is not so intuitive. Wrapped it up in
+# python so that I can just do, eg
+
+cd workspace
+python ../swap/mongodb.py
+
+# But I cannot do even the most basic things - so Ive written down what
+# I want to do in plausible python, for Amit to advise on!
+
+# ============================================================================

@@ -1,7 +1,7 @@
 # ======================================================================
 
 import numpy as np
-import os,sys,subprocess
+import os,sys,subprocess,datetime
 from pymongo import MongoClient
 
 # ======================================================================
@@ -69,7 +69,7 @@ class MongoDB(object):
         self.process = subprocess.Popen(["mongod","--dbpath","."],stdout=self.logfile,stderr=self.logfile)
         
         # Check everything is working:
-        if self.process.poll() == 0: print "MongoDB: server is up and running"
+        if self.process.poll() == None: print "MongoDB: server is up and running"
         
         # Connect to the Mongo:
         self.client = MongoClient('localhost', 27017)
@@ -130,20 +130,54 @@ class MongoDB(object):
         return
 
 # ======================================================================
-
+# None of this code works. It's just to show Amit what I want to do!
 
 if __name__ == '__main__':
 
     m = MongoDB('spacewarps-2013-04-06_20-07-28')
 
-    S = m.subjects.find_one({'zooniverse_id' : 'ASW0000002'})
-    print "S = ",S
+    # Get a batch of classifications between t1 and t2:
     
-    C = m.classifications.find_one({'id' : S['id']})
-    print "C = ",C
-    
-    C2 = m.classifications.find_one()
-    print "C2 = ",C2
-
+    t1 = datetime.datetime(2013, 4, 4, 20, 33, 45, 0)
+    t2 = datetime.datetime(2013, 4, 5, 20, 33, 45, 0)
+    batch = m.classifications.find(updated_at > t1 and updated_at < t2)
+        
+    for classification in batch:
+        
+        # Who made the classification?
+        Name = classification['user_id']
+        # If there is no user_id, get the ip address...
+        
+        # Pull out the subject that was classified:
+        ID = classification['subject_id']
+        subject = m.subjects.find_one(subject_id == ID)
+        
+        # Was it a training subject or a test subject?
+        category = subject['category']
+        
+        if category == 'training':
+            # Was it a sim or a dud?
+            kind = subject['kind']
+        
+        # What was the result of the classification?
+        if category == 'training':
+            if kind == 'sim':
+                # Did the user hit the arcs?
+                success = classification['hit_arcs'] # True or False?
+                if success: result = 'LENS'
+                else: result = 'NOT'
+            else:
+                # Did the user make no annotations?
+                success = classification['skipped'] # True or False?
+                if success: result = 'NOT'
+                else: result = 'LENS'
+        
+        else: 
+            foundsomething = (len(annotations) > 0) # True or False?
+            if foundsomething: result = 'LENS'
+            else: result = 'NOT'
+        
+        print Name,ID,category,result,kind
+        
     
     m.terminate()

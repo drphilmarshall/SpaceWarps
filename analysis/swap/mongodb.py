@@ -56,20 +56,20 @@ class MongoDB(object):
 
     def __init__(self,dumpname=None):
 
-        self.dumpname = dumpname
-       
-        # Keep a record of what goes on:
-        self.logfilename = os.getcwd()+'/'+self.dumpname+'.log'
-        self.logfile = open(self.logfilename,"w")
-        
-        # Start the Mongo server in the background:
-        subprocess.call(["mongorestore",self.dumpname],stdout=self.logfile,stderr=self.logfile)
-        os.chdir(self.dumpname)
-        self.cleanup()
-        self.process = subprocess.Popen(["mongod","--dbpath","."],stdout=self.logfile,stderr=self.logfile)
-        
-        # Check everything is working:
-        if self.process.poll() == None: print "MongoDB: server is up and running"
+        # self.dumpname = dumpname
+        #        
+        # # Keep a record of what goes on:
+        # self.logfilename = os.getcwd()+'/'+self.dumpname+'.log'
+        # self.logfile = open(self.logfilename,"w")
+        # 
+        # # Start the Mongo server in the background:
+        # subprocess.call(["mongorestore",self.dumpname],stdout=self.logfile,stderr=self.logfile)
+        # os.chdir(self.dumpname)
+        # self.cleanup()
+        # self.process = subprocess.Popen(["mongod","--dbpath","."],stdout=self.logfile,stderr=self.logfile)
+        # 
+        # # Check everything is working:
+        # if self.process.poll() == None: print "MongoDB: server is up and running"
         
         # Connect to the Mongo:
         self.client = MongoClient('localhost', 27017)
@@ -134,19 +134,42 @@ class MongoDB(object):
 
 if __name__ == '__main__':
 
-    m = MongoDB('spacewarps-2013-04-06_20-07-28')
+    m = MongoDB('ouroboros_staging')
 
     # Get a batch of classifications between t1 and t2:
     
     t1 = datetime.datetime(2013, 4, 4, 20, 33, 45, 0)
     t2 = datetime.datetime(2013, 4, 5, 20, 33, 45, 0)
-    batch = m.classifications.find(updated_at > t1 and updated_at < t2)
-        
+    # batch = m.classifications.find({'updated_at': {"$gt": t1}, 'updated_at:': {"$lt": t2}})
+    
+    # Select classifications that came after t1.  Note the greater than operator "$gt".
+    # Batch is a cursor, it does not read anything into memory yet.
+    batch = m.classifications.find({'updated_at': {"$gt": t1}})
+    
+    # Here is where items are read.  Batch has a next() method, which returns the subsequent
+    # record.  Or we can execute a for loop.
     for classification in batch:
         
         # Who made the classification?
-        Name = classification['user_id']
+        
+        # The classification will be identified by either the user_id or
+        # the user_ip.  The value will be abstracted into the variable user.
+        
+        # Not all records have all keys.  For instance, classifications from
+        # anonymous users will not have a user_id key. We must check that the key exists,
+        # and if so, get the value.
+        if classification.has_key('user_id'):
+          user = classification['user_id']
         # If there is no user_id, get the ip address...
+        else:
+          # I think we're safe with user_ip.  All records should have this field.
+          # Check the key if you're worried. 
+          user = classification['user_ip']
+        
+        print user
+        
+        # Continuing because the below code propagates errors.
+        continue
         
         # Pull out the subject that was classified:
         ID = classification['subject_id']

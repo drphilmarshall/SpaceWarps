@@ -133,7 +133,10 @@ class MongoDB(object):
 # None of this code works. It's just to show Amit what I want to do!
 
 if __name__ == '__main__':
-
+    
+    testGroup = '5154a3783ae74086ab000001'
+    trainingGroup = '5154a3783ae74086ab000002'
+    
     m = MongoDB('ouroboros_staging')
 
     # Get a batch of classifications between t1 and t2:
@@ -166,41 +169,75 @@ if __name__ == '__main__':
           # Check the key if you're worried. 
           user = classification['user_ip']
         
-        print user
-        
-        # Continuing because the below code propagates errors.
-        continue
-        
         # Pull out the subject that was classified:
-        ID = classification['subject_id']
-        subject = m.subjects.find_one(subject_id == ID)
+        subjects = classification['subjects']
+        if len(subjects) == 0:
+          continue
+        
+        for subject in subjects:
+          ID = subject['id']
+        
+        subject = m.subjects.find_one({'_id': ID})
         
         # Was it a training subject or a test subject?
-        category = subject['category']
+        if subject.has_key('group_id'):
+          groupId = subject['group_id']
+        else:
+          # Subject is tutorial and has no group id
+          continue
         
-        if category == 'training':
+        kind = ''
+        if str(groupId) == trainingGroup:
             # Was it a sim or a dud?
-            kind = subject['kind']
-        
-        # What was the result of the classification?
-        if category == 'training':
-            if kind == 'sim':
-                # Did the user hit the arcs?
-                success = classification['hit_arcs'] # True or False?
-                if success: result = 'LENS'
-                else: result = 'NOT'
+            word = subject['metadata']['training']['type']
+            
+            if word == 'empty':
+              kind = 'dud'
             else:
-                # Did the user make no annotations?
-                success = classification['skipped'] # True or False?
-                if success: result = 'NOT'
-                else: result = 'LENS'
+              kind = 'sim'
         
-        else: 
-            foundsomething = (len(annotations) > 0) # True or False?
-            if foundsomething: result = 'LENS'
-            else: result = 'NOT'
+        if kind == 'sim':
+          
+          # Faking: Any number of markers constitutes a hit.
+          
+          # Select the annotations
+          annotations = classification['annotations']
+          
+          # Start an annotation counter
+          nAnnotations = 0
+          
+          # Loop over annotations. NOTE: Not every annotation has an associated coordinate (e.g. x, y)
+          for annotation in annotations:
+            if annotation.has_key('x'):
+              nAnnotations += 1
+          
+          result = 'LENS'
+          if nAnnotations == 0:
+            result = 'NOT'
+          
         
-        print Name,ID,category,result,kind
+        
+        continue
+        
+        # # What was the result of the classification?
+        # if category == 'training':
+        #     if kind == 'sim':
+        #         # Did the user hit the arcs?
+        #         success = classification['hit_arcs'] # True or False?
+        #         if success: result = 'LENS'
+        #         else: result = 'NOT'
+        #     else:
+        #         # Did the user make no annotations?
+        #         success = classification['skipped'] # True or False?
+        #         if success: result = 'NOT'
+        #         else: result = 'LENS'
+        # 
+        # else: 
+        #     foundsomething = (len(annotations) > 0) # True or False?
+        #     if foundsomething: result = 'LENS'
+        #     else: result = 'NOT'
+        # 
+        # print Name,ID,category,result,kind
         
     
     m.terminate()

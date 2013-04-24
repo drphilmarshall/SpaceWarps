@@ -87,7 +87,7 @@ def get_new_filename(pars,flavour):
     head = pars['survey']+'_'+pars['finish']+'_'+flavour
     if flavour == 'crowd' or flavour == 'collection':
         ext = 'pickle'
-    elif flavour == 'history' or flavour == 'trajectory':
+    elif flavour == 'history' or flavour == 'trajectory' or flavour == 'probabilities':
         ext = 'png'
     else:
         raise Exception("SWAP: io: eww - what's that flavour? "+flavour)    

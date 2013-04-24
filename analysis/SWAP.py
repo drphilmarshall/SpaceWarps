@@ -213,7 +213,13 @@ def SWAP(argv):
     for Name in collaboration.list():
         collaboration.member[Name].plot_history(fig1)
     collaboration.finish_history_plot(fig1,pngfile)
-        
+
+    # Agent probabilities:
+    
+    pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
+    print "SWAP: plotting classifier probabilities in "+pngfile
+    collaboration.plot_histogram(pngfile)        
+
     # Subject probabilities:
     
     fig2 = sample.start_trajectory_plot()

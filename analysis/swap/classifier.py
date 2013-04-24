@@ -86,7 +86,7 @@ class Classifier(object):
         self.PD = 0.5
         self.PL = 0.5
         self.contribution = self.update_contribution()
-        self.history = np.array([self.contribution])
+        self.history = {'I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         return None
 
 # ----------------------------------------------------------------------
@@ -126,7 +126,9 @@ class Classifier(object):
             else:
                 raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
  
-            self.history = np.append(self.history,self.update_contribution())
+            self.history['I'] = np.append(self.history['I'],self.update_contribution())
+            self.history['PL'] = np.append(self.history['PL'],self.PL)
+            self.history['PD'] = np.append(self.history['PD'],self.PD)
 
         return
 
@@ -136,10 +138,13 @@ class Classifier(object):
     def plot_history(self,axes):
     
         plt.sca(axes)
-        N = np.linspace(1, len(self.history), len(self.history), endpoint=True)
-        plt.plot(N, self.history, color="green", alpha=0.1, linewidth=2.0, linestyle="-")
-        plt.scatter(N[-1], self.history[-1], color="green", alpha=0.5)
-    
+        I = self.history['I']
+        N = np.linspace(1, len(I), len(I), endpoint=True)
+        
+        # Information contributions:
+        plt.plot(N, I, color="green", alpha=0.1, linewidth=2.0, linestyle="-")
+        plt.scatter(N[-1], I[-1], color="green", alpha=0.5)
+        
         return
 
 # ======================================================================

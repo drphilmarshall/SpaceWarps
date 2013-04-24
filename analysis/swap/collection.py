@@ -93,7 +93,7 @@ class Collection(object):
         plt.sca(upper)
         upper.set_xlim(1e-8,1.0)
         upper.set_xscale('log')
-        upper.set_ylim(200.0,0.5)
+        upper.set_ylim(50.0,0.8)
         upper.set_yscale('log')
         plt.axhline(y=5.5,color='gray',linestyle='dotted')
         plt.axvline(x=0.3,color='blue',linestyle='dotted')

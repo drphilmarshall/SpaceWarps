@@ -7,6 +7,10 @@ try: from pymongo import MongoClient
 except:
     print "MongoDB: pymongo is not installed. You can still --practise though"
     sys.exit()
+
+# Hard-coded for all Space Warps datasets? Or just beta?
+testGroup = '5154a3783ae74086ab000001'
+trainingGroup = '5154a3783ae74086ab000002'
     
 # ======================================================================
 
@@ -46,14 +50,17 @@ class MongoDB(object):
         ToyDB.get_classification()
         
     BUGS
-
+        - groupIds are hard-coded, and so could go wrong any time.
+        - arc hits in sim subjects are not yet recorded.
+        
     AUTHOR
       This file is part of the Space Warps project, and is distributed 
       under the GPL v2 by the Space Warps Science Team.
       http://spacewarps.org/
 
     HISTORY
-      2013-04-18  Started Marshall (Oxford)
+      2013-04-18  Started: Marshall (Oxford)
+      2013-04-23  Correct Mongo calls supplied: Kapadia (Adler) 
     """
 
 # ----------------------------------------------------------------------------
@@ -82,75 +89,11 @@ class MongoDB(object):
         return None
 
 # ----------------------------------------------------------------------------
-# # Return a tuple of the key quantities:
-# 
-#     def get_classification(self,i):
-#         
-#         C = self.classifications[i]    
-#         
-#         return C['Name'],C['ID'],C['category'],C['result'],C['kind']
-# 
-# ----------------------------------------------------------------------------
-# Return the size of the classification table:
+# Return a tuple of the key quantities, given a cursor pointing to a 
+# record in the classifications table:
 
-    def size(self):
+    def digest(self,classification):
         
-        return len(self.classifications)
-        
-# ----------------------------------------------------------------------------
-
-    def terminate(self):
-    
-        self.process.terminate()
-        self.logfile.close()
-        self.cleanup()
-
-        return
-
-# ----------------------------------------------------------------------------
-
-    def cleanup(self):
-    
-        try: os.remove('mongod.lock')
-        except: pass
-        try: os.remove('local.0')
-        except: pass
-        try: os.remove('local.ns')
-        except: pass
-        try: os.removedirs('journal')
-        except: pass
-        try: os.removedirs('_tmp')
-        except: pass
-        
-        return
-
-# ======================================================================
-
-if __name__ == '__main__':
-    
-    # Hard-coded for all Space Warps datasets? Or just beta?
-    testGroup = '5154a3783ae74086ab000001'
-    trainingGroup = '5154a3783ae74086ab000002'
-    
-    db = MongoDB()
-    
-    # Select all classifications that were made before t1.  
-    # Note the greater than operator "$lt".
-    # Batch is a cursor, it does not read anything into memory yet.
-    
-    # t1 = datetime.datetime(2013, 4, 4, 23, 59, 59, 0)
-    
-    # Make sure we catch them all!
-    t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
-    batch = db.classifications.find({'updated_at': {"$gt": t1}})
-    
-    # Now, loop over classifications, digesting them.
-    
-    # Batch has a next() method, which returns the subsequent
-    # record, or we can execute a for loop as follows:
-    count = 0
-    for classification in batch:
-                
         # When was this classification made?
         t = classification['updated_at']
         
@@ -181,21 +124,21 @@ if __name__ == '__main__':
         
         # Ignore the empty lists (eg the first tutorial subject...)
         if len(subjects) == 0:
-            continue
+            return None
         
         # Get the subject ID:
         for subject in subjects:
             ID = subject['id']
         
         # And finally pull the subject itself from the subject table:
-        subject = db.subjects.find_one({'_id': ID})
+        subject = self.subjects.find_one({'_id': ID})
         
         # Was it a training subject or a test subject?
         if subject.has_key('group_id'):
             groupId = subject['group_id']
         else:
             # Subject is tutorial and has no group id:
-            continue
+            return None
         
         # What kind of subject was it? Training or test? A sim or a dud?
         kind = ''
@@ -234,12 +177,85 @@ if __name__ == '__main__':
             else:
                 result = 'LENS'            
         
-        # Check we got all 5 items:            
-        items = str(t),str(Name),str(ID),kind,result
-        if len(items) != 5: print "oops! ",items[:] 
+        # And finally, what's the truth about this subject?
+        if kind == 'sim':
+            truth = 'LENS'
+        elif kind == 'dud':
+            truth = 'NOT'
+        else:    
+            truth = 'UNKNOWN'
         
-        # Count classifications
-        count += 1
+        # Check we got all 5 items:            
+        items = str(t),str(Name),str(ID),result,truth
+        if len(items) != 5: print "MongoDB: digest failed: ",items[:] 
+                         
+        return items[:]
+
+
+# ----------------------------------------------------------------------------
+# Return the size of the classification table:
+
+    def size(self):
+        
+        return len(self.classifications)
+        
+# ----------------------------------------------------------------------------
+
+    def terminate(self):
+    
+        self.process.terminate()
+        self.logfile.close()
+        self.cleanup()
+
+        return
+
+# ----------------------------------------------------------------------------
+
+    def cleanup(self):
+    
+        try: os.remove('mongod.lock')
+        except: pass
+        try: os.remove('local.0')
+        except: pass
+        try: os.remove('local.ns')
+        except: pass
+        try: os.removedirs('journal')
+        except: pass
+        try: os.removedirs('_tmp')
+        except: pass
+        
+        return
+
+# ======================================================================
+
+if __name__ == '__main__':
+    
+    db = MongoDB()
+    
+    # Select all classifications that were made before t1.  
+    # Note the greater than operator "$gt".
+    # Batch is a cursor, it does not read anything into memory yet.
+    # Make sure we catch them all!
+    t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
+
+    batch = db.classifications.find({'updated_at': {"$gt": t1}})
+    
+    # Now, loop over classifications, digesting them.
+    
+    # Batch has a next() method, which returns the subsequent
+    # record, or we can execute a for loop as follows:
+    count = 0
+    for classification in batch:
+                        
+        items = db.digest(classification)
+        
+        # Check we got all 5 items:            
+        if items is not None:
+            if len(items) != 5: 
+                print "oops! ",items[:]
+            else:    
+                # Count classifications
+                count += 1
     
     # Good! Whole database dealt with.
     print "Counted ",count," classifications, that each look like:"

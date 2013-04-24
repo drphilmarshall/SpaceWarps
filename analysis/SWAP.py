@@ -160,7 +160,10 @@ def SWAP(argv):
     for classification in batch:
 
         # Get the vitals for this classification:
-        t,Name,ID,category,kind,X,Y = db.digest(classification)
+        values = db.digest(classification)
+        if values is None:
+          continue
+        t,Name,ID,category,kind,X,Y = values
 
         # BUG! The above line fails, with error:
         #   TypeError: 'NoneType' object is not iterable

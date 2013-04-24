@@ -1,4 +1,3 @@
-from mongodb import *
 from logging import *
 from config import *
 from io import *
@@ -7,3 +6,4 @@ from classifier import *
 from collection import *
 from subject import *
 from toydb import *
+from mongodb import *

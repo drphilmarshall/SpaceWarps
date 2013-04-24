@@ -159,3 +159,37 @@ python ../swap/mongodb.py
 # I want to do in plausible python, for Amit to advise on!
 
 # ============================================================================
+# 2013-04-24 (Wednesday) 10:18 BST
+# 
+# Great session with Amit yesterday solving all my db access problems!
+# He says that on the Zooniverse system, the correct db is always online,
+# so we should just connect to the client. That means that all of this
+# wrapper I wrote is redundant - but I preserve it here, for reference:
+
+#     self.dumpname = dumpname
+#            
+#     # Keep a record of what goes on:
+#     self.logfilename = os.getcwd()+'/'+self.dumpname+'.log'
+#     self.logfile = open(self.logfilename,"w")
+#     
+#     # Start the Mongo server in the background:
+#     subprocess.call(["mongorestore",self.dumpname],stdout=self.logfile,stderr=self.logfile)
+#     os.chdir(self.dumpname)
+#     self.cleanup()
+#     self.process = subprocess.Popen(["mongod","--dbpath","."],stdout=self.logfile,stderr=self.logfile)
+#     
+#     # Check everything is working:
+#     if self.process.poll() == None: print "MongoDB: server is up and running"
+# 
+#     # Connect to the Mongo:
+#     self.client = MongoClient('localhost', 27017)
+#     self.db = self.client['ouroboros_staging']
+# 
+#     self.subjects = self.db['spacewarp_subjects']
+#     self.classifications = self.db['spacewarp_classifications']
+
+# Followed by, later,
+#     m.terminate()
+
+
+# ============================================================================

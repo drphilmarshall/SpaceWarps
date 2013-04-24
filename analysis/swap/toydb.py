@@ -159,6 +159,34 @@ class ToyDB(object):
 # ======================================================================
 
 if __name__ == '__main__':
-  m = ToyDB()
-  # print m.subjects
-  # print m.classifications
+
+    db = ToyDB(ambition=10)
+    
+    # Select all classifications that were made before t1.  
+    # Note the greater than operator ">".
+    # Make sure we catch them all!
+    t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
+
+    batch = db.find('since',t1)
+    
+    # Now, loop over classifications, digesting them.
+    
+    # Batch has a next() method, which returns the subsequent
+    # record, or we can execute a for loop as follows:
+    count = 0
+    for classification in batch:
+                        
+        items = db.digest(classification)
+        
+        # Check we got all 5 items:            
+        if items is not None:
+            if len(items) != 5: 
+                print "oops! ",items[:]
+            else:    
+                # Count classifications
+                count += 1
+    
+    # Good! Whole database dealt with.
+    print "Counted ",count," classifications, that each look like:"
+    print items[:]
+    

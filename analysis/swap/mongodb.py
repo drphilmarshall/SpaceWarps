@@ -89,6 +89,23 @@ class MongoDB(object):
         return None
 
 # ----------------------------------------------------------------------------
+# Return a batch of classifications, defined by a time range - either 
+# claasifications made 'since' t, or classifications made 'before' t:
+
+    def find(self,word,t):
+
+       if word == 'since':
+            batch = self.classifications.find({'updated_at': {"$gt": t}})
+       
+       elif word == 'before':
+            batch = self.classifications.find({'updated_at': {"$lt": t}})
+       
+       else
+           print "MongoDB: error, cannot find classifications '"+word+"' "+str(t)
+
+       return batch
+
+# ----------------------------------------------------------------------------
 # Return a tuple of the key quantities, given a cursor pointing to a 
 # record in the classifications table:
 
@@ -238,8 +255,9 @@ if __name__ == '__main__':
     # Make sure we catch them all!
     t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
 
-    batch = db.classifications.find({'updated_at': {"$gt": t1}})
-    
+    # batch = db.classifications.find({'updated_at': {"$gt": t1}})
+    batch = db.find('since',t1)
+
     # Now, loop over classifications, digesting them.
     
     # Batch has a next() method, which returns the subsequent

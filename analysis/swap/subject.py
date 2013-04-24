@@ -115,7 +115,7 @@ class Subject(object):
 
     def plot_trajectory(self,axes):
     
-        plt.sca(axes)
+        plt.sca(axes[0])
         N = np.linspace(1, len(self.trajectory), len(self.trajectory), endpoint=True)
         
         if self.kind == 'sim':

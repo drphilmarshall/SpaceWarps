@@ -191,5 +191,12 @@ python ../swap/mongodb.py
 # Followed by, later,
 #     m.terminate()
 
+# Worked example gives the following result, from the initial beta DB:
+
+# Counted  7564  classifications, that each look like:
+# ('2013-04-06 19:54:42.146000', '5065ff08d10d244cd10029ba', '515de2efe4bb21642700019a', 'test', 'NOT')
+
+
+
 
 # ============================================================================

@@ -64,11 +64,15 @@ class MongoDB(object):
         try: self.client = MongoClient('localhost', 27017)
         except: 
             print "MongoDB: couldn't connect to the Mongo"
+            print "MongoDB: try doing something like this in a different shell:"
+            print "  mongorestore spacewarps-2013-04-06_20-07-28"
+            print "  mongod --dbpath . &"
             sys.exit()
         
         try: self.db = self.client['ouroboros_staging']
         except: 
             print "MongoDB: couldn't find a DB called ouroboros_staging"
+            print "MongoDB: did your mongorestore work correctly?"
             sys.exit()
 
         # Set up tables of subjects, and classifications: 

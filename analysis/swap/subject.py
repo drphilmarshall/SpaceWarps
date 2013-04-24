@@ -20,19 +20,26 @@ class Subject(object):
 
     COMMENTS
         Each subject knows whether it is a test or training subject, and
-        it knows its state (which is different according to category).
+        it knows its truth (which is different according to category).
         Each subject (regardless of category) has a probability of 
         being a LENS, and this is tracked along a trajectory.
         
-        Test subject states:
-          * Active    Still being classified:     P < ceiling
-          * Promoted  Still being classified:     P > ceiling
-          * Retired   No longer being classified: P < floor
-          
-        Training subject states:
-          * LENS      It actually is a LENS
-          * NOT       It actually is NOT a LENS
+        Subject states:
+          * active    Still being classified:     P < ceiling
+          * promoted  Still being classified:     P > ceiling
+          * retired   No longer being classified: P < floor
+        Training subjects are always active. Retired = inactive.
         
+        Subject kinds:
+          * test      A subject from the test (random, survey) set
+          * sim       A training subject containing a simulated lens
+          * dud       A training subject known not to contain any lenses
+        
+        Subject truths:
+          * LENS      It actually is a LENS (sim)
+          * NOT       It actually is NOT a LENS (dud)
+          * UNKNOWN   It could be either (test)
+
         
     INITIALISATION
         name
@@ -55,18 +62,15 @@ class Subject(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,name,category,kind=None):
+    def __init__(self,name,category,kind,truth):
+
         self.name = name
         self.category = category
+        self.kind = kind
+        self.truth = truth
 
-        if category == 'test':
-            self.state = 'Active'
-        if category == 'training':
-            self.state = kind
+        self.state = 'active'
             
-        if self.state is None: 
-           raise Exception("SWAP Subject: unkindness. Name, category = "+name+", "+category)    
-        
         self.probability = prior
         
         self.trajectory = np.array([self.probability])
@@ -76,27 +80,29 @@ class Subject(object):
 # ----------------------------------------------------------------------
 
     def __str__(self):
-        return 'individual subject named %s, Pr(LENS|d) = %.2f' % \
-               (self.name,self.probability)       
+        return 'individual (%s) subject named %s, Pr(LENS|d) = %.2f' % \
+               (self.kind,self.name,self.probability)       
         
 # ----------------------------------------------------------------------
 # Update probability of LENS, given latest classification:
-#   eg.  sample.member[ID].described(by=classifier,as_kind='LENS')
+#   eg.  sample.member[ID].was_described(by=classifier,as_being='LENS')
 
-    def described(self,by=None,as_kind=None):
+    def was_described(self,by=None,as_being=None):
 
-        if by==None or as_kind==None:
+        if by==None or as_being==None:
             pass
 
         else:
-            if as_kind=='LENS':
+            if as_being == 'LENS':
                 likelihood = by.PL
                 likelihood /= (by.PL*self.probability + (1-by.PD)*(1-self.probability))
-            elif as_kind=='NOT':
+            
+            elif as_being == 'NOT':
                 likelihood = (1-by.PL)
                 likelihood /= ((1-by.PL)*self.probability + by.PD*(1-self.probability))
+            
             else:
-                raise Exception("Apparently, the subject was a "+as_kind)
+                raise Exception("Unrecognised classification result: "+as_being)
 
             self.probability = likelihood*self.probability
             
@@ -112,11 +118,11 @@ class Subject(object):
         plt.sca(axes)
         N = np.linspace(1, len(self.trajectory), len(self.trajectory), endpoint=True)
         
-        if self.state=='LENS':
+        if self.kind == 'sim':
             colour = 'blue'
-        elif self.state=='NOT':
+        elif self.kind == 'dud':
             colour = 'red'
-        else:
+        elif self.kind == 'test':
             colour = 'black'
         
         plt.plot(N, self.trajectory, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")

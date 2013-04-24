@@ -53,7 +53,10 @@ def read_pickle(filename,flavour):
         
     except IOError:
 
-        if filename != 'None': print "SWAP: "+filename+" does not exist."
+        if filename == 'None': 
+            print "SWAP: no filename supplied."
+        else:
+            print "SWAP: "+filename+" does not exist."
 
         if flavour == 'crowd':
             contents = swap.Crowd()
@@ -61,7 +64,7 @@ def read_pickle(filename,flavour):
         elif flavour == 'collection':
             contents = swap.Collection()
         
-        print "SWAP: Made a new",contents
+        print "SWAP: made a new",contents
             
     return contents
 

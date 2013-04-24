@@ -73,7 +73,7 @@ class ToyDB(object):
                 if np.random.rand() > 0.0:
                     subject['category'] = 'training'
                 else:
-                    subject['category'] = 'testing'
+                    subject['category'] = 'test'
                 
                 if subject['category'] == 'training':
                     if np.random.rand() > 0.5:
@@ -161,7 +161,7 @@ class ToyDB(object):
 
     def digest(self,C):
                 
-        return str(C['updated_at']),C['Name'],C['ID'],C['kind'],C['result'],C['truth']
+        return str(C['updated_at']),C['Name'],C['ID'],C['category'],C['kind'],C['result'],C['truth']
 
 # ----------------------------------------------------------------------------
 # Return a batch of classifications, defined by a time range - either 
@@ -217,9 +217,9 @@ if __name__ == '__main__':
                         
         items = db.digest(classification)
         
-        # Check we got all 5 items:            
+        # Check we got all 7 items:            
         if items is not None:
-            if len(items) != 6: 
+            if len(items) != 7: 
                 print "oops! ",items[:]
             else:    
                 # Count classifications

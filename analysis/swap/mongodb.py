@@ -167,7 +167,7 @@ class MongoDB(object):
             else:
                 kind = 'sim'
         else: # It's a test subject:
-            category = 'testing'
+            category = 'test'
             kind = 'test'
         
         # What the volunteer say about this subject?
@@ -202,9 +202,9 @@ class MongoDB(object):
         else:    
             truth = 'UNKNOWN'
         
-        # Check we got all 6 items:            
-        items = str(t),str(Name),str(ID),kind,result,truth
-        if len(items) != 6: print "MongoDB: digest failed: ",items[:] 
+        # Check we got all 7 items:            
+        items = str(t),str(Name),str(ID),category,kind,result,truth
+        if len(items) != 7: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]
 
@@ -263,12 +263,12 @@ if __name__ == '__main__':
     # record, or we can execute a for loop as follows:
     count = 0
     for classification in batch:
-                        
+        
         items = db.digest(classification)
         
-        # Check we got all 5 items:            
+        # Check we got all 7 items:            
         if items is not None:
-            if len(items) != 5: 
+            if len(items) != 7: 
                 print "oops! ",items[:]
             else:    
                 # Count classifications

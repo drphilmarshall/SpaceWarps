@@ -60,8 +60,9 @@ class Classifier(object):
         name
     
     METHODS
-        Classifier.update_expertise()     Calculate the expected 
-                                          information per classification
+        Classifier.update_contribution()  Calculate the expected 
+                                          information contributed 
+                                          per classification
         Classifier.said(it_was=X,actually_it_was=Y)     Read report.
         Classifier.plot_history(axes)
         
@@ -84,27 +85,27 @@ class Classifier(object):
         self.NL = 2.0
         self.PD = 0.5
         self.PL = 0.5
-        self.expertise = self.update_expertise()
-        self.history = np.array([self.expertise])
+        self.contribution = self.update_contribution()
+        self.history = np.array([self.contribution])
         return None
 
 # ----------------------------------------------------------------------
 
     def __str__(self):
-        return 'individual classifier named %s with expertise %.2f' % \
-               (self.name,self.expertise)       
+        return 'individual classifier named %s with contribution %.2f' % \
+               (self.name,self.contribution)       
         
 # ----------------------------------------------------------------------
 # Compute expected information per classification:
 
-    def update_expertise(self):
+    def update_contribution(self):
         plogp = np.zeros([2,2])
         plogp[0,0] = self.PD*np.log2(self.PD)
         plogp[0,1] = (1-self.PD)*np.log2(1-self.PD)
         plogp[1,0] = (1-self.PL)*np.log2(1-self.PL)
         plogp[1,1] = self.PL*np.log2(self.PL)
-        self.expertise = 0.5*(np.sum(plogp) + 2)
-        return self.expertise
+        self.contribution = 0.5*(np.sum(plogp) + 2)
+        return self.contribution
         
 # ----------------------------------------------------------------------
 # Update confusion matrix with latest result:
@@ -125,7 +126,7 @@ class Classifier(object):
             else:
                 raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
  
-            self.history = np.append(self.history,self.update_expertise())
+            self.history = np.append(self.history,self.update_contribution())
 
         return
 

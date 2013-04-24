@@ -51,7 +51,8 @@ def SWAP(argv):
         confusion matrices.
         
     FLAGS
-        -h            Print this message [0]
+        -h            Print this message
+        -p --practise Do a dry run, using a simple toy model database
 
     INPUTS
         configfile    Plain text file containing SW experiment configuration
@@ -85,16 +86,20 @@ def SWAP(argv):
     # ------------------------------------------------------------------
 
     try:
-       opts, args = getopt.getopt(argv,"h",["help"])
+       opts, args = getopt.getopt(argv,"hp",["help","practise"])
     except getopt.GetoptError, err:
        print str(err) # will print something like "option -a not recognized"
        print SWAP.__doc__  # will print the big comment above.
        return
 
+    practise = False
+    
     for o,a in opts:
        if o in ("-h", "--help"):
           print SWAP.__doc__
           return
+       elif o in ("-p", "--practise"):
+          practise = True
        else:
           assert False, "unhandled option"
 
@@ -105,9 +110,10 @@ def SWAP(argv):
         print swap.hello
         print swap.doubledashedline
         print "SWAP: taking instructions from",configfile
-        print "SWAP: for the actual analysis, we need a DB and some code from Amit!"
-        print "SWAP: more on this soon..."
-        print "SWAP: for now, just make some useful objects."
+        if practise:
+            print "SWAP: doing a dry run using a Toy database"
+        else:
+            print "SWAP: data will be read from the current Mongo database"
     else:
         print SWAP.__doc__
         return
@@ -136,30 +142,29 @@ def SWAP(argv):
     sample = swap.read_pickle(tonights.parameters['samplefile'],'collection')
         
     # ------------------------------------------------------------------
-    # Read in a batch of classifications:
+    # Open up database:
     
-    db = swap.ToyDB(ambition=1)
+    if practise:
+        db = swap.ToyDB(ambition=1)
+    else:
+        db = swap.MongoDB()
+
+    # Read in a batch of classifications, since the specified time:
     
+    t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
+
+    batch = db.find('since',t1)
+        
     # ------------------------------------------------------------------
    
-    for i in range(db.size()):
-    
-        # Pull out a fake classification:
-#         if i == 0: 
-#             Name,ID,category,X,Y = ('Phil1','0001' ,'training','NOT','NOT')
-#         if i == 1: 
-#             Name,ID,category,X,Y = ('Phil2','0001' ,'training','LENS','LENS')
-#         if i == 2: 
-#             Name,ID,category,X,Y = ('Phil1','0002' ,'training','LENS','LENS')
-#         if i == 3: 
-#             Name,ID,category,X,Y = ('Phil1','0003' ,'training','LENS','LENS')
-#         if i == 4: 
-#             Name,ID,category,X,Y = ('Phil2','0002' ,'training','LENS','NOT')
-#         if i == 5: 
-#             Name,ID,category,X,Y = ('Phil2','0003' ,'training','NOT','LENS')
-        
-        Name,ID,category,X,Y = db.get_classification(i)
-        
+    for classification in batch:
+
+        # Get the vitals for this classification:
+        t,Name,ID,category,kind,X,Y = db.digest(classification)
+
+        # BUG! The above line fails, with error:
+        #   TypeError: 'NoneType' object is not iterable
+
 
         # Register new volunteers, and create an agent for each one:
         if Name not in collaboration.list():  
@@ -170,7 +175,7 @@ def SWAP(argv):
         
         # Register newly-classified subjects:
         if ID not in sample.list():           
-            sample.member[ID] = swap.Subject(ID,category,kind=Y)    
+            sample.member[ID] = swap.Subject(ID,category,kind,Y)    
 
         # Update the agent's confusion matrix, based on what it heard:
         if category == 'training':
@@ -179,12 +184,13 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the 
         # collaboration member. We send that member's agent to the subject
         # to do this.  
-        sample.member[ID].described(by=collaboration.member[Name],as_kind=X)
+        sample.member[ID].was_described(by=collaboration.member[Name],as_being=X)
 
         # Brag about it:
+        print "SWAP: --------------------------------------------------------------------------"
         print "SWAP: subject "+ID+" was classified by "+Name
-        print "SWAP: he/she said "+X+" when it was "+Y
-        print "SWAP: their agent reckons their expertise = ",collaboration.member[Name].expertise
+        print "SWAP: he/she said "+X+" when it was actually "+Y
+        print "SWAP: their agent reckons their contribution (in bits) = ",collaboration.member[Name].contribution
         print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
         print "SWAP: and the subject's new probability as ",sample.member[ID].probability
        

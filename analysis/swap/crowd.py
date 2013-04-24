@@ -17,7 +17,7 @@ class Crowd(object):
     COMMENTS
         The members of a Crowd are all agents known as Classifiers. 
         The Crowd knows how big it is, and could, in principle, also 
-        know its mean expertise, and other qualities.
+        know its mean contribution, and other qualities.
 
     INITIALISATION
         From scratch.
@@ -74,8 +74,8 @@ class Crowd(object):
         axes.set_xticks([1,10,100,2000])
         axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
         axes.set_xlabel('No. of training subjects classified')
-        axes.set_ylabel('Information per classification (bits)')
-        axes.set_title('Agent Histories')
+        axes.set_ylabel('Contributed information per classification (bits)')
+        axes.set_title('Classifier Histories')
             
         return axes
 

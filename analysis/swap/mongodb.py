@@ -167,7 +167,7 @@ class MongoDB(object):
             else:
                 kind = 'sim'
         else: # It's a test subject:
-            category = 'test'
+            category = 'testing'
             kind = 'test'
         
         # What the volunteer say about this subject?
@@ -202,9 +202,9 @@ class MongoDB(object):
         else:    
             truth = 'UNKNOWN'
         
-        # Check we got all 5 items:            
-        items = str(t),str(Name),str(ID),result,truth
-        if len(items) != 5: print "MongoDB: digest failed: ",items[:] 
+        # Check we got all 6 items:            
+        items = str(t),str(Name),str(ID),kind,result,truth
+        if len(items) != 6: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]
 
@@ -255,7 +255,6 @@ if __name__ == '__main__':
     # Make sure we catch them all!
     t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
 
-    # batch = db.classifications.find({'updated_at': {"$gt": t1}})
     batch = db.find('since',t1)
 
     # Now, loop over classifications, digesting them.

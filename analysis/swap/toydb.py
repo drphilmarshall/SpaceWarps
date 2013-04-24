@@ -2,6 +2,8 @@
 
 import numpy as np
 
+import datetime
+
 # ======================================================================
 
 class ToyDB(object):
@@ -71,15 +73,18 @@ class ToyDB(object):
                 if np.random.rand() > 0.0:
                     subject['category'] = 'training'
                 else:
-                    subject['category'] = 'test'
+                    subject['category'] = 'testing'
                 
                 if subject['category'] == 'training':
                     if np.random.rand() > 0.5:
-                        subject['kind'] = 'LENS'
+                        subject['kind'] = 'sim'
+                        subject['truth'] = 'LENS'
                     else:
-                        subject['kind'] = 'NOT'
+                        subject['kind'] = 'dud'
+                        subject['truth'] = 'NOT'
                 else:
-                    subject['kind'] = 'UNKNOWN'
+                    subject['kind'] = 'test'
+                    subject['truth'] = 'UNKNOWN'
                 
                 array.append(subject)
                 
@@ -91,10 +96,13 @@ class ToyDB(object):
                 
                 classification['Name'] = self.pick_one('volunteers')
                 subject = self.pick_one('subjects')
+                t = self.pick_one('epochs')
                 
+                classification['updated_at'] = t
                 classification['ID'] = subject['ID']
                 classification['category'] = subject['category']
                 classification['kind'] = subject['kind']
+                classification['truth'] = subject['truth']
                 classification['result'] = \
                   self.make_classification(subject=subject,volunteer=classification['Name'])
                 
@@ -118,6 +126,14 @@ class ToyDB(object):
             j = int(100*self.ambition*np.random.rand())
             something = self.subjects[j]
                 
+        elif things == 'epochs':
+
+            day = int(14*np.random.rand()) + 1
+            hour = int(24*np.random.rand())
+            minute = int(60*np.random.rand())
+            second = int(60*np.random.rand())
+            something = datetime.datetime(2013, 4, day, hour, minute, second, 0)
+                
         return something
         
 # ----------------------------------------------------------------------------
@@ -131,10 +147,10 @@ class ToyDB(object):
         PL = 0.9
         PD = 0.8
         
-        if subject['kind'] == 'LENS':
+        if subject['truth'] == 'LENS':
             if np.random.rand() < PL: word = 'LENS'
             else: word = 'NOT'
-        elif subject['kind'] == 'NOT':
+        elif subject['truth'] == 'NOT':
             if np.random.rand() < PD: word = 'NOT'
             else: word = 'LENS'
         
@@ -143,11 +159,34 @@ class ToyDB(object):
 # ----------------------------------------------------------------------------
 # Return a tuple of the key quantities:
 
-    def get_classification(self,i):
-        
-        C = self.classifications[i]    
-        
-        return C['Name'],C['ID'],C['category'],C['result'],C['kind']
+    def digest(self,C):
+                
+        return str(C['updated_at']),C['Name'],C['ID'],C['kind'],C['result'],C['truth']
+
+# ----------------------------------------------------------------------------
+# Return a batch of classifications, defined by a time range - either 
+# claasifications made 'since' t, or classifications made 'before' t:
+
+    def find(self,word,t):
+
+       batch = []
+       
+       if word == 'since':
+            
+            for classification in self.classifications:
+                if classification['updated_at'] > t: 
+                    batch.append(classification)
+       
+       elif word == 'before':
+            
+            for classification in self.classifications:
+                if classification['updated_at'] < t: 
+                    batch.append(classification)
+       
+       else:
+           print "ToyDB: error, cannot find classifications '"+word+"' "+str(t)
+
+       return batch
 
 # ----------------------------------------------------------------------------
 # Return the size of the classification table:
@@ -180,7 +219,7 @@ if __name__ == '__main__':
         
         # Check we got all 5 items:            
         if items is not None:
-            if len(items) != 5: 
+            if len(items) != 6: 
                 print "oops! ",items[:]
             else:    
                 # Count classifications

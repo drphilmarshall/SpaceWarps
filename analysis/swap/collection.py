@@ -58,7 +58,7 @@ class Collection(object):
         return self.member.keys()
         
 # ----------------------------------------------------------------------
-# Prepare to plot subjects' trajectories:
+# Prepare to plot subjects' trajectories. We need t
 
     def start_trajectory_plot(self):
     
@@ -69,6 +69,7 @@ class Collection(object):
         axes.set_xscale('log')
         axes.set_ylim(200.0,0.5)
         axes.set_yscale('log')
+        plt.axhline(y=0.5,color='gray',linestyle='dotted')
         plt.axvline(x=0.3,color='blue',linestyle='dotted')
         plt.axvline(x=1e-5,color='red',linestyle='dotted')
         axes.set_ylabel('No. of classifications')

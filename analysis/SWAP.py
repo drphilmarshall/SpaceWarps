@@ -27,10 +27,6 @@ def SWAP(argv):
         possibility of performing the analysis in real time (although
         presumably not with this piece of python).
 
-        Amit: can you help us get started please? Search for the string
-        MONGO to see where I need help extracting information from the
-        mongo DB.
-
         Currently, the confusion matrices only depend on the
         classifications of training subjects. Upgrading this would be a
         nice piece of further work. Likewise, neither the Marker
@@ -123,12 +119,20 @@ def SWAP(argv):
     
     tonights = swap.Configuration(configfile)
     
-    if tonights.parameters['time'] == 'Now':
-        tonights.parameters['t2'] = datetime.datetime.utcnow()
-        tonights.parameters['t2string'] = tonights.parameters['t2'].strftime("%Y-%m-%d_%H%M")
-        print "SWAP: updating all objects with classifications up to "+tonights.parameters['t2string']
+    vb = tonights.parameters['verbose']
+    if not vb: 
+        print "SWAP: only reporting minimal stdout."
+    
+    # From when shall we take classifications to analyze?
+    if tonights.parameters['start'] == 'the_beginning':
+        t1 = datetime.datetime(1978, 2, 28, 12, 0, 0, 0)
     else:
-        raise "SWAP: analysis between 2 points in time not yet implemented"
+        t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d')
+    print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
+    
+    # And what will we call the new files we make?
+    t2 = datetime.datetime.utcnow()
+    tonights.parameters['finish'] = t2.strftime('%Y-%m-%d')
     
     # ------------------------------------------------------------------
     # Read in, or create, a bureau of agents who will represent the 
@@ -149,22 +153,21 @@ def SWAP(argv):
     else:
         db = swap.MongoDB()
 
-    # Read in a batch of classifications, since the specified time:
-    
-    t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
+    # Read in a batch of classifications, made since the aforementioned 
+    # start time:
 
     batch = db.find('since',t1)
         
     # ------------------------------------------------------------------
    
+    count = 0
     for classification in batch:
 
         # Get the vitals for this classification:
-        t,Name,ID,category,kind,X,Y = db.digest(classification)
-
-        # BUG! The above line fails, with error:
-        #   TypeError: 'NoneType' object is not iterable
-
+        items = db.digest(classification)
+        if items is None: 
+            continue # Tutorial subjects fail!
+        t,Name,ID,category,kind,X,Y = items
 
         # Register new volunteers, and create an agent for each one:
         if Name not in collaboration.list():  
@@ -187,13 +190,17 @@ def SWAP(argv):
         sample.member[ID].was_described(by=collaboration.member[Name],as_being=X)
 
         # Brag about it:
-        print "SWAP: --------------------------------------------------------------------------"
-        print "SWAP: subject "+ID+" was classified by "+Name
-        print "SWAP: he/she said "+X+" when it was actually "+Y
-        print "SWAP: their agent reckons their contribution (in bits) = ",collaboration.member[Name].contribution
-        print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
-        print "SWAP: and the subject's new probability as ",sample.member[ID].probability
+        count += 1
+        if vb:
+            print "SWAP: --------------------------------------------------------------------------"
+            print "SWAP: Subject "+ID+" was classified by "+Name
+            print "SWAP: he/she said "+X+" when it was actually "+Y
+            print "SWAP: their agent reckons their contribution (in bits) = ",collaboration.member[Name].contribution
+            print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
+            print "SWAP: and the subject's new probability as ",sample.member[ID].probability
        
+    if vb: print "SWAP: --------------------------------------------------------------------------"
+    print "SWAP: total no. of classifications processed: ",count
 
     # ------------------------------------------------------------------
     # Make plots:
@@ -201,24 +208,33 @@ def SWAP(argv):
     # Agent histories:
     
     fig1 = collaboration.start_history_plot()
+    pngfile = swap.get_new_filename(tonights.parameters,'history')
+    print "SWAP: plotting classifier histories in "+pngfile
     for Name in collaboration.list():
         collaboration.member[Name].plot_history(fig1)
-    pngfile = swap.get_new_filename(tonights.parameters,'history')
     collaboration.finish_history_plot(fig1,pngfile)
         
     # Subject probabilities:
     
     fig2 = sample.start_trajectory_plot()
+    pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
+    print "SWAP: plotting subject trajectories in "+pngfile
     for ID in sample.list():
         sample.member[ID].plot_trajectory(fig2)
-    pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
     sample.finish_trajectory_plot(fig2,pngfile)
     
     # ------------------------------------------------------------------
     # Pickle the collaboration. Hooray! 
 
     new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
+    print "SWAP: saving agents in "+new_crowdfile
     swap.write_pickle(collaboration,new_crowdfile)
+
+    # Pickle the sample. Hooray!
+    
+    new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
+    print "SWAP: saving subjects in "+new_samplefile
+    swap.write_pickle(sample,new_samplefile)
 
     # ------------------------------------------------------------------
     

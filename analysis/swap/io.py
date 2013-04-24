@@ -51,10 +51,10 @@ def read_pickle(filename,flavour):
         contents = cPickle.load(F)
         F.close()
         
-    except IOError:
+    except:
 
-        if filename == 'None': 
-            print "SWAP: no filename supplied."
+        if filename is None: 
+            print "SWAP: no "+flavour+" filename supplied."
         else:
             print "SWAP: "+filename+" does not exist."
 
@@ -84,8 +84,8 @@ def write_pickle(contents,filename):
 
 def get_new_filename(pars,flavour):
 
-    head = pars['survey']+'_'+pars['t2string']+'_'+flavour
-    if flavour == 'crowd':
+    head = pars['survey']+'_'+pars['finish']+'_'+flavour
+    if flavour == 'crowd' or flavour == 'collection':
         ext = 'pickle'
     elif flavour == 'history' or flavour == 'trajectory':
         ext = 'png'
@@ -94,36 +94,6 @@ def get_new_filename(pars,flavour):
         
     return head+'.'+ext
 
-# ----------------------------------------------------------------------------
-# 
-# def readCatalog(filename,config):
-# 
-#     table = atpy.Table(filename, type='ascii')
-# 
-#     try: table.rename_column(config.parameters['nRAName'],'nRA')
-#     except: pass
-#     try: table.rename_column(config.parameters['DecName'],'Dec')
-#     except: pass
-# 
-#     # Calibration catalogs:
-#     try: table.rename_column(config.parameters['CalibMhaloName'],'Mhalo_obs')
-#     except: pass
-#     try: table.rename_column(config.parameters['CalibRedshiftName'],'z_obs')
-#     except: pass
-# 
-#     # Observed catalog:
-#     try: table.rename_column(config.parameters['ObsMstarName'],'Mstar_obs')
-#     except: pass
-#     try: table.rename_column(config.parameters['ObsRedshiftName'],'z_obs')
-#     except: pass
-#     try: 
-#         mag = table[config.parameters['MagName']]
-#         table.add_column('mag',mag)
-#     except: 
-#         raise "Error in io.readCatalog: no mag column called "+config.parameters['MagName']
-#    
-#     return table
-# 
 # ----------------------------------------------------------------------------
 # Remove file, if it exists, stay quiet otherwise:
 

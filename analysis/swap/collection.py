@@ -62,16 +62,17 @@ class Collection(object):
 
     def start_trajectory_plot(self):
     
-        plt.figure()
+        plt.figure(figsize=(5,8), dpi=100)
         axes = plt.gca()
-        axes.set_xlim(0.5,2000.0)
+        axes.set_aspect(3.0)
+        axes.set_xlim(1e-8,1.0)
         axes.set_xscale('log')
-        axes.set_ylim(1e-8,1.0)
+        axes.set_ylim(200.0,0.5)
         axes.set_yscale('log')
-        axes.set_xticks([1,10,100,2000])
-        axes.set_yticks([1e-7,1e-6,1e-5,0.0001,0.001,0.01,0.1,1.0])
-        axes.set_xlabel('No. of classifications')
-        axes.set_ylabel('Posterior Probability Pr(LENS|d)')
+        plt.axvline(x=0.3,color='blue',linestyle='dotted')
+        plt.axvline(x=1e-5,color='red',linestyle='dotted')
+        axes.set_ylabel('No. of classifications')
+        axes.set_xlabel('Posterior Probability Pr(LENS|d)')
         axes.set_title('Subject Trajectories')
             
         return axes

@@ -105,6 +105,14 @@ class Configuration(object):
 #         assert len(self.parameters['CalibrationCatalogs']) == \
 #                len(self.parameters['CalibrationKappamaps'])
             
+            # Certain strings are special:
+            if self.parameters[key] == 'False': 
+                self.parameters[key] = False
+            elif self.parameters[key] == 'True': 
+                self.parameters[key] = True
+            elif self.parameters[key] == 'None': 
+                self.parameters[key] = None
+
         return
 
     # ------------------------------------------------------------------

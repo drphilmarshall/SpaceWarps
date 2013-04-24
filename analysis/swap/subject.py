@@ -125,8 +125,8 @@ class Subject(object):
         elif self.kind == 'test':
             colour = 'black'
         
-        plt.plot(N, self.trajectory, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")
-        plt.scatter(N[-1], self.trajectory[-1], color=colour, alpha=0.5)
+        plt.plot(self.trajectory, N, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")
+        plt.scatter(self.trajectory[-1], N[-1], color=colour, alpha=0.5)
         
         return
 

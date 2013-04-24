@@ -100,7 +100,7 @@ class MongoDB(object):
        elif word == 'before':
             batch = self.classifications.find({'updated_at': {"$lt": t}})
        
-       else
+       else:
            print "MongoDB: error, cannot find classifications '"+word+"' "+str(t)
 
        return batch

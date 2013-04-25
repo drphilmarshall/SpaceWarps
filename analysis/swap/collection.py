@@ -39,9 +39,10 @@ class Collection(object):
 # ----------------------------------------------------------------------------
 
     def __init__(self):
+        
         self.member = {}
         self.probabilities = {'sim':np.array([]), 'dud':np.array([]), 'test':np.array([])}
-                
+         
         return None
 
 # ----------------------------------------------------------------------------
@@ -138,7 +139,7 @@ class Collection(object):
         # Plot histograms! 0 is the upper panel, 1 the lower.
         plt.sca(axes[1])
         
-        bins = np.linspace(np.log10(1e-8),np.log10(1.0),32,endpoint=True)
+        bins = np.linspace(np.log10(swap.pmin),np.log10(swap.pmax),32,endpoint=True)
         bins = 10.0**bins
         colors = ['blue','red','black']
         labels = ['Sims','Duds','Survey']
@@ -147,10 +148,11 @@ class Collection(object):
             
             self.collect_probabilities(kind)
             p = self.probabilities[kind]
-
-            # Numpy histogram:
-            # h,x = np.histogram(p,bins=bins,range=[bins[0],bins[-1]])
-            # plt.plot(x[:-1],h,drawstyle='steps',color=colors[j])  
+            
+            # Sometimes all probabilities are lower than pmin! 
+            # Snap to grid.
+            p[p<swap.pmin] = swap.pmin
+            # print "kind,bins,p = ",kind,bins,p
             
             # Pylab histogram:
             plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=0.7, label=labels[j])

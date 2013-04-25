@@ -56,10 +56,15 @@ class ToyDB(object):
         try: self.prior = int(pars['lensrate']) # Mean no. of classifications per person
         except: self.prior = 1e-3 # Probability of an image containing a lens
 
+        try: self.difficulty = int(pars['difficulty']) # Mean no. of classifications per person
+        except: self.difficulty = 0.5
+        
         self.volunteers = self.populate('volunteers')
-        trainingset = self.populate('subjects',category='training')
-        testset = self.populate('subjects',category='test')
-        self.subjects = trainingset + testset
+        
+        self.trainingset = self.populate('subjects',category='training')
+        self.testset = self.populate('subjects',category='test')
+        self.subjects = self.trainingset + self.testset
+        
         self.classifications = self.populate('classifications')
 
         return None
@@ -72,11 +77,12 @@ class ToyDB(object):
         array = []
         
         if things == 'volunteers':
-
+            # Store their name, and how many classifications they've made
             for k in range(self.population):
-                Name = 'Phil'+str(k)
-                
-                array.append(Name)
+                classifier = {}
+                classifier['Name'] = 'Phil'+str(k)
+                classifier['count'] = 0
+                array.append(classifier)
         
         
         elif things == 'subjects':
@@ -118,10 +124,12 @@ class ToyDB(object):
 
             for i in range(self.population*self.enthusiasm):
                 classification = {}
-                
-                classification['Name'] = self.pick_one('volunteers')
-                subject = self.pick_one('subjects')
                 t = self.pick_one('epochs')
+                
+                classifier = self.pick_one('volunteers')
+                classification['Name'] = classifier['Name']
+
+                subject = self.pick_one('subjects',classifier=classifier)
                 
                 classification['updated_at'] = t
                 classification['ID'] = subject['ID']
@@ -139,7 +147,7 @@ class ToyDB(object):
 # ----------------------------------------------------------------------------
 # Random selection of something from its list:
 
-    def pick_one(self,things):
+    def pick_one(self,things,classifier=None):
     
         if things == 'volunteers':
 
@@ -147,9 +155,22 @@ class ToyDB(object):
             something = self.volunteers[k]
         
         elif things == 'subjects':
-
-            j = int(len(self.subjects)*np.random.rand())
-            something = self.subjects[j]
+            
+            # Here, we have to emulate the stream. What the volunteer
+            # is shown depends on what they have already seen!
+            
+            j = classifier['count'] + 1
+            level = int(j/20.0) + 1
+            alpha = self.difficulty
+            
+            training_rate = 2.0 / (5.0*2.0**(alpha*(level - 1)))
+            
+            if np.random.rand() < training_rate:
+                j = int(len(self.trainingset)*np.random.rand())
+                something = self.trainingset[j]
+            else:
+                j = int(len(self.testset)*np.random.rand())
+                something = self.testset[j]
                 
         elif things == 'epochs':
 

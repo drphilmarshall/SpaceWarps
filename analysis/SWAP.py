@@ -194,14 +194,14 @@ def SWAP(argv):
         # Brag about it:
         count += 1
         if vb:
-            print "SWAP: --------------------------------------------------------------------------"
+            print swap.dashedline
             print "SWAP: Subject "+ID+" was classified by "+Name
             print "SWAP: he/she said "+X+" when it was actually "+Y
             print "SWAP: their agent reckons their contribution (in bits) = ",collaboration.member[Name].contribution
             print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
             print "SWAP: and the subject's new probability as ",sample.member[ID].probability
        
-    if vb: print "SWAP: --------------------------------------------------------------------------"
+    if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
 
     # ------------------------------------------------------------------

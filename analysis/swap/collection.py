@@ -121,7 +121,7 @@ class Collection(object):
         plt.sca(lower)
         lower.set_xlim(1e-8,1.0)
         lower.set_xscale('log')
-        lower.set_ylim(0.1,199)
+        lower.set_ylim(0.1,0.5*self.size())
         # lower.set_yscale('log')
         plt.axvline(x=0.3,color='blue',linestyle='dotted')
         plt.axvline(x=1e-5,color='red',linestyle='dotted')

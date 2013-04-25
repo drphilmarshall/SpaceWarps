@@ -153,20 +153,20 @@ class Crowd(object):
         # Right histogram panel: 
         plt.sca(righthist)
         righthist.set_ylim(pmin,pmax)
-        righthist.set_xlim(0.3*len(PD),0.0)
+        righthist.set_xlim(0.5*len(PD),0.0)
         plt.axhline(0.5,color='gray',linestyle='dotted')
         for label in righthist.get_yticklabels():
             label.set_visible(False)
         for label in righthist.get_xticklabels():
             label.set_visible(False)
            
-        plt.hist(PL, bins=bins, orientation='horizontal', histtype='stepfilled', color='red', alpha=0.7)
+        plt.hist(PD, bins=bins, orientation='horizontal', histtype='stepfilled', color='red', alpha=0.7)
 
 
         # Lower histogram panel: 
         plt.sca(lowerhist)
         lowerhist.set_xlim(pmin,pmax)
-        lowerhist.set_ylim(0.0,0.3*len(PL))
+        lowerhist.set_ylim(0.0,0.5*len(PL))
         plt.axvline(0.5,color='gray',linestyle='dotted')
         for label in lowerhist.get_yticklabels():
             label.set_visible(False)

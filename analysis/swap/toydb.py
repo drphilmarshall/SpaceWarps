@@ -36,15 +36,30 @@ class ToyDB(object):
 
 # ----------------------------------------------------------------------------
 
-    def __init__(self,ambition):
+    def __init__(self,pars=None):
 
         self.client = "Highest bidder"
         self.db = "Hah! This is all fake"
 
-        self.ambition = ambition
+        try: self.surveysize = int(pars['surveysize']) # No. of subjects
+        except: self.surveysize = 400
+        
+        try: self.trainingsize = int(pars['trainingsize']) # No. of subjects
+        except: self.surveysize = 400
+        
+        try: self.population = int(pars['population']) # No. of classifiers
+        except: self.population = 100
+        
+        try: self.enthusiasm = int(pars['enthusiasm']) # Mean no. of classifications per person
+        except: self.enthusiasm = 40
+        
+        try: self.prior = int(pars['lensrate']) # Mean no. of classifications per person
+        except: self.prior = 1e-3 # Probability of an image containing a lens
 
         self.volunteers = self.populate('volunteers')
-        self.subjects = self.populate('subjects')
+        trainingset = self.populate('subjects',category='training')
+        testset = self.populate('subjects',category='test')
+        self.subjects = trainingset + testset
         self.classifications = self.populate('classifications')
 
         return None
@@ -52,13 +67,13 @@ class ToyDB(object):
 # ----------------------------------------------------------------------------
 # Generate various tables in the database:
 
-    def populate(self,things):
+    def populate(self,things,category=None):
 
         array = []
         
         if things == 'volunteers':
 
-            for k in range(10*self.ambition):
+            for k in range(self.population):
                 Name = 'Phil'+str(k)
                 
                 array.append(Name)
@@ -66,15 +81,19 @@ class ToyDB(object):
         
         elif things == 'subjects':
 
-            for j in range(100*self.ambition):
+            if category not in ['training','test']:
+                print "ToyDB: confused by category "+category
+                sys.exit()
+             
+            if category == 'training': Nj = self.trainingsize   
+            if category == 'test': Nj = self.surveysize   
+            
+            for j in range(Nj):
                 subject = {}
-                subject['ID'] = 'Image'+str(j)
-                
-                if np.random.rand() > 0.0:
-                    subject['category'] = 'training'
-                else:
-                    subject['category'] = 'test'
-                
+                subject['ID'] = category+'Image'+str(j)
+
+                subject['category'] = category
+
                 if subject['category'] == 'training':
                     if np.random.rand() > 0.5:
                         subject['kind'] = 'sim'
@@ -82,16 +101,22 @@ class ToyDB(object):
                     else:
                         subject['kind'] = 'dud'
                         subject['truth'] = 'NOT'
-                else:
+                        
+                elif subject['category'] == 'test':
                     subject['kind'] = 'test'
                     subject['truth'] = 'UNKNOWN'
-                
+                    # But we do actually need to know what this is!
+                    if np.random.rand() < self.prior: 
+                        subject['strewth'] = 'LENS'
+                    else:
+                        subject['strewth'] = 'NOT'
+
                 array.append(subject)
                 
                 
         elif things == 'classifications':
 
-            for i in range(1000*self.ambition):
+            for i in range(self.population*self.enthusiasm):
                 classification = {}
                 
                 classification['Name'] = self.pick_one('volunteers')
@@ -118,12 +143,12 @@ class ToyDB(object):
     
         if things == 'volunteers':
 
-            k = int(10*self.ambition*np.random.rand())
+            k = int(self.population*np.random.rand())
             something = self.volunteers[k]
         
         elif things == 'subjects':
 
-            j = int(100*self.ambition*np.random.rand())
+            j = int(len(self.subjects)*np.random.rand())
             something = self.subjects[j]
                 
         elif things == 'epochs':
@@ -147,13 +172,19 @@ class ToyDB(object):
         PL = 0.9
         PD = 0.8
         
-        if subject['truth'] == 'LENS':
+        if subject['category'] == 'training':
+            truth = subject['truth']
+        elif subject['category'] == 'test':
+            truth = subject['strewth']
+        
+        if truth == 'LENS':
             if np.random.rand() < PL: word = 'LENS'
             else: word = 'NOT'
-        elif subject['truth'] == 'NOT':
+        
+        elif truth == 'NOT':
             if np.random.rand() < PD: word = 'NOT'
             else: word = 'LENS'
-        
+                
         return word
 
 # ----------------------------------------------------------------------------
@@ -199,7 +230,7 @@ class ToyDB(object):
 
 if __name__ == '__main__':
 
-    db = ToyDB(ambition=10)
+    db = ToyDB()
     
     # Select all classifications that were made before t1.  
     # Note the greater than operator ">".

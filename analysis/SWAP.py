@@ -48,7 +48,6 @@ def SWAP(argv):
         
     FLAGS
         -h            Print this message
-        -p --practise Do a dry run, using a simple toy model database
 
     INPUTS
         configfile    Plain text file containing SW experiment configuration
@@ -87,15 +86,11 @@ def SWAP(argv):
        print str(err) # will print something like "option -a not recognized"
        print SWAP.__doc__  # will print the big comment above.
        return
-
-    practise = False
     
     for o,a in opts:
        if o in ("-h", "--help"):
           print SWAP.__doc__
           return
-       elif o in ("-p", "--practise"):
-          practise = True
        else:
           assert False, "unhandled option"
 
@@ -106,10 +101,6 @@ def SWAP(argv):
         print swap.hello
         print swap.doubledashedline
         print "SWAP: taking instructions from",configfile
-        if practise:
-            print "SWAP: doing a dry run using a Toy database"
-        else:
-            print "SWAP: data will be read from the current Mongo database"
     else:
         print SWAP.__doc__
         return
@@ -118,6 +109,12 @@ def SWAP(argv):
     # Read in run configuration:
     
     tonights = swap.Configuration(configfile)
+    
+    practise = (tonights.parameters['dbspecies'] == 'Toy')
+    if practise:
+        print "SWAP: doing a dry run using a Toy database"
+    else:
+        print "SWAP: data will be read from the current Mongo database"
     
     vb = tonights.parameters['verbose']
     if not vb: 
@@ -149,7 +146,12 @@ def SWAP(argv):
     # Open up database:
     
     if practise:
-        db = swap.ToyDB(ambition=1)
+        db = swap.ToyDB(pars=tonights.parameters)
+        print "SWAP: generated ",db.size()," Toy classifications"
+        print "SWAP: made by ",db.population," Toy classifiers"
+        print "SWAP: of ",db.surveysize," Toy subjects"
+        print "SWAP: where each classifier makes ",db.enthusiasm," classifications, on average"
+       
     else:
         db = swap.MongoDB()
 

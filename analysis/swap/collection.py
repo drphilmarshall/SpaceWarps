@@ -33,8 +33,7 @@ class Collection(object):
       under the GPL v2 by the Space Warps Science Team.
       http://spacewarps.org/
 
-    trajectorY
-      2013-04-17  Started Marshall (Oxford)
+      2013-04-17  Started: Marshall (Oxford)
     """
 
 # ----------------------------------------------------------------------------
@@ -86,14 +85,28 @@ class Collection(object):
         upperarea = [left, 0.4, width, 0.5]# left, bottom, width, height
         lowerarea = [left, 0.1, width, 0.3]
 
-        upper = fig.add_axes(upperarea)
-        lower = fig.add_axes(lowerarea, sharex=upper)
-
         # Upper panel: subjects drifting downwards:
+
+        # First plot an arrow to show the subjects entering the plot.
+        # This is non-trivial, you have to overlay in a different 
+        # set of axes, with linear scales...
+        hax = fig.add_axes(upperarea)
+        hax.set_xlim(np.log10(1e-8),np.log10(1.0))
+        hax.set_ylim(np.log10(50.0),np.log10(0.5))
+        for label in hax.get_xticklabels():
+            label.set_visible(False)
+        for label in hax.get_yticklabels():
+            label.set_visible(False)
+        plt.sca(hax)
+        plt.arrow(np.log10(2e-4), np.log10(0.6), 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
+        # hax.set_axis_off()        
+
+        # Now overlay a transparent frame to plot the subjects in:
+        upper = fig.add_axes(upperarea, frameon=False)
         plt.sca(upper)
         upper.set_xlim(1e-8,1.0)
         upper.set_xscale('log')
-        upper.set_ylim(50.0,0.8)
+        upper.set_ylim(50.0,0.5)
         upper.set_yscale('log')
         plt.axhline(y=5.5,color='gray',linestyle='dotted')
         plt.axvline(x=0.3,color='blue',linestyle='dotted')
@@ -104,6 +117,7 @@ class Collection(object):
         upper.set_title('Subject Trajectories')
         
         # Lower panel: histograms:
+        lower = fig.add_axes(lowerarea, sharex=upper)
         plt.sca(lower)
         lower.set_xlim(1e-8,1.0)
         lower.set_xscale('log')

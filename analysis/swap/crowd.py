@@ -46,6 +46,7 @@ class Crowd(object):
     def __init__(self):
         self.member = {}
         self.probabilities = {'LENS':np.array([]), 'NOT':np.array([])}
+        self.contributions = np.array([])
         
         return None
 
@@ -71,13 +72,16 @@ class Crowd(object):
     
         PLarray = np.array([])
         PDarray = np.array([])
+        contributions = np.array([])
         for ID in self.list():
             classifier = self.member[ID]
             PLarray = np.append(PLarray,classifier.PL)
             PDarray = np.append(PDarray,classifier.PD)
+            contributions = np.append(contributions,classifier.contribution)
 
         self.probabilities['LENS'] = PLarray
         self.probabilities['NOT'] = PDarray
+        self.contributions = contributions
         
         return
         
@@ -125,47 +129,48 @@ class Crowd(object):
         righthist = fig.add_axes(righthistarea, sharey=scatter)
         lowerhist = fig.add_axes(lowerhistarea, sharex=scatter)
 
-        pmin,pmax = 0.001,0.999
+        pmin,pmax = 0.0,1.0
         self.collect_probabilities()
         PD = self.probabilities['NOT']
         PL = self.probabilities['LENS']
         bins = np.linspace(0.0,1.0,20,endpoint=True)
 
-        # Scatter plot:
+        # Scatter plot - points sized by information content:
         plt.sca(scatter)
         scatter.set_xlim(pmin,pmax)
         scatter.set_ylim(pmin,pmax)
         plt.axvline(0.5,color='gray',linestyle='dotted')
         plt.axhline(0.5,color='gray',linestyle='dotted')
-        scatter.set_ylabel('Pr("LENS"|LENS)')
+        scatter.set_ylabel('Pr("NOT"|NOT)')
         for label in scatter.get_xticklabels():
             label.set_visible(False)
-        scatter.set_title('Classifier probabilities')
+        scatter.set_title('Classifier Probabilities')
         
-        plt.scatter(PD, PL, color='black', alpha=0.5)
+        size = 200*self.contributions + 3.0
+        plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
 
         
         # Right histogram panel: 
         plt.sca(righthist)
         righthist.set_ylim(pmin,pmax)
-        righthist.set_xlim(len(PD),0.0)
+        righthist.set_xlim(0.3*len(PD),0.0)
         plt.axhline(0.5,color='gray',linestyle='dotted')
         for label in righthist.get_yticklabels():
             label.set_visible(False)
         for label in righthist.get_xticklabels():
             label.set_visible(False)
            
-        plt.hist(PD, bins=bins, orientation='horizontal', histtype='stepfilled', color='red', alpha=0.7)
+        plt.hist(PL, bins=bins, orientation='horizontal', histtype='stepfilled', color='red', alpha=0.7)
 
 
         # Lower histogram panel: 
         plt.sca(lowerhist)
         lowerhist.set_xlim(pmin,pmax)
-        lowerhist.set_ylim(0.0,len(PL))
+        lowerhist.set_ylim(0.0,0.3*len(PL))
         plt.axvline(0.5,color='gray',linestyle='dotted')
         for label in lowerhist.get_yticklabels():
             label.set_visible(False)
-        lowerhist.set_xlabel('Pr("NOT"|NOT)')
+        lowerhist.set_xlabel('Pr("LENS"|LENS)')
            
         plt.hist(PL, bins=bins, histtype='stepfilled', color='blue', alpha=0.7)
 

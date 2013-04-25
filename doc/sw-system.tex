@@ -204,8 +204,9 @@ subject based on all image views to date.
 
 We perform a ``Pseudo-online'' analysis of the classifications, 
 updating a probabilistic model of every (anonymous) volunteer's
-expertise, and every subject (in both the training and test sets), on a
-daily basis. This allows us to track the speed with which the crowd
+data, and also updating the lens probability of each subject 
+(in both the training and test sets), on a
+daily(??) basis. This allows us to track the speed with which the crowd
 learns about lenses, and also gives us a dynamic estimate of the
 posterior probability for  any given  subject being a lens, given all
 classifications of it. Assigning thresholds in this lens probability
@@ -421,7 +422,7 @@ calculate
 
 Indeed, the information content of each classification can be estimated by an
 agent before the next classification is made, just from its confusion matrix.
-We define the expected information per classification, or {\it expertise}, as
+We define the expected contributed information per classification, as
 \be
   \langle I_k \rangle = \frac{1}{2} 
                         \sum_{i} \left( \mathcal{M}^k_{i}  

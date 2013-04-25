@@ -126,8 +126,12 @@ class Subject(object):
             colour = 'black'
         
         plt.plot(self.trajectory, N, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")
-        plt.scatter(self.trajectory[-1], N[-1], color=colour, alpha=0.5)
+        NN = N[-1]
+        if NN > swap.Ncmax: NN = swap.Ncmax
+        plt.scatter(self.trajectory[-1], NN, color=colour, alpha=0.5)
         
+        # if self.kind == 'sim': print self.trajectory[-1], N[-1]
+                
         return
 
 # ======================================================================

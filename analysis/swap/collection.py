@@ -92,7 +92,7 @@ class Collection(object):
         # This is non-trivial, you have to overlay in a different 
         # set of axes, with linear scales...
         hax = fig.add_axes(upperarea)
-        hax.set_xlim(np.log10(1e-8),np.log10(1.0))
+        hax.set_xlim(np.log10(swap.pmin),np.log10(swap.pmax))
         hax.set_ylim(np.log10(50.0),np.log10(0.5))
         for label in hax.get_xticklabels():
             label.set_visible(False)
@@ -105,7 +105,7 @@ class Collection(object):
         # Now overlay a transparent frame to plot the subjects in:
         upper = fig.add_axes(upperarea, frameon=False)
         plt.sca(upper)
-        upper.set_xlim(1e-8,1.0)
+        upper.set_xlim(swap.pmin,swap.pmax)
         upper.set_xscale('log')
         upper.set_ylim(50.0,0.5)
         upper.set_yscale('log')
@@ -120,7 +120,7 @@ class Collection(object):
         # Lower panel: histograms:
         lower = fig.add_axes(lowerarea, sharex=upper)
         plt.sca(lower)
-        lower.set_xlim(1e-8,1.0)
+        lower.set_xlim(swap.pmin,swap.pmax)
         lower.set_xscale('log')
         lower.set_ylim(0.1,0.5*self.size())
         # lower.set_yscale('log')

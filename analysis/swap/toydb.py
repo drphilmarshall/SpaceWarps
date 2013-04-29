@@ -150,7 +150,10 @@ class ToyDB(object):
     def pick_one(self,things,classifier=None):
     
         if things == 'volunteers':
-
+            
+            # Distribution of number of classifications peaks at low N. 
+            # Suppose mean number is 40; exponential distribution with this 
+            # mean?
             k = int(self.population*np.random.rand())
             something = self.volunteers[k]
         

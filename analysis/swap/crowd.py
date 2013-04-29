@@ -175,6 +175,10 @@ class Crowd(object):
         for label in scatter.get_xticklabels():
             label.set_visible(False)
         scatter.set_title('Classifier Probabilities')
+        plt.text(0.02,0.02,'"Obtuse"',color='gray')
+        plt.text(0.02,0.96,'"Pessimistic"',color='gray')
+        plt.text(0.74,0.02,'"Optimistic"',color='gray')
+        plt.text(0.81,0.96,'"Astute"',color='gray')
         
         # Training received:
         size = 4*self.training + 6.0

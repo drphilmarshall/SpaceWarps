@@ -155,7 +155,7 @@ class Collection(object):
         bins = np.linspace(np.log10(swap.pmin),np.log10(swap.pmax),32,endpoint=True)
         bins = 10.0**bins
         colors = ['blue','red','black']
-        labels = ['Sims','Duds','Survey']
+        labels = ['Training: Sims','Training: Duds','Test: Survey']
         
         for j,kind in enumerate(['sim','dud','test']):
             
@@ -169,7 +169,7 @@ class Collection(object):
             
             # Pylab histogram:
             plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=0.7, label=labels[j])
-            plt.legend()
+            plt.legend(prop={'size':10})
                    
         # Write out to file:
         plt.savefig(filename,dpi=300)

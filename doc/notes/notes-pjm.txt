@@ -238,4 +238,6 @@ SWAP.py CFHTLS-beta_P70.config
 # - Retired/promoted subjects         -
 # - Completeness, purity calculated   -
 # - Difficulty variation              DONE
-# - PD, PL capped at 0.99             -
+# - PD, PL capped at 0.99             DONE
+
+# ============================================================================

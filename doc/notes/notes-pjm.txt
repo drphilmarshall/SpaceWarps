@@ -196,7 +196,46 @@ python ../swap/mongodb.py
 # Counted  7564  classifications, that each look like:
 # ('2013-04-06 19:54:42.146000', '5065ff08d10d244cd10029ba', '515de2efe4bb21642700019a', 'test', 'NOT')
 
-
-
-
 # ============================================================================
+# 2013-04-29 (Monday) 17:03 BST
+
+# OK, got SWAP working in its simplest incarnation.
+# REady to do some experiments!
+
+# Standard setup is this on: agents learn, but set PD=PL=50%, initially.
+SWAP.py CFHTLS-beta_P50.config
+
+# Aprajita asks, do we have to learn? Why not assume one set of P's and 
+# stick with them? Get off to a fsater start?
+SWAP.py CFHTLS-beta_no-learning_P50.config
+# Random classifiers get nowhere!
+
+SWAP.py CFHTLS-beta_no-learning_P90.config
+# Big jumps up and down in probability, lots of false positives.
+
+
+# OK, so back to learning. How about we be less pessimistic about people's 
+# talents? 
+SWAP.py CFHTLS-beta_P90.config
+# Not bad - Christmas tree is broader. FP rate higher, but got some sims in
+# the detection zone now.
+
+# More measured. Crowd divided between two groups? 
+#    The Herd: PD = 0.9, PL = U(0:1)
+# Enthusiasts: PD = U(0.2:0.6), PL = U(0.6:1.0) 
+SWAP.py CFHTLS-beta_P70.config
+
+
+# One issue with this LENS or NOT analysis is the hard edged estimation of PD
+# and PL. Early classifications can have a significant impact... Hmm. 70-70
+# seems like a reasonable starting point. 
+
+
+# Wishlist for mock survey:
+
+# - Detected/rejected subjects        -
+# - Candidate URLs output             -
+# - Retired/promoted subjects         -
+# - Completeness, purity calculated   -
+# - Difficulty variation              DONE
+# - PD, PL capped at 0.99             -

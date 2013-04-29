@@ -201,7 +201,9 @@ def SWAP(argv):
 
         # Update the agent's confusion matrix, based on what it heard:
         if category == 'training' and agents_willing_to_learn:
-            collaboration.member[Name].heard(it_was=X,actually_it_was=Y)
+            collaboration.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
+        elif category == 'training':
+            collaboration.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
 
         # Brag about it:
         count += 1

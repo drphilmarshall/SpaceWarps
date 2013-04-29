@@ -111,22 +111,24 @@ class Classifier(object):
 # Update confusion matrix with latest result:
 #   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT')
 
-    def heard(self,it_was=None,actually_it_was=None):
+    def heard(self,it_was=None,actually_it_was=None,ignore=False):
 
         if it_was==None or actually_it_was==None:
             pass
 
         else:
-            if actually_it_was=='LENS':
-                self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
-                self.NL += 1
-                
-            elif actually_it_was=='NOT':
-                self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
-                self.ND += 1
-            else:
-                raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
+            if not ignore:
+                if actually_it_was=='LENS':
+                    self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
+                    self.NL += 1
+
+                elif actually_it_was=='NOT':
+                    self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
+                    self.ND += 1
+                else:
+                    raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
  
+            # Always log progress, even if not learning:
             self.history['I'] = np.append(self.history['I'],self.update_contribution())
             self.history['PL'] = np.append(self.history['PL'],self.PL)
             self.history['PD'] = np.append(self.history['PD'],self.PD)
@@ -143,7 +145,7 @@ class Classifier(object):
         N = np.linspace(1, len(I), len(I), endpoint=True)
         
         # Information contributions:
-        plt.plot(N, I, color="green", alpha=0.2, linewidth=2.0, linestyle="-")
+        plt.plot(N, I, color="green", alpha=0.1, linewidth=2.0, linestyle="-")
         plt.scatter(N[-1], I[-1], color="green", alpha=0.5)
         
         return

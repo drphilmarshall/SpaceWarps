@@ -54,10 +54,12 @@ def write_report(pars,crowd,sample):
     
     F.write('\\begin{minipage}{0.42\linewidth}\n')
 
-    F.write('{\LARGE %s}\\newline\n' % pars['survey'])
+    title = pars['survey'].replace('_',',')
+
+    F.write('{\LARGE %s}\\newline\n' % title)
     F.write('\\vspace{\\baselineskip}\n\n')
     
-    F.write('\\begin{tabular}{|p{0.7\linewidth}p{0.15\linewidth}|}\n')
+    F.write('\\begin{tabular}{|p{0.6\linewidth}p{0.25\linewidth}|}\n')
     F.write('\hline\n')
     F.write('Number of classifications: & %d \\\\ \n' % np.sum(sample.get_exposure()))
     F.write('Number of classifiers:     & %d \\\\ \n' % len(crowd.member))

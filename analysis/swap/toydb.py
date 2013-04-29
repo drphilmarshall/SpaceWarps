@@ -45,7 +45,7 @@ class ToyDB(object):
         except: self.surveysize = 400
         
         try: self.trainingsize = int(pars['trainingsize']) # No. of subjects
-        except: self.surveysize = 400
+        except: self.trainingsize = 400
         
         try: self.population = int(pars['population']) # No. of classifiers
         except: self.population = 100
@@ -59,7 +59,7 @@ class ToyDB(object):
         try: self.difficulty = int(pars['difficulty']) # Mean no. of classifications per person
         except: self.difficulty = 0.5
         
-        self.volunteers = self.populate('volunteers')
+        self.classifiers = self.populate('classifiers')
         
         self.trainingset = self.populate('subjects',category='training')
         self.testset = self.populate('subjects',category='test')
@@ -76,14 +76,15 @@ class ToyDB(object):
 
         array = []
         
-        if things == 'volunteers':
-            # Store their name, and how many classifications they've made
+        if things == 'classifiers':
+            # Store their name, and other information:
             for k in range(self.population):
                 classifier = {}
                 classifier['Name'] = 'Phil'+str(k)
                 classifier['count'] = 0
+                classifier['truePL'],classifier['truePD'] = self.draw_from_Beta2D()
                 array.append(classifier)
-        
+
         
         elif things == 'subjects':
 
@@ -126,7 +127,7 @@ class ToyDB(object):
                 classification = {}
                 t = self.pick_one('epochs')
                 
-                classifier = self.pick_one('volunteers')
+                classifier = self.pick_one('classifiers')
                 classification['Name'] = classifier['Name']
 
                 subject = self.pick_one('subjects',classifier=classifier)
@@ -137,7 +138,7 @@ class ToyDB(object):
                 classification['kind'] = subject['kind']
                 classification['truth'] = subject['truth']
                 classification['result'] = \
-                  self.make_classification(subject=subject,volunteer=classification['Name'])
+                  self.make_classification(subject=subject,classifier=classifier)
                 
                 array.append(classification)
 
@@ -149,17 +150,25 @@ class ToyDB(object):
 
     def pick_one(self,things,classifier=None):
     
-        if things == 'volunteers':
+        if things == 'classifiers':
             
             # Distribution of number of classifications peaks at low N. 
             # Suppose mean number is 40; exponential distribution with this 
             # mean?
-            k = int(self.population*np.random.rand())
-            something = self.volunteers[k]
+            
+            # Original uniform distribution:
+            # k = int(self.population*np.random.rand())
+            
+            # Exponential with mean = enthusiasm:
+            k = int(np.random.exponential(scale=self.enthusiasm))
+            if k > len(self.classifiers)-1: k = 0
+            
+            something = self.classifiers[k]
+
         
         elif things == 'subjects':
             
-            # Here, we have to emulate the stream. What the volunteer
+            # Here, we have to emulate the stream. What the classifier
             # is shown depends on what they have already seen!
             
             j = classifier['count'] + 1
@@ -186,27 +195,28 @@ class ToyDB(object):
         return something
         
 # ----------------------------------------------------------------------------
-# Use the hidden confusion matrix of each toy volunteer to classify 
+# Use the hidden confusion matrix of each toy classifier to classify 
 # the subject provided:
 
-    def make_classification(self,subject=None,volunteer=None):
+    def make_classification(self,subject=None,classifier=None):
     
-        # All toy volunteers are equally skilled! Can ignore them, and
-        # just use constant P values.
-        PL = 0.9
-        PD = 0.8
+        # If all toy classifiers were equally skilled, we could ignore them, 
+        # and just use constant P values:
+        # PL = 0.9
+        # PD = 0.8
+        # Instead, we use the classifier's own PD and PL:
         
         if subject['category'] == 'training':
             truth = subject['truth']
         elif subject['category'] == 'test':
             truth = subject['strewth']
-        
+                
         if truth == 'LENS':
-            if np.random.rand() < PL: word = 'LENS'
+            if np.random.rand() < classifier['truePL']: word = 'LENS'
             else: word = 'NOT'
         
         elif truth == 'NOT':
-            if np.random.rand() < PD: word = 'NOT'
+            if np.random.rand() < classifier['truePD']: word = 'NOT'
             else: word = 'LENS'
                 
         return word
@@ -249,6 +259,30 @@ class ToyDB(object):
     def size(self):
         
         return len(self.classifications)
+        
+# ----------------------------------------------------------------------------
+# Draw a PL,PD pair from circular beta PDF:
+
+    def draw_from_Beta2D(self):
+
+        # First draw a radius:
+        alpha = 1.0/0.25
+        beta = 1.0/0.8
+        R = 0.48*np.random.beta(alpha,beta,size=1)
+
+        # Now draw an azimuthal angle:
+        alpha = 1.0/0.25
+        beta = 1.0/0.3
+        phi = -0.5*np.pi + 1.5*np.pi*np.random.beta(alpha,beta,size=1)
+
+        # Convert to PL and PD, fuzzy up, and truncate:
+        Pmax = 0.99
+        PL = 0.5 + R*np.cos(phi) + 0.03*np.random.randn()
+        PL[np.where(PL > Pmax)] = Pmax
+        PD = 0.5 + R*np.sin(phi) + 0.03*np.random.randn()
+        PD[np.where(PD > Pmax)] = Pmax
+
+        return PL[0],PD[0]
         
 # ======================================================================
 

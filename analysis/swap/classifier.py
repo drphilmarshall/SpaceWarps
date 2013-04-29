@@ -120,6 +120,7 @@ class Classifier(object):
             if actually_it_was=='LENS':
                 self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
                 self.NL += 1
+                
             elif actually_it_was=='NOT':
                 self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
                 self.ND += 1
@@ -142,7 +143,7 @@ class Classifier(object):
         N = np.linspace(1, len(I), len(I), endpoint=True)
         
         # Information contributions:
-        plt.plot(N, I, color="green", alpha=0.1, linewidth=2.0, linestyle="-")
+        plt.plot(N, I, color="green", alpha=0.2, linewidth=2.0, linestyle="-")
         plt.scatter(N[-1], I[-1], color="green", alpha=0.5)
         
         return

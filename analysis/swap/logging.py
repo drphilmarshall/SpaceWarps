@@ -3,6 +3,7 @@
 import swap
 
 import subprocess,sys,os,time
+import numpy as np
 
 # ======================================================================
 
@@ -51,15 +52,18 @@ def write_report(pars,crowd,sample):
 
     # Top left panel holds a summary of numbers:
     
-    F.write('\\begin{minipage}{0.40\linewidth}\n')
+    F.write('\\begin{minipage}{0.42\linewidth}\n')
 
     F.write('{\LARGE %s}\\newline\n' % pars['survey'])
     F.write('\\vspace{\\baselineskip}\n\n')
     
     F.write('\\begin{tabular}{|p{0.7\linewidth}p{0.15\linewidth}|}\n')
     F.write('\hline\n')
-    F.write('Number of classifiers: & %d \\\\ \n' % len(crowd.member))
-    F.write('Number of subjects:    & %d \\\\ \n' % len(sample.member))
+    F.write('Number of classifications: & %d \\\\ \n' % np.sum(sample.get_exposure()))
+    F.write('Number of classifiers:     & %d \\\\ \n' % len(crowd.member))
+    F.write('Number of subjects:        & %d \\\\ \n' % len(sample.member))
+    F.write('Number of sims:            & %d \\\\ \n' % len(sample.probabilities['sim']))
+    F.write('Number of duds:            & %d \\\\ \n' % len(sample.probabilities['dud']))
     F.write('\hline\n')
     F.write('\end{tabular}\n')
 
@@ -102,20 +106,25 @@ def write_report_preamble(F):
 def add_report_figures(F,pars):
 
     # Top Right: Subject trajectories:
-    F.write('\\begin{minipage}{0.58\linewidth}\n')
+    F.write('\\begin{minipage}{0.56\linewidth}\n')
     F.write('\includegraphics[width=\linewidth]{%s}\n' % pars['trajectoriesplot'])
-    F.write('\end{minipage}\n')
+    F.write('\end{minipage}\n\n')
+
+    F.write('\\vspace{-1\\baselineskip}\n')
+    F.write('\\begin{minipage}{\linewidth}\n')
 
     # Bottom Left: Classifier probabilities:
-    F.write('\\begin{minipage}{0.42\linewidth}\n')
+    F.write('\\begin{minipage}{0.48\linewidth}\n')
     F.write('\includegraphics[width=\linewidth]{%s}\n' % pars['probabilitiesplot'])
-    F.write('\end{minipage}\hfill\n')
+    F.write('\end{minipage}\n')
 
     # Bottom Right: Classifier histories:
-    F.write('\\begin{minipage}{0.56\linewidth}\n')
+    F.write('\\begin{minipage}{0.48\linewidth}\n')
     F.write('\includegraphics[width=\linewidth]{%s}\n' % pars['historiesplot'])
     F.write('\end{minipage}\n')
     
+    F.write('\end{minipage}\n')
+
     return
     
 # ----------------------------------------------------------------------

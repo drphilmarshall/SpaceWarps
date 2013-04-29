@@ -57,6 +57,18 @@ class Collection(object):
         
 # ----------------------------------------------------------------------------
 
+    def get_exposure(self):
+    
+        N = np.array([])
+        for ID in self.list():
+            subject = self.member[ID]
+            N = np.append(N,subject.exposure)
+            
+        self.exposure = N    
+        return N
+        
+# ----------------------------------------------------------------------------
+
     def list(self):
         return self.member.keys()
         
@@ -93,13 +105,13 @@ class Collection(object):
         # set of axes, with linear scales...
         hax = fig.add_axes(upperarea)
         hax.set_xlim(np.log10(swap.pmin),np.log10(swap.pmax))
-        hax.set_ylim(np.log10(50.0),np.log10(0.5))
+        hax.set_ylim(np.log10(swap.Ncmax),np.log10(swap.Ncmin))
         for label in hax.get_xticklabels():
             label.set_visible(False)
         for label in hax.get_yticklabels():
             label.set_visible(False)
         plt.sca(hax)
-        plt.arrow(np.log10(2e-4), np.log10(0.6), 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
+        plt.arrow(np.log10(2e-4), np.log10(0.3), 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
         # hax.set_axis_off()        
 
         # Now overlay a transparent frame to plot the subjects in:
@@ -107,9 +119,9 @@ class Collection(object):
         plt.sca(upper)
         upper.set_xlim(swap.pmin,swap.pmax)
         upper.set_xscale('log')
-        upper.set_ylim(50.0,0.5)
+        upper.set_ylim(swap.Ncmax,swap.Ncmin)
         upper.set_yscale('log')
-        plt.axhline(y=5.5,color='gray',linestyle='dotted')
+        plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
         plt.axvline(x=0.3,color='blue',linestyle='dotted')
         plt.axvline(x=1e-5,color='red',linestyle='dotted')
         upper.set_ylabel('No. of classifications')
@@ -124,6 +136,7 @@ class Collection(object):
         lower.set_xscale('log')
         lower.set_ylim(0.1,0.5*self.size())
         # lower.set_yscale('log')
+        plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
         plt.axvline(x=0.3,color='blue',linestyle='dotted')
         plt.axvline(x=1e-5,color='red',linestyle='dotted')
         lower.set_xlabel('Posterior Probability Pr(LENS|d)')

@@ -6,7 +6,7 @@ import numpy as np
 import pylab as plt
 
 # Every subject starts with the following probability of being a LENS:
-prior = 0.0002
+prior = 2e-4
 
 # ======================================================================
 
@@ -72,8 +72,8 @@ class Subject(object):
         self.state = 'active'
             
         self.probability = prior
-        
         self.trajectory = np.array([self.probability])
+        self.exposure = 0
         
         return None
 
@@ -105,8 +105,11 @@ class Subject(object):
                 raise Exception("Unrecognised classification result: "+as_being)
 
             self.probability = likelihood*self.probability
-            
+            if self.probability < swap.pmin: self.probability = swap.pmin
+                        
             self.trajectory = np.append(self.trajectory,self.probability)
+
+            self.exposure += 1
 
         return
 
@@ -116,7 +119,8 @@ class Subject(object):
     def plot_trajectory(self,axes):
     
         plt.sca(axes[0])
-        N = np.linspace(1, len(self.trajectory), len(self.trajectory), endpoint=True)
+        N = np.linspace(0, len(self.trajectory), len(self.trajectory), endpoint=True)
+        N[0] = 0.5
         
         if self.kind == 'sim':
             colour = 'blue'

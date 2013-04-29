@@ -194,14 +194,14 @@ def SWAP(argv):
         if ID not in sample.list():           
             sample.member[ID] = swap.Subject(ID,category,kind,Y)    
 
-        # Update the agent's confusion matrix, based on what it heard:
-        if category == 'training' and agents_willing_to_learn:
-            collaboration.member[Name].heard(it_was=X,actually_it_was=Y)
-
         # Update the subject's lens probability using input from the 
         # collaboration member. We send that member's agent to the subject
         # to do this.  
         sample.member[ID].was_described(by=collaboration.member[Name],as_being=X)
+
+        # Update the agent's confusion matrix, based on what it heard:
+        if category == 'training' and agents_willing_to_learn:
+            collaboration.member[Name].heard(it_was=X,actually_it_was=Y)
 
         # Brag about it:
         count += 1

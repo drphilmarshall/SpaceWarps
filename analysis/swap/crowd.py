@@ -73,34 +73,58 @@ class Crowd(object):
         PLarray = np.array([])
         PDarray = np.array([])
         contributions = np.array([])
+        training = np.array([])
         for ID in self.list():
             classifier = self.member[ID]
             PLarray = np.append(PLarray,classifier.PL)
             PDarray = np.append(PDarray,classifier.PD)
             contributions = np.append(contributions,classifier.contribution)
+            training = np.append(training,classifier.NL+classifier.ND)
 
         self.probabilities['LENS'] = PLarray
         self.probabilities['NOT'] = PDarray
         self.contributions = contributions
-        
+        self.training = training
+
         return
         
 # ----------------------------------------------------------------------
 # Prepare to plot classifiers' histories:
 
     def start_history_plot(self):
-    
-        plt.figure()
-        axes = plt.gca()
-        axes.set_xlim(0.5,1000.0)
+        
+        Nmin = 0.5
+        Nmax = 2000.0
+        
+        bins = np.linspace(np.log10(Nmin),np.log10(Nmax),20,endpoint=True)
+        self.collect_probabilities()
+        logN = np.log10(self.training)
+        
+        fig = plt.figure(figsize=(6,5), dpi=300)
+
+        # Linear xes for histogram:
+        hax = fig.add_axes([0.15,0.15,0.85,0.80])
+        hax.set_xlim(np.log10(Nmin),np.log10(Nmax))
+        hax.set_ylim(0.0,0.5*len(logN))
+        for label in hax.get_xticklabels():
+            label.set_visible(False)
+        for label in hax.get_yticklabels():
+            label.set_visible(False)
+            
+        plt.hist(logN, bins=bins, histtype='stepfilled', color='yellow', alpha=0.4)
+            
+ 
+        # Logarithmic axes for information contribution plot: 
+        axes = fig.add_axes([0.15,0.15,0.85,0.80], frameon=False)
+        axes.set_xlim(Nmin,Nmax)
         axes.set_xscale('log')
         axes.set_ylim(0.0,1.0)
-        axes.set_xticks([1,10,100,2000])
+        axes.set_xticks([1,10,100,1000])
         axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
         axes.set_xlabel('No. of training subjects classified')
         axes.set_ylabel('Contributed information per classification (bits)')
         axes.set_title('Classifier Histories')
-            
+        
         return axes
 
 # ----------------------------------------------------------------------
@@ -118,7 +142,7 @@ class Crowd(object):
 
     def plot_histogram(self,filename):
     
-        fig = plt.figure(figsize=(8,8), dpi=300)
+        fig = plt.figure(figsize=(6,6), dpi=300)
 
         width,height,margin = 0.65,0.2,0.1
         scatterarea   = [margin, margin+height, width, width] # left, bottom, width, height
@@ -141,7 +165,7 @@ class Crowd(object):
         
         bins = np.linspace(0.0,1.0,20,endpoint=True)
 
-        # Scatter plot - points sized by information content:
+        # Scatter plot:
         plt.sca(scatter)
         scatter.set_xlim(pmin,pmax)
         scatter.set_ylim(pmin,pmax)
@@ -152,10 +176,14 @@ class Crowd(object):
             label.set_visible(False)
         scatter.set_title('Classifier Probabilities')
         
+        # Training received:
+        size = 4*self.training + 6.0
+        plt.scatter(PL, PD, s=size, color='yellow', alpha=0.5)
+        
+        # Information contributed:
         size = 200*self.contributions + 3.0
         plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
 
-        
         # Right histogram panel: 
         plt.sca(righthist)
         righthist.set_ylim(pmin,pmax)

@@ -135,9 +135,9 @@ class Crowd(object):
         # Add a little bit of scatter to the probabilities, to make
         # the ones near (0.5,0.5) visible:
         PD = self.probabilities['NOT']
-        PD += 4.0*(1.0-PD)*PD*0.02*np.random.randn(len(PD))
+        PD += 4.0*(1.0-PD)*PD*0.01*np.random.randn(len(PD))
         PL = self.probabilities['LENS']
-        PL += 4.0*(1.0-PL)*PL*0.02*np.random.randn(len(PL))
+        PL += 4.0*(1.0-PL)*PL*0.01*np.random.randn(len(PL))
         
         bins = np.linspace(0.0,1.0,20,endpoint=True)
 

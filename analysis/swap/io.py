@@ -84,7 +84,7 @@ def write_pickle(contents,filename):
 
 def get_new_filename(pars,flavour):
 
-    head = pars['survey']+'_'+pars['finish']+'_'+flavour
+    head = pars['stem']+'_'+flavour
     if flavour == 'crowd' or flavour == 'collection':
         ext = 'pickle'
     elif flavour == 'history' or flavour == 'trajectory' or flavour == 'probabilities':

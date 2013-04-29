@@ -3,7 +3,7 @@
 
 import swap
 
-import sys,getopt,datetime
+import sys,getopt,datetime,os,subprocess
 
 # ======================================================================
 
@@ -137,6 +137,12 @@ def SWAP(argv):
     t2 = datetime.datetime.utcnow()
     tonights.parameters['finish'] = t2.strftime('%Y-%m-%d')
     
+    # Use the following stem for all output files:
+    trunk = tonights.parameters['survey']+'_'+tonights.parameters['finish']
+    tonights.parameters['dir'] = os.getcwd()+'/'+trunk
+    subprocess.call(["mkdir","-p",tonights.parameters['dir']])
+    tonights.parameters['stem'] = tonights.parameters['dir']+'/'+trunk
+
     # ------------------------------------------------------------------
     # Read in, or create, a bureau of agents who will represent the 
     # collaboration:
@@ -221,34 +227,42 @@ def SWAP(argv):
     for Name in collaboration.list():
         collaboration.member[Name].plot_history(fig1)
     collaboration.finish_history_plot(fig1,pngfile)
+    tonights.parameters['historiesplot'] = pngfile
 
     # Agent probabilities:
     
     pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
     print "SWAP: plotting classifier probabilities in "+pngfile
     collaboration.plot_histogram(pngfile)        
+    tonights.parameters['probabilitiesplot'] = pngfile
 
     # Subject probabilities:
     
-    fig2 = sample.start_trajectory_plot()
+    fig3 = sample.start_trajectory_plot()
     pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
     print "SWAP: plotting subject trajectories in "+pngfile
     for ID in sample.list():
-        sample.member[ID].plot_trajectory(fig2)
-    sample.finish_trajectory_plot(fig2,pngfile)
+        sample.member[ID].plot_trajectory(fig3)
+    sample.finish_trajectory_plot(fig3,pngfile)
+    tonights.parameters['trajectoriesplot'] = pngfile
     
     # ------------------------------------------------------------------
-    # Pickle the collaboration. Hooray! 
-
-    new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
-    print "SWAP: saving agents in "+new_crowdfile
-    swap.write_pickle(collaboration,new_crowdfile)
-
-    # Pickle the sample. Hooray!
+    # Write a PDF report:
     
-    new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
-    print "SWAP: saving subjects in "+new_samplefile
-    swap.write_pickle(sample,new_samplefile)
+    swap.write_report(tonights.parameters,collaboration,sample) 
+    
+    # ------------------------------------------------------------------
+    # Pickle the collaboration and sample, if required:
+
+    if tonights.parameters['repickle']:
+    
+        new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
+        print "SWAP: saving agents in "+new_crowdfile
+        swap.write_pickle(collaboration,new_crowdfile)
+
+        new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
+        print "SWAP: saving subjects in "+new_samplefile
+        swap.write_pickle(sample,new_samplefile)
 
     # ------------------------------------------------------------------
     

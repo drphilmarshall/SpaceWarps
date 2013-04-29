@@ -1,7 +1,7 @@
 # ======================================================================
 
 import numpy as np
-import os,sys,subprocess,datetime
+import os,sys,datetime
 
 try: from pymongo import MongoClient
 except:

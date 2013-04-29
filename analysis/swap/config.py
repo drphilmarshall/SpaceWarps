@@ -5,8 +5,14 @@ import os, glob
 # ======================================================================
 # Global parameters:
 
+# Limits to subject probability (cannot go over 1 anyway):
 pmin,pmax = 2e-8,1.1
+
+# Plotting limits for no. of classifications (per subject):
 Ncmin,Ncmax = 0.2,50
+
+# Limits to confusion matrix elements:
+PDmax,PLmax = 0.99,0.99
 
 # ======================================================================
 

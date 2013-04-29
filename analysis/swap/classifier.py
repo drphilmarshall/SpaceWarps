@@ -120,10 +120,12 @@ class Classifier(object):
             if not ignore:
                 if actually_it_was=='LENS':
                     self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
+                    self.PL = np.min([self.PL,swap.PLmax])
                     self.NL += 1
 
                 elif actually_it_was=='NOT':
                     self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
+                    self.PD = np.min([self.PD,swap.PDmax])
                     self.ND += 1
                 else:
                     raise Exception("Apparently, the subject was actually a "+str(actually_it_was))

@@ -116,6 +116,12 @@ def SWAP(argv):
     else:
         print "SWAP: data will be read from the current Mongo database"
     
+    agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
+    if agents_willing_to_learn:
+        print "SWAP: agents will update their confusion matrices as new data arrives"
+    else:
+        print "SWAP: agents will use current confusion matrices without updating them"
+    
     vb = tonights.parameters['verbose']
     if not vb: 
         print "SWAP: only reporting minimal stdout."
@@ -173,7 +179,7 @@ def SWAP(argv):
 
         # Register new volunteers, and create an agent for each one:
         if Name not in collaboration.list():  
-            collaboration.member[Name] = swap.Classifier(Name)
+            collaboration.member[Name] = swap.Classifier(Name,tonights.parameters)
             # Note that a collaboration.member is an *agent*, not a 
             # person. People exist in real life, whereas this is 
             # just a piece of software!
@@ -183,7 +189,7 @@ def SWAP(argv):
             sample.member[ID] = swap.Subject(ID,category,kind,Y)    
 
         # Update the agent's confusion matrix, based on what it heard:
-        if category == 'training':
+        if category == 'training' and agents_willing_to_learn:
             collaboration.member[Name].heard(it_was=X,actually_it_was=Y)
 
         # Update the subject's lens probability using input from the 

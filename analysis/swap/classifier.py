@@ -79,12 +79,12 @@ class Classifier(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,name):
+    def __init__(self,name,pars):
         self.name = name
-        self.ND = 2.0
-        self.NL = 2.0
-        self.PD = 0.5
-        self.PL = 0.5
+        self.PD = pars['initialPD']
+        self.PL = pars['initialPL']
+        self.ND = 1.0/self.PD
+        self.NL = 1.0/self.PL
         self.contribution = self.update_contribution()
         self.history = {'I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         return None

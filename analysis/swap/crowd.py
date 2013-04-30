@@ -82,18 +82,22 @@ class Crowd(object):
         PLarray = np.array([])
         PDarray = np.array([])
         contributions = np.array([])
-        training = np.array([])
+        Ntraining = np.array([])
+        Ntotal = np.array([])
         for ID in self.list():
             classifier = self.member[ID]
             PLarray = np.append(PLarray,classifier.PL)
             PDarray = np.append(PDarray,classifier.PD)
             contributions = np.append(contributions,classifier.contribution)
-            training = np.append(training,classifier.NL+classifier.ND)
+            Ntraining = np.append(Ntraining,classifier.NL+classifier.ND)
+            Ntotal = np.append(Ntotal,classifier.N)
 
         self.probabilities['LENS'] = PLarray
         self.probabilities['NOT'] = PDarray
         self.contributions = contributions
-        self.training = training
+        self.Ntraining = Ntraining
+        self.Ntotal = Ntotal
+        self.Ntest = Ntotal - Ntraining
 
         return
         
@@ -107,7 +111,7 @@ class Crowd(object):
         
         bins = np.linspace(np.log10(Nmin),np.log10(Nmax),20,endpoint=True)
         self.collect_probabilities()
-        logN = np.log10(self.training)
+        logN = np.log10(self.Ntraining)
         
         fig = plt.figure(figsize=(6,5), dpi=300)
 
@@ -165,11 +169,15 @@ class Crowd(object):
         pmin,pmax = 0.0,1.0
         self.collect_probabilities()
         
+        # Only plot a shortlist of 1000, or fewer:
+        TheseFewNames = self.shortlist(np.min([1000,self.size()]))
+        index = [i for i,Name in enumerate(self.list()) if Name in set(TheseFewNames)]
+        PD = self.probabilities['NOT'][index]
+        PL = self.probabilities['LENS'][index]
+        
         # Add a little bit of scatter to the probabilities, to make
         # the ones near (0.5,0.5) visible:
-        PD = self.probabilities['NOT']
         PD += 4.0*(1.0-PD)*PD*0.01*np.random.randn(len(PD))
-        PL = self.probabilities['LENS']
         PL += 4.0*(1.0-PL)*PL*0.01*np.random.randn(len(PL))
         
         bins = np.linspace(0.0,1.0,20,endpoint=True)
@@ -190,7 +198,7 @@ class Crowd(object):
         plt.text(0.81,0.96,'"Astute"',color='gray')
         
         # Training received:
-        size = 4*self.training + 6.0
+        size = 4*self.Ntraining + 6.0
         plt.scatter(PL, PD, s=size, color='yellow', alpha=0.5)
         
         # Information contributed:

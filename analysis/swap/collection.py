@@ -42,6 +42,7 @@ class Collection(object):
         
         self.member = {}
         self.probabilities = {'sim':np.array([]), 'dud':np.array([]), 'test':np.array([])}
+        self.exposure = {'sim':np.array([]), 'dud':np.array([]), 'test':np.array([])}
          
         return None
 
@@ -57,18 +58,18 @@ class Collection(object):
         return len(self.member)
         
 # ----------------------------------------------------------------------------
-# Return an array giving each samples' exposure to the classifiers:
-
-    def get_exposure(self):
-    
-        N = np.array([])
-        for ID in self.list():
-            subject = self.member[ID]
-            N = np.append(N,subject.exposure)
-            
-        self.exposure = N    
-        return N
-        
+# # Return an array giving each samples' exposure to the classifiers:
+# 
+#     def get_exposure(self):
+#     
+#         N = np.array([])
+#         for ID in self.list():
+#             subject = self.member[ID]
+#             N = np.append(N,subject.exposure)
+#             
+#         self.exposure = N    
+#         return N
+#         
 # ----------------------------------------------------------------------------
 # Return a complete list of collection members:
 
@@ -76,7 +77,9 @@ class Collection(object):
         return self.member.keys()
         
 # ----------------------------------------------------------------------------
-# Return a list of N collection members, selected at regular intervals:
+# Return a list of N collection members, selected at regular intervals. This 
+# *should* contain a significant number of training subjects, since on average 
+# 1 in 20 subjects are training...
 
     def shortlist(self,N):
         longlist = self.list()
@@ -88,17 +91,20 @@ class Collection(object):
     def collect_probabilities(self,kind):
     
         p = np.array([])
+        n = np.array([])
         for ID in self.list():
             subject = self.member[ID]
             if subject.kind == kind:
                 p = np.append(p,subject.probability)
+                n = np.append(n,subject.exposure)
         
         self.probabilities[kind] = p
+        self.exposure[kind] = n
         
         return
         
 # ----------------------------------------------------------------------
-# Prepare to plot subjects' trajectories. We need t
+# Prepare to plot subjects' trajectories:
 
     def start_trajectory_plot(self):
     

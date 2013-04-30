@@ -163,7 +163,7 @@ def SWAP(argv):
         db = swap.read_pickle(tonights.parameters['dbfile'],'database')
         
         if db is None:
-            print "Making a new Toy database..."
+            print "SWAP: making a new Toy database..."
             db = swap.ToyDB(pars=tonights.parameters)
         
         print "SWAP: database has ",db.size()," Toy classifications"
@@ -180,7 +180,9 @@ def SWAP(argv):
     batch = db.find('since',t1)
         
     # ------------------------------------------------------------------
-   
+    
+    print "SWAP: interpreting classifications..."
+ 
     count = 0
     for classification in batch:
 
@@ -226,6 +228,7 @@ def SWAP(argv):
             if count == 1: sys.stdout.write('SWAP: ')
             elif np.mod(count,int(db.size()/73.0)) == 0: sys.stdout.write('.')
             elif count == db.size(): sys.stdout.write('\n')
+            sys.stdout.flush()
         
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
@@ -254,9 +257,10 @@ def SWAP(argv):
     
     fig1 = collaboration.start_history_plot()
     pngfile = swap.get_new_filename(tonights.parameters,'history')
-    print "SWAP: plotting classifier histories in "+pngfile
+    Nc = np.min([1000,collaboration.size()])
+    print "SWAP: plotting "+str(Nc)+" classifier histories in "+pngfile
     
-    for Name in collaboration.shortlist(np.min([1000,collaboration.size()])):
+    for Name in collaboration.shortlist(Nc):
         collaboration.member[Name].plot_history(fig1)
     collaboration.finish_history_plot(fig1,pngfile)
     tonights.parameters['historiesplot'] = pngfile
@@ -264,7 +268,7 @@ def SWAP(argv):
     # Agent probabilities:
     
     pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
-    print "SWAP: plotting classifier probabilities in "+pngfile
+    print "SWAP: plotting "+str(Nc)+" classifier probabilities in "+pngfile
     collaboration.plot_histogram(pngfile)        
     tonights.parameters['probabilitiesplot'] = pngfile
 
@@ -272,8 +276,9 @@ def SWAP(argv):
     
     fig3 = sample.start_trajectory_plot()
     pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
-    print "SWAP: plotting subject trajectories in "+pngfile
-    for ID in sample.shortlist(np.min([1000,sample.size()])):
+    Ns = np.min([1000,sample.size()])
+    print "SWAP: plotting "+str(Ns)+" subject trajectories in "+pngfile
+    for ID in sample.shortlist(Ns):
         sample.member[ID].plot_trajectory(fig3)
     sample.finish_trajectory_plot(fig3,pngfile)
     tonights.parameters['trajectoriesplot'] = pngfile

@@ -2,7 +2,7 @@
 
 import numpy as np
 
-import datetime
+import datetime,sys
 
 # ======================================================================
 
@@ -123,7 +123,9 @@ class ToyDB(object):
                 
         elif things == 'classifications':
 
-            for i in range(self.population*self.enthusiasm):
+            count = 0
+            N = self.population*self.enthusiasm
+            for i in range(N):
                 classification = {}
                 t = self.pick_one('epochs')
                 
@@ -141,7 +143,13 @@ class ToyDB(object):
                   self.make_classification(subject=subject,classifier=classifier)
                 
                 array.append(classification)
+                count += 1
 
+                # Count up to 74 in dots:
+                if count == 1: sys.stdout.write('SWAP: ')
+                elif np.mod(count,int(N/73.0)) == 0: sys.stdout.write('.')
+                elif count == N: sys.stdout.write('\n')
+                sys.stdout.flush()
 
         return array
 

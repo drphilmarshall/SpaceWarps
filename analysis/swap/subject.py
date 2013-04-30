@@ -104,12 +104,19 @@ class Subject(object):
             else:
                 raise Exception("Unrecognised classification result: "+as_being)
 
+            # Update subject:
             self.probability = likelihood*self.probability
             if self.probability < swap.pmin: self.probability = swap.pmin
                         
             self.trajectory = np.append(self.trajectory,self.probability)
 
             self.exposure += 1
+            
+            # Update classifier: 
+            by.N += 1
+            if self.kind == 'test':
+                 by.testhistory['ID'] = self.name
+                 by.testhistory['I'] = by.contribution
 
         return
 

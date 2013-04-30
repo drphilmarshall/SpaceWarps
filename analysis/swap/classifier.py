@@ -74,7 +74,7 @@ class Classifier(object):
       http://spacewarps.org/
 
     HISTORY
-      2013-04-17  Started Marshall (Oxford)
+      2013-04-17:  Started Marshall (Oxford)
     """
 
 # ----------------------------------------------------------------------
@@ -85,8 +85,10 @@ class Classifier(object):
         self.PL = pars['initialPL']
         self.ND = 1.0/self.PD
         self.NL = 1.0/self.PL
+        self.N = 0
         self.contribution = self.update_contribution()
-        self.history = {'I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
+        self.traininghistory = {'ID':'tutorial','I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
+        self.testhistory = {'ID':[],'I':np.array([])}
         return None
 
 # ----------------------------------------------------------------------
@@ -131,9 +133,9 @@ class Classifier(object):
                     raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
  
             # Always log progress, even if not learning:
-            self.history['I'] = np.append(self.history['I'],self.update_contribution())
-            self.history['PL'] = np.append(self.history['PL'],self.PL)
-            self.history['PD'] = np.append(self.history['PD'],self.PD)
+            self.traininghistory['I'] = np.append(self.traininghistory['I'],self.update_contribution())
+            self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
+            self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
 
         return
 
@@ -143,7 +145,7 @@ class Classifier(object):
     def plot_history(self,axes):
     
         plt.sca(axes)
-        I = self.history['I']
+        I = self.traininghistory['I']
         N = np.linspace(1, len(I), len(I), endpoint=True)
         
         # Information contributions:

@@ -4,6 +4,7 @@
 import swap
 
 import sys,getopt,datetime,os,subprocess
+import numpy as np
 
 # ======================================================================
 
@@ -158,8 +159,14 @@ def SWAP(argv):
     # Open up database:
     
     if practise:
-        db = swap.ToyDB(pars=tonights.parameters)
-        print "SWAP: generated ",db.size()," Toy classifications"
+        
+        db = swap.read_pickle(tonights.parameters['dbfile'],'database')
+        
+        if db is None:
+            print "Making a new Toy database..."
+            db = swap.ToyDB(pars=tonights.parameters)
+        
+        print "SWAP: database has ",db.size()," Toy classifications"
         print "SWAP: made by ",db.population," Toy classifiers"
         print "SWAP: of ",db.surveysize," Toy subjects"
         print "SWAP: where each classifier makes ",db.enthusiasm," classifications, on average"
@@ -214,9 +221,31 @@ def SWAP(argv):
             print "SWAP: their agent reckons their contribution (in bits) = ",collaboration.member[Name].contribution
             print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
             print "SWAP: and the subject's new probability as ",sample.member[ID].probability
-       
+        else:
+            # Count up to 74 in dots:
+            if count == 1: sys.stdout.write('SWAP: ')
+            elif np.mod(count,int(db.size()/73.0)) == 0: sys.stdout.write('.')
+            elif count == db.size(): sys.stdout.write('\n')
+        
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
+
+    # ------------------------------------------------------------------
+    # Pickle the collaboration and sample, if required:
+
+    if tonights.parameters['repickle']:
+    
+        new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
+        print "SWAP: saving agents in "+new_crowdfile
+        swap.write_pickle(collaboration,new_crowdfile)
+
+        new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
+        print "SWAP: saving subjects in "+new_samplefile
+        swap.write_pickle(sample,new_samplefile)
+
+        new_dbfile = swap.get_new_filename(tonights.parameters,'database')
+        print "SWAP: saving database in "+new_dbfile
+        swap.write_pickle(db,new_dbfile)
 
     # ------------------------------------------------------------------
     # Make plots:
@@ -226,7 +255,8 @@ def SWAP(argv):
     fig1 = collaboration.start_history_plot()
     pngfile = swap.get_new_filename(tonights.parameters,'history')
     print "SWAP: plotting classifier histories in "+pngfile
-    for Name in collaboration.list():
+    
+    for Name in collaboration.shortlist(np.min([1000,collaboration.size()])):
         collaboration.member[Name].plot_history(fig1)
     collaboration.finish_history_plot(fig1,pngfile)
     tonights.parameters['historiesplot'] = pngfile
@@ -243,7 +273,7 @@ def SWAP(argv):
     fig3 = sample.start_trajectory_plot()
     pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
     print "SWAP: plotting subject trajectories in "+pngfile
-    for ID in sample.list():
+    for ID in sample.shortlist(np.min([1000,sample.size()])):
         sample.member[ID].plot_trajectory(fig3)
     sample.finish_trajectory_plot(fig3,pngfile)
     tonights.parameters['trajectoriesplot'] = pngfile
@@ -253,19 +283,6 @@ def SWAP(argv):
     
     swap.write_report(tonights.parameters,collaboration,sample) 
     
-    # ------------------------------------------------------------------
-    # Pickle the collaboration and sample, if required:
-
-    if tonights.parameters['repickle']:
-    
-        new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
-        print "SWAP: saving agents in "+new_crowdfile
-        swap.write_pickle(collaboration,new_crowdfile)
-
-        new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
-        print "SWAP: saving subjects in "+new_samplefile
-        swap.write_pickle(sample,new_samplefile)
-
     # ------------------------------------------------------------------
     
     print swap.doubledashedline

@@ -56,15 +56,24 @@ class Crowd(object):
         return 'crowd of %d classification agents' % (self.size())       
         
 # ----------------------------------------------------------------------------
+# Return the number of crowd members:
 
     def size(self):
         return len(self.member)
         
 # ----------------------------------------------------------------------------
+# Return a complete list of crowd members:
 
     def list(self):
         return self.member.keys()
         
+# ----------------------------------------------------------------------------
+# Return a list of N crowd members, selected at regular intervals:
+
+    def shortlist(self,N):
+        longlist = self.list()
+        return longlist[0::int(len(longlist)/N)][0:N]
+            
 # ----------------------------------------------------------------------------
 # Extract all the classification probabilities used by the agents:
 

@@ -51,11 +51,13 @@ class Collection(object):
         return 'collection of %d subjects' % (self.size())       
         
 # ----------------------------------------------------------------------------
+# Return the number of collection members:
 
     def size(self):
         return len(self.member)
         
 # ----------------------------------------------------------------------------
+# Return an array giving each samples' exposure to the classifiers:
 
     def get_exposure(self):
     
@@ -68,10 +70,18 @@ class Collection(object):
         return N
         
 # ----------------------------------------------------------------------------
+# Return a complete list of collection members:
 
     def list(self):
         return self.member.keys()
         
+# ----------------------------------------------------------------------------
+# Return a list of N collection members, selected at regular intervals:
+
+    def shortlist(self,N):
+        longlist = self.list()
+        return longlist[0::int(len(longlist)/N)][0:N]
+            
 # ----------------------------------------------------------------------------
 # Extract all the lens probabilities of the members of a given kind:
 

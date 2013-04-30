@@ -60,11 +60,14 @@ def read_pickle(filename,flavour):
 
         if flavour == 'crowd':
             contents = swap.Crowd()
+            print "SWAP: made a new",contents
 
         elif flavour == 'collection':
             contents = swap.Collection()
+            print "SWAP: made a new",contents
         
-        print "SWAP: made a new",contents
+        elif flavour == 'database':
+            contents = None
             
     return contents
 
@@ -85,7 +88,7 @@ def write_pickle(contents,filename):
 def get_new_filename(pars,flavour):
 
     head = pars['stem']+'_'+flavour
-    if flavour == 'crowd' or flavour == 'collection':
+    if flavour == 'crowd' or flavour == 'collection' or flavour == 'database':
         ext = 'pickle'
     elif flavour == 'history' or flavour == 'trajectory' or flavour == 'probabilities':
         ext = 'png'

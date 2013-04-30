@@ -233,11 +233,12 @@ SWAP.py CFHTLS-beta_P70.config
 
 # Wishlist for mock survey:
 
+# - Difficulty variation              DONE
+# - PD, PL capped at 0.99             DONE
+# - Realistic PDFs for Nc, PD, PL     DONE
 # - Detected/rejected subjects        -
 # - Candidate URLs output             -
 # - Retired/promoted subjects         -
 # - Completeness, purity calculated   -
-# - Difficulty variation              DONE
-# - PD, PL capped at 0.99             DONE
 
 # ============================================================================

@@ -66,8 +66,9 @@ def write_report(pars,crowd,sample):
     N = np.sum(sample.exposure['sim'])+np.sum(sample.exposure['dud'])+np.sum(sample.exposure['test'])    
     Nc = len(crowd.member)
     
-    Ns = len(sample.member)
-    assert (Ns == sample.N)
+    # Ns = len(sample.member)
+    # assert (Ns == sample.N)
+    Ns = sample.Ns
 
     Ntl = len(sample.probabilities['sim'])
     assert (Ntl == sample.Ntl)
@@ -79,7 +80,7 @@ def write_report(pars,crowd,sample):
     F.write('\hline\n')
     F.write('Number of classifications:         & %d   \\\\ \n' % N )
     F.write('Number of classifiers:             & %d   \\\\ \n' % Nc )
-    F.write('Number of subjects:                & %d   \\\\ \n' % Ns )
+    F.write('Number of test subjects:           & %d   \\\\ \n' % Ns )
     F.write('Number of sims:                    & %d   \\\\ \n' % Ntl )
     F.write('Number of duds:                    & %d   \\\\ \n' % Ntd )
     F.write('\hline\n')

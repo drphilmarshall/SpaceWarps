@@ -172,6 +172,7 @@ def SWAP(argv):
         print "SWAP: where each classifier makes ",db.enthusiasm," classifications, on average"
        
     else:
+    
         db = swap.MongoDB()
 
     # Read in a batch of classifications, made since the aforementioned 
@@ -246,9 +247,10 @@ def SWAP(argv):
         print "SWAP: saving subjects in "+new_samplefile
         swap.write_pickle(sample,new_samplefile)
 
-        new_dbfile = swap.get_new_filename(tonights.parameters,'database')
-        print "SWAP: saving database in "+new_dbfile
-        swap.write_pickle(db,new_dbfile)
+        if practise:
+            new_dbfile = swap.get_new_filename(tonights.parameters,'database')
+            print "SWAP: saving database in "+new_dbfile
+            swap.write_pickle(db,new_dbfile)
 
     # ------------------------------------------------------------------
     # Make plots:

@@ -167,10 +167,36 @@ class ToyDB(object):
             # Original uniform distribution:
             # k = int(self.population*np.random.rand())
             
-            # Exponential with mean = enthusiasm:
-            k = int(np.random.exponential(scale=self.enthusiasm))
-            if k > len(self.classifiers)-1: k = 0
+            j = 0
+            while (j == 0):
             
+                # Exponential distribution for Nk with mean = enthusiasm:
+                Nk = int(np.random.exponential(scale=self.enthusiasm)) + 1
+                # This is the number of classifications made by the kth classifier
+                # Nk = 1 is the most likely number, it's the bin with the most
+                # classifiers in it. Now find where in the ordered sequence of 
+                # classifiers we are, by drawing randomly from this bin of the 
+                # histogram.
+                
+                mu = self.enthusiasm
+                KK = self.population
+                                
+                # First count the classifiers who will do less than Nk
+                # classifications:
+                i = int((KK/mu)*(mu - (Nk-1.0+mu)*np.exp(-1.0*(Nk-1.0)/mu)))
+                
+                # Now draw a classifier from the Nk column:
+                j = int((KK*Nk/(mu*mu))*np.exp(-1.0*Nk/mu))
+                k = i + int(np.random.rand() * j)
+                
+                # BUG: this should really be a draw without replacement.
+                # No matter - its good enough for a sim.
+                               
+                # print "Classifier: Nk,i,j,k = ",Nk,i,j,k
+                if j == 0 or k >= KK:
+                    # print "Rejecting Classifier: Nk,i,j,k = ",Nk,i,j,k
+                    j = 0
+                        
             something = self.classifiers[k]
 
         

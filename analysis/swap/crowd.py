@@ -123,6 +123,10 @@ class Crowd(object):
             label.set_visible(False)
         for label in hax.get_yticklabels():
             label.set_visible(False)
+        for tick in hax.xaxis.get_ticklines(): 
+            tick.set_visible(False) 
+        for tick in hax.yaxis.get_ticklines(): 
+            tick.set_visible(False) 
             
         plt.hist(logN, bins=bins, histtype='stepfilled', color='yellow', alpha=0.4)
             
@@ -132,8 +136,8 @@ class Crowd(object):
         axes.set_xlim(Nmin,Nmax)
         axes.set_xscale('log')
         axes.set_ylim(0.0,1.0)
-        axes.set_xticks([1,10,100,1000])
-        axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
+        # axes.set_xticks([1,10,100,1000])
+        # axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
         axes.set_xlabel('No. of training subjects classified')
         axes.set_ylabel('Contributed information per classification (bits)')
         axes.set_title('Classifier Histories')

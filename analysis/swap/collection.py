@@ -126,6 +126,10 @@ class Collection(object):
             label.set_visible(False)
         for label in hax.get_yticklabels():
             label.set_visible(False)
+        for tick in hax.xaxis.get_ticklines(): 
+            tick.set_visible(False) 
+        for tick in hax.yaxis.get_ticklines(): 
+            tick.set_visible(False) 
         plt.sca(hax)
         plt.arrow(np.log10(2e-4), np.log10(0.3), 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
         # hax.set_axis_off()        

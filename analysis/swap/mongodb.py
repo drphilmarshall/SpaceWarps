@@ -213,8 +213,9 @@ class MongoDB(object):
 # Return the size of the classification table:
 
     def size(self):
-        
-        return len(self.classifications)
+        # BUG: I don't actually know how to return the length of the 
+        # classification table...
+        return 1e6
         
 # ----------------------------------------------------------------------------
 

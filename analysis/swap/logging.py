@@ -71,10 +71,8 @@ def write_report(pars,crowd,sample):
 
     F.write('\\begin{tabular}{|p{0.65\linewidth}p{0.2\linewidth}|}\n')
     F.write('\hline\n')
-    F.write('No.\ of test subjects seen:             & %d   \\\\ \n' % (np.sum(crowd.Ntest)))
-    F.write('Mean test subjects/classifier:          & %.1f \\\\ \n' % (np.sum(crowd.Ntest)/len(crowd.member)))
-    F.write('Mean class$^{\\rm n}$s/test subject:    & %.1f \\\\ \n' % (np.sum(sample.exposure['test'])/np.sum(crowd.Ntest)))
-    F.write('Mean test class$^{\\rm n}$s/classifier:      & %.1f \\\\ \n' % (np.sum(sample.exposure['test'])/len(crowd.member)))
+    F.write('Mean test class$^{\\rm n}$s/classifier: & %.1f \\\\ \n' % (np.average(crowd.Ntest)))
+    F.write('Mean class$^{\\rm n}$s/test subject:    & %.1f \\\\ \n' % (np.average(sample.exposure['test'])))
     F.write('\hline\n')
     F.write('\end{tabular}\n')
 

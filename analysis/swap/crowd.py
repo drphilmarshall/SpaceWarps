@@ -13,12 +13,14 @@ class Crowd(object):
         Crowd
 
     PURPOSE
-        Represent a group of volunteers by assigning each one an agent.
+        A group of agents assigned to represent the volunteers.
+        "Bureau" is probably a better name - we hope the agents will 
+        stay in line, after all.
 
     COMMENTS
-        The members of a Crowd are all agents known as Classifiers. 
-        The Crowd knows how big it is, and could, in principle, also 
-        know its mean contribution, and other qualities.
+        The members of a Crowd are all Agents.  The Crowd knows how big
+        it is, and could, in principle, also know its mean
+        contribution, and other qualities.
 
     INITIALISATION
         From scratch.
@@ -53,7 +55,7 @@ class Crowd(object):
 # ----------------------------------------------------------------------------
 
     def __str__(self):
-        return 'crowd of %d classification agents' % (self.size())       
+        return 'bureau of %d classification agents' % (self.size())       
         
 # ----------------------------------------------------------------------------
 # Return the number of crowd members:
@@ -85,12 +87,12 @@ class Crowd(object):
         Ntraining = np.array([])
         Ntotal = np.array([])
         for ID in self.list():
-            classifier = self.member[ID]
-            PLarray = np.append(PLarray,classifier.PL)
-            PDarray = np.append(PDarray,classifier.PD)
-            contributions = np.append(contributions,classifier.contribution)
-            Ntraining = np.append(Ntraining,classifier.NL+classifier.ND)
-            Ntotal = np.append(Ntotal,classifier.N)
+            agent = self.member[ID]
+            PLarray = np.append(PLarray,agent.PL)
+            PDarray = np.append(PDarray,agent.PD)
+            contributions = np.append(contributions,agent.contribution)
+            Ntraining = np.append(Ntraining,agent.NL+agent.ND)
+            Ntotal = np.append(Ntotal,agent.N)
 
         self.probabilities['LENS'] = PLarray
         self.probabilities['NOT'] = PDarray
@@ -102,7 +104,7 @@ class Crowd(object):
         return
         
 # ----------------------------------------------------------------------
-# Prepare to plot classifiers' histories:
+# Prepare to plot agents' histories:
 
     def start_history_plot(self):
         
@@ -128,7 +130,7 @@ class Crowd(object):
         for tick in hax.yaxis.get_ticklines(): 
             tick.set_visible(False) 
             
-        plt.hist(logN, bins=bins, histtype='stepfilled', color='yellow', alpha=0.4)
+        plt.hist(logN, bins=bins, histtype='stepfilled', color='yellow', alpha=0.5)
             
  
         # Logarithmic axes for information contribution plot: 
@@ -136,16 +138,15 @@ class Crowd(object):
         axes.set_xlim(Nmin,Nmax)
         axes.set_xscale('log')
         axes.set_ylim(0.0,1.0)
-        # axes.set_xticks([1,10,100,1000])
-        # axes.set_yticks([0.0,0.2,0.4,0.6,0.8,1.0])
+        plt.axhline(y=swap.Imax,color='gray',linestyle='dotted')
         axes.set_xlabel('No. of training subjects classified')
         axes.set_ylabel('Contributed information per classification (bits)')
-        axes.set_title('Classifier Histories')
+        axes.set_title('Example Agent Histories')
         
         return axes
 
 # ----------------------------------------------------------------------
-# Prepare to plot classifiers' histories:
+# Prepare to plot agents' histories:
 
     def finish_history_plot(self,axes,filename):
     
@@ -155,9 +156,9 @@ class Crowd(object):
         return
 
 # ----------------------------------------------------------------------
-# Plot histograms of classifiers' confusion matrix element probabilities:
+# Plot histograms of agents' confusion matrix element probabilities:
 
-    def plot_histogram(self,filename):
+    def plot_histogram(self,Nc,filename):
     
         fig = plt.figure(figsize=(6,6), dpi=300)
 
@@ -173,14 +174,14 @@ class Crowd(object):
         pmin,pmax = 0.0,1.0
         self.collect_probabilities()
         
-        # Only plot a shortlist of 1000, or fewer:
-        TheseFewNames = self.shortlist(np.min([1000,self.size()]))
+        # Only plot a shortlist of 200, or fewer, uniformly sampled:
+        TheseFewNames = self.shortlist(np.min([Nc,self.size()]))
         index = [i for i,Name in enumerate(self.list()) if Name in set(TheseFewNames)]
         PD = self.probabilities['NOT'][index]
         PL = self.probabilities['LENS'][index]
         
         # Add a little bit of scatter to the probabilities, to make
-        # the ones near (0.5,0.5) visible:
+        # the ones near the starting point visible:
         PD += 4.0*(1.0-PD)*PD*0.01*np.random.randn(len(PD))
         PL += 4.0*(1.0-PL)*PL*0.01*np.random.randn(len(PL))
         
@@ -195,7 +196,7 @@ class Crowd(object):
         scatter.set_ylabel('Pr("NOT"|NOT)')
         for label in scatter.get_xticklabels():
             label.set_visible(False)
-        scatter.set_title('Classifier Probabilities')
+        scatter.set_title('Example Agent Probabilities')
         plt.text(0.02,0.02,'"Obtuse"',color='gray')
         plt.text(0.02,0.96,'"Pessimistic"',color='gray')
         plt.text(0.74,0.02,'"Optimistic"',color='gray')

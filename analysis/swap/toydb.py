@@ -70,6 +70,11 @@ class ToyDB(object):
         return None
 
 # ----------------------------------------------------------------------------
+
+    def __str__(self):
+        return 'database of %d Toy classifications' % (self.size())       
+        
+# ----------------------------------------------------------------------------
 # Generate various tables in the database:
 
     def populate(self,things,category=None):

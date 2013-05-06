@@ -24,11 +24,19 @@ class Subject(object):
         Each subject (regardless of category) has a probability of 
         being a LENS, and this is tracked along a trajectory.
         
-        Subject states:
-          * active    Still being classified:     P < ceiling
-          * promoted  Still being classified:     P > ceiling
-          * retired   No longer being classified: P < floor
+        Subject state:
+          * active    Still being classified
+          * inactive  No longer being classified
         Training subjects are always active. Retired = inactive.
+
+        Subject status: 
+          * detected  P > detection_threshold
+          * rejected  P < rejection_threshold
+          * undecided otherwise
+        
+        Subject categories:
+          * test      A subject from the test (random, survey) set
+          * training  A training subject, either a sim or a dud
         
         Subject kinds:
           * test      A subject from the test (random, survey) set
@@ -42,7 +50,7 @@ class Subject(object):
 
         
     INITIALISATION
-        name
+        ID
     
     METHODS
         Subject.described(by=X,as=Y)     Calculate Pr(LENS|d) given 
@@ -62,36 +70,59 @@ class Subject(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,name,category,kind,truth):
+    def __init__(self,ID,category,kind,truth,thresholds):
 
-        self.name = name
+        self.ID = ID
         self.category = category
         self.kind = kind
         self.truth = truth
 
         self.state = 'active'
+        self.status = 'undecided'
             
         self.probability = prior
         self.trajectory = np.array([self.probability])
         self.exposure = 0
         
+        self.detection_threshold = thresholds['detection']
+        self.rejection_threshold = thresholds['rejection']
+                
         return None
 
 # ----------------------------------------------------------------------
 
     def __str__(self):
-        return 'individual (%s) subject named %s, Pr(LENS|d) = %.2f' % \
-               (self.kind,self.name,self.probability)       
+        return 'individual (%s) subject, ID %s, Pr(LENS|d) = %.2f' % \
+               (self.kind,self.ID,self.probability)       
         
 # ----------------------------------------------------------------------
 # Update probability of LENS, given latest classification:
-#   eg.  sample.member[ID].was_described(by=classifier,as_being='LENS')
+#   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None):
+    def was_described(self,by=None,as_being=None,at_time=None):
 
         if by==None or as_being==None:
             pass
 
+        # Skip straight past inactive subjects.
+        # It would be nice to warn the user that inactive subjects
+        # should not be being classified:  this can happen if the
+        # subject has not been cleanly retired  in the Zooniverse
+        # database. However, this leads to a huge  stream of warnings,
+        # so best not do that... Note also that training subjects 
+        # cannot go inactive - but we need to ignore classifications of
+        # them after they cross threshold, for the training set to 
+        # be useful in giving us the selection function. What you see in 
+        # the trajectory plot is the *status* of the training subjects,
+        # not their *state*.
+        
+        elif self.state == 'inactive' \
+          or self.status == 'detected' or self.status == 'rejected':
+            
+            # print "SWAP: WARNING: subject "+self.ID+" is inactive, but appears to have been just classified"
+            pass
+
+        # Deal with active subjects:
         else:
             if as_being == 'LENS':
                 likelihood = by.PL
@@ -112,10 +143,26 @@ class Subject(object):
 
             self.exposure += 1
             
-            # Update classifier: 
+            # Should we count it as a detection, or a rejection? 
+            # Only test subjects get de-activated:
+            
+            if self.probability < self.rejection_threshold:
+                self.status = 'rejected'
+                if self.kind == 'test':  
+                    self.state = 'inactive'
+                    self.retirement_age = at_time
+                
+            elif self.probability > self.detection_threshold:
+                self.status = 'detected'
+                if self.kind == 'test':
+                    self.state = 'inactive'
+                    self.retirement_age = at_time
+                    
+            
+            # Update agent - training history is taken care of elsewhere: 
             by.N += 1
             if self.kind == 'test':
-                 by.testhistory['ID'] = self.name
+                 by.testhistory['ID'] = self.ID
                  by.testhistory['I'] = by.contribution
 
         return
@@ -135,11 +182,16 @@ class Subject(object):
             colour = 'red'
         elif self.kind == 'test':
             colour = 'black'
+            
+        if self.status == 'undecided':
+            facecolour = colour
+        else:
+            facecolour = 'white'
         
         plt.plot(self.trajectory, N, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")
         NN = N[-1]
         if NN > swap.Ncmax: NN = swap.Ncmax
-        plt.scatter(self.trajectory[-1], NN, color=colour, alpha=0.5)
+        plt.scatter(self.trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5)
         
         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
                 

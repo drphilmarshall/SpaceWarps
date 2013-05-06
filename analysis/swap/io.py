@@ -51,6 +51,8 @@ def read_pickle(filename,flavour):
         contents = cPickle.load(F)
         F.close()
         
+        print "SWAP: read an old",contents,"from "+filename
+        
     except:
 
         if filename is None: 
@@ -90,7 +92,7 @@ def get_new_filename(pars,flavour):
     head = pars['stem']+'_'+flavour
     if flavour == 'crowd' or flavour == 'collection' or flavour == 'database':
         ext = 'pickle'
-    elif flavour == 'history' or flavour == 'trajectory' or flavour == 'probabilities':
+    elif flavour == 'histories' or flavour == 'trajectories' or flavour == 'probabilities':
         ext = 'png'
     else:
         raise Exception("SWAP: io: eww - what's that flavour? "+flavour)    

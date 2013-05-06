@@ -50,7 +50,7 @@ def write_report(pars,crowd,sample):
     F = open(tex,"w")
     swap.write_report_preamble(F)
 
-    # Top left panel holds a summary of numbers:
+    # Top left panel holds a summary of numbers.
     
     F.write('\\begin{minipage}{0.42\linewidth}\n')
 
@@ -59,22 +59,77 @@ def write_report(pars,crowd,sample):
     F.write('{\LARGE %s}\\newline\n' % title)
     F.write('\medskip\n\n')
     
-    F.write('\\begin{tabular}{|p{0.65\linewidth}p{0.2\linewidth}|}\n')
-    F.write('\hline\n')
-    F.write('Number of classifications:         & %d   \\\\ \n' % (np.sum(sample.exposure['sim'])+np.sum(sample.exposure['dud'])+np.sum(sample.exposure['test'])))
-    F.write('Number of classifiers:             & %d   \\\\ \n' % len(crowd.member))
-    F.write('Number of subjects:                & %d   \\\\ \n' % len(sample.member))
-    F.write('Number of sims:                    & %d   \\\\ \n' % len(sample.probabilities['sim']))
-    F.write('Number of duds:                    & %d   \\\\ \n' % len(sample.probabilities['dud']))
-    F.write('\hline\n')
-    F.write('\end{tabular}\n')
+    # First, just count things:
+
+    sample.take_stock()
+    
+    N = np.sum(sample.exposure['sim'])+np.sum(sample.exposure['dud'])+np.sum(sample.exposure['test'])    
+    Nc = len(crowd.member)
+    
+    Ns = len(sample.member)
+    assert (Ns == sample.N)
+
+    Ntl = len(sample.probabilities['sim'])
+    assert (Ntl == sample.Ntl)
+
+    Ntd = len(sample.probabilities['dud'])
+    assert (Ntd == sample.Ntd)
 
     F.write('\\begin{tabular}{|p{0.65\linewidth}p{0.2\linewidth}|}\n')
     F.write('\hline\n')
-    F.write('Mean test class$^{\\rm n}$s/classifier: & %.1f \\\\ \n' % (np.average(crowd.Ntest)))
-    F.write('Mean class$^{\\rm n}$s/test subject:    & %.1f \\\\ \n' % (np.average(sample.exposure['test'])))
+    F.write('Number of classifications:         & %d   \\\\ \n' % N )
+    F.write('Number of classifiers:             & %d   \\\\ \n' % Nc )
+    F.write('Number of subjects:                & %d   \\\\ \n' % Ns )
+    F.write('Number of sims:                    & %d   \\\\ \n' % Ntl )
+    F.write('Number of duds:                    & %d   \\\\ \n' % Ntd )
     F.write('\hline\n')
     F.write('\end{tabular}\n')
+
+    # Now, what has the crowd achieved?
+    
+    Nc_per_classifier = np.average(crowd.Ntest)
+    Nc_per_subject    = np.average(sample.exposure['test'])
+    Ns_retired = sample.Ns_retired
+    Ns_rejected = sample.Ns_rejected
+    Ns_detected = sample.Ns_detected
+
+    F.write('\\begin{tabular}{|p{0.65\linewidth}p{0.2\linewidth}|}\n')
+    F.write('\hline\n')
+    F.write('Mean test class$^{\\rm n}$s/classifier: & %.1f \\\\ \n' % Nc_per_classifier )
+    F.write('Mean class$^{\\rm n}$s/test subject:    & %.1f \\\\ \n' % Nc_per_subject )
+    F.write('Test subject retirements:               & %d   \\\\ \n' % Ns_retired )
+    F.write('Test subject rejections:                & %d   \\\\ \n' % Ns_rejected )
+    F.write('Test subject identifications:           & %d   \\\\ \n' % Ns_detected )
+    F.write('\hline\n')
+    F.write('\end{tabular}\n')
+
+    # How complete/pure is the sample likely to be, based on the
+    # training set? First, completeness - lenses out over lenses in:
+    C_LENS = 100.0*sample.Ntl_detected/(sample.Ntl + (sample.Ntl == 0))
+    C_NOT = 100.0*sample.Ntd_rejected/(sample.Ntd + (sample.Ntd == 0))
+    
+    # Now purity - lenses out over all output:
+    P_LENS = 100.0*sample.Ntl_detected/(sample.Nt_detected + (sample.Nt_detected == 0))
+    P_NOT = 100.0*sample.Ntd_rejected/(sample.Nt_rejected + (sample.Nt_rejected == 0))
+
+    # False positive contamination - detected duds as fraction of 
+    # total detections:
+    FP = 100.0*sample.Ntd_detected/(sample.Nt_detected + (sample.Nt_detected == 0))
+    # Lenses lost as false negatives - rejected sims as fraction of 
+    # total number of input sims:
+    FN = 100.0*sample.Ntl_rejected/(sample.Ntl + (sample.Ntl == 0))
+
+    F.write('\\begin{tabular}{|p{0.65\linewidth}p{0.2\linewidth}|}\n')
+    F.write('\hline\n')
+    F.write('Lens completeness:         & %.1f%s \\\\ \n' % (C_LENS,'\%') )
+    F.write('Lens purity:               & %.1f%s \\\\ \n' % (P_LENS,'\%') )
+    F.write('Non-lens completeness:     & %.1f%s \\\\ \n' % (C_NOT,'\%')  )
+    # F.write('Non-lens purity:           & %.1f%s \\\\ \n' % (P_NOT,'\%')  )
+    F.write('Contamination:             & %.1f%s \\\\ \n' % (FP,'\%')  )
+    F.write('Lenses missed:             & %.1f%s \\\\ \n' % (FN,'\%')  )
+    F.write('\hline\n')
+    F.write('\end{tabular}\n')
+
 
     F.write('\end{minipage}\hfill\n')
     

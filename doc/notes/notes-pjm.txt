@@ -236,9 +236,9 @@ SWAP.py CFHTLS-beta_P70.config
 # - Difficulty variation              DONE
 # - PD, PL capped at 0.99             DONE
 # - Realistic PDFs for Nc, PD, PL     DONE
-# - Detected/rejected subjects        -
-# - Candidate URLs output             -
-# - Retired/promoted subjects         -
-# - Completeness, purity calculated   -
+# - Completeness, purity calculated   DONE
+# - Detected/rejected subjects        DONE
+# - Retired/promoted subjects         DONE
+# - Candidate IDs output              -
 
 # ============================================================================

@@ -22,7 +22,7 @@ def SWAP(argv):
     COMMENTS
         The SW analysis is "online" in the statistical sense: we step 
         through the classifications one by one, updating each
-        classifier's confusion matrix and each subject's lens
+        classifier's agent's confusion matrix, and each subject's lens
         probability. The main reason for taking this approach is that
         it is the most logical one; secondarily, it opens up the
         possibility of performing the analysis in real time (although
@@ -144,11 +144,16 @@ def SWAP(argv):
     subprocess.call(["mkdir","-p",tonights.parameters['dir']])
     tonights.parameters['stem'] = tonights.parameters['dir']+'/'+trunk
 
+    # How will we make decisions based on probability?
+    thresholds = {}
+    thresholds['detection'] = tonights.parameters['detection_threshold']
+    thresholds['rejection'] = tonights.parameters['rejection_threshold']
+
     # ------------------------------------------------------------------
     # Read in, or create, a bureau of agents who will represent the 
-    # collaboration:
+    # volunteers:
     
-    collaboration = swap.read_pickle(tonights.parameters['crowdfile'],'crowd')
+    bureau = swap.read_pickle(tonights.parameters['crowdfile'],'crowd')
    
     # ------------------------------------------------------------------
     # Read in, or create, an object representing the candidate list:
@@ -167,8 +172,8 @@ def SWAP(argv):
             db = swap.ToyDB(pars=tonights.parameters)
         
         print "SWAP: database has ",db.size()," Toy classifications"
-        print "SWAP: made by ",db.population," Toy classifiers"
         print "SWAP: of ",db.surveysize," Toy subjects"
+        print "SWAP: made by ",db.population," Toy classifiers"
         print "SWAP: where each classifier makes ",db.enthusiasm," classifications, on average"
        
     else:
@@ -194,26 +199,23 @@ def SWAP(argv):
         t,Name,ID,category,kind,X,Y = items
 
         # Register new volunteers, and create an agent for each one:
-        if Name not in collaboration.list():  
-            collaboration.member[Name] = swap.Classifier(Name,tonights.parameters)
-            # Note that a collaboration.member is an *agent*, not a 
-            # person. People exist in real life, whereas this is 
-            # just a piece of software!
+        if Name not in bureau.list():  
+            bureau.member[Name] = swap.Agent(Name,tonights.parameters)
         
         # Register newly-classified subjects:
         if ID not in sample.list():           
-            sample.member[ID] = swap.Subject(ID,category,kind,Y)    
+            sample.member[ID] = swap.Subject(ID,category,kind,Y,thresholds)    
 
         # Update the subject's lens probability using input from the 
-        # collaboration member. We send that member's agent to the subject
+        # classifier. We send that classifier's agent to the subject
         # to do this.  
-        sample.member[ID].was_described(by=collaboration.member[Name],as_being=X)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t)
 
         # Update the agent's confusion matrix, based on what it heard:
         if category == 'training' and agents_willing_to_learn:
-            collaboration.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
+            bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
         elif category == 'training':
-            collaboration.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
+            bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
 
         # Brag about it:
         count += 1
@@ -221,27 +223,28 @@ def SWAP(argv):
             print swap.dashedline
             print "SWAP: Subject "+ID+" was classified by "+Name
             print "SWAP: he/she said "+X+" when it was actually "+Y
-            print "SWAP: their agent reckons their contribution (in bits) = ",collaboration.member[Name].contribution
-            print "SWAP: while estimating their PL,PD as ",collaboration.member[Name].PL,collaboration.member[Name].PD
+            print "SWAP: their agent reckons their contribution (in bits) = ",bureau.member[Name].contribution
+            print "SWAP: while estimating their PL,PD as ",bureau.member[Name].PL,bureau.member[Name].PD
             print "SWAP: and the subject's new probability as ",sample.member[ID].probability
         else:
             # Count up to 74 in dots:
             if count == 1: sys.stdout.write('SWAP: ')
             elif np.mod(count,int(db.size()/73.0)) == 0: sys.stdout.write('.')
-            elif count == db.size(): sys.stdout.write('\n')
+            # elif count == db.size(): sys.stdout.write('\n')
             sys.stdout.flush()
         
+    sys.stdout.write('\n')
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
 
     # ------------------------------------------------------------------
-    # Pickle the collaboration and sample, if required:
+    # Pickle the bureau, sample, and database, if required:
 
     if tonights.parameters['repickle']:
     
         new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
         print "SWAP: saving agents in "+new_crowdfile
-        swap.write_pickle(collaboration,new_crowdfile)
+        swap.write_pickle(bureau,new_crowdfile)
 
         new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
         print "SWAP: saving subjects in "+new_samplefile
@@ -253,42 +256,46 @@ def SWAP(argv):
             swap.write_pickle(db,new_dbfile)
 
     # ------------------------------------------------------------------
-    # Make plots:
+    # Make plots! Can't plot everything - uniformly sample 200 of each
+    # thing (agent or subject).
     
     # Agent histories:
     
-    fig1 = collaboration.start_history_plot()
-    pngfile = swap.get_new_filename(tonights.parameters,'history')
-    Nc = np.min([1000,collaboration.size()])
-    print "SWAP: plotting "+str(Nc)+" classifier histories in "+pngfile
+    fig1 = bureau.start_history_plot()
+    pngfile = swap.get_new_filename(tonights.parameters,'histories')
+    Nc = np.min([200,bureau.size()])
+    print "SWAP: plotting "+str(Nc)+" agent histories in "+pngfile
     
-    for Name in collaboration.shortlist(Nc):
-        collaboration.member[Name].plot_history(fig1)
-    collaboration.finish_history_plot(fig1,pngfile)
+    for Name in bureau.shortlist(Nc):
+        bureau.member[Name].plot_history(fig1)
+    
+    bureau.finish_history_plot(fig1,pngfile)
     tonights.parameters['historiesplot'] = pngfile
 
     # Agent probabilities:
     
     pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
-    print "SWAP: plotting "+str(Nc)+" classifier probabilities in "+pngfile
-    collaboration.plot_histogram(pngfile)        
+    print "SWAP: plotting "+str(Nc)+" agent probabilities in "+pngfile
+    bureau.plot_histogram(Nc,pngfile)        
     tonights.parameters['probabilitiesplot'] = pngfile
 
     # Subject probabilities:
     
     fig3 = sample.start_trajectory_plot()
-    pngfile = swap.get_new_filename(tonights.parameters,'trajectory')
-    Ns = np.min([1000,sample.size()])
+    pngfile = swap.get_new_filename(tonights.parameters,'trajectories')
+    Ns = np.min([500,sample.size()])
     print "SWAP: plotting "+str(Ns)+" subject trajectories in "+pngfile
+    
     for ID in sample.shortlist(Ns):
         sample.member[ID].plot_trajectory(fig3)
+    
     sample.finish_trajectory_plot(fig3,pngfile)
     tonights.parameters['trajectoriesplot'] = pngfile
     
     # ------------------------------------------------------------------
     # Write a PDF report:
     
-    swap.write_report(tonights.parameters,collaboration,sample) 
+    swap.write_report(tonights.parameters,bureau,sample) 
     
     # ------------------------------------------------------------------
     

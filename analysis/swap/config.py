@@ -11,8 +11,9 @@ pmin,pmax = 2e-8,1.1
 # Plotting limits for no. of classifications (per subject):
 Ncmin,Ncmax = 0.2,50
 
-# Limits to confusion matrix elements:
+# Limits to confusion matrix elements - the volunteers are only human:
 PDmax,PLmax = 0.99,0.99
+Imax = 0.919
 
 # ======================================================================
 

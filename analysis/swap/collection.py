@@ -58,7 +58,7 @@ class Collection(object):
         return len(self.member)
         
 # ----------------------------------------------------------------------------
-# # Return an array giving each samples' exposure to the classifiers:
+# # Return an array giving each samples' exposure to the agents:
 # 
 #     def get_exposure(self):
 #     
@@ -86,6 +86,20 @@ class Collection(object):
         return longlist[0::int(len(longlist)/N)][0:N]
             
 # ----------------------------------------------------------------------------
+# Get the probability thresholds for this sample:
+
+    def thresholds(self):
+        
+        thresholds = {}
+        ID = self.shortlist(1)[0]
+        subject = self.member[ID]
+
+        thresholds['detection'] = subject.detection_threshold
+        thresholds['rejection'] = subject.rejection_threshold
+
+        return thresholds
+        
+# ----------------------------------------------------------------------------
 # Extract all the lens probabilities of the members of a given kind:
 
     def collect_probabilities(self,kind):
@@ -102,6 +116,74 @@ class Collection(object):
         self.exposure[kind] = n
         
         return
+
+# ----------------------------------------------------------------------
+# Take stock: how many detections? how many rejections?
+
+    def take_stock(self):
+        
+        self.N = 0
+        self.Ns = 0
+        self.Nt = 0
+        self.Ntl = 0
+        self.Ntd = 0
+        self.Ns_retired = 0
+        self.Ns_rejected = 0
+        self.Ns_detected = 0
+        self.Nt_rejected = 0
+        self.Nt_detected = 0
+        self.Ntl_rejected = 0
+        self.Ntl_detected = 0
+        self.Ntd_rejected = 0
+        self.Ntd_detected = 0
+        
+        for ID in self.list():
+            subject = self.member[ID]
+            self.N += 1
+            
+            if subject.category == 'training':
+                self.Nt += 1
+                if subject.kind == 'sim': 
+                    self.Ntl += 1
+                elif subject.kind == 'dud': 
+                    self.Ntd += 1
+            else:
+                self.Ns += 1        
+            
+            # Detected or rejected?
+            if subject.status == 'detected': 
+                if subject.category == 'training':
+                    self.Nt_detected += 1
+                    if subject.kind == 'sim': 
+                         self.Ntl_detected += 1
+                    elif subject.kind == 'dud': 
+                         self.Ntd_detected += 1
+                else:
+                    self.Ns_detected += 1
+                
+            elif subject.status == 'rejected': 
+                if subject.category == 'training':
+                    self.Nt_rejected += 1
+                    if subject.kind == 'sim': 
+                        self.Ntl_rejected += 1
+                    elif subject.kind == 'dud': 
+                        self.Ntd_rejected += 1
+                else:
+                    self.Ns_rejected += 1
+            
+            if subject.state  == 'inactive': 
+                self.Ns_retired += 1
+
+        return
+        
+# ----------------------------------------------------------------------
+# Make a list of subjects that have been retired during this run:
+
+    def retirementlist(self):
+        
+        the_departed = ['none','yet']
+        
+        return the_departed
         
 # ----------------------------------------------------------------------
 # Prepare to plot subjects' trajectories:
@@ -141,13 +223,17 @@ class Collection(object):
         upper.set_xscale('log')
         upper.set_ylim(swap.Ncmax,swap.Ncmin)
         upper.set_yscale('log')
+        
+        # Vertical lines to mark prior and detect/rejection thresholds:
+        x = self.thresholds()
         plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
-        plt.axvline(x=0.3,color='blue',linestyle='dotted')
-        plt.axvline(x=1e-5,color='red',linestyle='dotted')
+        plt.axvline(x=x['detection'],color='blue',linestyle='dotted')
+        plt.axvline(x=x['rejection'],color='red',linestyle='dotted')
+
         upper.set_ylabel('No. of classifications')
         for label in upper.get_xticklabels():
             label.set_visible(False)
-        upper.set_title('Subject Trajectories')
+        upper.set_title('Example Subject Trajectories')
         
         # Lower panel: histograms:
         lower = fig.add_axes(lowerarea, sharex=upper)
@@ -157,8 +243,8 @@ class Collection(object):
         lower.set_ylim(0.1,0.5*self.size())
         # lower.set_yscale('log')
         plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
-        plt.axvline(x=0.3,color='blue',linestyle='dotted')
-        plt.axvline(x=1e-5,color='red',linestyle='dotted')
+        plt.axvline(x=x['detection'],color='blue',linestyle='dotted')
+        plt.axvline(x=x['rejection'],color='red',linestyle='dotted')
         lower.set_xlabel('Posterior Probability Pr(LENS|d)')
         lower.set_ylabel('No. of subjects')
            

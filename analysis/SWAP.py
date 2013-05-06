@@ -256,6 +256,16 @@ def SWAP(argv):
             swap.write_pickle(db,new_dbfile)
 
     # ------------------------------------------------------------------
+    # Output list of subjects of retire, based on this batch of 
+    # subjects:
+    
+    new_retirementfile = swap.get_new_filename(tonights.parameters,'retire_these')
+    print "SWAP: saving newly retired subject IDs..."
+    N = swap.write_subjectlist(sample,new_retirementfile)
+    print "SWAP: "+str(N)+" lines written to "+new_retirementfile
+
+    
+    # ------------------------------------------------------------------
     # Make plots! Can't plot everything - uniformly sample 200 of each
     # thing (agent or subject).
     

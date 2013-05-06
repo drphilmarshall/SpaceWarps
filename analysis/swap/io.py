@@ -85,6 +85,22 @@ def write_pickle(contents,filename):
     return
 
 # ----------------------------------------------------------------------------
+# Write out a simple list of subject IDs, of subjects to be retired.
+
+def write_subjectlist(sample, filename):
+
+    count = 0
+    F = open(filename,'w')
+    for ID in sample.list():
+        subject = sample.member[ID]
+        if subject.state == 'inactive':
+            F.write('%s\n' % ID)
+            count += 1
+    F.close()
+        
+    return count
+    
+# ----------------------------------------------------------------------------
 # Make up a new filename, based on tonight's parameters:
 
 def get_new_filename(pars,flavour):
@@ -94,8 +110,10 @@ def get_new_filename(pars,flavour):
         ext = 'pickle'
     elif flavour == 'histories' or flavour == 'trajectories' or flavour == 'probabilities':
         ext = 'png'
+    elif flavour == 'retire_these':
+        ext = 'txt'
     else:
-        raise Exception("SWAP: io: eww - what's that flavour? "+flavour)    
+        raise Exception("SWAP: io: unknown flavour "+flavour)    
         
     return head+'.'+ext
 

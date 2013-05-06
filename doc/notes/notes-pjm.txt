@@ -236,9 +236,19 @@ SWAP.py CFHTLS-beta_P70.config
 # - Difficulty variation              DONE
 # - PD, PL capped at 0.99             DONE
 # - Realistic PDFs for Nc, PD, PL     DONE
-# - Completeness, purity calculated   DONE
-# - Detected/rejected subjects        DONE
-# - Retired/promoted subjects         DONE
-# - Candidate IDs output              -
+
+# ============================================================================
+# 2013-05-06 (Monday) 12:40 BST
+
+# Wishlist for mock survey (continued):
+
+# - Completeness, purity calculated   DONE 2013-05-06
+# - Detected/rejected subjects        DONE 2013-05-06
+# - Retired/promoted subjects         DONE 2013-05-06
+# - Candidate IDs output              DONE 2013-05-06
+
+# OK, great! Now we just need to be able to do low cost 
+# batch processing.
+
 
 # ============================================================================

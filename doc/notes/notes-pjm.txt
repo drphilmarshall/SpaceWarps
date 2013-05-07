@@ -406,13 +406,35 @@ SWAP.py CFHTLS-SWITCH-test.config
 
 set retirees = /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS-SWITCH-test_2013-05-07/CFHTLS-SWITCH-test_2013-05-07_retire_these.txt
 
+# SWITCH: retiring subjects listed in  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS-SWITCH-test_2013-05-07/CFHTLS-SWITCH-test_2013-05-07_retire_these.txt
+# SWITCH: looks like we have 19  subjects to retire
+# SWITCH: doing a dry run
+# result = client.put('/projects/spacewarp/subjects/ASW000075q/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000arx/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW00005js/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW000082p/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000hlt/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000by9/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000a4m/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW00008wq/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000wlr/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000c6t/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000w51/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000kx4/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000s3v/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000l4y/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000d6r/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000b6n/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000tc7/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000hs9/retire')
+# result = client.put('/projects/spacewarp/subjects/ASW0000kig/retire')
+
+# OK, looks good - give it a try!
+
 SWITCH.py $retirees
 
 # Whoah - success?
 # 
-# ================================================================================
-#                    SWITCH: the Space Warps Retirement Plan                      
-# ================================================================================
 # SWITCH: retiring subjects listed in  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS-SWITCH-test_2013-05-07/CFHTLS-SWITCH-test_2013-05-07_retire_these.txt
 # SWITCH: looks like we have 19  subjects to retire
 # 
@@ -461,4 +483,4 @@ SWITCH.py $retirees
 # ASW0000kig False
 # ================================================================================
 
-# Check with Michael!!
+# Check with Michael!! :-)

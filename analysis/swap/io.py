@@ -87,15 +87,43 @@ def write_pickle(contents,filename):
 # ----------------------------------------------------------------------------
 # Write out a simple list of subject IDs, of subjects to be retired.
 
-def write_subjectlist(sample, filename):
+def write_list(sample, filename, item=None):
 
     count = 0
     F = open(filename,'w')
     for ID in sample.list():
         subject = sample.member[ID]
-        if subject.state == 'inactive':
-            F.write('%s\n' % ID)
+        string = None
+        
+        if item == 'retired_subject':
+            if subject.state == 'inactive':
+                string = subject.ZooID
+            
+        elif item == 'candidate':
+            if subject.kind == 'test' and subject.status == 'detected':
+                string = subject.location
+            
+        elif item == 'true_positive':
+            if subject.kind == 'sim' and subject.status == 'detected':
+                string = subject.location
+            
+        elif item == 'false_positive':
+            if subject.kind == 'dud' and subject.status == 'detected':
+                string = subject.location
+            
+        elif item == 'true_negative':
+            if subject.kind == 'dud' and subject.status == 'rejected':
+                string = subject.location
+            
+        elif item == 'false_negative':
+            if subject.kind == 'sim' and subject.status == 'rejected':
+                string = subject.location
+            
+        # Write a new line:
+        if item is not None and string is not None:
+            F.write('%s\n' % string)
             count += 1
+    
     F.close()
         
     return count
@@ -106,11 +134,21 @@ def write_subjectlist(sample, filename):
 def get_new_filename(pars,flavour):
 
     head = pars['stem']+'_'+flavour
-    if flavour == 'crowd' or flavour == 'collection' or flavour == 'database':
+    if flavour == 'crowd' or \
+       flavour == 'collection' or \
+       flavour == 'database':
         ext = 'pickle'
-    elif flavour == 'histories' or flavour == 'trajectories' or flavour == 'probabilities':
+    elif flavour == 'histories' or \
+         flavour == 'trajectories' or \
+         flavour == 'probabilities':
         ext = 'png'
     elif flavour == 'retire_these':
+        ext = 'txt'
+    elif flavour == 'candidates' or \
+         flavour == 'training_true_positives' or \
+         flavour == 'training_false_positives' or \
+         flavour == 'training_true_negatives' or \
+         flavour == 'training_false_negatives':
         ext = 'txt'
     else:
         raise Exception("SWAP: io: unknown flavour "+flavour)    

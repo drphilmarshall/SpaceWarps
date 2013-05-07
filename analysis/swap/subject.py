@@ -70,9 +70,10 @@ class Subject(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,ID,category,kind,truth,thresholds):
+    def __init__(self,ID,ZooID,category,kind,truth,thresholds,location):
 
         self.ID = ID
+        self.ZooID = ZooID
         self.category = category
         self.kind = kind
         self.truth = truth
@@ -86,6 +87,8 @@ class Subject(object):
         
         self.detection_threshold = thresholds['detection']
         self.rejection_threshold = thresholds['rejection']
+        
+        self.location = location
                 
         return None
 

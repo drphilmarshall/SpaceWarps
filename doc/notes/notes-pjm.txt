@@ -1,6 +1,6 @@
 # ============================================================================
 # 2013-04-07 (Sunday) 00:58 IST
-# 
+#
 # Get beta click database and start writing analysis code for it.
 
 cd analysis/workspace
@@ -16,7 +16,7 @@ ls spacewarps-2013-04-06_20-07-28/ouroboros_staging/
 # These are files to be read into a mongoDB, using mongodbrestore.
 
 # Needs pymongo... pip install? Yep - done
-	
+
 # Also need binary installation of mongodb, from mongodb.org
 # Downloaded to software, linked to ~/bin
 
@@ -28,7 +28,7 @@ mongorestore spacewarps-2013-04-06_20-07-28
 # Try from python:
 
 cd spacewarps-2013-04-06_20-07-28/
-python ../../swap/mongodb.py 
+python ../../swap/mongodb.py
 
 Traceback (most recent call last):
   File "../../swap/mongodb.py", line 23, in <module>
@@ -45,7 +45,7 @@ mongod --dbpath . &
 
 # Now python runs ok:
 
-python ../../swap/mongodb.py 
+python ../../swap/mongodb.py
 # Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_subjects.0')
 # Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'spacewarp_classifications.0')
 
@@ -62,26 +62,28 @@ Collection(Database(MongoClient('localhost', 27017), u'ouroboros_staging'), u'sp
 # Interesting.
 
 >>> m.subjects.find_one({'zooniverse_id' : 'ASW0000002'})
-{u'project_id': ObjectId('5101a1341a320ea77f000001'), u'classification_count':
-523, u'created_at': datetime.datetime(2013, 4, 4, 20, 29, 18, 949000),
-u'random': 0.5465496445414518, u'updated_at': datetime.datetime(2013, 4, 4,
-20, 29, 18, 975000), u'state': u'complete', u'trending': 3, u'coords': [],
-u'location': {u'thumbnail': u'', u'standard': u''}, u'zooniverse_id':
-u'ASW0000002', u'workflow_ids': [ObjectId('5101a1361a320ea77f000002')],
-u'_id': ObjectId('5101a1931a320ea77f000004'), u'tutorial': True, u'metadata':
+{u'project_id': ObjectId('5101a1341a320ea77f000001'),
+u'classification_count': 523, u'created_at': datetime.datetime(2013, 4,
+4, 20, 29, 18, 949000), u'random': 0.5465496445414518, u'updated_at':
+datetime.datetime(2013, 4, 4, 20, 29, 18, 975000), u'state':
+u'complete', u'trending': 3, u'coords': [], u'location': {u'thumbnail':
+u'', u'standard': u''}, u'zooniverse_id': u'ASW0000002',
+u'workflow_ids': [ObjectId('5101a1361a320ea77f000002')], u'_id':
+ObjectId('5101a1931a320ea77f000004'), u'tutorial': True, u'metadata':
 {}}
 
 # OK cool - here's a clue to the subject schema, and the metadata on subject
-# ASW0000002.  
+# ASW0000002.
 
 # How about a non-tutorial one?
->>> m.subjects.find_one({'zooniverse_id' : 'ASW0000004'})
-{u'_id': ObjectId('515de29fe4bb216427000001'), u'classification_count': 13,
+>>> m.subjects.find_one({'zooniverse_id' : 'ASW0000004'}) {u'_id':
+ObjectId('515de29fe4bb216427000001'), u'classification_count': 13,
 u'created_at': datetime.datetime(2013, 4, 4, 20, 29, 19, 372000),
 u'activated_at': datetime.datetime(2013, 4, 4, 20, 32, 51, 886000),
-u'updated_at': datetime.datetime(2013, 4, 4, 20, 29, 19, 398000), u'random':
-0.1047423015104475, u'project_id': ObjectId('5101a1341a320ea77f000001'),
-u'state': u'active', u'zooniverse_id': u'ASW0000004', u'workflow_ids':
+u'updated_at': datetime.datetime(2013, 4, 4, 20, 29, 19, 398000),
+u'random': 0.1047423015104475, u'project_id':
+ObjectId('5101a1341a320ea77f000001'), u'state': u'active',
+u'zooniverse_id': u'ASW0000004', u'workflow_ids':
 [ObjectId('5101a1361a320ea77f000002')], u'location': {u'thumbnail':
 u'http://www.spacewarps.org/subjects/thumbnail/CFHTLS_002_0530_gri.png',
 u'standard':
@@ -89,9 +91,9 @@ u'http://www.spacewarps.org/subjects/standard/CFHTLS_002_0530_gri.png'},
 u'group_id': ObjectId('5154a3783ae74086ab000001'), u'metadata': {u'id':
 u'CFHTLS_002_0530'}}
 
-# Nice! There's the actual image name, from Anu. And this URL is open - 
+# Nice! There's the actual image name, from Anu. And this URL is open -
 # volunteers can grab those any time if they want to model them elsewhere.
-# Just need to expose that on the site somewhere. 
+# Just need to expose that on the site somewhere.
 
 # Anyway, what about classifications?
 
@@ -114,24 +116,24 @@ Safari/537.31'}]}
 # learning how this works!
 
 # Plan:
-# 
-# Make a list of operations that I want to do, 
+#
+# Make a list of operations that I want to do,
 # and ask for a suggested example command from Amit?
-# 
+#
 # 1) Return a list of users as an array of strings
-# 
+#
 # 2) For a given user, return the IDs of all the training subjects they classified
 #     Presumably this array will be time-ordered?
-# 
+#
 # 3) For a given user and training subject ID, return the value 1 if they succeeded in recognising it, 0 if not
 
 # Issued.
 
 
 # 2013-04-18 (Thursday) 12:04 BST
-# 
+#
 # datetime objects are interesting! See http://docs.python.org/2/library/datetime.html
-# 
+#
 # >>> import datetime
 # >>> print datetime.datetime(2013, 4, 4, 20, 29, 18, 949000)
 # 2013-04-04 20:29:18.949000
@@ -155,36 +157,36 @@ Safari/537.31'}]}
 cd workspace
 python ../swap/mongodb.py
 
-# But I cannot do even the most basic things - so Ive written down what
+# But I cannot do even the most basic things - so I've written down what
 # I want to do in plausible python, for Amit to advise on!
 
 # ============================================================================
 # 2013-04-24 (Wednesday) 10:18 BST
-# 
+#
 # Great session with Amit yesterday solving all my db access problems!
 # He says that on the Zooniverse system, the correct db is always online,
 # so we should just connect to the client. That means that all of this
 # wrapper I wrote is redundant - but I preserve it here, for reference:
 
 #     self.dumpname = dumpname
-#            
+#
 #     # Keep a record of what goes on:
 #     self.logfilename = os.getcwd()+'/'+self.dumpname+'.log'
 #     self.logfile = open(self.logfilename,"w")
-#     
+#
 #     # Start the Mongo server in the background:
 #     subprocess.call(["mongorestore",self.dumpname],stdout=self.logfile,stderr=self.logfile)
 #     os.chdir(self.dumpname)
 #     self.cleanup()
 #     self.process = subprocess.Popen(["mongod","--dbpath","."],stdout=self.logfile,stderr=self.logfile)
-#     
+#
 #     # Check everything is working:
 #     if self.process.poll() == None: print "MongoDB: server is up and running"
-# 
+#
 #     # Connect to the Mongo:
 #     self.client = MongoClient('localhost', 27017)
 #     self.db = self.client['ouroboros_staging']
-# 
+#
 #     self.subjects = self.db['spacewarp_subjects']
 #     self.classifications = self.db['spacewarp_classifications']
 
@@ -205,7 +207,7 @@ python ../swap/mongodb.py
 # Standard setup is this on: agents learn, but set PD=PL=50%, initially.
 SWAP.py CFHTLS-beta_P50.config
 
-# Aprajita asks, do we have to learn? Why not assume one set of P's and 
+# Aprajita asks, do we have to learn? Why not assume one set of P's and
 # stick with them? Get off to a fsater start?
 SWAP.py CFHTLS-beta_no-learning_P50.config
 # Random classifiers get nowhere!
@@ -214,21 +216,21 @@ SWAP.py CFHTLS-beta_no-learning_P90.config
 # Big jumps up and down in probability, lots of false positives.
 
 
-# OK, so back to learning. How about we be less pessimistic about people's 
-# talents? 
+# OK, so back to learning. How about we be less pessimistic about people's
+# talents?
 SWAP.py CFHTLS-beta_P90.config
 # Not bad - Christmas tree is broader. FP rate higher, but got some sims in
 # the detection zone now.
 
-# More measured. Crowd divided between two groups? 
+# More measured. Crowd divided between two groups?
 #    The Herd: PD = 0.9, PL = U(0:1)
-# Enthusiasts: PD = U(0.2:0.6), PL = U(0.6:1.0) 
+# Enthusiasts: PD = U(0.2:0.6), PL = U(0.6:1.0)
 SWAP.py CFHTLS-beta_P70.config
 
 
 # One issue with this LENS or NOT analysis is the hard edged estimation of PD
 # and PL. Early classifications can have a significant impact... Hmm. 70-70
-# seems like a reasonable starting point. 
+# seems like a reasonable starting point.
 
 
 # Wishlist for mock survey:
@@ -247,8 +249,216 @@ SWAP.py CFHTLS-beta_P70.config
 # - Retired/promoted subjects         DONE 2013-05-06
 # - Candidate IDs output              DONE 2013-05-06
 
-# OK, great! Now we just need to be able to do low cost 
+# OK, great! Now we just need to be able to do low cost
 # batch processing.
 
 
 # ============================================================================
+# 2013-05-07 (Tuesday) 09:43 BST
+
+# Testing new database!
+
+# Download:
+
+set url = "https://zooniverse-code.s3.amazonaws.com/databases/2013-05-07/ouroboros_projects/spacewarp_2013-05-07.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1368548396&Signature=as2nCaTgD9ctFLIHZrxj%2FrnQJoo%3D"
+
+set dbfile = `echo "$url" | cut -d '?' -f1 | cut -d'/' -f7`
+set logfile = ${dbfile:r:r}.wget.log
+wget -O $dbfile "$url" >& $logfile
+
+# Unpack:
+tar xvfz $dbfile
+
+set db = $dbfile:r:r
+
+# First need to kill any old servers:
+set pid = `ps -e | grep 'mongod --dbpath' | \
+                   grep -v 'grep' | head -1 | awk '{print $1}'`
+if ($#pid > 0) kill $pid
+
+# Start new mongo server in its own directory, out of the way:
+mkdir -p mongo
+chdir mongo
+mongod --dbpath . &
+chdir ..
+
+# Now restore the new database:
+mongorestore --drop --db ouroboros_staging $db
+ 
+
+# Try running SWAP:
+
+SWAP.py CFHTLS-test.config >& CFHTLS-test.log
+
+# SWAP: interpreting classifications...
+# SWAP: total no. of classifications processed:  0
+
+
+# Hmm. Send this and the mongorestore output to Parrish and Amit.
+
+mongorestore spacewarp_2013-05-06 >& spacewarp_2013-05-06_mongorestore.log
+
+# Tue May  7 13:53:54.598 [initandlisten] connection accepted from 127.0.0.1:64410 #4 (1 connection now open)
+# Tue May  7 13:53:55.204 [conn4] end connection 127.0.0.1:64410 (0 connections now open)
+
+
+# ============================================================================
+# 2013-05-07 (Tuesday) 18:36 BST
+
+# Control of retirement from afar! Coooooool.
+
+# Email from Michael Parrish:
+
+
+# Hi Phil,
+# 
+# I'm attaching an example administration client script (in python) along
+# with the documentation for administration endpoints. The script depends
+# on the requests library, which you can install with `pip install
+# requests`.
+# 
+# The admin account in the script is active -- feel free to
+# retire/activate some subjects to make sure it's working for you.
+# 
+# Since this is all new code, there may still be some rough edges to work
+# through, so please let me know if you have questions/problems.
+# 
+# -Michael
+# 
+# 
+# 
+# Administration:
+# 
+# Administration requests are authenticated with a combination of a
+# password, a private key, a public key, and a sequence identifier.
+# 
+# 
+# Administrators:
+# 
+# Accounts are created by request. A password, and private key will be
+# supplied.
+# 
+# 
+# Session:
+# 
+# A session begins by logging in with a POST request to /admin/login with
+# { name: 'your admin name', password: 'your admin password' }
+# 
+# A successful login responds with a new public_key.
+# 
+# 
+# Requests:
+# 
+# After establishing a session, requests can be made by signing each
+# request with the name of the administrator and request key.
+# 
+# Request keys are generated by combining the public and private keys as
+# well as a sequence identifier.
+# 
+# At the beginning of a session, the sequence identifier is 1. Each
+# request increments this number.
+# 
+# In the case of an unauthorized request, sequence identifiers will no
+# longer match causing the session to terminate.
+# 
+# If a session terminates, a new login request must be sent to restart the
+# session with a new public key.
+# 
+# 
+# Login Limits:
+# 
+# More than 10 unsuccessful login attempts within an hour will temporarily
+# block logins by the administrator account. More than 100 unsuccessful
+# login attempts within an hour will disable the administrator account. A
+# developer will have to reactivate it.
+# 
+# Requests:
+# 
+# Administration requests are rate limited to less than 1,000 per hour.
+# All requests, successful or not, are logged for security purposes.
+# 
+# Example code:
+# 
+# Subject Administration
+# 
+# Method  Action      Path                                                Params
+# PUT     activate    /admin/projects/:project_id/subjects/:id/activate   { }
+# PUT     retire      /admin/projects/:project_id/subjects/:id/retire     { }
+# PUT     pause       /admin/projects/:project_id/subjects/:id/pause      { }
+# PUT     resume      /admin/projects/:project_id/subjects/:id/resume     { }
+
+
+# OK, got it! Wrote SWITCH.py to read in a list of subject IDs, and 
+# then make put requests to retire them. 
+
+# First run SWAP with low rejection treshold to get a bunch of
+# retirements to do:
+
+SWAP.py CFHTLS-SWITCH-test.config 
+
+# SWAP: interpreting classifications...
+# SWAP: 
+# SWAP: total no. of classifications processed:  37
+# SWAP: saving newly retired subject IDs...
+# SWAP: 19 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS-SWITCH-test_2013-05-07/CFHTLS-SWITCH-test_2013-05-07_retire_these.txt
+
+# Good - now SWITCH them:
+
+set retirees = /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS-SWITCH-test_2013-05-07/CFHTLS-SWITCH-test_2013-05-07_retire_these.txt
+
+SWITCH.py $retirees
+
+# Whoah - success?
+# 
+# ================================================================================
+#                    SWITCH: the Space Warps Retirement Plan                      
+# ================================================================================
+# SWITCH: retiring subjects listed in  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS-SWITCH-test_2013-05-07/CFHTLS-SWITCH-test_2013-05-07_retire_these.txt
+# SWITCH: looks like we have 19  subjects to retire
+# 
+# ...
+# 
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(0)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(1)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(2)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(3)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(4)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(5)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(6)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(7)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(8)
+# 'instancemethod' object is not subscriptable(0)
+# 'instancemethod' object is not subscriptable(1)
+# 'instancemethod' object is not subscriptable(2)
+# 'NoneType' object is not iterable(9)
+# ASW0000kig False
+# ================================================================================
+
+# Check with Michael!!

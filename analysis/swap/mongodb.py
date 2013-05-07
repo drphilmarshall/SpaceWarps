@@ -31,9 +31,8 @@ class MongoDB(object):
         mongorestore spacewarps-2013-04-06_20-07-28
         mongod --dbpath . &
         
-        pymongo can be obtained by pip install.
         This sequence is carried out by the MongoDB class itself, via a 
-        system call.
+        system call. pymongo can be obtained by pip install.
         
         Basic operation is to define a "classification" tuple, that 
         contains all the information needed by a probabilistic online 
@@ -143,9 +142,10 @@ class MongoDB(object):
         if len(subjects) == 0:
             return None
         
-        # Get the subject ID:
+        # Get the subject ID, and also its Zooniverse ID:
         for subject in subjects:
             ID = subject['id']
+            ZooID = subject['zooniverse_id']
         
         # And finally pull the subject itself from the subject table:
         subject = self.subjects.find_one({'_id': ID})
@@ -161,7 +161,15 @@ class MongoDB(object):
         kind = ''
         if str(groupId) == trainingGroup:
             category = 'training'
-            word = subject['metadata']['training']['type']
+            metadata = subject['metadata']
+            things = metadata['training']
+            # things is either a list of dictionaries, or in beta, a 
+            # single dictionary:
+            if type(things) == list:
+                thing = things[0]
+            else:
+                thing = things
+            word = thing['type']
             if word == 'empty':
                 kind = 'dud'
             else:
@@ -169,6 +177,13 @@ class MongoDB(object):
         else: # It's a test subject:
             category = 'test'
             kind = 'test'
+        
+        # What's the URL of this image?
+        if subject.has_key('location'):
+            things = subject['location']
+            location = things['standard']
+        else:
+            location = None
         
         # What the volunteer say about this subject?
         # First select the annotations:
@@ -202,9 +217,9 @@ class MongoDB(object):
         else:    
             truth = 'UNKNOWN'
         
-        # Check we got all 7 items:            
-        items = str(t),str(Name),str(ID),category,kind,result,truth
-        if len(items) != 7: print "MongoDB: digest failed: ",items[:] 
+        # Check we got all 9 items:            
+        items = str(t),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location)
+        if len(items) != 9: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]
 

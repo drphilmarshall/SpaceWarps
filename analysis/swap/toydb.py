@@ -102,7 +102,10 @@ class ToyDB(object):
             
             for j in range(Nj):
                 subject = {}
-                subject['ID'] = category+'Image'+str(j)
+                ID = category+'Image'+str(j)
+                ZooID = 'ASWXXXX'+str(j)
+                subject['ID'] = ID
+                subject['ZooID'] = ID
 
                 subject['category'] = category
 
@@ -122,6 +125,9 @@ class ToyDB(object):
                         subject['strewth'] = 'LENS'
                     else:
                         subject['strewth'] = 'NOT'
+
+                png = ID+'_gri.png'
+                subject['location'] = 'http://toy.org/standard/'+png
 
                 array.append(subject)
                 
@@ -265,7 +271,7 @@ class ToyDB(object):
 
     def digest(self,C):
                 
-        return str(C['updated_at']),C['Name'],C['ID'],C['category'],C['kind'],C['result'],C['truth']
+        return str(C['updated_at']),C['Name'],C['ID'],C['ZooID'],C['category'],C['kind'],C['result'],C['truth'],C['location']
 
 # ----------------------------------------------------------------------------
 # Return a batch of classifications, defined by a time range - either 

@@ -66,8 +66,6 @@ def SWAP(argv):
         SWAP.py CFHTLS-beta-day01.config > CFHTLS-beta-day01.log
 
     BUGS
-        - No capability to read MongoDB yet.
-        - No actual analysis routines coded.
 
     AUTHORS
       This file is part of the Space Warps project, and is distributed 
@@ -82,7 +80,7 @@ def SWAP(argv):
     # ------------------------------------------------------------------
 
     try:
-       opts, args = getopt.getopt(argv,"hp",["help","practise"])
+       opts, args = getopt.getopt(argv,"h",["help"])
     except getopt.GetoptError, err:
        print str(err) # will print something like "option -a not recognized"
        print SWAP.__doc__  # will print the big comment above.
@@ -196,7 +194,7 @@ def SWAP(argv):
         items = db.digest(classification)
         if items is None: 
             continue # Tutorial subjects fail!
-        t,Name,ID,category,kind,X,Y = items
+        t,Name,ID,ZooID,category,kind,X,Y,location = items
 
         # Register new volunteers, and create an agent for each one:
         if Name not in bureau.list():  
@@ -204,7 +202,7 @@ def SWAP(argv):
         
         # Register newly-classified subjects:
         if ID not in sample.list():           
-            sample.member[ID] = swap.Subject(ID,category,kind,Y,thresholds)    
+            sample.member[ID] = swap.Subject(ID,ZooID,category,kind,Y,thresholds,location)    
 
         # Update the subject's lens probability using input from the 
         # classifier. We send that classifier's agent to the subject
@@ -237,33 +235,61 @@ def SWAP(argv):
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
 
+    if count == 0: 
+        print "SWAP: going home early."
+        return
+        
     # ------------------------------------------------------------------
     # Pickle the bureau, sample, and database, if required:
 
     if tonights.parameters['repickle']:
     
         new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
-        print "SWAP: saving agents in "+new_crowdfile
+        print "SWAP: saving agents to "+new_crowdfile
         swap.write_pickle(bureau,new_crowdfile)
 
         new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
-        print "SWAP: saving subjects in "+new_samplefile
+        print "SWAP: saving subjects to "+new_samplefile
         swap.write_pickle(sample,new_samplefile)
 
         if practise:
             new_dbfile = swap.get_new_filename(tonights.parameters,'database')
-            print "SWAP: saving database in "+new_dbfile
+            print "SWAP: saving database to "+new_dbfile
             swap.write_pickle(db,new_dbfile)
 
     # ------------------------------------------------------------------
-    # Output list of subjects of retire, based on this batch of 
-    # subjects:
+    # Output list of subjects to retire, based on this batch of 
+    # classifications. Note that what is needed here is the ZooID, 
+    # not the subject ID:
     
     new_retirementfile = swap.get_new_filename(tonights.parameters,'retire_these')
-    print "SWAP: saving newly retired subject IDs..."
-    N = swap.write_subjectlist(sample,new_retirementfile)
+    print "SWAP: saving newly retired subject Zooniverse IDs..."
+    N = swap.write_list(sample,new_retirementfile,item='retired_subject')
     print "SWAP: "+str(N)+" lines written to "+new_retirementfile
 
+    # Also print out lists of detections etc! These are urls of images.
+    
+    new_samplefile = swap.get_new_filename(tonights.parameters,'candidates')
+    print "SWAP: saving new lens candidates..."
+    N = swap.write_list(sample,new_samplefile,item='candidate')
+    print "SWAP: "+str(N)+" lines written to "+new_samplefile
+    
+    # Now save the training images, for inspection: 
+    new_samplefile = swap.get_new_filename(tonights.parameters,'training_true_positives')
+    print "SWAP: saving new lens candidates..."
+    N = swap.write_list(sample,new_samplefile,item='true_positive')
+    print "SWAP: "+str(N)+" lines written to "+new_samplefile
+    
+    new_samplefile = swap.get_new_filename(tonights.parameters,'training_false_positives')
+    print "SWAP: saving new false positives..."
+    N = swap.write_list(sample,new_samplefile,item='false_positive')
+    print "SWAP: "+str(N)+" lines written to "+new_samplefile
+    
+    new_samplefile = swap.get_new_filename(tonights.parameters,'training_false_negatives')
+    print "SWAP: saving new false negatives..."
+    N = swap.write_list(sample,new_samplefile,item='false_negative')
+    print "SWAP: "+str(N)+" lines written to "+new_samplefile
+    
     
     # ------------------------------------------------------------------
     # Make plots! Can't plot everything - uniformly sample 200 of each

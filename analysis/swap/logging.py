@@ -36,6 +36,7 @@ dashedline       = 'SWAP: ------------------------------------------------------
 doubledashedline = '================================================================================'
 
 hello            = '                   SWAP: the Space Warps Analysis Pipeline                      '
+helloswitch      = '                   SWITCH: the Space Warps Retirement Plan                      '
 
 # ======================================================================
 # Write a PDF report, using latex:

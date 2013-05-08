@@ -71,8 +71,8 @@ class MongoDB(object):
         except: 
             print "MongoDB: couldn't connect to the Mongo"
             print "MongoDB: try doing something like this in a different shell:"
-            print "  mongorestore spacewarps-2013-04-06_20-07-28"
             print "  mongod --dbpath . &"
+            print "  mongorestore spacewarps-2013-04-06_20-07-28"
             sys.exit()
         
         try: self.db = self.client['ouroboros_staging']

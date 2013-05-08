@@ -284,7 +284,9 @@ chdir ..
 
 # Now restore the new database:
 mongorestore --drop --db ouroboros_staging $db
- 
+
+# Probably should script this? Maybe?
+
 
 # Try running SWAP:
 
@@ -294,12 +296,9 @@ SWAP.py CFHTLS-test.config >& CFHTLS-test.log
 # SWAP: total no. of classifications processed:  0
 
 
-# Hmm. Send this and the mongorestore output to Parrish and Amit.
+# Scripted! Just need to download db tarball manually:
 
-mongorestore spacewarp_2013-05-06 >& spacewarp_2013-05-06_mongorestore.log
-
-# Tue May  7 13:53:54.598 [initandlisten] connection accepted from 127.0.0.1:64410 #4 (1 connection now open)
-# Tue May  7 13:53:55.204 [conn4] end connection 127.0.0.1:64410 (0 connections now open)
+SWIPE.csh spacewarp_2013-05-07.tar.gz
 
 
 # ============================================================================
@@ -391,7 +390,7 @@ mongorestore spacewarp_2013-05-06 >& spacewarp_2013-05-06_mongorestore.log
 # OK, got it! Wrote SWITCH.py to read in a list of subject IDs, and 
 # then make put requests to retire them. 
 
-# First run SWAP with low rejection treshold to get a bunch of
+# First run SWAP with low rejection threshold to get a bunch of
 # retirements to do:
 
 SWAP.py CFHTLS-SWITCH-test.config 
@@ -481,6 +480,10 @@ SWITCH.py $retirees
 # 'instancemethod' object is not subscriptable(2)
 # 'NoneType' object is not iterable(9)
 # ASW0000kig False
-# ================================================================================
+# ======================================================================
 
 # Check with Michael!! :-)
+
+# Yep, all good after changing response.json to response.json()
+
+# ======================================================================

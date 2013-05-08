@@ -105,9 +105,11 @@ def SWITCH(argv):
              print "result = client.put('"+down+"')"
          
          else:
-             result = client.put(down)
-             print ID,result
-         
+             worked = client.put(down)
+             if not worked:
+                 print "SWITCH: retirement fail: ",ID,worked
+             else:
+                 print "SWITCH: successfully retired subject "+ID
          
     # ------------------------------------------------------------------
     print swap.doubledashedline

@@ -36,16 +36,13 @@ def SWAP(argv):
         could be. In this version, it's LENS or NOT.
 
         Standard operation is to update the candidate list by making a
-        new, timestamped catalog of candidates - and the
-        classifications that led to them. This means we have to know
-        when the last update was made - this is done by reading in a
-        pickle of the last classification to be SWAPped. The final
-        sample of candidates could be obtained by reading  in all
-        sample pickles and taking the most up to date characterisation
-        of  each - but we might as well over-write a pickle of this
-        every time too. The bureau has to always be read in in its
-        entirety, because a classifier can reappear any time to 
-        have their agent update its confusion matrix.
+        new, timestamped catalog of candidates - and the classifications
+        that led to them. This means we have to know when the last
+        update was made - this is done by SWAP writing its own next
+        config file, and by reading in a pickle of the last
+        classification to be SWAPped. The bureau has to always be read
+        in in its entirety, because a classifier can reappear any time
+        to  have their agent update its confusion matrix.
         
     FLAGS
         -h            Print this message

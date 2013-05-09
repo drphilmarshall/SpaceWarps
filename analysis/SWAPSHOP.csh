@@ -17,6 +17,8 @@
 #   -f --startup      Start afresh. Def = continue from update.config
 #   -s --survey name  Survey name (used in prefix of everything)
 #   -t --test N       Only run SWAP.py N times
+#   -a --animate      Make animated plot of subject trajectories
+#   -d --download     Download images of candidates, false +ves etc
 #
 # OUTPUTS:
 #
@@ -35,6 +37,8 @@ set help = 0
 set survey = 'CFHTLS'
 set N = 'infinity'
 set startup = 0
+set animate = 0
+set download = 0
 
 while ( $#argv > 0 )
    switch ($argv[1])
@@ -53,6 +57,22 @@ while ( $#argv > 0 )
    case --{startup}:        
       shift argv
       set startup = 1
+      breaksw
+   case -a:        
+      shift argv
+      set animate = 1
+      breaksw
+   case --{animate}:        
+      shift argv
+      set animate = 1
+      breaksw
+   case -d:        
+      shift argv
+      set download = 1
+      breaksw
+   case --{download}:        
+      shift argv
+      set download = 1
       breaksw
    case -s:        
       shift argv
@@ -192,44 +212,54 @@ echo "SWAPSHOP: final report: $report"
 # - - - - - - - - - -
 # 3) Animated plots:
 
-echo "SWAPSHOP: you can view some animated plots on your browser with (wait for it):"
-echo " "
+if ($animate) then
 
-foreach type ( trajectories histories probabilities )
-
-    set gif = $cwd/${survey}_${today}_${type}.gif
-
-    convert -delay 50 -loop 0 ${survey}_*/*${type}.png $gif
-
-    echo "          file://$gif"
+    echo "SWAPSHOP: you can view an animated plot on your browser with (wait for it):"
     echo " "
 
-end
+    # foreach type ( trajectories histories probabilities )
+    foreach type ( trajectories )
+
+        set gif = $cwd/${survey}_${today}_${type}.gif
+
+        convert -delay 50 -loop 0 ${survey}_*/*${type}.png $gif
+
+        echo "          file://$gif"
+        echo " "
+
+    end
+
+endif
 
 # - - - - - - - - - -
 # 4) Image download:
 
-foreach type ( candidates \
-               training_false_negatives \
-               training_false_positives )
-    mkdir -p $type
-    chdir $type
-    echo "SWAPSHOP: in folder '$type',"
-    
-    set catalog = `\ls ../*${type}*txt`
-    set N = `cat $catalog | wc -l`
-    echo "SWAPSHOP: downloading $N images..."
-    
-    foreach url ( `cat $catalog` )
-        set png = $url:t
-        set log = $png:r.log
-        wget -O $png "$url" >& $log
+if ($download) then
+
+    foreach type ( candidates \
+                   training_false_negatives \
+                   training_false_positives )
+        mkdir -p $type
+        chdir $type
+        echo "SWAPSHOP: in folder '$type',"
+
+        set catalog = `\ls ../${latest}/*${type}*txt`
+        set N = `cat $catalog | wc -l`
+        echo -n "SWAPSHOP: downloading $N images from $catalog..."
+
+        foreach url ( `cat $catalog` )
+            set png = $url:t
+            set log = $png:r.log
+            wget -O $png "$url" >& $log
+            echo -n "."
+        end
+        echo "SWAPSHOP: ...done."
+
+        chdir ..
+
     end
-    
-    chdir ..
-    echo "SWAPSHOP: ...done."
-    
-end
+
+endif
     
 echo "SWAPSHOP: all done."
 

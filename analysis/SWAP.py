@@ -311,7 +311,7 @@ def SWAP(argv):
     
     # Now save the training images, for inspection: 
     new_samplefile = swap.get_new_filename(tonights.parameters,'training_true_positives')
-    print "SWAP: saving new lens candidates..."
+    print "SWAP: saving new true positives..."
     N = swap.write_list(sample,new_samplefile,item='true_positive')
     print "SWAP: "+str(N)+" lines written to "+new_samplefile
     

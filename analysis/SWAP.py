@@ -128,6 +128,7 @@ def SWAP(argv):
         t1 = datetime.datetime(1978, 2, 28, 12, 0, 0, 0)
     elif tonights.parameters['start'] == 'dont_bother':
         print "SWAP: looks like there is nothing more to do!"
+        swap.set_cookie(False)
         print swap.doubledashedline
         return
     else:
@@ -225,10 +226,16 @@ def SWAP(argv):
             sys.stdout.flush()
         
         # When was the first classification made?
-        if count == 1: t1 = t
+        if count == 1: 
+            t1 = t
         
+        # Did we at least manage to do 1?
+        elif count == 2:
+            swap.set_cookie(True)
+            
         # Have we done enough for this run?
-        if count == count_max: break
+        elif count == count_max: 
+            break
     
     
     sys.stdout.write('\n')
@@ -329,7 +336,8 @@ def SWAP(argv):
     
     if not more_to_do:
         tonights.parameters['start'] = 'dont_bother'
-    # SWAPSHOP will read this and acts accordingly.
+        swap.set_cookie(False)
+    # SWAPSHOP will read this cookie and act accordingly.
     
     configfile = 'update.config'
     swap.write_config(configfile, tonights.parameters)

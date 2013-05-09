@@ -235,12 +235,12 @@ class Collection(object):
             label.set_visible(False)
         upper.set_title('Example Subject Trajectories')
         
-        # Lower panel: histograms:
+        # Lower panel: histogram:
         lower = fig.add_axes(lowerarea, sharex=upper)
         plt.sca(lower)
         lower.set_xlim(swap.pmin,swap.pmax)
         lower.set_xscale('log')
-        lower.set_ylim(0.1,0.5*self.size())
+        lower.set_ylim(0.1,9999)
         # lower.set_yscale('log')
         plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
         plt.axvline(x=x['detection'],color='blue',linestyle='dotted')

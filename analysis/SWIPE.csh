@@ -41,16 +41,6 @@ while ( $#argv > 0 )
       shift argv
       set help = 1
       breaksw
-   case -s:        
-      shift argv
-      set survey = $argv[1]
-      shift argv
-      breaksw
-   case --{survey}:        
-      shift argv
-      set survey = $argv[1]
-      shift argv
-      breaksw
    case *:        
       set dbfile = $argv[1]
       shift argv
@@ -120,18 +110,8 @@ if ($fail) then
   goto FINISH
 endif
 
-echo "SWIPE: new database all ready to be read by SWAP:"
+echo "SWIPE: new database all ready to be read by SWAP."
 
-
-# Now write a startup.config file based on the standard one in swap:
-
-set configfile = startup.config
-
-cat $SWAP_DIR/swap/$configfile | sed s/SURVEY/$survey/g > $configfile
-
-echo " "
-echo "       SWAP.py  $configfile"
-echo " "
 echo '================================================================================'
 
 # ==============================================================================

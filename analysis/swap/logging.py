@@ -241,6 +241,19 @@ def compile_report(tex,pars):
 
     return
 
+# ----------------------------------------------------------------------
+
+def set_cookie(go):
+    
+    F = open('.swap.cookie','w')
+    if go:
+        F.write('running')
+    else:
+        F.write('stopped')
+    F.close()
+
+    return
+
 #=======================================================================
 
 if __name__ == '__main__':

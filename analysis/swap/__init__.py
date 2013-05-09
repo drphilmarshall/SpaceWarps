@@ -2,7 +2,7 @@ from logging import *
 from config import *
 from io import *
 from crowd import *
-from classifier import *
+from agent import *
 from collection import *
 from subject import *
 from toydb import *

@@ -185,7 +185,7 @@ class MongoDB(object):
         else:
             location = None
         
-        # What the volunteer say about this subject?
+        # What did the volunteer say about this subject?
         # First select the annotations:
         annotations = classification['annotations']
 

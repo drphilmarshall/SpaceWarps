@@ -146,17 +146,22 @@ class Bureau(object):
 # ----------------------------------------------------------------------
 # Prepare to plot agents' histories:
 
-    def finish_history_plot(self,axes,filename):
+    def finish_history_plot(self,axes,t,filename):
     
         plt.sca(axes)
+        
+        # Timestamp:
+        plt.text(100,swap.Imax+0.02,t,color='gray')
+       
         plt.savefig(filename,dpi=300)
             
         return
 
 # ----------------------------------------------------------------------
-# Plot histograms of agents' confusion matrix element probabilities:
+# Plot scattergraph and histograms of agents' confusion matrix 
+# element probabilities:
 
-    def plot_histogram(self,Nc,filename):
+    def plot_histogram(self,Nc,t,filename):
     
         fig = plt.figure(figsize=(6,6), dpi=300)
 
@@ -208,6 +213,7 @@ class Bureau(object):
         size = 200*self.contributions + 3.0
         plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
 
+
         # Right histogram panel: 
         plt.sca(righthist)
         righthist.set_ylim(pmin,pmax)
@@ -232,6 +238,8 @@ class Bureau(object):
            
         plt.hist(PL, bins=bins, histtype='stepfilled', color='blue', alpha=0.7)
 
+        # Timestamp:
+        plt.text(0.03,0.82*0.5*len(PL),t,color='gray')
 
         plt.savefig(filename,dpi=300)
         

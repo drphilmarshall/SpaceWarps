@@ -334,14 +334,14 @@ def SWAP(argv):
     for Name in bureau.shortlist(Nc):
         bureau.member[Name].plot_history(fig1)
     
-    bureau.finish_history_plot(fig1,pngfile)
+    bureau.finish_history_plot(fig1,t,pngfile)
     tonights.parameters['historiesplot'] = pngfile
 
     # Agent probabilities:
     
     pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
     print "SWAP: plotting "+str(Nc)+" agent probabilities in "+pngfile
-    bureau.plot_histogram(Nc,pngfile)        
+    bureau.plot_histogram(Nc,t,pngfile)        
     tonights.parameters['probabilitiesplot'] = pngfile
 
     # Subject probabilities:
@@ -354,7 +354,6 @@ def SWAP(argv):
     for ID in sample.shortlist(Ns):
         sample.member[ID].plot_trajectory(fig3)
     
-    # Stamp on the last classification time:
     sample.finish_trajectory_plot(fig3,t,pngfile)
     tonights.parameters['trajectoriesplot'] = pngfile
     

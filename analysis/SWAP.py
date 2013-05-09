@@ -354,7 +354,8 @@ def SWAP(argv):
     for ID in sample.shortlist(Ns):
         sample.member[ID].plot_trajectory(fig3)
     
-    sample.finish_trajectory_plot(fig3,pngfile)
+    # Stamp on the last classification time:
+    sample.finish_trajectory_plot(fig3,t,pngfile)
     tonights.parameters['trajectoriesplot'] = pngfile
     
     # ------------------------------------------------------------------

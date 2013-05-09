@@ -253,7 +253,7 @@ class Collection(object):
 # ----------------------------------------------------------------------
 # Prepare to plot subjects' trajectories:
 
-    def finish_trajectory_plot(self,axes,filename):
+    def finish_trajectory_plot(self,axes,t,filename):
     
         # Plot histograms! 0 is the upper panel, 1 the lower.
         plt.sca(axes[1])
@@ -276,7 +276,11 @@ class Collection(object):
             # Pylab histogram:
             plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=0.7, label=labels[j])
             plt.legend(prop={'size':10})
-                   
+        
+        # Add timestamp in top righthand corner:
+        plt.sca(axes[0])
+        plt.text(1.3*swap.prior,0.27,t,color='gray')
+        
         # Write out to file:
         plt.savefig(filename,dpi=300)
             

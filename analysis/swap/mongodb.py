@@ -282,9 +282,11 @@ if __name__ == '__main__':
         
         items = db.digest(classification)
         
-        # Check we got all 7 items:            
+        if count == 13: print classification
+        
+        # Check we got all 9 items:            
         if items is not None:
-            if len(items) != 7: 
+            if len(items) != 9: 
                 print "oops! ",items[:]
             else:    
                 # Count classifications

@@ -487,3 +487,48 @@ SWITCH.py $retirees
 # Yep, all good after changing response.json to response.json()
 
 # ======================================================================
+# 2013-05-08 (Wednesday) 14:29 BST
+
+# Launch day! :-)
+# First batch of classifications from Michael. First tidy away all the
+# beta work... and also the SWITCH test:
+
+mkdir -p Beta
+mv *beta* Beta/
+mv spacewarps-2013-04-06_20-07-28* Beta/
+
+mkdir -p SWITCH-test
+mv *-SWITCH* SWITCH-test/
+mv spacewarp_* SWITCH-test/
+mv CFHTLS* SWITCH-test/
+
+# Now make a working directory:
+mkdir -p 2013-05-08
+cd 2013-05-08
+
+# OK, get new db:
+
+set url = "https://zooniverse-code.s3.amazonaws.com/databases/2013-05-08/ouroboros_projects/spacewarp_2013-05-08.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1368612013&Signature=QRK%2BOV37H6khTqgqoTu0z%2FLO%2F2s%3D"
+
+set dbfile = `echo "$url" | cut -d '?' -f1 | cut -d'/' -f7`
+set logfile = ${dbfile:r:r}.wget.log
+wget -O $dbfile "$url" >& $logfile
+
+# OK, SWIPE this:
+
+SWIPE.csh $dbfile
+
+# Good! This script should write a config file.
+
+SWAP.py startup.config
+
+# Nice - 10,000 classifications of 8000 subjects by 300 people. Crowd
+# look very similar to beta! Result :-)
+
+# ======================================================================
+# 2013-05-09 (Thursday) 09:46 BST
+
+# Gosh - half a million classifications in the first day!
+# Better get this code working at scale - and fast.
+
+

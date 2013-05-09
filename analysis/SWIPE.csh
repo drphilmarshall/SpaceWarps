@@ -29,6 +29,7 @@
 # ==============================================================================
 
 set help = 0
+set survey = 'CFHTLS'
 
 while ( $#argv > 0 )
    switch ($argv[1])
@@ -39,6 +40,16 @@ while ( $#argv > 0 )
    case --{help}:        
       shift argv
       set help = 1
+      breaksw
+   case -s:        
+      shift argv
+      set survey = $argv[1]
+      shift argv
+      breaksw
+   case --{survey}:        
+      shift argv
+      set survey = $argv[1]
+      shift argv
       breaksw
    case *:        
       set dbfile = $argv[1]
@@ -116,7 +127,7 @@ echo "SWIPE: new database all ready to be read by SWAP:"
 
 set configfile = startup.config
 
-cat $SWAP_DIR/swap/$configfile | sed s/XXXSURVEY/$SURVEY/g > $configfile
+cat $SWAP_DIR/swap/$configfile | sed s/XXXSURVEY/$survey/g > $configfile
 
 echo " "
 echo "       SWAP.py  $configfile"

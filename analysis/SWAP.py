@@ -178,7 +178,7 @@ def SWAP(argv):
         
     # ------------------------------------------------------------------
     
-    count_max = 10
+    count_max = 10000
     print "SWAP: interpreting up to",count_max," classifications..."
  
     count = 0

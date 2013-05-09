@@ -78,7 +78,9 @@ class Configuration(object):
             if ':' not in line: continue
             # Interpret remaining lines, which contain Name:Value pairs:
             line = line.split(':')
-            Name, Value = line[0], line[1]
+            Name, Value = line[0], ':'.join(line[1:])
+            # NB. We have to cope with strings that themselves contain 
+            # colons - like timestamps.
             self.parameters[Name] = Value
         thisfile.close()
         return

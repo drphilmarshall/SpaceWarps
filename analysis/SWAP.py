@@ -127,7 +127,7 @@ def SWAP(argv):
     if tonights.parameters['start'] == 'the_beginning':
         t1 = datetime.datetime(1978, 2, 28, 12, 0, 0, 0)
     else:
-        t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H-%M-%S')
+        t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H:%M:%S')
     print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
     
     # How will we make decisions based on probability?

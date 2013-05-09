@@ -14,6 +14,7 @@
 #
 # OPTIONAL INPUTS:
 #   -h --help         Print this header
+#   -f --startup      Start afresh. Def = continue from update.config
 #   -s --survey name  Survey name (used in prefix of everything)
 #   -t --test N       Only run SWAP.py N times
 #
@@ -33,6 +34,7 @@
 set help = 0
 set survey = 'CFHTLS'
 set N = 'infinity'
+set startup = 0
 
 while ( $#argv > 0 )
    switch ($argv[1])
@@ -43,6 +45,14 @@ while ( $#argv > 0 )
    case --{help}:        
       shift argv
       set help = 1
+      breaksw
+   case -f:        
+      shift argv
+      set startup = 1
+      breaksw
+   case --{startup}:        
+      shift argv
+      set startup = 1
       breaksw
    case -s:        
       shift argv
@@ -89,11 +99,18 @@ echo "SWAPSHOP: classifications in survey '$survey' are analysed"
 
 # First write a startup.config file based on the standard one in swap:
 
-set configfile = startup.config
-
-cat $SWAP_DIR/swap/$configfile | sed s/SURVEY/$survey/g > $configfile
-
-echo "SWAPSHOP: start-up configuration stored in $configfile"
+if ($startup) then
+    set configfile = startup.config
+    cat $SWAP_DIR/swap/$configfile | sed s/SURVEY/$survey/g > $configfile
+    echo "SWAPSHOP: start-up configuration stored in $configfile"
+else
+    set configfile = 'update.config'
+    if (! -e $configfile) then
+        echo "SWAPSHOP: ERROR: no update.config file to start from."
+        goto FINISH
+    endif
+    echo "SWAPSHOP: continuing using configuration stored in $configfile"
+endif
 
 # ----------------------------------------------------------------------
 
@@ -170,7 +187,7 @@ endif
 set report = ${survey}_${today}_report.pdf
 cp $latest/*report.pdf  $report
 
-echo "SWAPSHOP: final report: $report:t"
+echo "SWAPSHOP: final report: $report"
 
 # - - - - - - - - - -
 # 3) Animated plots:
@@ -192,8 +209,29 @@ end
 # - - - - - - - - - -
 # 4) Image download:
 
-
-
+foreach type ( candidates \
+               training_false_negatives \
+               training_false_positives )
+    mkdir -p $type
+    chdir $type
+    echo "SWAPSHOP: in folder '$type',"
+    
+    set catalog = `\ls ../*${type}*txt`
+    set N = `cat $catalog | wc -l`
+    echo "SWAPSHOP: downloading $N images..."
+    
+    foreach url ( `cat $catalog` )
+        set png = $url:t
+        set log = $png:r.log
+        wget -O $png "$url" >& $log
+    end
+    
+    chdir ..
+    echo "SWAPSHOP: ...done."
+    
+end
+    
+echo "SWAPSHOP: all done."
 
 echo '================================================================================'
 

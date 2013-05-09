@@ -111,6 +111,8 @@ while ($more_to_do)
     
     else
         # Run SWAP again:
+        @ kk = $k + 1
+        echo "SWAPSHOP: starting batch number $kk"
         SWAP.py  $configfile
     
     endif     

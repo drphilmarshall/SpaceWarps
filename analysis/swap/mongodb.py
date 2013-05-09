@@ -218,7 +218,7 @@ class MongoDB(object):
             truth = 'UNKNOWN'
         
         # Check we got all 9 items:            
-        items = str(t),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location)
+        items = t.strftime('%Y-%m-%d_%H-%M-%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location)
         if len(items) != 9: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]

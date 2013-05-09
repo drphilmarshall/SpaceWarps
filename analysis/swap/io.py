@@ -60,8 +60,8 @@ def read_pickle(filename,flavour):
         else:
             print "SWAP: "+filename+" does not exist."
 
-        if flavour == 'crowd':
-            contents = swap.Crowd()
+        if flavour == 'bureau':
+            contents = swap.Bureau()
             print "SWAP: made a new",contents
 
         elif flavour == 'collection':
@@ -133,27 +133,87 @@ def write_list(sample, filename, item=None):
 
 def get_new_filename(pars,flavour):
 
-    head = pars['stem']+'_'+flavour
-    if flavour == 'crowd' or \
-       flavour == 'collection' or \
-       flavour == 'database':
+    # Usually, this is what we want filenames to look like:
+    stem = pars['trunk']+'_'+flavour
+    # Pickles are an exception though!
+    
+    if flavour == 'bureau' or \
+         flavour == 'collection' or \
+         flavour == 'database':
+        stem = pars['survey']+'_'+flavour
         ext = 'pickle'
+        folder = '.'
     elif flavour == 'histories' or \
          flavour == 'trajectories' or \
          flavour == 'probabilities':
         ext = 'png'
+        folder = pars['dir']
     elif flavour == 'retire_these':
         ext = 'txt'
+        folder = pars['dir']
     elif flavour == 'candidates' or \
          flavour == 'training_true_positives' or \
          flavour == 'training_false_positives' or \
          flavour == 'training_true_negatives' or \
          flavour == 'training_false_negatives':
         ext = 'txt'
+        folder = pars['dir']
     else:
         raise Exception("SWAP: io: unknown flavour "+flavour)    
         
-    return head+'.'+ext
+    return folder+'/'+stem+'.'+ext
+
+# ----------------------------------------------------------------------------
+# Write configuration file given a dictionary of parameters:
+ 
+def write_config(filename, pars):
+
+    F = open(filename,'w')
+
+    header = """
+# ======================================================================
+#
+# Space Warps Analysis Pipeline configuration file.
+#
+# Lines starting with '#' are ignored; all other lines must contain a
+# Name : Value pair to be read into the parameters dictionary.
+#
+# This file is part of the Space Warps project, and is distributed 
+# under the GPL v2 by the Space Warps Science Team.
+# http://spacewarps.org/
+# 
+# SWAP configuration is modelled on that written for the
+# Pangloss project, by Tom Collett (IoA) and Phil Marshall (Oxford). 
+# https://github.com/drphilmarshall/Pangloss/blob/master/example/example.config
+#
+# ======================================================================
+    """
+    F.write(header)
+   
+    shortlist = ['survey', \
+                 'start', \
+                 'bureaufile', \
+                 'samplefile', \
+                 'verbose', \
+                 'repickle', \
+                 'initialPL', \
+                 'initialPD', \
+                 'agents_willing_to_learn', \
+                 'detection_threshold', \
+                 'rejection_threshold', \
+                 'dbspecies']
+   
+    for keyword in shortlist:
+        F.write('\n')
+        F.write('%s: %s\n' % (keyword,str(pars[keyword])))
+
+    F.write('\n')
+    footer = '# ======================================================================'
+    F.write(footer)
+
+    F.close()
+
+    return
 
 # ----------------------------------------------------------------------------
 # Remove file, if it exists, stay quiet otherwise:

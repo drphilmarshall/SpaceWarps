@@ -127,7 +127,7 @@ echo "SWIPE: new database all ready to be read by SWAP:"
 
 set configfile = startup.config
 
-cat $SWAP_DIR/swap/$configfile | sed s/XXXSURVEY/$survey/g > $configfile
+cat $SWAP_DIR/swap/$configfile | sed s/SURVEY/$survey/g > $configfile
 
 echo " "
 echo "       SWAP.py  $configfile"

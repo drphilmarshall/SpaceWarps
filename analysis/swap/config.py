@@ -67,13 +67,16 @@ class Configuration(object):
     def read(self):
         thisfile = open(self.file)
         for line in thisfile:
-            # Ignore empty lines and comments:
+            # Ignore truly empty lines and comments:
             if line[0:2] == '\n': continue
             if line[0] == '#': continue
             line.strip()
             line = line.split('#')[0]
-            # Remove whitespace and interpret Name:Value pairs:
+            # Remove whitespace:
             line = ''.join(line.split())
+            # Ignore lines without colons:
+            if ':' not in line: continue
+            # Interpret remaining lines, which contain Name:Value pairs:
             line = line.split(':')
             Name, Value = line[0], line[1]
             self.parameters[Name] = Value

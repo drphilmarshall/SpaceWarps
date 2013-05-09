@@ -43,7 +43,7 @@ helloswitch      = '                   SWITCH: the Space Warps Retirement Plan  
 
 def write_report(pars,crowd,sample):
 
-    tex = pars['stem']+'_report.tex'
+    tex = pars['dir']+'/'+pars['trunk']+'_report.tex'
 
     print "SWAP: writing report in "+tex
 

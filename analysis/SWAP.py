@@ -28,7 +28,7 @@ def SWAP(argv):
         possibility of performing the analysis in real time (although
         presumably not with this piece of python).
 
-        Currently, the confusion matrices only depend on the
+        Currently, the agents' confusion matrices only depend on the
         classifications of training subjects. Upgrading this would be a
         nice piece of further work. Likewise, neither the Marker
         positions, the classification  durations, nor any other
@@ -43,9 +43,9 @@ def SWAP(argv):
         sample of candidates could be obtained by reading  in all
         sample pickles and taking the most up to date characterisation
         of  each - but we might as well over-write a pickle of this
-        every time too. The crowd we have to always read in in its
-        entirety, because they can reappear any time to update their
-        confusion matrices.
+        every time too. The bureau has to always be read in in its
+        entirety, because a classifier can reappear any time to 
+        have their agent update its confusion matrix.
         
     FLAGS
         -h            Print this message
@@ -55,15 +55,13 @@ def SWAP(argv):
 
     OUTPUTS
         stdout
-        theCrowd.pickle
-        theLensSampleFrom.DATE.pickle
-        theClassificationBatchFrom.DATE.pickle
-        theMostRecentClassification.pickle
+        *_bureau.pickle
+        *_collection.pickle
 
     EXAMPLE
         
         cd workspace
-        SWAP.py CFHTLS-beta-day01.config > CFHTLS-beta-day01.log
+        SWAP.py startup.config > CFHTLS-beta-day01.log
 
     BUGS
 
@@ -129,19 +127,9 @@ def SWAP(argv):
     if tonights.parameters['start'] == 'the_beginning':
         t1 = datetime.datetime(1978, 2, 28, 12, 0, 0, 0)
     else:
-        t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d')
+        t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H-%M-%S')
     print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
     
-    # And what will we call the new files we make?
-    t2 = datetime.datetime.utcnow()
-    tonights.parameters['finish'] = t2.strftime('%Y-%m-%d')
-    
-    # Use the following stem for all output files:
-    trunk = tonights.parameters['survey']+'_'+tonights.parameters['finish']
-    tonights.parameters['dir'] = os.getcwd()+'/'+trunk
-    subprocess.call(["mkdir","-p",tonights.parameters['dir']])
-    tonights.parameters['stem'] = tonights.parameters['dir']+'/'+trunk
-
     # How will we make decisions based on probability?
     thresholds = {}
     thresholds['detection'] = tonights.parameters['detection_threshold']
@@ -151,7 +139,7 @@ def SWAP(argv):
     # Read in, or create, a bureau of agents who will represent the 
     # volunteers:
     
-    bureau = swap.read_pickle(tonights.parameters['crowdfile'],'crowd')
+    bureau = swap.read_pickle(tonights.parameters['bureaufile'],'bureau')
    
     # ------------------------------------------------------------------
     # Read in, or create, an object representing the candidate list:
@@ -185,7 +173,8 @@ def SWAP(argv):
         
     # ------------------------------------------------------------------
     
-    print "SWAP: interpreting classifications..."
+    count_max = 10000
+    print "SWAP: interpreting up to",count_max," classifications..."
  
     count = 0
     for classification in batch:
@@ -227,10 +216,17 @@ def SWAP(argv):
         else:
             # Count up to 74 in dots:
             if count == 1: sys.stdout.write('SWAP: ')
-            elif np.mod(count,int(db.size()/73.0)) == 0: sys.stdout.write('.')
+            elif np.mod(count,int(count_max/73.0)) == 0: sys.stdout.write('.')
             # elif count == db.size(): sys.stdout.write('\n')
             sys.stdout.flush()
         
+        # When was the first classification made?
+        if count == 1: t1 = t
+        
+        # Have we done enough for this run?
+        if count == count_max: break
+    
+    
     sys.stdout.write('\n')
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
@@ -240,22 +236,47 @@ def SWAP(argv):
         return
         
     # ------------------------------------------------------------------
-    # Pickle the bureau, sample, and database, if required:
+    
+    # Set up outputs based on where we got to.
+    
+    # And what will we call the new files we make? Use the first 
+    # classification timestamp!
+    tonights.parameters['finish'] = t1
+    
+    # Let's also update the start parameter, ready for next time:
+    tonights.parameters['start'] = t
+        
+    # Use the following directory for output lists and plots:
+    tonights.parameters['trunk'] = \
+        tonights.parameters['survey']+'_'+tonights.parameters['finish']
 
+    tonights.parameters['dir'] = os.getcwd()+'/'+tonights.parameters['trunk']
+    subprocess.call(["mkdir","-p",tonights.parameters['dir']])
+
+    # ------------------------------------------------------------------
+    # Pickle the bureau, sample, and database, if required. If we do 
+    # this, its because we want to pick up from where we left off
+    # (ie with SWAPSHOP) - so save the pickles in the $cwd. This is
+    # taken care of in io.py. Note that we update the parameters as 
+    # we go - this will be useful later when we write update.config.
+        
     if tonights.parameters['repickle']:
     
-        new_crowdfile = swap.get_new_filename(tonights.parameters,'crowd')
-        print "SWAP: saving agents to "+new_crowdfile
-        swap.write_pickle(bureau,new_crowdfile)
+        new_bureaufile = swap.get_new_filename(tonights.parameters,'bureau')
+        print "SWAP: saving agents to "+new_bureaufile
+        swap.write_pickle(bureau,new_bureaufile)
+        tonights.parameters['bureaufile'] = new_bureaufile
 
         new_samplefile = swap.get_new_filename(tonights.parameters,'collection')
         print "SWAP: saving subjects to "+new_samplefile
         swap.write_pickle(sample,new_samplefile)
+        tonights.parameters['samplefile'] = new_samplefile
 
         if practise:
             new_dbfile = swap.get_new_filename(tonights.parameters,'database')
             print "SWAP: saving database to "+new_dbfile
             swap.write_pickle(db,new_dbfile)
+            tonights.parameters['dbfile'] = new_dbfile
 
     # ------------------------------------------------------------------
     # Output list of subjects to retire, based on this batch of 
@@ -289,6 +310,14 @@ def SWAP(argv):
     print "SWAP: saving new false negatives..."
     N = swap.write_list(sample,new_samplefile,item='false_negative')
     print "SWAP: "+str(N)+" lines written to "+new_samplefile
+    
+    
+    # ------------------------------------------------------------------
+    # Now, over-write the update.config file so that we can carry on
+    # where we left off. Note that the pars are already updated! :-)
+    
+    configfile = 'update.config'
+    swap.write_config(configfile, tonights.parameters)
     
     
     # ------------------------------------------------------------------
@@ -329,7 +358,7 @@ def SWAP(argv):
     tonights.parameters['trajectoriesplot'] = pngfile
     
     # ------------------------------------------------------------------
-    # Write a PDF report:
+    # Finally, write a PDF report:
     
     swap.write_report(tonights.parameters,bureau,sample) 
     

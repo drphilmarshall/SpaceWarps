@@ -178,7 +178,7 @@ def SWAP(argv):
         
     # ------------------------------------------------------------------
     
-    count_max = 10000
+    count_max = 10
     print "SWAP: interpreting up to",count_max," classifications..."
  
     count = 0
@@ -246,7 +246,7 @@ def SWAP(argv):
     if count == 0: 
         print "SWAP: something went wrong - 0 classifications found."
         return
-    elif count < count_max:
+    elif count < count_max: # ie we didn't make it to 10,000 this time!
         more_to_do = False
     else:
         more_to_do = True
@@ -335,7 +335,7 @@ def SWAP(argv):
     # already updated! :-)
     
     if not more_to_do:
-        tonights.parameters['start'] = 'dont_bother'
+        tonights.parameters['start'] = t
         swap.set_cookie(False)
     # SWAPSHOP will read this cookie and act accordingly.
     

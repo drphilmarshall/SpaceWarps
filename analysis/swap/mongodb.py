@@ -273,6 +273,16 @@ if __name__ == '__main__':
 
     batch = db.find('since',t1)
 
+    # How many did we get?
+    total = db.classifications.count()
+    print "Whoah! Found ",total," classifications!"
+    print "Here's the last one:"
+    for classification in db.classifications.find().skip(total-1).limit(1):
+        items = db.digest(classification)
+        print items[:]
+    
+    print "Reading them all one by one, just for fun:"
+    
     # Now, loop over classifications, digesting them.
     
     # Batch has a next() method, which returns the subsequent
@@ -282,7 +292,7 @@ if __name__ == '__main__':
         
         items = db.digest(classification)
         
-        if count == 13: print classification
+        if count == total: print classification
         
         # Check we got all 9 items:            
         if items is not None:
@@ -291,7 +301,12 @@ if __name__ == '__main__':
             else:    
                 # Count classifications
                 count += 1
-    
+                
+        if np.mod(count,int(total/80.0)) == 0: 
+            sys.stdout.write('.')
+            sys.stdout.flush()
+           
+                   
     # Good! Whole database dealt with.
     print "Counted ",count," classifications, that each look like:"
     print items[:]

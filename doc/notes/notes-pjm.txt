@@ -531,4 +531,6 @@ SWAP.py startup.config
 # Gosh - half a million classifications in the first day!
 # Better get this code working at scale - and fast.
 
+# OK, SWAPSHOP is operational and checked in.
 
+# ======================================================================

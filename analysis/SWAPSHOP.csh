@@ -113,8 +113,19 @@ while ($more_to_do)
         # Run SWAP again:
         @ kk = $k + 1
         echo "SWAPSHOP: starting batch number $kk"
+        
         SWAP.py  $configfile
     
+        # Keep a record of the config we used in this run...
+        # That means replacing the new start time in update.config
+        # with the actual start time of the latest run:
+
+        set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
+        set now = `echo $latest | sed s/$survey//g | cut -c2-50`
+        
+        set tomorrow = `grep 'start:' $configfile | cut -d':' -f2-20`
+        sed s/$tomorrow/$now/g $configfile > $latest/update.config
+        
     endif     
     
     @ k = $k + 1
@@ -122,6 +133,7 @@ while ($more_to_do)
     # See if we should keep going:
     set more_to_do = `grep 'running' .swap.cookie | wc -l`
     if ($more_to_do) set configfile = update.config
+    
     
 end
 
@@ -143,15 +155,27 @@ cp $latest/*retire_these.txt  $retirees
 
 set NR = `cat $retirees | wc -l`
 
-echo "SWAPSHOP: if you want, you can go ahead and retire $NR subjects with"
-echo " "
-echo "          SWITCH.py $retirees"
-echo " "
+if ($NR > 0) then
+    echo "SWAPSHOP: if you want, you can go ahead and retire $NR subjects with"
+    echo " "
+    echo "          SWITCH.py $retirees"
+    echo " "
+else
+    echo "SWAPSHOP: no subjects to retire"
+endif
 
 # - - - - - - - - - -
-# 2) Animated plots:
+# 2) Final report:
 
-echo "SWAPSHOP: you can view some animated plots on yoru browser with (wait for it):"
+set report = ${survey}_${today}_report.pdf
+cp $latest/*report.pdf  $report
+
+echo "SWAPSHOP: final report: $report:t"
+
+# - - - - - - - - - -
+# 3) Animated plots:
+
+echo "SWAPSHOP: you can view some animated plots on your browser with (wait for it):"
 echo " "
 
 foreach type ( trajectories histories probabilities )
@@ -164,6 +188,12 @@ foreach type ( trajectories histories probabilities )
     echo " "
 
 end
+
+# - - - - - - - - - -
+# 4) Image download:
+
+
+
 
 echo '================================================================================'
 

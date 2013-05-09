@@ -126,6 +126,10 @@ def SWAP(argv):
     # From when shall we take classifications to analyze?
     if tonights.parameters['start'] == 'the_beginning':
         t1 = datetime.datetime(1978, 2, 28, 12, 0, 0, 0)
+    elif tonights.parameters['start'] == 'dont_bother':
+        print "SWAP: looks like there is nothing more to do!"
+        print swap.doubledashedline
+        return
     else:
         t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H:%M:%S')
     print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
@@ -231,9 +235,15 @@ def SWAP(argv):
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
 
+    # All good things come to an end:
     if count == 0: 
-        print "SWAP: going home early."
+        print "SWAP: something went wrong - 0 classifications found."
         return
+    elif count < count_max:
+        more_to_do = False
+    else:
+        more_to_do = True
+        
         
     # ------------------------------------------------------------------
     
@@ -313,8 +323,13 @@ def SWAP(argv):
     
     
     # ------------------------------------------------------------------
-    # Now, over-write the update.config file so that we can carry on
-    # where we left off. Note that the pars are already updated! :-)
+    # Now, if there is more to do, over-write the update.config file so
+    # that we can carry on where we left off. Note that the pars are
+    # already updated! :-)
+    
+    if not more_to_do:
+        tonights.parameters['start'] = 'dont_bother'
+    # SWAPSHOP will read this and acts accordingly.
     
     configfile = 'update.config'
     swap.write_config(configfile, tonights.parameters)

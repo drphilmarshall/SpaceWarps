@@ -88,7 +88,7 @@ class Agent(object):
         self.PL = pars['initialPL']
         self.ND = pars['initialND']
         self.NL = pars['initialNL']
-        self.N = 0
+        self.N = initialND+initialNL
         self.NT = initialND+initialNL
         self.contribution = self.update_contribution()
         self.traininghistory = {'ID':'tutorial','I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}

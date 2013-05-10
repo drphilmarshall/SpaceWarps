@@ -81,8 +81,23 @@ class Collection(object):
 # *should* contain a significant number of training subjects, since on average 
 # 1 in 20 subjects are training...
 
-    def shortlist(self,N):
-        longlist = self.list()
+    def shortlist(self,N,kind='Any',status='Any'):
+        reallylonglist = self.list()
+        
+        if kind == 'Any' and status == 'Any':
+            longlist = reallylonglist
+        else:
+            longlist = []
+            count = 0
+            for ID in reallylonglist:
+                 subject = self.member[ID]
+                 if (kind == 'Any' and subject.status == status) or \
+                    (status == 'Any' and subject.kind == kind) or \
+                    (kind == subject.kind and subject.status == status):
+                     longlist.append(ID)
+                     count += 1
+            if count < N: N = count
+        
         return longlist[0::int(len(longlist)/N)][0:N]
             
 # ----------------------------------------------------------------------------

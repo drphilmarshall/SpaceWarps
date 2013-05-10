@@ -195,6 +195,7 @@ def write_config(filename, pars):
                  'bureaufile', \
                  'samplefile', \
                  'verbose', \
+                 'report', \
                  'repickle', \
                  'initialPL', \
                  'initialPD', \

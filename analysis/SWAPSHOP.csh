@@ -39,6 +39,7 @@ set N = 'infinity'
 set startup = 0
 set animate = 0
 set download = 0
+set fast = 0
 
 while ( $#argv > 0 )
    switch ($argv[1])
@@ -94,6 +95,10 @@ while ( $#argv > 0 )
       set N = $argv[1]
       shift argv
       breaksw
+   case --{fast}:        
+      set fast = 1
+      shift argv
+      breaksw
    case *:        
       set dbfile = $argv[1]
       shift argv
@@ -130,6 +135,12 @@ else
         goto FINISH
     endif
     echo "SWAPSHOP: continuing using configuration stored in $configfile"
+endif
+
+# Save time by only reporting at the end:
+if ($fast) then
+    sed s/'report: True'/'report: False'/g $configfile > junk
+    mv junk $configfile
 endif
 
 # ----------------------------------------------------------------------
@@ -171,8 +182,16 @@ while ($more_to_do)
     set more_to_do = `grep 'running' .swap.cookie | wc -l`
     if ($more_to_do) set configfile = update.config
     
-    
 end
+
+# OK, run SWAP one more time (on last classification again), and 
+# write the report:
+
+if ($fast) then
+    sed s/'report: False'/'report: True'/g update.config > junk ; mv junk update.config
+    echo "SWAPSHOP: starting plotting run"
+    SWAP.py  update.config
+endif
 
 # Great: we should now have everything we need, in a whole bunch of 
 # directories.
@@ -249,7 +268,7 @@ if ($download) then
 
         foreach url ( `cat $catalog` )
             set png = $url:t
-            set log = $png:r.log
+            set log = .$png:r.log
             wget -O $png "$url" >& $log
             echo -n "."
         end

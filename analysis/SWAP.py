@@ -108,7 +108,7 @@ def SWAP(argv):
     if practise:
         print "SWAP: doing a dry run using a Toy database"
     else:
-        print "SWAP: data will be read from the current Mongo database"
+        print "SWAP: data will be read from the current live Mongo database"
     
     agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
     if agents_willing_to_learn:
@@ -118,7 +118,13 @@ def SWAP(argv):
     
     vb = tonights.parameters['verbose']
     if not vb: 
-        print "SWAP: only reporting minimal stdout."
+        print "SWAP: only reporting minimal stdout"
+    
+    report = tonights.parameters['report']
+    if report:
+        print "SWAP: will make plots and write report at the end"
+    else:
+        print "SWAP: postponing reporting until the last minute"
     
     # From when shall we take classifications to analyze?
     if tonights.parameters['start'] == 'the_beginning':
@@ -175,7 +181,7 @@ def SWAP(argv):
         
     # ------------------------------------------------------------------
     
-    count_max = 10000
+    count_max = 50000
     print "SWAP: interpreting up to",count_max," classifications..."
  
     count = 0
@@ -188,12 +194,14 @@ def SWAP(argv):
         t,Name,ID,ZooID,category,kind,X,Y,location = items
 
         # Register new volunteers, and create an agent for each one:
-        if Name not in bureau.list():  
-            bureau.member[Name] = swap.Agent(Name,tonights.parameters)
+        # Old, slow code: if Name not in bureau.list():  
+        try: test = bureau.member[Name]
+        except: bureau.member[Name] = swap.Agent(Name,tonights.parameters)
         
         # Register newly-classified subjects:
-        if ID not in sample.list():           
-            sample.member[ID] = swap.Subject(ID,ZooID,category,kind,Y,thresholds,location)    
+        # Old, slow code: if ID not in sample.list(): 
+        try: test = sample.member[ID]          
+        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,Y,thresholds,location)    
 
         # Update the subject's lens probability using input from the 
         # classifier. We send that classifier's agent to the subject
@@ -293,39 +301,42 @@ def SWAP(argv):
             tonights.parameters['dbfile'] = new_dbfile
 
     # ------------------------------------------------------------------
-    # Output list of subjects to retire, based on this batch of 
-    # classifications. Note that what is needed here is the ZooID, 
-    # not the subject ID:
-    
-    new_retirementfile = swap.get_new_filename(tonights.parameters,'retire_these')
-    print "SWAP: saving newly retired subject Zooniverse IDs..."
-    N = swap.write_list(sample,new_retirementfile,item='retired_subject')
-    print "SWAP: "+str(N)+" lines written to "+new_retirementfile
 
-    # Also print out lists of detections etc! These are urls of images.
-    
-    new_samplefile = swap.get_new_filename(tonights.parameters,'candidates')
-    print "SWAP: saving new lens candidates..."
-    N = swap.write_list(sample,new_samplefile,item='candidate')
-    print "SWAP: "+str(N)+" lines written to "+new_samplefile
-    
-    # Now save the training images, for inspection: 
-    new_samplefile = swap.get_new_filename(tonights.parameters,'training_true_positives')
-    print "SWAP: saving new true positives..."
-    N = swap.write_list(sample,new_samplefile,item='true_positive')
-    print "SWAP: "+str(N)+" lines written to "+new_samplefile
-    
-    new_samplefile = swap.get_new_filename(tonights.parameters,'training_false_positives')
-    print "SWAP: saving new false positives..."
-    N = swap.write_list(sample,new_samplefile,item='false_positive')
-    print "SWAP: "+str(N)+" lines written to "+new_samplefile
-    
-    new_samplefile = swap.get_new_filename(tonights.parameters,'training_false_negatives')
-    print "SWAP: saving new false negatives..."
-    N = swap.write_list(sample,new_samplefile,item='false_negative')
-    print "SWAP: "+str(N)+" lines written to "+new_samplefile
-    
-    
+    if report:
+
+        # Output list of subjects to retire, based on this batch of 
+        # classifications. Note that what is needed here is the ZooID, 
+        # not the subject ID:
+
+        new_retirementfile = swap.get_new_filename(tonights.parameters,'retire_these')
+        print "SWAP: saving retiree subject Zooniverse IDs..."
+        N = swap.write_list(sample,new_retirementfile,item='retired_subject')
+        print "SWAP: "+str(N)+" lines written to "+new_retirementfile
+
+        # Also print out lists of detections etc! These are urls of images.
+
+        new_samplefile = swap.get_new_filename(tonights.parameters,'candidates')
+        print "SWAP: saving lens candidates..."
+        N = swap.write_list(sample,new_samplefile,item='candidate')
+        print "SWAP: "+str(N)+" lines written to "+new_samplefile
+
+        # Now save the training images, for inspection: 
+        new_samplefile = swap.get_new_filename(tonights.parameters,'training_true_positives')
+        print "SWAP: saving true positives..."
+        N = swap.write_list(sample,new_samplefile,item='true_positive')
+        print "SWAP: "+str(N)+" lines written to "+new_samplefile
+
+        new_samplefile = swap.get_new_filename(tonights.parameters,'training_false_positives')
+        print "SWAP: saving false positives..."
+        N = swap.write_list(sample,new_samplefile,item='false_positive')
+        print "SWAP: "+str(N)+" lines written to "+new_samplefile
+
+        new_samplefile = swap.get_new_filename(tonights.parameters,'training_false_negatives')
+        print "SWAP: saving false negatives..."
+        N = swap.write_list(sample,new_samplefile,item='false_negative')
+        print "SWAP: "+str(N)+" lines written to "+new_samplefile
+
+
     # ------------------------------------------------------------------
     # Now, if there is more to do, over-write the update.config file so
     # that we can carry on where we left off. Note that the pars are
@@ -341,47 +352,54 @@ def SWAP(argv):
     
     
     # ------------------------------------------------------------------
-    # Make plots! Can't plot everything - uniformly sample 200 of each
-    # thing (agent or subject).
     
-    # Agent histories:
-    
-    fig1 = bureau.start_history_plot()
-    pngfile = swap.get_new_filename(tonights.parameters,'histories')
-    Nc = np.min([200,bureau.size()])
-    print "SWAP: plotting "+str(Nc)+" agent histories in "+pngfile
-    
-    for Name in bureau.shortlist(Nc):
-        bureau.member[Name].plot_history(fig1)
-    
-    bureau.finish_history_plot(fig1,t,pngfile)
-    tonights.parameters['historiesplot'] = pngfile
+    if report:
 
-    # Agent probabilities:
-    
-    pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
-    print "SWAP: plotting "+str(Nc)+" agent probabilities in "+pngfile
-    bureau.plot_histogram(Nc,t,pngfile)        
-    tonights.parameters['probabilitiesplot'] = pngfile
+        # Make plots! Can't plot everything - uniformly sample 200 of each
+        # thing (agent or subject).
 
-    # Subject probabilities:
-    
-    fig3 = sample.start_trajectory_plot()
-    pngfile = swap.get_new_filename(tonights.parameters,'trajectories')
-    Ns = np.min([500,sample.size()])
-    print "SWAP: plotting "+str(Ns)+" subject trajectories in "+pngfile
-    
-    for ID in sample.shortlist(Ns):
-        sample.member[ID].plot_trajectory(fig3)
-    
-    sample.finish_trajectory_plot(fig3,t,pngfile)
-    tonights.parameters['trajectoriesplot'] = pngfile
-    
-    # ------------------------------------------------------------------
-    # Finally, write a PDF report:
-    
-    swap.write_report(tonights.parameters,bureau,sample) 
-    
+        # Agent histories:
+
+        fig1 = bureau.start_history_plot()
+        pngfile = swap.get_new_filename(tonights.parameters,'histories')
+        Nc = np.min([200,bureau.size()])
+        print "SWAP: plotting "+str(Nc)+" agent histories in "+pngfile
+
+        for Name in bureau.shortlist(Nc):
+            bureau.member[Name].plot_history(fig1)
+
+        bureau.finish_history_plot(fig1,t,pngfile)
+        tonights.parameters['historiesplot'] = pngfile
+
+        # Agent probabilities:
+
+        pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
+        print "SWAP: plotting "+str(Nc)+" agent probabilities in "+pngfile
+        bureau.plot_histogram(Nc,t,pngfile)        
+        tonights.parameters['probabilitiesplot'] = pngfile
+
+        # Subject probabilities:
+
+        fig3 = sample.start_trajectory_plot()
+        pngfile = swap.get_new_filename(tonights.parameters,'trajectories')
+        Ns = np.min([500,sample.size()])
+        print "SWAP: plotting "+str(Ns)+" subject trajectories in "+pngfile
+
+        for ID in sample.shortlist(Ns):
+            sample.member[ID].plot_trajectory(fig3)
+
+        # Aprajita's false negative only plot:
+        # for ID in sample.shortlist(Ns,kind='sim',status='rejected'):
+        #     sample.member[ID].plot_trajectory(fig3)
+
+        sample.finish_trajectory_plot(fig3,t,pngfile)
+        tonights.parameters['trajectoriesplot'] = pngfile
+
+        # ------------------------------------------------------------------
+        # Finally, write a PDF report:
+
+        swap.write_report(tonights.parameters,bureau,sample) 
+
     # ------------------------------------------------------------------
     
     print swap.doubledashedline

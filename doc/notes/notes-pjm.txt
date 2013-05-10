@@ -533,4 +533,27 @@ SWAP.py startup.config
 
 # OK, SWAPSHOP is operational and checked in.
 
+# Run on 1st 300,000 classifications!
+# Just did:
+
+SWAPSHOP.csh
+
+# Got 117 candidates and 131 false negatives from first 300,000 
+# classifications, in 2013-05-09
+
+# Made plot of just false negatives for AV - quite some uncertainty,
+# subjects move back and forth quite a lot. Agents are overconfident!
+
+
+# Try shifting thresholds to 0.4 and 1e-7 (symmetrical). How many
+# retirements? Completeness stats?
+
+# Edited swap/startup.config, then ran:
+
+time SWAPSHOP.csh -s CFHTLS-strict -f --fast
+
+# --fast is no animation, so no plots until the end!
+
+# Looks like its about 20s per batch, increasing with time though. 
+
 # ======================================================================

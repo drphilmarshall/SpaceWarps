@@ -41,7 +41,7 @@ helloswitch      = '                   SWITCH: the Space Warps Retirement Plan  
 # ======================================================================
 # Write a PDF report, using latex:
 
-def write_report(pars,crowd,sample):
+def write_report(pars,bureau,sample):
 
     tex = pars['dir']+'/'+pars['trunk']+'_report.tex'
 
@@ -63,9 +63,11 @@ def write_report(pars,crowd,sample):
     # First, just count things:
 
     sample.take_stock()
+    bureau.collect_probabilities()
     
-    N = np.sum(sample.exposure['sim'])+np.sum(sample.exposure['dud'])+np.sum(sample.exposure['test'])    
-    Nc = len(crowd.member)
+    Nmade = np.sum(bureau.Ntotal)
+    Nused = np.sum(sample.exposure['sim'])+np.sum(sample.exposure['dud'])+np.sum(sample.exposure['test'])    
+    Nc = len(bureau.member)
     
     # Ns = len(sample.member)
     # assert (Ns == sample.N)
@@ -79,7 +81,8 @@ def write_report(pars,crowd,sample):
 
     F.write('\\begin{tabular}{|p{0.65\linewidth}p{0.2\linewidth}|}\n')
     F.write('\hline\n')
-    F.write('Number of classifications:         & %d   \\\\ \n' % N )
+    F.write('Number of classifications:         & %d   \\\\ \n' % Nmade )
+    F.write('Number of class$^{\\rm n}$s used:  & %d   \\\\ \n' % Nused )
     F.write('Number of classifiers:             & %d   \\\\ \n' % Nc )
     F.write('Number of test subjects:           & %d   \\\\ \n' % Ns )
     F.write('Number of sims:                    & %d   \\\\ \n' % Ntl )
@@ -89,7 +92,7 @@ def write_report(pars,crowd,sample):
 
     # Now, what has the crowd achieved?
     
-    Nc_per_classifier = np.average(crowd.Ntest)
+    Nc_per_classifier = np.average(bureau.Ntest)
     Nc_per_subject    = np.average(sample.exposure['test'])
     Ns_retired = sample.Ns_retired
     Ns_rejected = sample.Ns_rejected

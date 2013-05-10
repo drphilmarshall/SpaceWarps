@@ -104,6 +104,9 @@ class Subject(object):
 
     def was_described(self,by=None,as_being=None,at_time=None,ignore=0):
 
+        # Update agent: 
+        by.N += 1
+
         if by==None or as_being==None:
             pass
 
@@ -163,12 +166,12 @@ class Subject(object):
                 elif self.probability > self.detection_threshold:
                     self.status = 'detected'
                     if self.kind == 'test':
-                        self.state = 'inactive'
-                        self.retirement_age = at_time
-                    
+                        # Let's keep the detections live!
+                        # self.state = 'inactive'
+                        # self.retirement_age = at_time
+                        pass
 
                 # Update agent - training history is taken care of elsewhere: 
-                by.N += 1
                 if self.kind == 'test':
                      by.testhistory['ID'] = self.ID
                      by.testhistory['I'] = by.contribution

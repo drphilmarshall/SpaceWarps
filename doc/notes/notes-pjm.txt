@@ -596,3 +596,29 @@ end
 
 # Mostly LRGs with rings hidden in depths. All fairly tricky.
 # ======================================================================
+# 2013-05-10 (Friday) 12:17 BST
+
+# New db! Try analysing with the really straict settings that are
+# currently checked in:
+
+SWIPE.csh spacewarp_2013-05-10.tar.gz
+
+time SWAPSHOP.csh -s CFHTLS-reallystrict -f --fast
+
+# Hmm - weird. 1.08 million classifications, but report only shows 
+# 396281! Still, 15% lenses missed, 82% completeness, 99.8% purity
+# in sims vs duds. 33078 subjects to retire. Leave the candidates in
+# to be inspected more often! FPs are not a problem.
+
+# Try running without the 10-subject training period.
+
+time SWAPSHOP.csh -s CFHTLS-strict -f --fast
+
+# OK, hmm. Seems I am counting wrong!
+# Yep - switched to agents counting all classifications, 
+# but subjects only counts that matter to them.
+
+# OK, last tests: try really strict with 95% detection threshold, 
+# and retirement only at low probability end.
+
+time SWAPSHOP.csh -s CFHTLS-reallystrict95 -f --fast -d

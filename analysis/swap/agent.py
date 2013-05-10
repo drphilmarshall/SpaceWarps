@@ -108,7 +108,7 @@ class Agent(object):
         plogp = np.zeros([2])
         plogp[0] = (self.PD+self.PL)/2.*np.log2((self.PD+self.PL)/2.)
         plogp[1] = (1.-self.PD+1.-self.PL)/2.*np.log2((1.-self.PD+1.-self.PL)/2.)
-        self.contribution = np.sum(plogp)
+        self.contribution = -np.sum(plogp)
         return self.contribution
         
 # ----------------------------------------------------------------------

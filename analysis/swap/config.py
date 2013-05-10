@@ -97,32 +97,7 @@ class Configuration(object):
                 self.parameters[key] = float(self.parameters[key])
             except ValueError:
                 pass
-                
-#         # Integers:
-
-#         intkeys = ['NCalibrationLightcones','NRealisations']
-#         for key in intkeys:
-#             self.parameters[key] = int(self.parameters[key])
-
-#         # Now sort out filenames etc:
-#         pathkeys = ['CalibrationCatalogs', 'CalibrationKappamaps',
-#                     'ObservedCatalog', 'CalibrationFolder', 'HMFfile']
-#         for key in pathkeys:
-#             paths = self.parameters[key]
-#             # Expand environment variables (eg $PANGLOSS_DIR)
-#             paths = os.path.expandvars(paths)
-#             # Expand wildcards - glob returns [] if no files found...
-#             found = glob.glob(paths)
-#             if len(found) > 0: paths = found
-#             # Make sure all paths are lists, for consistency:
-#             if len(paths[0]) == 1: paths = [paths]
-#             # Replace parameters:
-#             self.parameters[key] = paths
-# 
-#         # Calibration catalogs and kappa maps must come in pairs...
-#         assert len(self.parameters['CalibrationCatalogs']) == \
-#                len(self.parameters['CalibrationKappamaps'])
-            
+                            
             # Certain strings are special:
             if self.parameters[key] == 'False': 
                 self.parameters[key] = False

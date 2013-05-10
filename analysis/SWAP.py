@@ -112,10 +112,14 @@ def SWAP(argv):
     
     agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
     if agents_willing_to_learn:
+        a_few_at_the_start = tonights.parameters['a_few_at_the_start']
         print "SWAP: agents will update their confusion matrices as new data arrives"
+        print "SWAP: but at first they'll ignore the classifier until "
+        print "SWAP: they've done ",int(a_few_at_the_start)," training images"
     else:
-        print "SWAP: agents will use current confusion matrices without updating them"
-    
+        a_few_at_the_start = 0
+        print "SWAP: agents will use fixed confusion matrices without updating them"    
+
     vb = tonights.parameters['verbose']
     if not vb: 
         print "SWAP: only reporting minimal stdout"
@@ -206,7 +210,7 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the 
         # classifier. We send that classifier's agent to the subject
         # to do this.  
-        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start)
 
         # Update the agent's confusion matrix, based on what it heard:
         if category == 'training' and agents_willing_to_learn:

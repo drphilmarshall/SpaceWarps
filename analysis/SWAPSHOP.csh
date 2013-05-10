@@ -171,7 +171,8 @@ while ($more_to_do)
         set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
         set now = `echo $latest | sed s/$survey//g | cut -c2-50`
         
-        set tomorrow = `grep 'start:' $configfile | cut -d':' -f2-20`
+        set tomorrow = `grep 'start:' $configfile | \
+                        grep -v 'a_few' | cut -d':' -f2-20`
         sed s/$tomorrow/$now/g $configfile > $latest/update.config
         
     endif     

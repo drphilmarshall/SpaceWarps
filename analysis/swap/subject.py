@@ -102,7 +102,7 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None):
+    def was_described(self,by=None,as_being=None,at_time=None,ignore=0):
 
         if by==None or as_being==None:
             pass
@@ -125,48 +125,53 @@ class Subject(object):
             # print "SWAP: WARNING: subject "+self.ID+" is inactive, but appears to have been just classified"
             pass
 
-        # Deal with active subjects:
+        # Deal with active subjects. Ignore the classifier until they 
+        # have seen NT > a_few_at_the_start (ie they've had a 
+        # certain amount of training):
         else:
-            if as_being == 'LENS':
-                likelihood = by.PL
-                likelihood /= (by.PL*self.probability + (1-by.PD)*(1-self.probability))
             
-            elif as_being == 'NOT':
-                likelihood = (1-by.PL)
-                likelihood /= ((1-by.PL)*self.probability + by.PD*(1-self.probability))
-            
-            else:
-                raise Exception("Unrecognised classification result: "+as_being)
+            if by.NT > ignore:
+               
+                if as_being == 'LENS':
+                    likelihood = by.PL
+                    likelihood /= (by.PL*self.probability + (1-by.PD)*(1-self.probability))
 
-            # Update subject:
-            self.probability = likelihood*self.probability
-            if self.probability < swap.pmin: self.probability = swap.pmin
-                        
-            self.trajectory = np.append(self.trajectory,self.probability)
+                elif as_being == 'NOT':
+                    likelihood = (1-by.PL)
+                    likelihood /= ((1-by.PL)*self.probability + by.PD*(1-self.probability))
 
-            self.exposure += 1
+                else:
+                    raise Exception("Unrecognised classification result: "+as_being)
+
+                # Update subject:
+                self.probability = likelihood*self.probability
+                if self.probability < swap.pmin: self.probability = swap.pmin
+
+                self.trajectory = np.append(self.trajectory,self.probability)
+
+                self.exposure += 1
             
-            # Should we count it as a detection, or a rejection? 
-            # Only test subjects get de-activated:
-            
-            if self.probability < self.rejection_threshold:
-                self.status = 'rejected'
-                if self.kind == 'test':  
-                    self.state = 'inactive'
-                    self.retirement_age = at_time
-                
-            elif self.probability > self.detection_threshold:
-                self.status = 'detected'
-                if self.kind == 'test':
-                    self.state = 'inactive'
-                    self.retirement_age = at_time
+                # Should we count it as a detection, or a rejection? 
+                # Only test subjects get de-activated:
+
+                if self.probability < self.rejection_threshold:
+                    self.status = 'rejected'
+                    if self.kind == 'test':  
+                        self.state = 'inactive'
+                        self.retirement_age = at_time
+
+                elif self.probability > self.detection_threshold:
+                    self.status = 'detected'
+                    if self.kind == 'test':
+                        self.state = 'inactive'
+                        self.retirement_age = at_time
                     
-            
-            # Update agent - training history is taken care of elsewhere: 
-            by.N += 1
-            if self.kind == 'test':
-                 by.testhistory['ID'] = self.ID
-                 by.testhistory['I'] = by.contribution
+
+                # Update agent - training history is taken care of elsewhere: 
+                by.N += 1
+                if self.kind == 'test':
+                     by.testhistory['ID'] = self.ID
+                     by.testhistory['I'] = by.contribution
 
         return
 

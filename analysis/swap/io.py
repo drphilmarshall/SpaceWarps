@@ -200,6 +200,7 @@ def write_config(filename, pars):
                  'initialPL', \
                  'initialPD', \
                  'agents_willing_to_learn', \
+                 'a_few_at_the_start', \
                  'detection_threshold', \
                  'rejection_threshold', \
                  'dbspecies']

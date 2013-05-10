@@ -21,7 +21,7 @@ class Agent(object):
         either a Zooniverse userid or, if that is not available, an IP
         address. Agents each have a History of N classifications,
         including ND that turned out to be duds and NL that turned out
-        to be lenses. (ND+NL) is the total number of training subjects
+        to be lenses. NT is the total number of training subjects
         classified, and is equal to N in the simple "LENS or NOT"
         analysis. Each Agent carries a "confusion matrix"
         parameterised by two numbers, PD and PL, the meaning of which is
@@ -87,6 +87,7 @@ class Agent(object):
         self.ND = 1.0/self.PD
         self.NL = 1.0/self.PL
         self.N = 0
+        self.NT = 0
         self.contribution = self.update_contribution()
         self.traininghistory = {'ID':'tutorial','I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         self.testhistory = {'ID':[],'I':np.array([])}
@@ -125,11 +126,13 @@ class Agent(object):
                     self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
                     self.PL = np.min([self.PL,swap.PLmax])
                     self.NL += 1
+                    self.NT += 1
 
                 elif actually_it_was=='NOT':
                     self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
                     self.PD = np.min([self.PD,swap.PDmax])
                     self.ND += 1
+                    self.NT += 1
                 else:
                     raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
  

@@ -35,12 +35,14 @@ class Agent(object):
         | "NOT" when it is NOT     "NOT" when it is a LENS   |
         | with probability PD        with probability (1-PL) |
         
-        It makes the simplest possible assignment for these
-        probabilities, namely that PX = 0.5 if NX = 0, and then updates
-        from there using the training subjects such that 
-        PX = NX_correct / NX at all times. For example, if the 
-        volunteer is right about 80% of the simulated lenses they see, 
-        the agent will assign PL = Pr("LENS"|LENS) = 0.8.
+	It makes the simplest possible assignment for these probabilities,
+	namely that PX = 0.5 if NX = 0, and then updates from there using the
+	training subjects such that 
+	PX = (NX_correct + initialNX/2) / (NX+initialNX)
+	at all times. For example, if the volunteer is right about 80% of the
+	simulated lenses they see, the agent will assign:
+	PL = Pr("LENS"|LENS) = 0.8. initialNX are listed in the configuration
+	file.
         
         Agents are initialised with PL = PD = some initial value, 
         provided in the configuration file. (0.5,0.5) would be a
@@ -84,10 +86,10 @@ class Agent(object):
         self.name = name
         self.PD = pars['initialPD']
         self.PL = pars['initialPL']
-        self.ND = 1.0/self.PD
-        self.NL = 1.0/self.PL
+        self.ND = pars['initialND']
+        self.NL = pars['initialNL']
         self.N = 0
-        self.NT = 0
+        self.NT = initialND+initialNL
         self.contribution = self.update_contribution()
         self.traininghistory = {'ID':'tutorial','I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         self.testhistory = {'ID':[],'I':np.array([])}
@@ -103,12 +105,10 @@ class Agent(object):
 # Compute expected information per classification:
 
     def update_contribution(self):
-        plogp = np.zeros([2,2])
-        plogp[0,0] = self.PD*np.log2(self.PD)
-        plogp[0,1] = (1-self.PD)*np.log2(1-self.PD)
-        plogp[1,0] = (1-self.PL)*np.log2(1-self.PL)
-        plogp[1,1] = self.PL*np.log2(self.PL)
-        self.contribution = 0.5*(np.sum(plogp) + 2)
+        plogp = np.zeros([2])
+        plogp[0] = (self.PD+self.PL)/2.*np.log2((self.PD+self.PL)/2.)
+        plogp[1] = (1.-self.PD+1.-self.PL)/2.*np.log2((1.-self.PD+1.-self.PL)/2.)
+        self.contribution = np.sum(plogp)
         return self.contribution
         
 # ----------------------------------------------------------------------

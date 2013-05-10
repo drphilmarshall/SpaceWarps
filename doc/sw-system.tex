@@ -343,7 +343,7 @@ lenses the volunteer has been shown, while $N_{``X"}$ is the number of
 times the volunteer got their classifications of this type of training subject
 right. $T$ stands for all
 $N_{\LENS} + N_{\NOT}$ training data that the agent has heard about to
-date.
+date. 
 
 The full confusion matrix of the $k^{\rm th}$ volunteer's agent is therefore:
 \be
@@ -421,37 +421,39 @@ calculate
 \end{align}
 {\it Obtuse} classifiers are as helpful as {\it perfect} ones!
 
-Indeed, the information content of each classification can be estimated by an
-agent before the next classification is made, just from its confusion matrix.
-We define the expected contributed information per classification, as
-\be
-  \langle I_k \rangle = \frac{1}{2} 
-                        \sum_{i} \left( \mathcal{M}^k_{i}  
-              + \mathcal{M}^k_{i}\cdot\log_2{\mathcal{M}^k_i} \right),
-  \label{eq:app:info}
-\ee
-where $i$ runs over all 4 elements of the confusion matrix 
-$\mathcal{M}^k_i$, and $\langle I_k \rangle$ is measured in ``bits.'' 
-The second term in the sum is recognisable as a
-negative entropy, while the first term and the factor of 1/2
-account for the way the confusion matrix encodes the results for the
-classification of two types of subject, and that the probabilities
-associated with each type are normalised. \Eref{eq:app:info} gives the
-required result, that 
-both the hypothetical {\it perfect} and
-{\it obtuse} classifiers contribute 
-1 bit of information each, per classification. 
+% This is incorrect, so for the moment commenting it out
+%Indeed, the information content of each classification can be estimated by an
+%agent before the next classification is made, just from its confusion matrix.
+%We define the expected contributed information per classification, as
+%\be
+%  \langle I_k \rangle = \frac{1}{2} 
+%                        \sum_{i} \left( \mathcal{M}^k_{i}  
+%              + \mathcal{M}^k_{i}\cdot\log_2{\mathcal{M}^k_i} \right),
+%  \label{eq:app:info}
+%\ee
+%where $i$ runs over all 4 elements of the confusion matrix 
+%$\mathcal{M}^k_i$, and $\langle I_k \rangle$ is measured in ``bits.'' 
+%The second term in the sum is recognisable as a
+%negative entropy, while the first term and the factor of 1/2
+%account for the way the confusion matrix encodes the results for the
+%classification of two types of subject, and that the probabilities
+%associated with each type are normalised. \Eref{eq:app:info} gives the
+%required result, that 
+%both the hypothetical {\it perfect} and
+%{\it obtuse} classifiers contribute 
+%1 bit of information each, per classification. 
+%
+%In fact, the only classifier that contributes the minimum information per
+%classification, zero bits, is the {\it random} classifier, whose agent's
+%confusion matrix elements are all 0.5.   
 
-In fact, the only classifier that contributes the minimum information per
-classification, zero bits, is the {\it random} classifier, whose agent's
-confusion matrix elements are all 0.5.   
 We conservatively initialise all the agents' confusion matrices to be that of
 the random classifier. This makes no allowance for volunteers that actually do
 have previous experience of what gravitational lenses look like, but should
 help prevent large numbers of false positives being assigned high probability.
-Plotting  $\langle I_k \rangle$ as a function of time will, to some extent,
-illustrate the
-learning process undergone by the $k^{\rm th}$ volunteer-agent partnership.
+%Plotting  $\langle I_k \rangle$ as a function of time will, to some extent,
+%illustrate the
+%learning process undergone by the $k^{\rm th}$ volunteer-agent partnership.
 
 Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
 subject just classified by the $k^{\rm th}$ volunteer. We can generalise
@@ -473,9 +475,53 @@ and by comparing it to a lower or upper thresholds, make decisions about
 whether to retire the subject from the classification interface or
 promote it in \Talk, respectively.
 
+The confusion matrix obtained from the application of Equation
+(\ref{eq:app:fraction}) has some inherent noise which will reduce as the number
+of training subjects classified by the user increases. For simplicity, the
+discussion thus far assumed the case when the confusion matrix is known
+perfectly. Let us now discuss the case when the noise in the confusion matrix
+is known. For ease of notation, we will denote $\pr(C_k|\LENS,T_k)\equiv p_1$
+and $\pr(C_k|\NOT,T_k)\equiv p_2$. In reality, there is a probability
+distribution for both $p_1$ and $p_2$. Let $p_0$ be the prior probability of
+the subject being a lens. Then the posterior probability, $p_0'$ of the subject
+being a lens after the classification $C_k$ is
+\be
+  \label{eq:app:sec}
+p_0' = \frac{p_1 p_0}{\left[ p_1 p_0 + p_2 (1- p_0) \right]},
+\ee
+In principle, the probability distributions for every agent $p_1,p_2$ and the
+prior probability $p_0$ could be maintained on a fine grid, so that the full
+posterior probability distribution can be obtained by the following
+marginalization procedure:
+\be
+P(p_0') = \int p_0' P(p_1) P(p_2) P(p_0) dp_1 dp_2 dp_0
+\ee
+This marginalization is likely not tractable analytically, but can perhaps be
+implemented in a Monte-Carlo fashion. This needs to be further investigated.
 
+Instead, for simplicity let us make some approximations to reduce each of the
+probability distribution to two numbers its mean and a variance. Let us assume
+that $p_1$ and $p_2$ are Gaussian distributed around some mean value
+$\bar{p}_x$ with a variance equal to $\sigma_x$. We will obtain $\bar{p}_0'$ by
+substituting the mean values $\bar{p}_1$ and $\bar{p_2}$ in Equation
+(\ref{eq:app:sec}) and the variance of $p_0'$ by simple error propagation
+\begin{eqnarray}
+\left(\frac{\sigma_0'}{\bar{p}_0'}\right)^2 =&& \left(\frac{\sigma_1}{p_1}\right)^2 + \left(\frac{\sigma_0}{p_0}\right)^2 \nonumber \\
+&+& \frac{ (p_1\sigma_0)^2 + (\sigma_1p_0)^2 + \sigma_2^2 + (p_2\sigma_0)^2 + (\sigma_2p_0)^2}{ \left[ p_1 p_0 + p_2 (1- p_0)\right]^2 } \nonumber \\
+\end{eqnarray}
 
-
+Finally, we also need to update the confusion matrix of an agent and obtain the
+variance on each element of the matrix, once a training subject has been
+classified. We would like to derive the posterior probability of the
+probability elements $p_1$ and $p_2$ given their prior probabilities. For this
+purpose, we can again make use of Bayes' theorem,
+\begin{equation}
+P(p_x'|N_{"X"},N_X,T) = \frac{P(N_{``X"}|p_x',N_X,T) P(p_x'|N_X,T)}{\sum_{N_{``X"}} P(N_{``X"}|p_x',N_X,T) P(p_x'|N_X,T)}
+\end{equation}
+We assume that $P(N_{``X"}|p_x',N_X,T)$ is a Poisson distribution, although
+this is not true strictly speaking given that our agents are learning and the
+values of the confusion matrix are moving. Modelling the learning curve of our
+users is yet another complicated extension we could think about.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  REFERENCES

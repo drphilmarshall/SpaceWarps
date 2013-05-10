@@ -89,7 +89,7 @@ class Bureau(object):
             PLarray = np.append(PLarray,agent.PL)
             PDarray = np.append(PDarray,agent.PD)
             contributions = np.append(contributions,agent.contribution)
-            Ntraining = np.append(Ntraining,agent.NL+agent.ND)
+            Ntraining = np.append(Ntraining,agent.NT)
             Ntotal = np.append(Ntotal,agent.N)
 
         self.probabilities['LENS'] = PLarray

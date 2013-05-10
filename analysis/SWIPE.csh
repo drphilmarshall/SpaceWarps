@@ -79,7 +79,7 @@ endif
 
 # Start new mongo server in its own directory, out of the way:
 echo "SWIPE: starting new server in directory mongo..."
-set logfile = ${db}_mongostartup.log
+set logfile = .${db}_mongostartup.log
 mkdir -p mongo
 chdir mongo
 mongod --dbpath . >& ../$logfile &
@@ -99,7 +99,7 @@ endif
 # Now restore the new database:
 echo "SWIPE: mongorestoring into database 'ouroboros_staging'"
 
-set logfile = ${db}_mongorestore.log
+set logfile = .${db}_mongorestore.log
 mongorestore --drop --db ouroboros_staging $db >& $logfile
 echo "SWIPE: mongorestore log stored in $logfile"
 

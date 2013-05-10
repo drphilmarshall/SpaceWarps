@@ -533,4 +533,66 @@ SWAP.py startup.config
 
 # OK, SWAPSHOP is operational and checked in.
 
+# Run on 1st 300,000 classifications!
+# Just did:
+
+SWAPSHOP.csh
+
+# Got 117 candidates and 131 false negatives from first 300,000 
+# classifications, in 2013-05-09
+
+# Made plot of just false negatives for AV - quite some uncertainty,
+# subjects move back and forth quite a lot. Agents are overconfident!
+
+
+# Try shifting thresholds to 0.4 and 1e-7 (symmetrical). How many
+# retirements? Completeness stats?
+
+# Edited swap/startup.config, then ran:
+
+time SWAPSHOP.csh -s CFHTLS-strict -f --fast
+
+# --fast is no animation, so no plots until the end!
+
+# Looks like its about 20s per batch, increasing with time though. 
+# 11 batches total, plus plots, takes 8.5 mins.
+
+# STill getting 17% false negatives, and with only 18000 retirements!
+
+
+# Try a cheap version of Surhud's idea - ignore the first few clicks?
+# Coded as ignore if agent.NT <= a_few_at_the_start where this 
+# refers to a few training images. Lets try an extreme version with
+# a_few_at_the_start = 10!
+
+time SWAPSHOP.csh -s CFHTLS-reallystrict -f --fast
+
+# Same number of classifiers/agents, but now many will stay at 0.5
+# because they never leave... 10 training images requires about 30
+# images total in the standard stream. The agent history only gets
+# updated for classifications that count
+
+# OK, I get 11500 retirements, and down to 13% false negatives
+# The total number of classifications is now 267000, so we lose about
+# 100k to the traiing programme! Candidates are still at 96, as with
+# strict routine.
+
+# Look at the images! Well, ones that are still negative:
+
+mkdir training_false_negatives
+set repo = ../2013-05-09/training_false_negatives
+
+foreach url ( `cat CFHTLS-reallystrict_2013-05-09_01:38:24/CFHTLS-reallystrict_2013-05-09_01:38:24_training_false_negatives.txt` )
+    set png = $url:t
+    cp $repo/$png training_false_negatives/.
+end
+
+# OK, we had all but 3 already.
+# cp: ../2013-05-09/training_false_negatives/5183f151e4bb2102190044e2.png: No such file or directory
+# cp: ../2013-05-09/training_false_negatives/5183f151e4bb210219007187.png: No such file or directory
+# cp: ../2013-05-09/training_false_negatives/5183f151e4bb210219004b03.png: No such file or directory
+
+# What do *these* look like?
+
+# Mostly LRGs with rings hidden in depths. All fairly tricky.
 # ======================================================================

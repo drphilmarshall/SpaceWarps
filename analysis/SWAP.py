@@ -386,7 +386,7 @@ def SWAP(argv):
 
         pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
         print "SWAP: plotting "+str(Nc)+" agent probabilities in "+pngfile
-        bureau.plot_histogram(Nc,t,pngfile)        
+        bureau.plot_probabilities(Nc,t,pngfile)        
         tonights.parameters['probabilitiesplot'] = pngfile
 
         # Subject probabilities:

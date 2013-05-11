@@ -678,14 +678,15 @@ time SWAPSHOP.csh -s CFHTLS-strict-YES-useXY -f --fast -t 6
 # Now, vary agent skepticism (initialNL,ND = 2 + skepticism).
 # Also, bump up detection threshold to 0.95!
 
-# Skepticism        0      3      8 
-# Retirements    6000   2000      - 
-# Missed lenses   15%    12%      - 
-
+# Skepticism              0        3        8 
+# Retirements         28489    xxxxx    xxxxx
+# Age at retirement    15.6     xx.x     xx.x
+# Missed lenses        18.5%    xx.x%    xx.x%
+# Candidates            148      xxx      xxx
 
 time SWAPSHOP.csh -s CFHTLS-skeptic00 -f --fast
 
-# time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast
-# 
+time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast
+
 # time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast
  

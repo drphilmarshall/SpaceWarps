@@ -161,7 +161,7 @@ class Bureau(object):
 # Plot scattergraph and histograms of agents' confusion matrix 
 # element probabilities:
 
-    def plot_histogram(self,Nc,t,filename):
+    def plot_probabilities(self,Nc,t,filename):
     
         fig = plt.figure(figsize=(6,6), dpi=300)
 
@@ -182,11 +182,13 @@ class Bureau(object):
         index = [i for i,Name in enumerate(self.list()) if Name in set(TheseFewNames)]
         PD = self.probabilities['NOT'][index]
         PL = self.probabilities['LENS'][index]
+        I = self.contributions[index]
+        NT = self.Ntraining[index]
         
         # Add a little bit of scatter to the probabilities, to make
         # the ones near the starting point visible:
-        PD += 4.0*(1.0-PD)*PD*0.01*np.random.randn(len(PD))
-        PL += 4.0*(1.0-PL)*PL*0.01*np.random.randn(len(PL))
+        PD += 4.0*(1.0-PD)*PD*0.005*np.random.randn(len(PD))
+        PL += 4.0*(1.0-PL)*PL*0.005*np.random.randn(len(PL))
         
         bins = np.linspace(0.0,1.0,20,endpoint=True)
 
@@ -206,11 +208,11 @@ class Bureau(object):
         plt.text(0.81,0.96,'"Astute"',color='gray')
         
         # Training received:
-        size = 4*self.Ntraining + 6.0
+        size = 4*NT + 6.0
         plt.scatter(PL, PD, s=size, color='yellow', alpha=0.5)
         
         # Information contributed:
-        size = 200*self.contributions + 3.0
+        size = 200*I + 3.0
         plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
 
 

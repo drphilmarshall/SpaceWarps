@@ -715,10 +715,34 @@ time SWAPSHOP.csh -s CFHTLS-skeptic00-noXY -f --fast
 # Missed lenses        18.5%    20.1%
 # Candidates            148      159
 
+# So XY gives a *better* false neg rate! Good. 
+
+# So, what about a training period? Level 1 has 20 subjects, 1 in 5 sims
+# and 1 in 5 duds, so 8 training images total. Try ignoring all of level
+# 1 and see what we get compared to the standard setup.
+
+time SWAPSHOP.csh -s CFHTLS-skeptic00-ignore8 -f --fast -t 20
+
+# (Note that I SWIPED the new db in the meantime - oops)
+
+# Run:                skeptic00      ignore8
+# Classifications        666864       536099
+# Retirements             28489        27346
+# Age at retirement        15.6         12.8
+# Missed lenses            18.5%        16.3%
+# Candidates                148          146
+
+# So its cleaner and cheaper. I think we have to do this. Make it 
+# past level 2 and your classifications start to count! Rough
+# qualification is 20 classifications - we asked for 40 in the PR. 
+# We can always go back later and make more use of the ignored clicks,
+# with a better model for how the agents learn. 
 
 # OK, done! Retirement plan is skeptic00, defined by this config:
 # 
 # skepticism: 0
+#
+# a_few_at_the_start: 8
 # 
 # use_marker_positions: True
 # 
@@ -737,6 +761,12 @@ time SWAPSHOP.csh -s CFHTLS-skeptic00-noXY -f --fast
 mkdir -p $SWAP_DIR/analysis/production
 chdir $SWAP_DIR/analysis/production
 
+SWIPE.csh spacewarp_2013-05-11.gz
+
+# OK, now SWAPSHOP with simple survey name. No need for -f - we are 
+# rolling now!
+
+SWAPSHOP.csh -s CFHTLS --fast
 
 # ======================================================================
 

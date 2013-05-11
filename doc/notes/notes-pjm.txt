@@ -763,10 +763,12 @@ chdir $SWAP_DIR/analysis/production
 
 SWIPE.csh spacewarp_2013-05-11.gz
 
-# OK, now SWAPSHOP with simple survey name. No need for -f - we are 
-# rolling now!
+# OK, now SWAPSHOP with simple survey name. No need for -f once we are 
+# rolling!
 
-SWAPSHOP.csh -s CFHTLS --fast
+SWAPSHOP.csh -s CFHTLS -f --fast
+
+# OK good - we are rolling!
 
 # ======================================================================
 

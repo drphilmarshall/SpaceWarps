@@ -106,8 +106,8 @@ class Agent(object):
 
     def update_contribution(self):
         plogp = np.zeros([2])
-        plogp[0] = (self.PD+self.PL)/2.*np.log2((self.PD+self.PL)/2.)
-        plogp[1] = (1.-self.PD+1.-self.PL)/2.*np.log2((1.-self.PD+1.-self.PL)/2.)
+        plogp[0] = 0.5*(self.PD+self.PL)*np.log2(self.PD+self.PL)
+        plogp[1] = 0.5*(1.0-self.PD+1.0-self.PL)*np.log2(1.0-self.PD+1.0-self.PL)
         self.contribution = np.sum(plogp)
         return self.contribution
         

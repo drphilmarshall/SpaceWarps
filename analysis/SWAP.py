@@ -114,15 +114,19 @@ def SWAP(argv):
     if agents_willing_to_learn:
         a_few_at_the_start = tonights.parameters['a_few_at_the_start']
         print "SWAP: agents will update their confusion matrices as new data arrives"
-        print "SWAP: but at first they'll ignore the classifier until "
-        print "SWAP: they've done ",int(a_few_at_the_start)," training images"
+        if a_few_at_the_start > 0: 
+            print "SWAP: but at first they'll ignore the classifier until "
+            print "SWAP: they've done ",int(a_few_at_the_start)," training images"
     else:
         a_few_at_the_start = 0
         print "SWAP: agents will use fixed confusion matrices without updating them"    
 
-    vb = tonights.parameters['verbose']
-    if not vb: 
-        print "SWAP: only reporting minimal stdout"
+    try: vb = tonights.parameters['verbose']
+    except: vb = False
+    if not vb: print "SWAP: only reporting minimal stdout"
+    
+    try: one_by_one = tonights.parameters['one_by_one']
+    except: one_by_one = False 
     
     report = tonights.parameters['report']
     if report:
@@ -142,6 +146,11 @@ def SWAP(argv):
         t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H:%M:%S')
     print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
     
+    # How will we decide if a sim has been seen?
+    try: use_marker_positions = tonights.parameters['use_marker_positions']
+    except: use_marker_positions = False
+    print "SWAP: should we use the marker positions on sims? ",use_marker_positions
+
     # How will we make decisions based on probability?
     thresholds = {}
     thresholds['detection'] = tonights.parameters['detection_threshold']
@@ -187,12 +196,13 @@ def SWAP(argv):
     
     count_max = 50000
     print "SWAP: interpreting up to",count_max," classifications..."
- 
+    if one_by_one: print "SWAP: (one by one - hit return for the next one)"
+
     count = 0
     for classification in batch:
 
         # Get the vitals for this classification:
-        items = db.digest(classification)
+        items = db.digest(classification,method=use_marker_positions)
         if items is None: 
             continue # Tutorial subjects fail!
         t,Name,ID,ZooID,category,kind,X,Y,location = items
@@ -237,15 +247,14 @@ def SWAP(argv):
         # When was the first classification made?
         if count == 1: 
             t1 = t
-        
         # Did we at least manage to do 1?
         elif count == 2:
             swap.set_cookie(True)
-            
         # Have we done enough for this run?
         elif count == count_max: 
             break
     
+        if one_by_one: next = raw_input()
     
     sys.stdout.write('\n')
     if vb: print swap.dashedline

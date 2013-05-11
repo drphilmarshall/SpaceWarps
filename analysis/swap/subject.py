@@ -167,8 +167,8 @@ class Subject(object):
                     self.status = 'detected'
                     if self.kind == 'test':
                         # Let's keep the detections live!
-                        # self.state = 'inactive'
-                        # self.retirement_age = at_time
+                        #   self.state = 'inactive'
+                        #   self.retirement_age = at_time
                         pass
 
                 # Update agent - training history is taken care of elsewhere: 

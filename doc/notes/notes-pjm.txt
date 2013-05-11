@@ -622,3 +622,73 @@ time SWAPSHOP.csh -s CFHTLS-strict -f --fast
 # and retirement only at low probability end.
 
 time SWAPSHOP.csh -s CFHTLS-reallystrict95 -f --fast -d
+
+# Affects number of detections, but not enormously they are all highly
+# classified at this point
+
+
+# Talked to Amit about using simFound annotation for sims!
+# Implemented, lets compare with strict (reset thresholds):
+
+time SWAPSHOP.csh -s CFHTLS-strict-simFound -f --fast
+
+# Hmm - looks very odd. Save and investigate...
+# Put in a print statement in mongodb.digest - what's going on?
+
+time SWAPSHOP.csh -s CFHTLS-strict-simFound -f --fast -t 1
+
+# OK, ran with verbose and one_by_one. Results seem plausible,
+# but there aren't too many hits on the sims!
+
+# In db.digest: kind,N_markers,simFound,result,truth =  sim 0 false NOT LENS
+# SWAP: --------------------------------------------------------------------------
+# SWAP: Subject 5183f151e4bb210219005ac5 was classified by 63.250.229.206
+# SWAP: he/she said NOT when it was actually LENS
+# SWAP: their agent reckons their contribution (in bits) =  1.99471942959
+# SWAP: while estimating their PL,PD as  0.152173913043 0.933333333333
+# SWAP: and the subject's new probability as  0.000159955385968
+
+# NB information is wrong...
+# If accuracy is missing, then we get a bunch of people just saying 
+# no to everything! And then subjects just fall straight. 
+
+
+# Try initialNL = 5 or so to allow for mistakes early on, and compare
+# use_marker_positions = True and False, on the first 300k.
+
+time SWAPSHOP.csh -s CFHTLS-strict-NO-useXY -f --fast -t 6
+
+# and then: 
+
+time SWAPSHOP.csh -s CFHTLS-strict-YES-useXY -f --fast -t 6
+
+# OK! Compare numbers:
+
+# Very similar, but:
+# 
+# Quantity        NO     YES
+# Retirements    3000   2000 
+# Missed lenses   13%    12%
+
+# ie the bureau is more circumspect.
+
+# DECISION: use XY!
+
+# Now, vary agent skepticism via initialNL,ND
+
+# Run with initialNL = initialND = skepticism + 2
+
+# Skepticism        0      3      8      18
+# Retirements    6000   2000      -       -
+# Missed lenses   15%    12%      -       -
+
+cp -r strict-YES-useXY  skeptic03
+
+time SWAPSHOP.csh -s CFHTLS-skeptic00 -f --fast -t 6
+
+# time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast -t 6
+# 
+# time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast -t 6
+# 
+# time SWAPSHOP.csh -s CFHTLS-skeptic18 -f --fast -t 6
+# 

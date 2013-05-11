@@ -108,7 +108,7 @@ class MongoDB(object):
 # Return a tuple of the key quantities, given a cursor pointing to a 
 # record in the classifications table:
 
-    def digest(self,classification):
+    def digest(self,classification,method=False):
         
         # When was this classification made?
         t = classification['updated_at']
@@ -198,16 +198,34 @@ class MongoDB(object):
         # (e.g. x, y) - tutorials fail this criterion.
 
         N_markers = 0
+        simFound = False
         for annotation in annotations:
-            if annotation.has_key('x'):
+            if annotation.has_key('x'): 
                 N_markers += 1
         
-        if kind == 'sim' or kind == 'test' or kind == 'dud':
-
+        # Detect whether sim was found or not:
+        if kind == 'sim':
+            if method:
+                # Use the marker positions!
+                for annotation in annotations:
+                    if annotation.has_key('simFound'):
+                        string = annotation['simFound']
+                        if string == 'true': simFound = True
+            else:
+                if N_markers > 0: simFound = True
+        
+        # Now turn indicators into results:
+        if kind == 'sim':
+            if simFound:
+                result = 'LENS'
+            else:
+                result = 'NOT'
+              
+        elif kind == 'test' or kind == 'dud':
             if N_markers == 0:
                 result = 'NOT'
             else:
-                result = 'LENS'            
+                result = 'LENS'
         
         # And finally, what's the truth about this subject?
         if kind == 'sim':
@@ -216,6 +234,9 @@ class MongoDB(object):
             truth = 'NOT'
         else:    
             truth = 'UNKNOWN'
+          
+        # Testing to see what people do:
+        # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
         
         # Check we got all 9 items:            
         items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location)

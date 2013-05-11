@@ -63,6 +63,7 @@ def write_report(pars,bureau,sample):
     # First, just count things:
 
     sample.take_stock()
+    
     bureau.collect_probabilities()
     
     Nmade = np.sum(bureau.Ntotal)
@@ -95,6 +96,7 @@ def write_report(pars,bureau,sample):
     Nc_per_classifier = np.average(bureau.Ntest)
     Nc_per_subject    = np.average(sample.exposure['test'])
     Ns_retired = sample.Ns_retired
+    Nc_per_retirement = np.average(sample.retirement_ages)
     Ns_rejected = sample.Ns_rejected
     Ns_detected = sample.Ns_detected
 
@@ -103,6 +105,7 @@ def write_report(pars,bureau,sample):
     F.write('Mean test class$^{\\rm n}$s/classifier: & %.1f \\\\ \n' % Nc_per_classifier )
     F.write('Mean class$^{\\rm n}$s/test subject:    & %.1f \\\\ \n' % Nc_per_subject )
     F.write('Test subject retirements:               & %d   \\\\ \n' % Ns_retired )
+    F.write('Mean class$^{\\rm n}$s/retirement:      & %.1f \\\\ \n' % Nc_per_retirement )
     F.write('Test subject rejections:                & %d   \\\\ \n' % Ns_rejected )
     F.write('Test subject identifications:           & %d   \\\\ \n' % Ns_detected )
     F.write('\hline\n')

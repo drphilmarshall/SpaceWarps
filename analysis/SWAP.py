@@ -121,13 +121,11 @@ def SWAP(argv):
         a_few_at_the_start = 0
         print "SWAP: agents will use fixed confusion matrices without updating them"    
 
-    try: vb = tonights.parameters['verbose']
-    except: vb = False
+    vb = tonights.parameters['verbose']
     if not vb: print "SWAP: only reporting minimal stdout"
     
-    try: one_by_one = tonights.parameters['one_by_one']
-    except: one_by_one = False 
-    
+    one_by_one = tonights.parameters['one_by_one']
+
     report = tonights.parameters['report']
     if report:
         print "SWAP: will make plots and write report at the end"

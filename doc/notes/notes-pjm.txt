@@ -667,28 +667,25 @@ time SWAPSHOP.csh -s CFHTLS-strict-YES-useXY -f --fast -t 6
 # Very similar, but:
 # 
 # Quantity        NO     YES
-# Retirements    3000   2000 
-# Missed lenses   13%    12%
+# Retirements    3000    150 
+# Missed lenses   13%     9%
 
-# ie the bureau is more circumspect.
+# ie the bureau is more circumspect. And much slower to retire!
 
-# DECISION: use XY!
+# DECISION: use XY, but investigate skepticism. These results used
+# skepticism = 3! Also, need more data. Run on all of 2010-05-10.
 
-# Now, vary agent skepticism via initialNL,ND
+# Now, vary agent skepticism (initialNL,ND = 2 + skepticism).
+# Also, bump up detection threshold to 0.95!
 
-# Run with initialNL = initialND = skepticism + 2
+# Skepticism        0      3      8 
+# Retirements    6000   2000      - 
+# Missed lenses   15%    12%      - 
 
-# Skepticism        0      3      8      18
-# Retirements    6000   2000      -       -
-# Missed lenses   15%    12%      -       -
 
-cp -r strict-YES-useXY  skeptic03
+time SWAPSHOP.csh -s CFHTLS-skeptic00 -f --fast
 
-time SWAPSHOP.csh -s CFHTLS-skeptic00 -f --fast -t 6
-
-# time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast -t 6
+# time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast
 # 
-# time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast -t 6
-# 
-# time SWAPSHOP.csh -s CFHTLS-skeptic18 -f --fast -t 6
-# 
+# time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast
+ 

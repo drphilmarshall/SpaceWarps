@@ -161,14 +161,16 @@ class Subject(object):
                     self.status = 'rejected'
                     if self.kind == 'test':  
                         self.state = 'inactive'
-                        self.retirement_age = at_time
+                        self.retirement_time = at_time
+                        self.retirement_age = self.exposure
 
                 elif self.probability > self.detection_threshold:
                     self.status = 'detected'
                     if self.kind == 'test':
                         # Let's keep the detections live!
                         #   self.state = 'inactive'
-                        #   self.retirement_age = at_time
+                        #   self.retirement_time = at_time
+                        #   self.retirement_age = self.exposure
                         pass
 
                 # Update agent - training history is taken care of elsewhere: 

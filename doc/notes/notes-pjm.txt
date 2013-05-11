@@ -734,6 +734,9 @@ time SWAPSHOP.csh -s CFHTLS-skeptic00-noXY -f --fast
 # Restore latest db to start production run. Run SWAPSHOP in production 
 # directory so that we can re-use the pickles.
 
+mkdir -p $SWAP_DIR/analysis/production
+chdir $SWAP_DIR/analysis/production
+
 
 # ======================================================================
 

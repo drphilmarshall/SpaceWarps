@@ -678,15 +678,63 @@ time SWAPSHOP.csh -s CFHTLS-strict-YES-useXY -f --fast -t 6
 # Now, vary agent skepticism (initialNL,ND = 2 + skepticism).
 # Also, bump up detection threshold to 0.95!
 
-# Skepticism              0        3        8 
-# Retirements         28489    xxxxx    xxxxx
-# Age at retirement    15.6     xx.x     xx.x
-# Missed lenses        18.5%    xx.x%    xx.x%
-# Candidates            148      xxx      xxx
-
 time SWAPSHOP.csh -s CFHTLS-skeptic00 -f --fast
 
 time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast
 
-# time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast
+time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast
+
+# Skepticism              0        3        8 
+# Retirements         28489    25574    21271
+# Age at retirement    15.6     17.8     20.3
+# Missed lenses        18.5%    18.3%    18.1%
+# Candidates            148       64       21
+
+# Looks like skepticism slows things down without affecting false -ve 
+# rate very much. I think we should go with skepticism = 0.
  
+# Using 15 classifications per retirement is expensive.
+# 400,000 * 15 = 6 million classifications!
+# Maybe not that many: 375 each from 16,000 people
+
+# Trajectories are roughly horizontal by the time we get close to 
+# threshold - good, there is an end in sight! 
+
+
+# What if using marker positions is causing a high false negative rate
+# somehow? By giving people low PL values, so that they are disbelieved?
+# Try skeptic00 with marker positions turned off.
+ 
+time SWAPSHOP.csh -s CFHTLS-skeptic00-noXY -f --fast
+
+# BTW each full run (10^6 classifications) takes about 14 mins.
+
+# Use XY positions?     Yes       No
+# Retirements         28489    35835
+# Age at retirement    15.6     10.7
+# Missed lenses        18.5%    20.1%
+# Candidates            148      159
+
+
+# OK, done! Retirement plan is skeptic00, defined by this config:
+# 
+# skepticism: 0
+# 
+# use_marker_positions: True
+# 
+# detection_threshold: 0.95
+# 
+# rejection_threshold: 1e-7
+# 
+# Checked in as startup.config! Done.
+
+# ======================================================================
+# 2013-05-11 (Saturday) 19:52 BST
+
+# Restore latest db to start production run. Run SWAPSHOP in production 
+# directory so that we can re-use the pickles.
+
+
+# ======================================================================
+
+

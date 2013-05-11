@@ -200,9 +200,9 @@ def write_config(filename, pars):
                  'repickle', \
                  'initialPL', \
                  'initialPD', \
-                 'skepticism', \
                  'agents_willing_to_learn', \
                  'a_few_at_the_start', \
+                 'skepticism', \
                  'use_marker_positions', \
                  'detection_threshold', \
                  'rejection_threshold', \

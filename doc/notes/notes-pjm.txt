@@ -779,6 +779,45 @@ SWIPE.csh spacewarp_2013-05-12.gz
 
 SWAPSHOP.csh -s CFHTLS --fast
 
+# Had to do retirments by hand, as script got it wrong to start with. 
+# Here's how I recovered:
+
+wc -l */*retire*
+#    33648 CFHTLS_2013-05-11_10:04:13/CFHTLS_2013-05-11_10:04:13_retire_these.txt
+#    36706 CFHTLS_2013-05-12_10:05:01/CFHTLS_2013-05-12_10:05:01_retire_these.txt
+
+set survey = CFHTLS
+\set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
+
+set previousretirees = CFHTLS_previously_retired.txt
+cat $previousretirees         | sort > old
+cat $latest/*retire_these.txt | sort > new
+sdiff -s old new | & cut -d'>' -f2 > diff
+wc -l old new diff
+#    33648 old
+#    36706 new
+#     3058 diff
+mv diff CFHTLS_production_retire_these.txt
+
+# Good! Retire these:
+
+SWITCH.py CFHTLS_production_retire_these.txt
+
+# ================================================================================
+#                    SWITCH: the Space Warps Retirement Plan                      
+# ================================================================================
+# SWITCH: retiring subjects listed in  CFHTLS_production_retire_these.txt
+# SWITCH: looks like we have 3058  subjects to retire
+# SWITCH: successfully retired subject ASW0000008
+# SWITCH: successfully retired subject ASW000000t
+# SWITCH: successfully retired subject ASW0000016
+# SWITCH: successfully retired subject ASW000001h
+# SWITCH: successfully retired subject ASW000001i
+# SWITCH: successfully retired subject ASW000001k
+# SWITCH: successfully retired subject ASW000001o
+
+# etc . Success! 
+
 # ======================================================================
 
 

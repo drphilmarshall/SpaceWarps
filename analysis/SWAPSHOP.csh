@@ -144,8 +144,36 @@ if ($fast) then
 endif
 
 # ----------------------------------------------------------------------
+# Where did we get to? Save the previous batch of retirees for 
+# comparison:
 
-# Assume we are in the right place, and just get going:
+set here = $cwd:t
+
+set retirees = ${survey}_${here}_retire_these.txt
+set previousretirees = ${survey}_previously_retired.txt
+
+# First time out there aren't any previous retirees:
+if (! -e $previousretirees) then
+    touch $previousretirees
+endif
+# Usual state of directory is that $retirees shows what was just 
+# retired, while $previousretirees is the total retired so far, not
+# including the latest batch.
+# -> Now we have to concatenate them before we overwrite $retirees.
+if (-e $retirees) then
+    cat $retirees >> $previousretirees
+    # Protect against idiocy:
+    cat $previousretirees | sort | uniq >! junk
+    mv junk $previousretirees
+endif
+
+set NPR = `cat $previousretirees | wc -l`
+
+echo "SWAPSHOP: so far we have retired $NPR subjects. Let's do some more!" 
+
+# ----------------------------------------------------------------------
+
+# Get going on the new db:
 
 set more_to_do = 1
 set k = 0
@@ -202,13 +230,17 @@ endif
 # Collate outputs in various ways:
 
 set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
-set today = $cwd:t
 
 # - - - - - - - - - - 
 # 1) Retirement plan:
 
-set retirees = ${survey}_${today}_retire_these.txt
-cp $latest/*retire_these.txt  $retirees
+# Compare latest grand total with previous list, and take the difference
+# to SWITCH:
+
+cat $previousretirees         | sort > old
+cat $latest/*retire_these.txt | sort > new
+sdiff -s old new | cut -d'>' -f2 > $retirees
+\rm old new
 
 set NR = `cat $retirees | wc -l`
 
@@ -224,7 +256,7 @@ endif
 # - - - - - - - - - -
 # 2) Final report:
 
-set report = ${survey}_${today}_report.pdf
+set report = ${survey}_${here}_report.pdf
 cp $latest/*report.pdf  $report
 
 echo "SWAPSHOP: final report: $report"
@@ -240,7 +272,7 @@ if ($animate) then
     # foreach type ( trajectories histories probabilities )
     foreach type ( trajectories )
 
-        set gif = $cwd/${survey}_${today}_${type}.gif
+        set gif = $cwd/${survey}_${here}_${type}.gif
 
         convert -delay 50 -loop 0 ${survey}_*/*${type}.png $gif
 

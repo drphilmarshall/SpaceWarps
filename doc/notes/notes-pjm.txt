@@ -771,5 +771,14 @@ SWAPSHOP.csh -s CFHTLS -f --fast
 # OK good - we are rolling!
 
 # ======================================================================
+# 2013-05-12 (Sunday) 19:57 CEST
+
+# Right, more retirements! 
+
+SWIPE.csh spacewarp_2013-05-12.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+# ======================================================================
 
 

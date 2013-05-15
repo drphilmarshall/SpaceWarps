@@ -851,9 +851,12 @@ head -2500 CFHTLS_production_retire_these.txt > batch1.txt
 head -5000 CFHTLS_production_retire_these.txt | tail -2500 > batch2.txt
 tail -2463 CFHTLS_production_retire_these.txt > batch3.txt
 
-SWITCH.py batch1.txt > retirement1.log &
-SWITCH.py batch2.txt > retirement2.log &
-SWITCH.py batch3.txt > retirement3.log &
+# SWITCH.py batch1.txt > retirement1.log &
+
+# Do the following next!! 2013-05-15 (Wednesday) 09:36 CEST
+
+# SWITCH.py batch2.txt > retirement2.log &
+# SWITCH.py batch3.txt > retirement3.log &
 
 # ======================================================================
 

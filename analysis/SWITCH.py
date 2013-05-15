@@ -3,7 +3,7 @@
 
 import swap
 
-import sys,getopt
+import sys,getopt,time
 import numpy as np
 
 from client import *
@@ -105,8 +105,7 @@ def SWITCH(argv):
     for ID in IDs:
     
          if resurrect:
-         
-             down = '/projects/spacewarp/subjects/'+ID+'/wtf'
+             down = '/projects/spacewarp/subjects/'+ID+'/activate'
          else:
              down = '/projects/spacewarp/subjects/'+ID+'/retire'
     
@@ -115,6 +114,7 @@ def SWITCH(argv):
          
          else:
              worked = client.put(down)
+             time.sleep(0.8) # So that we don't go over 5000 per hour.
              if not worked:
                  print "SWITCH: retirement fail: ",ID,worked
              else:

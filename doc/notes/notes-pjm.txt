@@ -818,6 +818,43 @@ SWITCH.py CFHTLS_production_retire_these.txt
 
 # etc . Success! 
 
+# Well, partially. Got back fom dinner to find:
+
+# SWITCH: retirement fail:  ASW0000chb False
+# failed: unauthorized, check your credentials(0)
+
+# for a whole bunch of subjects. Emailed Parrish for advice.
+
+# ======================================================================
+# 2013-05-14 (Tuesday) 00:54 CEST
+
+# OK, I hit the retirements per hour limit. Michael put it up to 5000
+# That means we can do 1 retirment every 0.72 secs. Add sleep 0.7 to 
+# code, and run overnight! We probably only did 3000 yesterday before it
+# got locked out, so might as well start from teh beginning gain.
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Great, now they are all done!
+
+# ======================================================================
+# 2013-05-15 (Wednesday) 00:38 CEST
+
+# Catching up - need to do both 13 and 14 May dumps.
+
+SWIPE.csh spacewarp_2013-05-13.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# Got 7463 subjects to retire - do in 3 batches:
+
+head -2500 CFHTLS_production_retire_these.txt > batch1.txt
+head -5000 CFHTLS_production_retire_these.txt | tail -2500 > batch2.txt
+tail -2463 CFHTLS_production_retire_these.txt > batch3.txt
+
+SWITCH.py batch1.txt > retirement1.log &
+SWITCH.py batch2.txt > retirement2.log &
+SWITCH.py batch3.txt > retirement3.log &
+
 # ======================================================================
 
 

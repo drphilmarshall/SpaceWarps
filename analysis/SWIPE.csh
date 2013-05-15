@@ -62,9 +62,10 @@ echo '==========================================================================
 echo "SWIPE: restoring database from $dbfile"
 
 # Assume we are in a sensible directory, and just unpack here:
-tar xvfz $dbfile
-
 set db = $dbfile:r:r
+
+if (! -e $db) tar xvfz $dbfile
+
 echo "SWIPE: database json and bson files stored in $db"
 
 

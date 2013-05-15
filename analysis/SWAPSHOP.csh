@@ -239,15 +239,22 @@ set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
 
 cat $previousretirees         | sort > old
 cat $latest/*retire_these.txt | sort > new
-sdiff -s old new | cut -d'>' -f2 > $retirees
+sdiff -s old new | grep -e '<' -e '>'  \
+                 | sed s/'<'//g | sed s/'>'//g > $retirees
 \rm old new
+# Note that we should retire inclusively - if a subject is in the
+# previously retired list but not in the latest list, that means it 
+# was orginally scheduled for returement, the SWITCH failed, it stayed
+# in play, and got voted up again - but that's not what we want. We want
+# to be fair to all subjects! Once you cross the line, thats it.
+
 
 set NR = `cat $retirees | wc -l`
 
 if ($NR > 0) then
     echo "SWAPSHOP: if you want, you can go ahead and retire $NR subjects with"
     echo " "
-    echo "          SWITCH.py $retirees"
+    echo "          SWITCH.py $retirees > retirement.log &"
     echo " "
 else
     echo "SWAPSHOP: no subjects to retire"

@@ -165,7 +165,7 @@ class Agent(object):
 
     def get_PL_realization(self,Ntrajectory):
         NL_correct=self.PL*self.NL;
-        NL_correct_realize=np.random.poisson(NL_correct,size=Ntrajectory);
+        NL_correct_realize=np.random.binomial(self.NL,self.PL,size=Ntrajectory);
         PL_realize=(NL_correct_realize*1.0)/(self.NL);
         idx=np.where(PL_realize>swap.PLmax);
         PL_realize[idx]=swap.PLmax;
@@ -179,7 +179,7 @@ class Agent(object):
 
     def get_PD_realization(self,Ntrajectory):
         ND_correct=self.PD*self.ND;
-        ND_correct_realize=np.random.poisson(ND_correct,size=Ntrajectory);
+        ND_correct_realize=np.random.binomial(self.ND,self.PD,size=Ntrajectory);
         PD_realize=(ND_correct_realize*1.0)/(self.ND);
         idx=np.where(PD_realize>swap.PDmax);
         PD_realize[idx]=swap.PDmax;

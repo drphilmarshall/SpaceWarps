@@ -144,7 +144,7 @@ class Subject(object):
             
             if by.NT > ignore:
                
-                # Calculate likelihood for all Ntrajectory trajectories, generating as many poisson deviates
+                # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
                 PL_realization=by.get_PL_realization(Ntrajectory);
                 PD_realization=by.get_PD_realization(Ntrajectory);
 

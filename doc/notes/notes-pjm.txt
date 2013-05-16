@@ -596,3 +596,268 @@ end
 
 # Mostly LRGs with rings hidden in depths. All fairly tricky.
 # ======================================================================
+# 2013-05-10 (Friday) 12:17 BST
+
+# New db! Try analysing with the really straict settings that are
+# currently checked in:
+
+SWIPE.csh spacewarp_2013-05-10.tar.gz
+
+time SWAPSHOP.csh -s CFHTLS-reallystrict -f --fast
+
+# Hmm - weird. 1.08 million classifications, but report only shows 
+# 396281! Still, 15% lenses missed, 82% completeness, 99.8% purity
+# in sims vs duds. 33078 subjects to retire. Leave the candidates in
+# to be inspected more often! FPs are not a problem.
+
+# Try running without the 10-subject training period.
+
+time SWAPSHOP.csh -s CFHTLS-strict -f --fast
+
+# OK, hmm. Seems I am counting wrong!
+# Yep - switched to agents counting all classifications, 
+# but subjects only counts that matter to them.
+
+# OK, last tests: try really strict with 95% detection threshold, 
+# and retirement only at low probability end.
+
+time SWAPSHOP.csh -s CFHTLS-reallystrict95 -f --fast -d
+
+# Affects number of detections, but not enormously they are all highly
+# classified at this point
+
+
+# Talked to Amit about using simFound annotation for sims!
+# Implemented, lets compare with strict (reset thresholds):
+
+time SWAPSHOP.csh -s CFHTLS-strict-simFound -f --fast
+
+# Hmm - looks very odd. Save and investigate...
+# Put in a print statement in mongodb.digest - what's going on?
+
+time SWAPSHOP.csh -s CFHTLS-strict-simFound -f --fast -t 1
+
+# OK, ran with verbose and one_by_one. Results seem plausible,
+# but there aren't too many hits on the sims!
+
+# In db.digest: kind,N_markers,simFound,result,truth =  sim 0 false NOT LENS
+# SWAP: --------------------------------------------------------------------------
+# SWAP: Subject 5183f151e4bb210219005ac5 was classified by 63.250.229.206
+# SWAP: he/she said NOT when it was actually LENS
+# SWAP: their agent reckons their contribution (in bits) =  1.99471942959
+# SWAP: while estimating their PL,PD as  0.152173913043 0.933333333333
+# SWAP: and the subject's new probability as  0.000159955385968
+
+# NB information is wrong...
+# If accuracy is missing, then we get a bunch of people just saying 
+# no to everything! And then subjects just fall straight. 
+
+
+# Try initialNL = 5 or so to allow for mistakes early on, and compare
+# use_marker_positions = True and False, on the first 300k.
+
+time SWAPSHOP.csh -s CFHTLS-strict-NO-useXY -f --fast -t 6
+
+# and then: 
+
+time SWAPSHOP.csh -s CFHTLS-strict-YES-useXY -f --fast -t 6
+
+# OK! Compare numbers:
+
+# Very similar, but:
+# 
+# Quantity        NO     YES
+# Retirements    3000    150 
+# Missed lenses   13%     9%
+
+# ie the bureau is more circumspect. And much slower to retire!
+
+# DECISION: use XY, but investigate skepticism. These results used
+# skepticism = 3! Also, need more data. Run on all of 2010-05-10.
+
+# Now, vary agent skepticism (initialNL,ND = 2 + skepticism).
+# Also, bump up detection threshold to 0.95!
+
+time SWAPSHOP.csh -s CFHTLS-skeptic00 -f --fast
+
+time SWAPSHOP.csh -s CFHTLS-skeptic03 -f --fast
+
+time SWAPSHOP.csh -s CFHTLS-skeptic08 -f --fast
+
+# Skepticism              0        3        8 
+# Retirements         28489    25574    21271
+# Age at retirement    15.6     17.8     20.3
+# Missed lenses        18.5%    18.3%    18.1%
+# Candidates            148       64       21
+
+# Looks like skepticism slows things down without affecting false -ve 
+# rate very much. I think we should go with skepticism = 0.
+ 
+# Using 15 classifications per retirement is expensive.
+# 400,000 * 15 = 6 million classifications!
+# Maybe not that many: 375 each from 16,000 people
+
+# Trajectories are roughly horizontal by the time we get close to 
+# threshold - good, there is an end in sight! 
+
+
+# What if using marker positions is causing a high false negative rate
+# somehow? By giving people low PL values, so that they are disbelieved?
+# Try skeptic00 with marker positions turned off.
+ 
+time SWAPSHOP.csh -s CFHTLS-skeptic00-noXY -f --fast
+
+# BTW each full run (10^6 classifications) takes about 14 mins.
+
+# Use XY positions?     Yes       No
+# Retirements         28489    35835
+# Age at retirement    15.6     10.7
+# Missed lenses        18.5%    20.1%
+# Candidates            148      159
+
+# So XY gives a *better* false neg rate! Good. 
+
+# So, what about a training period? Level 1 has 20 subjects, 1 in 5 sims
+# and 1 in 5 duds, so 8 training images total. Try ignoring all of level
+# 1 and see what we get compared to the standard setup.
+
+time SWAPSHOP.csh -s CFHTLS-skeptic00-ignore8 -f --fast -t 20
+
+# (Note that I SWIPED the new db in the meantime - oops)
+
+# Run:                skeptic00      ignore8
+# Classifications        666864       536099
+# Retirements             28489        27346
+# Age at retirement        15.6         12.8
+# Missed lenses            18.5%        16.3%
+# Candidates                148          146
+
+# So its cleaner and cheaper. I think we have to do this. Make it 
+# past level 2 and your classifications start to count! Rough
+# qualification is 20 classifications - we asked for 40 in the PR. 
+# We can always go back later and make more use of the ignored clicks,
+# with a better model for how the agents learn. 
+
+# OK, done! Retirement plan is skeptic00, defined by this config:
+# 
+# skepticism: 0
+#
+# a_few_at_the_start: 8
+# 
+# use_marker_positions: True
+# 
+# detection_threshold: 0.95
+# 
+# rejection_threshold: 1e-7
+# 
+# Checked in as startup.config! Done.
+
+# ======================================================================
+# 2013-05-11 (Saturday) 19:52 BST
+
+# Restore latest db to start production run. Run SWAPSHOP in production 
+# directory so that we can re-use the pickles.
+
+mkdir -p $SWAP_DIR/analysis/production
+chdir $SWAP_DIR/analysis/production
+
+SWIPE.csh spacewarp_2013-05-11.gz
+
+# OK, now SWAPSHOP with simple survey name. No need for -f once we are 
+# rolling!
+
+SWAPSHOP.csh -s CFHTLS -f --fast
+
+# OK good - we are rolling!
+
+# ======================================================================
+# 2013-05-12 (Sunday) 19:57 CEST
+
+# Right, more retirements! 
+
+SWIPE.csh spacewarp_2013-05-12.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+# Had to do retirments by hand, as script got it wrong to start with. 
+# Here's how I recovered:
+
+wc -l */*retire*
+#    33648 CFHTLS_2013-05-11_10:04:13/CFHTLS_2013-05-11_10:04:13_retire_these.txt
+#    36706 CFHTLS_2013-05-12_10:05:01/CFHTLS_2013-05-12_10:05:01_retire_these.txt
+
+set survey = CFHTLS
+\set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
+
+set previousretirees = CFHTLS_previously_retired.txt
+cat $previousretirees         | sort > old
+cat $latest/*retire_these.txt | sort > new
+sdiff -s old new | & cut -d'>' -f2 > diff
+wc -l old new diff
+#    33648 old
+#    36706 new
+#     3058 diff
+mv diff CFHTLS_production_retire_these.txt
+
+# Good! Retire these:
+
+SWITCH.py CFHTLS_production_retire_these.txt
+
+# ================================================================================
+#                    SWITCH: the Space Warps Retirement Plan                      
+# ================================================================================
+# SWITCH: retiring subjects listed in  CFHTLS_production_retire_these.txt
+# SWITCH: looks like we have 3058  subjects to retire
+# SWITCH: successfully retired subject ASW0000008
+# SWITCH: successfully retired subject ASW000000t
+# SWITCH: successfully retired subject ASW0000016
+# SWITCH: successfully retired subject ASW000001h
+# SWITCH: successfully retired subject ASW000001i
+# SWITCH: successfully retired subject ASW000001k
+# SWITCH: successfully retired subject ASW000001o
+
+# etc . Success! 
+
+# Well, partially. Got back fom dinner to find:
+
+# SWITCH: retirement fail:  ASW0000chb False
+# failed: unauthorized, check your credentials(0)
+
+# for a whole bunch of subjects. Emailed Parrish for advice.
+
+# ======================================================================
+# 2013-05-14 (Tuesday) 00:54 CEST
+
+# OK, I hit the retirements per hour limit. Michael put it up to 5000
+# That means we can do 1 retirment every 0.72 secs. Add sleep 0.7 to 
+# code, and run overnight! We probably only did 3000 yesterday before it
+# got locked out, so might as well start from teh beginning gain.
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Great, now they are all done!
+
+# ======================================================================
+# 2013-05-15 (Wednesday) 00:38 CEST
+
+# Catching up - need to do both 13 and 14 May dumps.
+
+SWIPE.csh spacewarp_2013-05-13.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# Got 7463 subjects to retire - do in 3 batches:
+
+head -2500 CFHTLS_production_retire_these.txt > batch1.txt
+head -5000 CFHTLS_production_retire_these.txt | tail -2500 > batch2.txt
+tail -2463 CFHTLS_production_retire_these.txt > batch3.txt
+
+# SWITCH.py batch1.txt > retirement1.log &
+
+# Do the following next!! 2013-05-15 (Wednesday) 09:36 CEST
+
+# SWITCH.py batch2.txt > retirement2.log &
+# SWITCH.py batch3.txt > retirement3.log &
+
+# ======================================================================
+
+

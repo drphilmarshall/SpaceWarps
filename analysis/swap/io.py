@@ -195,14 +195,15 @@ def write_config(filename, pars):
                  'bureaufile', \
                  'samplefile', \
                  'verbose', \
+                 'one_by_one', \
                  'report', \
                  'repickle', \
                  'initialPL', \
                  'initialPD', \
-                 'initialNL', \
-                 'initialND', \
                  'agents_willing_to_learn', \
                  'a_few_at_the_start', \
+                 'skepticism', \
+                 'use_marker_positions', \
                  'detection_threshold', \
                  'rejection_threshold', \
                  'dbspecies']

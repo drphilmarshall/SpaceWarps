@@ -86,8 +86,8 @@ class Agent(object):
         self.name = name
         self.PD = pars['initialPD']
         self.PL = pars['initialPL']
-        self.ND = pars['initialND']
-        self.NL = pars['initialNL']
+        self.ND = 2 + pars['skepticism']
+        self.NL = 2 + pars['skepticism']
         self.N = 0
         self.NT = 0
         self.contribution = self.update_contribution()

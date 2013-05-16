@@ -3,7 +3,7 @@
 
 import swap
 
-import sys,getopt
+import sys,getopt,time
 import numpy as np
 
 from client import *
@@ -26,10 +26,12 @@ def SWITCH(argv):
         separate, for different goals.
         
     FLAGS
-        -h            Print this message
+        -h                Print this message
+        -p --practise     Don't do the put, just print the commands
+        -r --resurrect    Re-activate subject
 
     INPUTS
-        ids.txt       Plain text file containing list of subject IDs
+        ids.txt           Plain text file containing list of subject IDs
     
     OUTPUTS
         stdout
@@ -53,20 +55,23 @@ def SWITCH(argv):
     # ------------------------------------------------------------------
 
     try:
-       opts, args = getopt.getopt(argv,"hp",["help","practise"])
+       opts, args = getopt.getopt(argv,"hpr",["help","practise","resurrect"])
     except getopt.GetoptError, err:
        print str(err) # will print something like "option -a not recognized"
        print SWITCH.__doc__  # will print the big comment above.
        return
     
     practise = False
+    resurrect = False
 
     for o,a in opts:
        if o in ("-h", "--help"):
           print SWITCH.__doc__
           return
-       if o in ("-p", "--practise"):
+       elif o in ("-p", "--practise"):
           practise = True
+       elif o in ("-r", "--resurrect"):
+          resurrect = True
        else:
           assert False, "unhandled option"
 
@@ -99,13 +104,17 @@ def SWITCH(argv):
     
     for ID in IDs:
     
-         down = '/projects/spacewarp/subjects/'+ID+'/retire'
+         if resurrect:
+             down = '/projects/spacewarp/subjects/'+ID+'/activate'
+         else:
+             down = '/projects/spacewarp/subjects/'+ID+'/retire'
     
          if practise:
              print "result = client.put('"+down+"')"
          
          else:
              worked = client.put(down)
+             time.sleep(0.8) # So that we don't go over 5000 per hour.
              if not worked:
                  print "SWITCH: retirement fail: ",ID,worked
              else:

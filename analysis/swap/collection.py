@@ -151,7 +151,8 @@ class Collection(object):
         self.Ntl_detected = 0
         self.Ntd_rejected = 0
         self.Ntd_detected = 0
-        
+        self.retirement_ages = np.array([])
+       
         for ID in self.list():
             subject = self.member[ID]
             self.N += 1
@@ -188,6 +189,7 @@ class Collection(object):
             
             if subject.state  == 'inactive': 
                 self.Ns_retired += 1
+                self.retirement_ages = np.append(self.retirement_ages,subject.retirement_age)
 
         return
         

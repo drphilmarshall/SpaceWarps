@@ -399,6 +399,12 @@ def SWAP(argv):
         for ID in sample.shortlist(Ns):
             sample.member[ID].plot_trajectory(fig3)
 
+        # These are false negatives and true positives
+        for ID in sample.shortlist(15,kind='sim',status='rejected'):
+            sample.member[ID].plot_trajectory(fig3)
+        for ID in sample.shortlist(15,kind='sim',status='detected'):
+            sample.member[ID].plot_trajectory(fig3)
+
         # Aprajita's false negative only plot:
         # for ID in sample.shortlist(Ns,kind='sim',status='rejected'):
         #     sample.member[ID].plot_trajectory(fig3)

@@ -220,6 +220,10 @@ class Bureau(object):
         plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
 
 
+        # For the histograms use all the information available
+        PD=self.probabilities['NOT']
+        PL=self.probabilities['LENS']
+
         # Right histogram panel: 
         plt.sca(righthist)
         righthist.set_ylim(pmin,pmax)

@@ -421,31 +421,27 @@ calculate
 \end{align}
 {\it Obtuse} classifiers are as helpful as {\it perfect} ones!
 
-% This is incorrect, so for the moment commenting it out
-%Indeed, the information content of each classification can be estimated by an
-%agent before the next classification is made, just from its confusion matrix.
-%We define the expected contributed information per classification, as
-%\be
-%  \langle I_k \rangle = \frac{1}{2} 
-%                        \sum_{i} \left( \mathcal{M}^k_{i}  
-%              + \mathcal{M}^k_{i}\cdot\log_2{\mathcal{M}^k_i} \right),
-%  \label{eq:app:info}
-%\ee
-%where $i$ runs over all 4 elements of the confusion matrix 
-%$\mathcal{M}^k_i$, and $\langle I_k \rangle$ is measured in ``bits.'' 
-%The second term in the sum is recognisable as a
-%negative entropy, while the first term and the factor of 1/2
-%account for the way the confusion matrix encodes the results for the
-%classification of two types of subject, and that the probabilities
-%associated with each type are normalised. \Eref{eq:app:info} gives the
-%required result, that 
-%both the hypothetical {\it perfect} and
-%{\it obtuse} classifiers contribute 
-%1 bit of information each, per classification. 
-%
-%In fact, the only classifier that contributes the minimum information per
-%classification, zero bits, is the {\it random} classifier, whose agent's
-%confusion matrix elements are all 0.5.   
+Indeed, the information content of each classification can be estimated by an
+agent before the next classification is made, just from its confusion matrix.
+We define the expected contributed information per classification, as
+\be
+  \langle I_k \rangle = \frac{1}{2} 
+    \left(
+    \mathcal{M}^k_{d}\cdot\log_2{\mathcal{M}^k_d} +  \mathcal{M}^k_{o}\cdot\log_2{\mathcal{M}^k_o} \right),
+  \label{eq:app:info}
+\ee
+where $\mathcal{M}^k_d$ and $\mathcal{M}^k_o$ is the sum of the diagonal and
+the off-diagonal elements of the confusion matrix and $\langle I_k \rangle$ is
+measured in ``bits.'' The factor of 1/2 accounts for the way the confusion
+matrix encodes the results for the classification, and
+that the probabilities associated with each type are normalised.
+\Eref{eq:app:info} gives the required result, that both the hypothetical {\it
+perfect} and {\it obtuse} classifiers contribute 1 bit of information each, per
+classification. 
+
+In fact, the only classifier that contributes the minimum information per
+classification, zero bits, is the {\it random} classifier, whose agent's
+confusion matrix elements are all 0.5.   
 
 We conservatively initialise all the agents' confusion matrices to be that of
 the random classifier. This makes no allowance for volunteers that actually do

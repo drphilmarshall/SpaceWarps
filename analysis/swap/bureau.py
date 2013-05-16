@@ -204,6 +204,10 @@ class Bureau(object):
         plt.text(0.02,0.96,'"Pessimistic"',color='gray')
         plt.text(0.74,0.02,'"Optimistic"',color='gray')
         plt.text(0.81,0.96,'"Astute"',color='gray')
+        plt.text(0.15,0.87,'"Random classifier"',color='gray',rotation=-45)
+
+        # Plot the random classifier line
+	plt.plot(np.arange(2),1-np.arange(2),color='grey');
         
         # Training received:
         size = 4*self.Ntraining + 6.0

@@ -4,7 +4,7 @@ import swap
 
 import numpy as np
 import pylab as plt
-
+from subject import Ntrajectory
 # ======================================================================
 
 class Collection(object):
@@ -119,17 +119,32 @@ class Collection(object):
 
     def collect_probabilities(self,kind):
     
-        p = np.array([])
-        n = np.array([])
+#       p = np.array([])
+#       n = np.array([])
+#       for ID in self.list():
+#           subject = self.member[ID]
+#           if subject.kind == kind:
+#               p = np.append(p,subject.probability)
+#               n = np.append(n,subject.exposure)
+#       
+#       self.probabilities[kind] = p
+#       self.exposure[kind] = n
+        
+        # print "Collecting probabilities in a faster way, size:",self.size()
+        # Appending wastes a lot of time
+        p = np.zeros(self.size())
+        n = np.zeros(self.size())
+        fill=0
         for ID in self.list():
             subject = self.member[ID]
             if subject.kind == kind:
-                p = np.append(p,subject.probability)
-                n = np.append(n,subject.exposure)
+                p[fill] = subject.mean_probability
+                n[fill] = subject.exposure
+                fill = fill + 1
         
-        self.probabilities[kind] = p
-        self.exposure[kind] = n
-        
+        self.probabilities[kind] = p[0:fill]
+        self.exposure[kind] = n[0:fill]
+        # print "Done collecting probabilities, hopefully faster now, size:",self.size()
         return
 
 # ----------------------------------------------------------------------

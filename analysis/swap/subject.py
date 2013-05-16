@@ -8,6 +8,9 @@ import pylab as plt
 # Every subject starts with the following probability of being a LENS:
 prior = 2e-4
 
+# Every subject starts 50 trajectories. This will slow down the code, but its ok, we can always parallelize
+Ntrajectory=50
+
 # ======================================================================
 
 class Subject(object):
@@ -66,6 +69,7 @@ class Subject(object):
 
     trajectory
       2013-04-17  Started Marshall (Oxford)
+      2013-05-15  Surhud More (KIPMU)
     """
 
 # ----------------------------------------------------------------------
@@ -81,8 +85,10 @@ class Subject(object):
         self.state = 'active'
         self.status = 'undecided'
             
-        self.probability = prior
-        self.trajectory = np.array([self.probability])
+        self.probability = np.zeros(Ntrajectory)+prior
+        self.mean_probability = prior
+        self.median_probability = prior
+        self.trajectory = np.zeros(Ntrajectory)+self.probability;
         self.exposure = 0
         
         self.detection_threshold = thresholds['detection']
@@ -95,8 +101,11 @@ class Subject(object):
 # ----------------------------------------------------------------------
 
     def __str__(self):
-        return 'individual (%s) subject, ID %s, Pr(LENS|d) = %.2f' % \
-               (self.kind,self.ID,self.probability)       
+        # Calculate the mean probability and the error on it
+        mean_logp =sum(np.log(self.probability))/Ntrajectory
+        error_logp=sum((np.log(self.probability)-mean_logp)**2/Ntrajectory)
+        return 'individual (%s) subject, ID %s, Pr(LENS|d) = %.2f \pm %.2f' % \
+               (self.kind,self.ID,exp(mean_logp),exp(mean_logp)*error_logp)       
         
 # ----------------------------------------------------------------------
 # Update probability of LENS, given latest classification:
@@ -135,36 +144,46 @@ class Subject(object):
             
             if by.NT > ignore:
                
+                # Calculate likelihood for all Ntrajectory trajectories, generating as many poisson deviates
+                PL_realization=by.get_PL_realization(Ntrajectory);
+                PD_realization=by.get_PD_realization(Ntrajectory);
+
                 if as_being == 'LENS':
-                    likelihood = by.PL
-                    likelihood /= (by.PL*self.probability + (1-by.PD)*(1-self.probability))
+                    likelihood = PL_realization
+                    likelihood /= (PL_realization*self.probability + (1-PD_realization)*(1-self.probability))
 
                 elif as_being == 'NOT':
-                    likelihood = (1-by.PL)
-                    likelihood /= ((1-by.PL)*self.probability + by.PD*(1-self.probability))
+                    likelihood = (1-PL_realization)
+                    likelihood /= ((1-PL_realization)*self.probability + PD_realization*(1-self.probability))
 
                 else:
                     raise Exception("Unrecognised classification result: "+as_being)
 
                 # Update subject:
                 self.probability = likelihood*self.probability
-                if self.probability < swap.pmin: self.probability = swap.pmin
+                idx=np.where(self.probability < swap.pmin)
+                self.probability[idx]=swap.pmin
+                #if self.probability < swap.pmin: self.probability = swap.pmin
 
                 self.trajectory = np.append(self.trajectory,self.probability)
 
                 self.exposure += 1
+
+                # Update median probability
+                self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
+                self.median_probability=np.sort(self.probability)[Ntrajectory/2]
             
                 # Should we count it as a detection, or a rejection? 
                 # Only test subjects get de-activated:
 
-                if self.probability < self.rejection_threshold:
+                if self.mean_probability < self.rejection_threshold:
                     self.status = 'rejected'
                     if self.kind == 'test':  
                         self.state = 'inactive'
                         self.retirement_time = at_time
                         self.retirement_age = self.exposure
 
-                elif self.probability > self.detection_threshold:
+                elif self.mean_probability > self.detection_threshold:
                     self.status = 'detected'
                     if self.kind == 'test':
                         # Let's keep the detections live!
@@ -178,6 +197,10 @@ class Subject(object):
                      by.testhistory['ID'] = self.ID
                      by.testhistory['I'] = by.contribution
 
+            # It would be incorrect to calculate mean classns/retirement different from strict and alt-strict
+            else:
+                     self.exposure += 1
+
         return
 
 # ----------------------------------------------------------------------
@@ -186,8 +209,18 @@ class Subject(object):
     def plot_trajectory(self,axes):
     
         plt.sca(axes[0])
-        N = np.linspace(0, len(self.trajectory)-1, len(self.trajectory), endpoint=True)
+        N = np.linspace(0, len(self.trajectory)/Ntrajectory+1, len(self.trajectory)/Ntrajectory, endpoint=True);
         N[0] = 0.5
+        mdn_trajectory=np.array([]);
+        sigma_trajectory_m=np.array([]);
+        sigma_trajectory_p=np.array([]);
+        for i in range(len(N)):
+	    sorted_arr=np.sort(self.trajectory[i*Ntrajectory:(i+1)*Ntrajectory])
+            sigma_p=sorted_arr[int(0.84*Ntrajectory)]-sorted_arr[int(0.50*Ntrajectory)]
+            sigma_m=sorted_arr[int(0.50*Ntrajectory)]-sorted_arr[int(0.16*Ntrajectory)]
+            mdn_trajectory=np.append(mdn_trajectory,sorted_arr[int(0.50*Ntrajectory)]);
+            sigma_trajectory_p=np.append(sigma_trajectory_p,sigma_p);
+            sigma_trajectory_m=np.append(sigma_trajectory_m,sigma_m);
         
         if self.kind == 'sim':
             colour = 'blue'
@@ -201,14 +234,14 @@ class Subject(object):
         else:
             facecolour = 'white'
         
-        plt.plot(self.trajectory, N, color=colour, alpha=0.1, linewidth=1.0, linestyle="-")
+        plt.plot(mdn_trajectory,N,color=colour,alpha=0.1,linewidth=1.0, linestyle="-")
+
         NN = N[-1]
         if NN > swap.Ncmax: NN = swap.Ncmax
-        plt.scatter(self.trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5)
-        
+        plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
+        plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
                 
         return
 
 # ======================================================================
-   

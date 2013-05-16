@@ -106,9 +106,9 @@ class Agent(object):
 
     def update_contribution(self):
         plogp = np.zeros([2])
-        plogp[0] = (self.PD+self.PL)/2.*np.log2((self.PD+self.PL)/2.)
-        plogp[1] = (1.-self.PD+1.-self.PL)/2.*np.log2((1.-self.PD+1.-self.PL)/2.)
-        self.contribution = 1.0+np.sum(plogp)
+        plogp[0] = 0.5*(self.PD+self.PL)*np.log2(self.PD+self.PL)
+        plogp[1] = 0.5*(1.0-self.PD+1.0-self.PL)*np.log2(1.0-self.PD+1.0-self.PL)
+        self.contribution = np.sum(plogp)
         return self.contribution
         
 # ----------------------------------------------------------------------
@@ -125,12 +125,14 @@ class Agent(object):
                 if actually_it_was=='LENS':
                     self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
                     self.PL = np.min([self.PL,swap.PLmax])
+                    self.PL = np.max([self.PL,swap.PLmin])
                     self.NL += 1
                     self.NT += 1
 
                 elif actually_it_was=='NOT':
                     self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
                     self.PD = np.min([self.PD,swap.PDmax])
+                    self.PD = np.max([self.PD,swap.PDmin])
                     self.ND += 1
                     self.NT += 1
                 else:
@@ -157,6 +159,34 @@ class Agent(object):
         plt.scatter(N[-1], I[-1], color="green", alpha=0.5)
         
         return
+
+# ----------------------------------------------------------------------
+# Get a realization for agent's PL distribution
+
+    def get_PL_realization(self,Ntrajectory):
+        NL_correct=self.PL*self.NL;
+        NL_correct_realize=np.random.poisson(NL_correct,size=Ntrajectory);
+        PL_realize=(NL_correct_realize*1.0)/(self.NL);
+        idx=np.where(PL_realize>swap.PLmax);
+        PL_realize[idx]=swap.PLmax;
+        idx=np.where(PL_realize<swap.PLmin);
+        PL_realize[idx]=swap.PLmin;
+        #print NL_correct,NL_correct_realize,PL_realize
+        return PL_realize;
+
+# ----------------------------------------------------------------------
+# Get a realization for agent's PD distribution
+
+    def get_PD_realization(self,Ntrajectory):
+        ND_correct=self.PD*self.ND;
+        ND_correct_realize=np.random.poisson(ND_correct,size=Ntrajectory);
+        PD_realize=(ND_correct_realize*1.0)/(self.ND);
+        idx=np.where(PD_realize>swap.PDmax);
+        PD_realize[idx]=swap.PDmax;
+        idx=np.where(PD_realize<swap.PDmin);
+        PD_realize[idx]=swap.PDmin;
+        #print  ND_correct,ND_correct_realize,PD_realize
+        return PD_realize;
 
 # ======================================================================
    

@@ -851,12 +851,123 @@ head -2500 CFHTLS_production_retire_these.txt > batch1.txt
 head -5000 CFHTLS_production_retire_these.txt | tail -2500 > batch2.txt
 tail -2463 CFHTLS_production_retire_these.txt > batch3.txt
 
-# SWITCH.py batch1.txt > retirement1.log &
+SWITCH.py batch1.txt > retirement1.log &
 
 # Do the following next!! 2013-05-15 (Wednesday) 09:36 CEST
 
-# SWITCH.py batch2.txt > retirement2.log &
-# SWITCH.py batch3.txt > retirement3.log &
+SWITCH.py batch2.txt > retirement2.log &
+SWITCH.py batch3.txt > retirement3.log &
+
+# Phew - just finished. That was an effort. 2013-05-17 (Friday) 01:04 CEST
+
+# Tomorrow, need to process 2013-05-14, 15, 16... Starting with SWIPE.
+
+# ======================================================================
+# 2013-05-17 (Friday) 18:51 CEST
+
+# On plane home from Copenhagen. Catch up!
+# Need to deal with interrupted retirements in SWITCH.
+
+# First, run SWAPSHOP on latest db! Make plots later...
+
+SWIPE.csh spacewarp_2013-05-17.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# SWAP: report compiled as /Users/pjm/public_html/SpaceWarps/Science/analysis/production/CFHTLS_2013-05-17_10:07:53/CFHTLS_2013-05-17_10:07:53_report.pdf
+# ================================================================================
+# SWAPSHOP: if you want, you can go ahead and retire 40595 subjects with
+#  
+#           SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Report shows 84130 subjects, 63722 to be retired. 
+# Numbers don't add up! Check lists:
+
+sort -n CFHTLS_previously_retired.txt | uniq | sed s/' '//g | grep 'ASW' > old
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+
+tabs2spaces -n 0 old new
+
+wc -l CFHTLS_previously_retired.txt old CFHTLS_production_retire_these.txt new
+#    44169 CFHTLS_previously_retired.txt
+#    44169 old
+#    40595 CFHTLS_production_retire_these.txt
+#    33132 new
+
+# Retirement list has some repeats in it!
+# Also, sdiff does not work for finding difference between files.
+# Brute force it! First, update these files.
+
+mv new CFHTLS_production_retire_these.txt
+rm old
+
+\rm junk
+foreach ID ( `cat CFHTLS_production_retire_these.txt` )
+  set done = `grep $ID CFHTLS_previously_retired.txt | wc -l`
+  if (! $done) echo $ID >> junk
+end  
+wc -l junk
+#   25669 junk   
+
+# OK, 44169 old + 25669 new = 69838
+# Why is this different from the 63722 listed?
+# Did many of the old ones not actually get retired?
+# Safe thing to do is retire eveything in 
+# CFHTLS_production_retire_these.txt - won't make any difference to 
+# re-retire things, it just takes longer. Run overnight!
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+
+# ======================================================================
+# 2013-05-19 (Sunday) 09:35 BST
+
+# Run SWAPSHOP on latest db. Hopefully retirements are now cleaned up 
+# following yesterday's run:
+
+SWIPE.csh spacewarp_2013-05-18.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# SWAPSHOP: if you want, you can go ahead and retire 15228 subjects with
+#  
+#           SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+ 
+# Hmm - still not counting right?
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#     7765 new
+
+# Hmm. Need to fix this. Over-write for now!
+
+mv new CFHTLS_production_retire_these.txt
+
+# Pausing retirment plan while we wait for Michael...
+
+# 2013-05-20 (Monday) 23:03 BST
+# OK got green light!
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# OK good! Onto May 20.
+# 2013-05-21 (Tuesday) 10:54 BST
+
+SWIPE.csh spacewarp_2013-05-21.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# Wow - 32517 retirements?!
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+
+# OK, "only" 17289 really...
+
+mv new CFHTLS_production_retire_these.txt
+
+# Retire them!
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+
 
 # ======================================================================
 

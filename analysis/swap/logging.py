@@ -4,6 +4,7 @@ import swap
 
 import subprocess,sys,os,time
 import numpy as np
+from subject import Ntrajectory
 
 # ======================================================================
 
@@ -116,16 +117,13 @@ def write_report(pars,bureau,sample):
     C_LENS = 100.0*sample.Ntl_detected/(sample.Ntl + (sample.Ntl == 0))
     C_NOT = 100.0*sample.Ntd_rejected/(sample.Ntd + (sample.Ntd == 0))
     
-    # Now purity - lenses out over all output, accounting for population:
-    
-    Npool = 1.0/swap.prior
-    P_LENS = 100.0*(1.0*C_LENS/100.0 + (1.0-C_NOT/100.0)*(Npool - 1))/(Npool)
+    # Now purity - lenses out over all output:
+    P_LENS = 100.0*sample.Ntl_detected/(sample.Nt_detected + (sample.Nt_detected == 0))
+    P_NOT = 100.0*sample.Ntd_rejected/(sample.Nt_rejected + (sample.Nt_rejected == 0))
 
     # False positive contamination - detected duds as fraction of 
     # total detections:
-    # FP = 100.0*sample.Ntd_detected/(sample.Nt_detected + (sample.Nt_detected == 0))
-    FP = 100.0 - P_LENS
-    
+    FP = 100.0*sample.Ntd_detected/(sample.Nt_detected + (sample.Nt_detected == 0))
     # Lenses lost as false negatives - rejected sims as fraction of 
     # total number of input sims:
     FN = 100.0*sample.Ntl_rejected/(sample.Ntl + (sample.Ntl == 0))
@@ -134,10 +132,10 @@ def write_report(pars,bureau,sample):
     F.write('\hline\n')
     F.write('Lens completeness:         & %.1f%s \\\\ \n' % (C_LENS,'\%') )
     F.write('Lens purity:               & %.1f%s \\\\ \n' % (P_LENS,'\%') )
-    # F.write('Non-lens completeness:     & %.1f%s \\\\ \n' % (C_NOT,'\%')  )
+    F.write('Non-lens completeness:     & %.1f%s \\\\ \n' % (C_NOT,'\%')  )
     # F.write('Non-lens purity:           & %.1f%s \\\\ \n' % (P_NOT,'\%')  )
-    F.write('FP contamination:          & %.1f%s \\\\ \n' % (FP,'\%')  )
-    F.write('Lenses missed (FN rate):   & %.1f%s \\\\ \n' % (FN,'\%')  )
+    F.write('Contamination:             & %.1f%s \\\\ \n' % (FP,'\%')  )
+    F.write('Lenses missed:             & %.1f%s \\\\ \n' % (FN,'\%')  )
     F.write('\hline\n')
     F.write('\end{tabular}\n')
 

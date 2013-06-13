@@ -13,6 +13,7 @@ Ncmin,Ncmax = 0.2,50
 
 # Limits to confusion matrix elements - the volunteers are only human:
 PDmax,PLmax = 0.99,0.99
+PDmin,PLmin = 0.01,0.01
 Imax = 0.919
 
 # ======================================================================

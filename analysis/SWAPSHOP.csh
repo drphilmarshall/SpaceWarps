@@ -117,6 +117,8 @@ echo '==========================================================================
 echo '                    SWAPSHOP: Space Warps Analysis Blitz                        '
 echo '================================================================================'
 
+date
+
 echo "SWAPSHOP: running SWAP.py over and over again until all"
 echo "SWAPSHOP: classifications in survey '$survey' are analysed"
 
@@ -322,6 +324,7 @@ endif
     
 echo "SWAPSHOP: all done."
 
+date
 echo '================================================================================'
 
 # ==============================================================================

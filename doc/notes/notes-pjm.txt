@@ -967,7 +967,417 @@ mv new CFHTLS_production_retire_these.txt
 
 SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
 
+# ======================================================================
+# 2013-05-22 (Wednesday) 13:24 BST
 
+SWIPE.csh spacewarp_2013-05-22.gz
+SWAPSHOP.csh -s CFHTLS --fast
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   19193 new
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-05-23 (Thursday) 12:45 BST
+
+SWIPE.csh spacewarp_2013-05-23.gz
+SWAPSHOP.csh -s CFHTLS --fast
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   23533 new
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-05-24 (Friday) 12:17 BST
+
+SWIPE.csh spacewarp_2013-05-24.gz
+SWAPSHOP.csh -s CFHTLS --fast
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   
+mv new CFHTLS_production_retire_these.txt
+
+# Try retiring from SLAC: Fail! No requests module. Ho hum.
+
+nohup SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-05-26 (Sunday) 21:00 BST
+
+SWIPE.csh spacewarp_2013-05-26.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   44392 new
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-05-27 (Monday) 17:44 BST
+
+SWIPE.csh spacewarp_2013-05-27.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   49761 new
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Wow - that won't leave many...
+
+# ======================================================================
+# 2013-05-26 (Sunday) 21:00 BST
+
+SWIPE.csh spacewarp_2013-05-28.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#    54393 new  
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Need to get D6 in? Wait for a bit.
+
+# ======================================================================
+# 2013-05-30 (Thursday) 09:59 BST
+
+SWIPE.csh spacewarp_2013-05-29.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#  58484 new  
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Retire these duds!
+
+# Ran out of time - had to abort:
+wc -l retirement.log
+#   28238 retirement.log
+
+# Restart on Friday night from New York!
+
+# ======================================================================
+# 2013-05-31 (Friday) 23:50 EDT
+
+SWIPE.csh spacewarp_2013-05-31.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# SWAP: interpreting up to 50000  classifications...
+# ERROR: AttributeError: 'NoneType' object has no attribute 'has_key' [swap.mongodb]
+# Traceback (most recent call last):
+#   File "/Users/pjm/public_html/SpaceWarps/Science/analysis/SWAP.py", line 422, in <module>
+#     SWAP(sys.argv[1:])
+#   File "/Users/pjm/public_html/SpaceWarps/Science/analysis/SWAP.py", line 203, in SWAP
+#     items = db.digest(classification,method=use_marker_positions)
+#   File "/Users/pjm/public_html/SpaceWarps/Science/analysis/swap/mongodb.py", line 154, in digest
+#     if subject.has_key('group_id'):
+# AttributeError: 'NoneType' object has no attribute 'has_key'
+# SWAPSHOP: if you want, you can go ahead and retire 140567 subjects with
+#  
+#           SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Hmm - wonder what that problem is?
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#    58484 new  
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Off we go again! Run overnight.
+
+# ======================================================================
+# 2013-06-01 (Saturday) 22:18 EDT
+
+SWIPE.csh spacewarp_2013-06-01.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   73358 new 
+mv new CFHTLS_production_retire_these.txt
+
+# Seems very high! Are retirement requests not working?
+# Compare log with new list:
+
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_production_retire_these.txt` )
+   set k = `grep $subject retirement.log | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k > 1) then
+       echo "Whoah! $subject was retired $k times yesterday!"
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored"
+echo "List of subjects to be retired afresh:"
+wc -l new
+
+# 58484 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+#   14874 new
+
+mv new CFHTLS_production_retire_these.txt
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-06-03 (Monday) 08:16 EDT
+
+SWIPE.csh spacewarp_2013-06-03.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#   65263 new 
+mv new CFHTLS_production_retire_these.txt
+
+# Seems very high! Are retirement requests not working?
+# Compare log with new list:
+
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_production_retire_these.txt` )
+   set k = `grep $subject retirement.log | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k > 1) then
+       echo "Whoah! $subject was retired $k times yesterday!"
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored"
+echo "List of subjects to be retired afresh:"
+wc -l new
+
+# 0 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+# wc -l new
+#    65263 new
+
+# Wow. 
+# OK, better get started! :-)
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Stop part way through:
+
+grep -n ASW0001jfc CFHTLS_production_retire_these.txt 
+# 12195:
+tail -n +12196 CFHTLS_production_retire_these.txt > \
+               CFHTLS_production_now_retire_these.txt
+
+SWITCH.py CFHTLS_production_now_retire_these.txt >> retirement.log &
+
+# And again!
+
+grep -n ASW000261b CFHTLS_production_retire_these.txt 
+# 30106:
+tail -n +30107 CFHTLS_production_retire_these.txt > \
+               CFHTLS_production_and_now_retire_these.txt
+
+SWITCH.py CFHTLS_production_and_now_retire_these.txt >> retirement.log &
+
+# And again...
+
+grep -n ASW0002lsr CFHTLS_production_retire_these.txt 
+# 45799:
+tail -n +45800 CFHTLS_production_retire_these.txt > \
+               CFHTLS_production_and_NOW_retire_these.txt
+
+SWITCH.py CFHTLS_production_and_NOW_retire_these.txt >> retirement.log &
+
+
+# ======================================================================
+# 2013-06-05 (Wednesday) 07:45 EDT
+
+SWIPE.csh spacewarp_2013-06-05.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+#  72222 new
+mv new CFHTLS_production_retire_these.txt
+
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_production_retire_these.txt` )
+   set k = `grep $subject retirement.log | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k > 1) then
+       echo "Whoah! $subject was retired $k times yesterday!"
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored"
+echo "List of subjects to be retired afresh:"
+wc -l new
+
+# 65260 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+#     6959 new
+
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Got a bunch of these:
+# 
+# HTTPSConnectionPool(host='api.zooniverse.org', port=443): Max retries exceeded with url: /admin/login (Caused by <class 'socket.error'>: [Errno 50] Network is down)(1)
+
+# Killed process. Restart:
+
+grep ASW retirement.log | grep -v fail | grep -v error | tail -1
+# SWITCH: successfully retired subject ASW0004weo
+grep -n ASW0004weo CFHTLS_production_retire_these.txt 
+# 5904:ASW0004weo
+tail -n +5905 CFHTLS_production_retire_these.txt > \
+              CFHTLS_production_now_retire_these.txt
+
+SWITCH.py CFHTLS_production_now_retire_these.txt >> retirement.log &
+
+# ======================================================================
+# 2013-06-06 (Thursday) 23:01 CDT
+
+SWIPE.csh spacewarp_2013-06-06.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 70950  Pretty sure these are not all new but retire them anyway...
+mv new CFHTLS_production_retire_these.txt
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# Killed job in order to start fresh on Sunday!
+
+grep uccess retirement.log | wc -l
+#    58595
+# ======================================================================
+# 2013-06-09 (Sunday) 09:46 PDT
+
+SWIPE.csh spacewarp_2013-06-09.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 84664 new
+mv new CFHTLS_production_retire_these.txt
+
+# OK, these have to be repeats. Compare with yesterday's retiremnets.
+
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_production_retire_these.txt` )
+   set k = `grep $subject retirement.log | grep uccess | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k > 1) then
+       echo "Whoah! $subject was retired $k times yesterday!"
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored" ; \
+echo "List of subjects to be retired afresh:" ; \
+wc -l new
+
+# 58593 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+#   26071 new
+
+# OK, that's plausible! Off we go then:
+mv new CFHTLS_production_retire_these.txt
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# All done!
+
+# ======================================================================
+# 2013-06-10 (Monday) 08:07 PDT
+
+SWIPE.csh spacewarp_2013-06-10.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 64721 new
+mv new CFHTLS_production_retire_these.txt
+
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_production_retire_these.txt` )
+   set k = `grep $subject retirement.log | grep uccess | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k > 1) then
+       echo "Whoah! $subject was retired $k times yesterday!"
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored" ; \
+echo "List of subjects to be retired afresh:" ; \
+wc -l new
+
+# 3058 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+#    61663 new
+
+mv new CFHTLS_production_retire_these.txt
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# 66072 retirement.log
+
+# ======================================================================
+# 2013-06-12 (Wednesday) 14:43 PDT
+
+SWIPE.csh spacewarp_2013-06-12.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 10390 new
+mv new CFHTLS_production_retire_these.txt
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-06-13 (Thursday) 08:35 PDT
+
+# Today we compare simple and fuzzy trajectories! First do simple run,
+# as control:
+
+SWIPE.csh spacewarp_2013-06-13.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+sort -n CFHTLS_production_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 13908 new
+mv new CFHTLS_production_retire_these.txt
+
+# OK, don't retire these - let's now compare with the fuzzies! 
+# First need to accept Surhud's pull request, then check out the code
+# into the Space Warps directory. If I decide to go back, I can just
+# check out the previous version of SWAP... but Ill need a separate 
+# workspace, at the same level as "production". Call it: fuzzy.
+
+# Need to get sartup.config right - check Surhud's emails.
+
+
+SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
 
 # ======================================================================
 

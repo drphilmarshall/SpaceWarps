@@ -6,7 +6,7 @@ import os,sys,datetime
 try: from pymongo import MongoClient
 except:
     print "MongoDB: pymongo is not installed. You can still --practise though"
-    sys.exit()
+    # sys.exit()
 
 # Hard-coded for all Space Warps datasets? Or just beta?
 testGroup = '5154a3783ae74086ab000001'

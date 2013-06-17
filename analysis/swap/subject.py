@@ -8,8 +8,10 @@ import pylab as plt
 # Every subject starts with the following probability of being a LENS:
 prior = 2e-4
 
-# Every subject starts 50 trajectories. This will slow down the code, but its ok, we can always parallelize
+# Every subject starts 50 trajectories. This will slow down the code, 
+# but its ok, we can always parallelize
 Ntrajectory=50
+# This should really be a user-supplied constant, in the configuration.
 
 # ======================================================================
 

@@ -118,8 +118,11 @@ def SWITCH(argv):
              if not worked:
                  print "SWITCH: retirement fail: ",ID,worked
              else:
-                 print "SWITCH: successfully retired subject "+ID
-         
+                 if resurrect:
+                     print "SWITCH: successfully resurrected subject "+ID
+                 else:
+                     print "SWITCH: successfully retired subject "+ID
+                 
     # ------------------------------------------------------------------
     print swap.doubledashedline
     return

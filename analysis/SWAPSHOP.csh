@@ -165,7 +165,8 @@ endif
 if (-e $retirees) then
     cat $retirees >> $previousretirees
     # Protect against idiocy:
-    cat $previousretirees | sort | uniq >! junk
+    cat $previousretirees | sort | uniq | \
+           ssed s/' '//g | grep 'ASW' >! junk
     mv junk $previousretirees
 endif
 

@@ -1368,6 +1368,27 @@ wc -l new
 # 13908 new
 mv new CFHTLS_production_retire_these.txt
 
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_production_retire_these.txt` )
+   set k = `grep $subject retirement.log | grep uccess | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k > 1) then
+       echo "Whoah! $subject was retired $k times yesterday!"
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored" ; \
+echo "List of subjects to be retired afresh:" ; \
+wc -l new
+
+# 10390 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+#     3518 new
+mv new CFHTLS_production_retire_these.txt
+
 # OK, don't retire these - let's now compare with the fuzzies! 
 # First need to accept Surhud's pull request, then check out the code
 # into the Space Warps directory. If I decide to go back, I can just
@@ -1376,8 +1397,200 @@ mv new CFHTLS_production_retire_these.txt
 
 # Need to get sartup.config right - check Surhud's emails.
 
+# Here's the pull output:
 
-SWITCH.py CFHTLS_production_retire_these.txt > retirement.log &
+# From github.com:drphilmarshall/SpaceWarps
+#    d43ef4b..d77816a  master     -> origin/master
+# Updating d43ef4b..d77816a
+# Fast-forward
+#  analysis/SWAP.py                |    6 ++
+#  analysis/SWAPSHOP.csh           |    3 +
+#  analysis/swap/agent.py          |   30 ++++++++
+#  analysis/swap/bureau.py         |    8 +++
+#  analysis/swap/collection.py     |   31 +++++---
+#  analysis/swap/config.py         |    1 +
+#  analysis/swap/logging.py        |   18 +++--
+#  analysis/swap/production.config |    8 +--
+#  analysis/swap/startup.config    |    6 +-
+#  analysis/swap/subject.py        |   65 ++++++++++++-----
+#  doc/sw-system.tex               |  151 ++++++++++++++++++---------------------
+#  11 files changed, 204 insertions(+), 123 deletions(-)
+
+# Forgot to tag it before pulling, oops. Ah well! Onwards :-)
+
+SWAPSHOP.csh -s CFHTLS --fast --startup
+
+# startup option brings over startup.config etc. Ntrajectory is set in 
+# the header of subject.py, which is a bug... But its set to 50
+# as recommenedded by Surhud.
+
+# Timing runs: each iteration of 50,000 classifications takes about a
+# minute, a little over. With 5 million classifications, the whole 
+# SWAPSHOP run will take at least 100 mins - say 2 hours.
+
+# Then, compare reports, and also lists of retirees. This needs to be
+# done carefully, using grep and awk etc, not sdiff, probably. 
+
+# had to pause after 139 iterations - and it didn not restart cleanly
+# :-(
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+# OK, compare reports and retirements. Not easy, as we have to
+# accumulate them uniquely. First clean up the fuzzy retirements!
+
+sort -n CFHTLS_fuzzy_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 176818 new  GOOD!
+mv new CFHTLS_fuzzy_retire_these.txt
+
+mkdir -p comparison
+cp CFHTLS_fuzzy_retire_these.txt CFHTLS_fuzzy_report.pdf comparison/
+
+# OK, now bring in all retirements done so far from production...
+
+cp ../production/CFHTLS_previously_retired.txt \
+        comparison/CFHTLS_production_previously_retired.txt
+cp ../production/CFHTLS_production_retire_these.txt comparison/
+
+# Hmm - previous retirements will have doubles in them from repeated 
+# days efforts:
+
+cd comparison
+
+cat CFHTLS_production_previously_retired.txt | awk '{print $1}' | \
+  grep 'ASW' | sort -n | uniq > new
+wc -l CFHTLS_production_previously_retired.txt new
+#   275170 CFHTLS_production_previously_retired.txt
+#   177563 new
+# OK, potentially very similar! Let's see.
+mv new CFHTLS_production_previously_retired.txt
+
+# Just to make sure, do same thing to the fuzzies:
+cat CFHTLS_fuzzy_retire_these.txt | awk '{print $1}' | \
+  grep 'ASW' | sort -n | uniq > new
+wc -l CFHTLS_fuzzy_retire_these.txt new
+#   176818 CFHTLS_fuzzy_retire_these.txt
+#   176818 new
+mv new CFHTLS_fuzzy_retire_these.txt
+
+# Good. Now, we need two lists: 
+# 1) Subjects to retire now
+# 2) Subjects to resurrect now
+
+# 1) Take the fuzzy retirement list, and remove all that appear in
+#    either the production previous retirements, or the production
+#    retire these list.
+
+cat CFHTLS_production_previously_retired.txt \
+    CFHTLS_production_retire_these.txt | \
+  awk '{print $1}' | grep 'ASW' | sort -n | uniq \
+  > CFHTLS_production_all_retirements.txt
+  
+set retirements = CFHTLS_to_turn_fuzzy_retire_these.txt
+set count = 0
+\rm -f $retirements
+foreach subject ( `cat CFHTLS_fuzzy_retire_these.txt` )
+   set k = `grep $subject CFHTLS_production_all_retirements.txt | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> $retirements
+   endif
+end
+echo "$count subjects already happily retired, can be ignored" ; \
+echo "List of subjects to be retired:" ; \
+wc -l $retirements
+
+# 176463 subjects already happily retired, can be ignored
+# List of subjects to be retired:
+#      355 CFHTLS_to_turn_fuzzy_retire_these.txt
+
+# Cool!
+
+
+# 2) Take the production previously retired list, and remove the 
+#    subjects that appear in the fuzzy retirement list.
+
+set resurrections = CFHTLS_to_turn_fuzzy_resurrect_these.txt
+set count = 0
+\rm -f $resurrections
+foreach subject ( `cat CFHTLS_production_previously_retired.txt` )
+   set k = `grep $subject CFHTLS_fuzzy_retire_these.txt | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> $resurrections
+   endif
+end
+echo "$count subjects already happily retired, can be ignored" ; \
+echo "List of subjects to be resurrected:" ; \
+wc -l $resurrections
+
+# 173060 subjects already happily retired, can be ignored
+# List of subjects to be resurrected:
+#     4503 CFHTLS_to_turn_fuzzy_resurrect_these.txt
+
+# OK, execute this, then continue running SWITCH in fuzzy directory
+# tomorrow? Yes - state is read from pickles, not from mongodb.
+
+SWITCH.py CFHTLS_to_turn_fuzzy_retire_these.txt > turning_fuzzy_retirement.log &
+
+SWITCH.py -r CFHTLS_to_turn_fuzzy_resurrect_these.txt > turning_fuzzy_resurrection.log &
+
+# OK, done! Now, to start SWAPPING from directory fuzzy.
+
+# ======================================================================
+# 2013-06-15 (Saturday) 09:44 PDT
+
+cd fuzzy
+
+SWIPE.csh spacewarp_2013-06-15.gz
+SWAPSHOP.csh -s CFHTLS --fast
+
+# Had to restart after trashing production mongo directory and re-SWIPEing.
+
+# SWAPSHOP: if you want, you can go ahead and retire 184711 subjects with
+#  
+#           SWITCH.py CFHTLS_fuzzy_retire_these.txt > retirement.log &
+
+# Hmm. Seems like a lot! As if it didn't know what had been retired...
+# Need to compare with log somehow.
+
+sort -n CFHTLS_fuzzy_retire_these.txt | uniq | sed s/' '//g | grep 'ASW' > new
+wc -l new
+# 184711 new
+mv new CFHTLS_fuzzy_retire_these.txt
+
+# OK, try faking a retirement log!
+
+cat comparison/CFHTLS_fuzzy_retire_these.txt > retirement.txt
+
+# Now do the line by line comparison:
+
+set count = 0
+\rm -f new
+foreach subject ( `cat CFHTLS_fuzzy_retire_these.txt` )
+   set k = `grep $subject retirement.txt | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+echo "$count subjects scheduled for re-retirement, can be ignored" ; \
+echo "List of subjects to be retired afresh:" ; \
+wc -l new
+# 176818 subjects scheduled for re-retirement, can be ignored
+# List of subjects to be retired afresh:
+#     7893 new
+
+# Over-write with new file:
+mv new CFHTLS_fuzzy_retire_these.txt
+
+SWITCH.py CFHTLS_fuzzy_retire_these.txt > retirement.log &
+
+# OK done - we are up and running.
 
 # ======================================================================
 

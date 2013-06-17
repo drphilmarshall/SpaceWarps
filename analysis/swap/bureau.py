@@ -209,7 +209,7 @@ class Bureau(object):
         plt.text(0.15,0.87,'"Random classifier"',color='gray',rotation=-45)
 
         # Plot the random classifier line
-	plt.plot(np.arange(2),1-np.arange(2),color='grey');
+        plt.plot(np.arange(2),1-np.arange(2),color='grey');
         
         # Training received:
         size = 4*NT + 6.0

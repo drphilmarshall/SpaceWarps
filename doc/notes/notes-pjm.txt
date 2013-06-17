@@ -1593,5 +1593,34 @@ SWITCH.py CFHTLS_fuzzy_retire_these.txt > retirement.log &
 # OK done - we are up and running.
 
 # ======================================================================
+# 2013-06-17 (Monday) 08:34 PDT
 
+SWIPE.csh spacewarp_2013-06-17.gz
 
+# Sort out these retirement lists. SWAPSHOP will concatenate
+# previously_retired and the current copy of retire_these before
+# over-writing - so we have to set up the former accordingly.
+
+mv comparison/CFHTLS_fuzzy_retire_these.txt \
+              CFHTLS_previously_retired.txt
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+# SWAPSHOP: so far we have retired 184711 subjects. Let's do some more!
+#   Good :-)
+# ...
+# SWAPSHOP: previous run brought total retirements to:
+#   184711 CFHTLS_previously_retired.txt
+# SWAPSHOP: current run has suggested another batch:
+#   194387 CFHTLS_fuzzy_retire_these.txt
+# SWAPSHOP: after filtering for repeats, the new retirements number:
+#   194387 CFHTLS_fuzzy_retire_these.txt
+# SWAPSHOP: after checking for uniqness, we need to retire these:
+#     9676 CFHTLS_fuzzy_retire_these.txt
+# SWAPSHOP: 184711 subjects were already retired and can be ignored
+
+# OK, let's go!
+
+SWITCH.py CFHTLS_fuzzy_retire_these.txt > retirement.log &
+
+# ======================================================================

@@ -166,7 +166,7 @@ if (-e $retirees) then
     cat $retirees >> $previousretirees
     # Protect against idiocy:
     cat $previousretirees | sort | uniq | \
-           ssed s/' '//g | grep 'ASW' >! junk
+           sed s/' '//g | grep 'ASW' >! junk
     mv junk $previousretirees
 endif
 
@@ -238,13 +238,46 @@ set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
 # 1) Retirement plan:
 
 # Compare latest grand total with previous list, and take the difference
-# to SWITCH:
+# to SWITCH. First grab the latest retirement list.
 
-cat $previousretirees         | sort > old
-cat $latest/*retire_these.txt | sort > new
-sdiff -s old new | grep -e '<' -e '>'  \
-                 | sed s/'<'//g | sed s/'>'//g > $retirees
-\rm old new
+# cat $previousretirees         | sort > old
+# cat $latest/*retire_these.txt | sort > new
+# sdiff -s old new | grep -e '<' -e '>'  \
+#                  | sed s/'<'//g | sed s/'>'//g > $retirees
+# \rm old new
+
+cat $latest/*retire_these.txt | sort -n | uniq | \
+  sed s/' '//g | grep 'ASW' > $retirees
+
+echo "SWAPSHOP: previous run brought total retirements to:"
+wc -l $previousretirees
+echo "SWAPSHOP: current run has suggested another batch:"
+wc -l $retirees
+
+# First make sure there are no repeats in the (now updated) retirement list:
+sort -n $retirees | uniq | sed s/' '//g | grep 'ASW' > new
+mv new $retirees
+echo "SWAPSHOP: after filtering for repeats, the new retirements number:"
+wc -l $retirees
+
+# Now make sure that none of the new retirments has actually already been
+# retired: 
+set count = 0
+\rm -f new ; touch new
+foreach subject ( `cat $retirees` )
+   set k = `grep $subject $previousretirees | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> new
+   endif
+end
+mv new $retirees
+
+echo "SWAPSHOP: after checking for uniqness, we need to retire these:"
+wc -l $retirees
+echo "SWAPSHOP: $count subjects were already retired and can be ignored"
+
 # Note that we should retire inclusively - if a subject is in the
 # previously retired list but not in the latest list, that means it 
 # was orginally scheduled for returement, the SWITCH failed, it stayed

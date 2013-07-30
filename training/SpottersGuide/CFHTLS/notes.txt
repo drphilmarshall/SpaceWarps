@@ -220,4 +220,268 @@ cp ${png:r}*.png ../lenses/cluster-galaxy/
 goto FINISH
 
 # ==============================================================================
+# 2013-06-26 (Wednesday) 15:10 PDT
+
+cd $SWAP_DIR/../training/SpottersGuide/CFHTLS/knownlenses
+
+# Get A, B and C lenses from Sonnenfeld et al 2013:
+
+set table = $LATEX_DIR/papers/SL2S/SL2S-Rings/tables/rm/lensfit.tex
+set list = Sonnenfeld++2013_all.list
+cat $table | awk '{print $1,$17}' | grep SL2S | sort -n | uniq > $list
+
+# Also need positions for Anupreeta:
+
+set cat = $list:r.txt
+\rm -f $cat
+
+set N = `cat $list | wc -l`
+set k = 0
+while ($k < $N)
+    @ k = $k + 1
+    set x = `tail -n +$k $list | head -1`
+    set rahms = `echo $x[1] | \
+                 awk '{printf "%2s:%2s:%2s\n", substr($0,6,2),substr($0,8,2),substr($0,10,2)}'`
+    set decdms = `echo $x[1] | \
+                 awk '{printf "%3s:%2s:%2s\n", substr($0,12,3),substr($0,15,2),substr($0,17,2)}'`
+    set y = `skycoor -d $rahms $decdms`
+    set ra = $y[1]
+    set dec = $y[2]
+    echo "$x[1]  $ra  $dec  $rahms  $decdms  $x[2]" >> $cat
+end
+
+wc -l Sonnenfeld++2013_all.txt 
+#       57 Sonnenfeld++2013_all.txt
+
+# Sent!
+
+# 2013-07-26 (Friday) 18:26 PDT
+#
+# Oops - need to refine positions to sub arcsec accuracy. Look up in v16 cat.
+
+# set reference = $WORK_DIR/stronglensing/SL2S/status/SL2S.v15.cat
+set reference = $WORK_DIR/stronglensing/SL2S/status/rings.v17.cat
+
+set v2cat = Sonnenfeld++2013_all.v2.txt
+\rm -f $v2cat
+
+set list = Sonnenfeld++2013_all.list
+
+set N = `cat $list | wc -l`
+set k = 0
+while ($k < $N)
+    @ k = $k + 1
+    set x = `tail -n +$k $list | head -1`
+    set radec = `grep $x[1] $reference | grep -v comment | awk '{print $2,$3}'`
+    set radecsex = `skycoor $radec | awk '{print $1,$2}'`
+    echo "$x[1]  $radec  $radecsex  $x[2]" >> $v2cat
+end
+
+# Hmm - some gaps. Not all lenses are in v15 cat, but all are in rings.v17!
+
+# Sent v2 to Anu.
+
+
+# ======================================================================
+# 2013-06-28 (Friday) 17:05 PDT
+
+# Here's a sample of 500 false positives. 
+# http://member.ipmu.jp/anupreeta.more/falsepos_stg2.tgz
+# 
+# Please send me IDs of those images which you think may have a lens and should be removed from this sample. I will then select 450 out of the remaining sample.
+# 
+# Typical types of false positives that people have identified as lenses
+# 1) lots of low-medium redshift face on spirals
+# 2) lots of high redshift star-forming galaxies
+# 3) some edge-on galaxies  (expecting to have doubles / quad sometimes)
+# 4) some very nearby ellipticals + spirals (expecting to have doubles / quad sometimes)
+# 5) some stars are thought of as lenses
+# 6) some edge-on galaxies are thought of as arcs 
+# 
+# The pop-up messages will have to be written accordingly. 
+
+
+# Talked to Anu about alt category scheme, based on spotters guide - go
+# with this, and potentially extend guide.
+# 
+# RING.........R
+# SPIRAL.......S
+# LIGHTWEIGHT..I
+# LONER........O
+# MERGER.......M
+# NEIGHBOUR....N
+# 
+# And use X for "do not use" - because there's more than one FP, or
+# because the image contains a lens.
+
+cd falsepos_stg2
+
+# Make gallery, 3x3 per page, with names:
+
+gallery.pl -x 3 -y 3 -pdf -t CFHTLS*png -o falsepos_stg2_gallery.pdf
+
+# Now start catalog:
+
+\ls *png | awk '{printf "%s   X\n", $0}' > falsepos_stg2_pjm.txt
+
+# New categories: 
+
+WEAKLENS......W  (the arc is far and/or straight: weak lensing only)
+STAR..........T  (the "lens" is a red star)
+
+# Rejected as category by Anu, wth good reason...
+AGN...........A  (there is a single blue point source in the centre)
+FOREGROUND....F  (the "images" are foreground stars)
+
+# Both of these could be labelled as Neighbours - do this at the end.
+
+# Switched to Google docs, at:
+
+https://docs.google.com/spreadsheet/ccc?key=0AtOcGuRIGUkudEVzdHM0WU5TZ0RzbTcyS1NUTmxDUUE#gid=0
+
+# ==============================================================================
+# 2013-07-29 (Monday) 10:02 PDT
+
+# Checking known lens candidates for spotters guide.
+
+cd knownlenses/finknwnlens_sg_stg2
+
+# Made catalog of all 154 images sent by anu, and graded A or B, according to
+# whether they should go in the guide or not. Compare with anu's list:
+
+grep -v '#' master_pjm.txt | awk '{if ($3 == "B") print $1}' > list_to_exclude_pjm
+cp list_to_exclude list_to_exclude_anu
+cat list_to_exclude_anu list_to_exclude_pjm | sort -n | uniq > list_to_exclude
+wc -l list*
+#       60 list_to_exclude
+#       37 list_to_exclude_anu
+#       43 list_to_exclude_pjm
+
+# OK, this is the superset, of systems neither I nor Anu likes. Make an
+# updated master catalog, and some galleries
+
+set master = finknwnlens_sg_stg2_catalog.txt
+head -1 master_pjm.txt > $master
+set N = `grep -v '#' master_pjm.txt | wc -l`
+set k = 1
+while ($k <= $N)
+  @ k = $k + 1
+  set x = `tail -n +$k master_pjm.txt | head -1`
+  set reject = `grep $x[1] list_to_exclude | wc -l`
+  if ($reject) then
+      set grade = 'B'
+  else
+      set grade = 'A'
+  endif
+  echo "$x[1]      $x[2]      $grade" >> $master
+end
+
+# OK, got master catalog. Galleries!
+
+set pdf = `echo $master | sed s/'catalog.txt'/'grade-A_groups.pdf'/g`
+set APlist = `grep -v '#' $master | awk '{if ($2 == "GROUP" && $3 == "A") print $1}'`
+gallery.pl -t -x 3 -y 3 -pdf -o $pdf $APlist >& /dev/null
+
+set pdf = `echo $master | sed s/'catalog.txt'/'grade-B_groups.pdf'/g`
+set BPlist = `grep -v '#' $master | awk '{if ($2 == "GROUP" && $3 == "B") print $1}'`
+gallery.pl -t -x 3 -y 3 -pdf -o $pdf $BPlist >& /dev/null
+
+set pdf = `echo $master | sed s/'catalog.txt'/'grade-A_galaxies.pdf'/g`
+set AGlist = `grep -v '#' $master | awk '{if ($2 == "GALAXY" && $3 == "A") print $1}'`
+gallery.pl -t -x 3 -y 3 -pdf -o $pdf $AGlist >& /dev/null
+
+set pdf = `echo $master | sed s/'catalog.txt'/'grade-B_galaxies.pdf'/g`
+set BGlist = `grep -v '#' $master | awk '{if ($2 == "GALAXY" && $3 == "B") print $1}'`
+gallery.pl -t -x 3 -y 3 -pdf -o $pdf $BGlist >& /dev/null
+
+echo "$#APlist grade A groups"   ; \
+echo "$#BPlist grade B groups"   ; \
+echo "$#AGlist grade A galaxies" ; \
+echo "$#BGlist grade B galaxies"
+
+# 37 grade A groups
+# 10 grade B groups
+# 60 grade A galaxies
+# 47 grade B galaxies
+
+
+# 2013-07-30 (Tuesday) 11:08 PDT
+# Suggestions from Anu and AV:
+# 
+# Thanks for inspecting and sorting them. I'd like to suggest a few minor
+# changes.
+# 
+# AM: Move from A-gal --> A-group:
+# CFHTLS_082_5924_11413_o_gri.png - the central galaxy is a BGG/BCG. 
+# PJM: Agreed!
+# 
+# AM: Move from B-gal --> A-gal:
+# CFHTLS_169_1956_6554_o_gri.png - probably, a confirmed lens with an arc +
+# counter-image; not sure why this is put under grade B
+# PJM: This was an error! Thanks.
+#
+# AM: Possibly, move from B-group --> A-group:
+# CFHTLS_002_4206_11323_o_gri.png - this is a nice quad in a group but might be
+# difficult to see. If you think this can be confusing, then we can leave it as
+# it is.
+# PJM: It is hard to see - but lets put it in A, once you see it its cool :-)
+# 
+# in A-groups:
+# AV: i'm not sure about using CFHTLS_074_18341_12173_o_gri.png this just looks
+# like an alignement to me but i might be wrong (or it might even be confirmed!)
+# AM: To my knowledge, this is not confirmed and is a less likely system but
+# don't feel too strongly for or against keeping it.
+# PJM: I'm OK with leaving it out, I agree its confusing.
+# 
+# AV: CFHTLS_155_8541_17936_o_gri.png is this a reasonable separation? i think
+# it's too wide and we should not use it in the SG
+# AM: This is an almost certain lens system. the arc's in a group, so wide
+# separation is justifiable, can stay in group A.
+# PJM: Let's keep it in the guide with appropriate apprehensiveness.
+#
+# 
+# in B-galaxies:
+# 
+# AV: what's wrong with CFHTLS_126_12103_3919_o_gri.png?
+# AM: If you zoom in on the png, it seems too straight and the arc has gradient
+# in colors indicating some possibility of chance alignments of distinct objects
+# or so. The counter-image seems too far given the distance of the arc from the
+# galaxy. This looks as a less likely lens candidate to me.
+# PJM: Agreed. Looks a bit fishy
+# 
+# AV: isnt there a counter in CFHTLS_169_1956_6554_o_gri.png that makes it grade
+# A?
+# AM: This is almost 100% a lens and should be moved to grade A. 
+# PJM: Done, as above.
+#  
+#
+# in B-groups:
+# AV: CFHTLS_132_6627_6100_o_gri.png shows giant arcs, doesnt it?
+# AM: Probably, phil thought its not very promising. i had left it in but not
+# too keen on keeping or leaving it out. 
+# PJM: I guess I thought it was hard to see! But lets keep it in and keep
+# people sharp.
+#  
+# AV: CFHTLS_156_4754_6956_o_gri.png if this isn't lensing i dont think these
+# are SF tidal tails - i think we should show a couple of add thigns to catch
+# any exotic lenses otherwise we may bias the user group to standard things
+# AM: Phil should comment if he feels strongly against including this, i had
+# left it in.
+# PJM: Good point re oddballs. I was erring against them, but we do want to
+# catch them so yes. A. This system is not at all well understood though!
+#
+#
+# Implemented changes by hand in finknwnlens_sg_stg2_catalog.txt, moved that
+# up a directory, remade galleries. 
+
+# Now use this catalog and the associated images to make Spotters Guide pages,
+# over in the Dev website. Copy the grade A system images! Make sure we
+# are in teh dev branch first...
+
+set WEB_DIR = $HOME/public_html/SpaceWarps/Dev/public/images/guide/lenses/gallery
+
+set gradeAimages = `grep -v '#' $master | awk '{if ($3 == "A") print $1}'`
+cp -v $gradeAimages $WEB_DIR/.
+
+# ==============================================================================
 FINISH:

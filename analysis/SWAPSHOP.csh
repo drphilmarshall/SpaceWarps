@@ -240,27 +240,21 @@ set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
 # Compare latest grand total with previous list, and take the difference
 # to SWITCH. First grab the latest retirement list.
 
-# cat $previousretirees         | sort > old
-# cat $latest/*retire_these.txt | sort > new
-# sdiff -s old new | grep -e '<' -e '>'  \
-#                  | sed s/'<'//g | sed s/'>'//g > $retirees
-# \rm old new
-
-cat $latest/*retire_these.txt | sort -n | uniq | \
-  sed s/' '//g | grep 'ASW' > $retirees
+cat $latest/*retire_these.txt | awk '{print $1}' | sort -n | uniq | \
+  grep 'ASW' > new
+cat $previousretirees         | awk '{print $1}' | sort -n | uniq | \
+  grep 'ASW' > old
+sdiff -s old new | grep -e '<' -e '>'  \
+                 | sed s/'<'//g | sed s/'>'//g | \
+                 awk '{print $1}' | sort -n | uniq > $retirees
+\rm old new
 
 echo "SWAPSHOP: previous run brought total retirements to:"
 wc -l $previousretirees
 echo "SWAPSHOP: current run has suggested another batch:"
 wc -l $retirees
 
-# First make sure there are no repeats in the (now updated) retirement list:
-sort -n $retirees | uniq | sed s/' '//g | grep 'ASW' > new
-mv new $retirees
-echo "SWAPSHOP: after filtering for repeats, the new retirements number:"
-wc -l $retirees
-
-# Now make sure that none of the new retirments has actually already been
+# Make sure that none of the new retirments has actually already been
 # retired: 
 set count = 0
 \rm -f new ; touch new

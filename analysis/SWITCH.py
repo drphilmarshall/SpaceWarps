@@ -41,7 +41,6 @@ def SWITCH(argv):
         SWITCH.py CFHTLS_2013-05-07/CFHTLS_2013-05-07_retire_these.txt
 
     BUGS
-        - Untested.
 
     AUTHORS
       This file is part of the Space Warps project, and is distributed 
@@ -49,7 +48,8 @@ def SWITCH(argv):
       http://spacewarps.org/
 
     HISTORY
-      2013-05-07 started: Marshall (Oxford)
+      2013-05-07 started. Marshall (Oxford)
+      2013-08-05 added whitelist, not to be reactivated. Marshall (KIPAC)
     """
 
     # ------------------------------------------------------------------
@@ -95,6 +95,12 @@ def SWITCH(argv):
     
     if practise: print "SWITCH: doing a dry run"
     
+    # Set up whitelist, not to be resurrected:
+    whitelist = ['ASW0000001', 'ASW0000002', 'ASW0000003', 'ASW0000004', \
+                 'ASW0000005', 'ASW0000006', 'ASW0000007', 'ASW0000009', \
+                 'ASW000000a', 'ASW000000b', 'ASW000000c', 'ASW000000d', \
+                 'ASW000000e', 'ASW000000f' ]
+    
     # ------------------------------------------------------------------
     # Create a client called "philmarshall", using stuff from client.py:
             
@@ -109,19 +115,27 @@ def SWITCH(argv):
          else:
              down = '/projects/spacewarp/subjects/'+ID+'/retire'
     
-         if practise:
-             print "result = client.put('"+down+"')"
-         
+         # Ignore whitelist:
+         if ((ID in whitelist) and resurrect):
+             print "SWITCH: resurrection attempt ignored: ",ID
+             pass
+             
          else:
-             worked = client.put(down)
-             time.sleep(0.8) # So that we don't go over 5000 per hour.
-             if not worked:
-                 print "SWITCH: retirement fail: ",ID,worked
+         # Send the message!
+             
+             if practise:
+                 print "result = client.put('"+down+"')"
+
              else:
-                 if resurrect:
-                     print "SWITCH: successfully resurrected subject "+ID
+                 worked = client.put(down)
+                 time.sleep(0.8) # So that we don't go over 5000 per hour.
+                 if not worked:
+                     print "SWITCH: retirement fail: ",ID,worked
                  else:
-                     print "SWITCH: successfully retired subject "+ID
+                     if resurrect:
+                         print "SWITCH: successfully resurrected subject "+ID
+                     else:
+                         print "SWITCH: successfully retired subject "+ID
                  
     # ------------------------------------------------------------------
     print swap.doubledashedline

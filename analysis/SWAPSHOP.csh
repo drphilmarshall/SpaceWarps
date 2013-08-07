@@ -152,7 +152,7 @@ endif
 set here = $cwd:t
 
 set retirees = ${survey}_${here}_retire_these.txt
-set previousretirees = ${survey}_previously_retired.txt
+set previousretirees = ${survey}_${here}_previously_retired.txt
 
 # First time out there aren't any previous retirees:
 if (! -e $previousretirees) then
@@ -274,9 +274,9 @@ echo "SWAPSHOP: $count subjects were already retired and can be ignored"
 
 # Note that we should retire inclusively - if a subject is in the
 # previously retired list but not in the latest list, that means it 
-# was orginally scheduled for returement, the SWITCH failed, it stayed
+# was orginally scheduled for retirement, the SWITCH failed, it stayed
 # in play, and got voted up again - but that's not what we want. We want
-# to be fair to all subjects! Once you cross the line, thats it.
+# to be fair to all subjects! Once you cross the line, that's it.
 
 
 set NR = `cat $retirees | wc -l`

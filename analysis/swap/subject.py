@@ -86,6 +86,9 @@ class Subject(object):
 
         self.state = 'active'
         self.status = 'undecided'
+
+        self.retirement_time = 'not yet'
+        self.retirement_age = 0.0
             
         self.probability = np.zeros(Ntrajectory)+prior
         self.mean_probability = prior
@@ -113,7 +116,7 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,ignore=0):
+    def was_described(self,by=None,as_being=None,at_time=None,ignore=0,haste=False):
 
         # Update agent: 
         by.N += 1
@@ -121,7 +124,7 @@ class Subject(object):
         if by==None or as_being==None:
             pass
 
-        # Skip straight past inactive subjects.
+        # Optional: skip straight past inactive subjects.
         # It would be nice to warn the user that inactive subjects
         # should not be being classified:  this can happen if the
         # subject has not been cleanly retired  in the Zooniverse
@@ -133,16 +136,18 @@ class Subject(object):
         # the trajectory plot is the *status* of the training subjects,
         # not their *state*.
         
-        elif self.state == 'inactive' \
-          or self.status == 'detected' or self.status == 'rejected':
+        elif haste and (     self.state == 'inactive' \
+                         or self.status == 'detected' \
+                         or self.status == 'rejected' ):
             
-            # print "SWAP: WARNING: subject "+self.ID+" is inactive, but appears to have been just classified"
-            pass
+                # print "SWAP: WARNING: subject "+self.ID+" is inactive, but appears to have been just classified"
+                pass
+
+        else:
 
         # Deal with active subjects. Ignore the classifier until they 
         # have seen NT > a_few_at_the_start (ie they've had a 
         # certain amount of training):
-        else:
             
             if by.NT > ignore:
                
@@ -193,15 +198,26 @@ class Subject(object):
                         #   self.retirement_time = at_time
                         #   self.retirement_age = self.exposure
                         pass
+                        
+                else:
+                    # Keep the subject alive! This code is only reached if
+                    # we are not being hasty.
+                    self.status = 'undecided'
+                    if self.kind == 'test':  
+                        self.state = 'active'
+                        self.retirement_time = 'not yet'
+                        self.retirement_age = 0.0
 
                 # Update agent - training history is taken care of elsewhere: 
                 if self.kind == 'test':
                      by.testhistory['ID'] = self.ID
                      by.testhistory['I'] = by.contribution
 
-            # It would be incorrect to calculate mean classns/retirement different from strict and alt-strict
             else:
-                     self.exposure += 1
+                # Still advance exposure, even if by.NT <= ignore:
+                # it would be incorrect to calculate mean classns/retirement 
+                # different from strict and alt-strict:
+                self.exposure += 1
 
         return
 

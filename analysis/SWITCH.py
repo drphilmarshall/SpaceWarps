@@ -91,7 +91,11 @@ def SWITCH(argv):
     
     IDs = np.genfromtxt(listfile,dtype='str')
     
-    print "SWITCH: looks like we have",len(IDs)," subjects to retire"
+    if resurrect:
+        print "SWITCH: looks like we have",len(IDs)," subjects to resurrect"
+    else:
+        print "SWITCH: looks like we have",len(IDs)," subjects to retire"
+
     
     if practise: print "SWITCH: doing a dry run"
     

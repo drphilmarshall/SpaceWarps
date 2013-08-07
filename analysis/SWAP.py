@@ -68,8 +68,9 @@ def SWAP(argv):
       http://spacewarps.org/
 
     HISTORY
-      2013-04-03 started. Marshall (Oxford)
-      2013-04-17 implemented v1 "LENS or NOT" analysis. Marshall (Oxford)
+      2013-04-03  started. Marshall (Oxford)
+      2013-04-17  implemented v1 "LENS or NOT" analysis. Marshall (Oxford)
+      2013-05-..  "fuzzy" trajectories. S. More (IPMU)
     """
 
     # ------------------------------------------------------------------
@@ -120,6 +121,13 @@ def SWAP(argv):
     else:
         a_few_at_the_start = 0
         print "SWAP: agents will use fixed confusion matrices without updating them"    
+
+    waste = tonights.parameters['hasty']
+    if waste:
+        print "SWAP: agents will ignore classifications of rejected subjects"
+    else:
+        print "SWAP: agents will use all classifications, even of rejected subjects"
+
 
     vb = tonights.parameters['verbose']
     if not vb: print "SWAP: only reporting minimal stdout"
@@ -218,7 +226,7 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the 
         # classifier. We send that classifier's agent to the subject
         # to do this.  
-        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste)
 
         # Update the agent's confusion matrix, based on what it heard:
         if category == 'training' and agents_willing_to_learn:

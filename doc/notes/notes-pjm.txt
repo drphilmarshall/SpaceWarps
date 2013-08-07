@@ -2020,6 +2020,219 @@ SWAPSHOP.csh -s CFHTLS --fast
 SWITCH.py CFHTLS_fuzzy_retire_these.txt > retirement.log &
 
 # ======================================================================
+# 2013-08-04 (Sunday) 17:27 PDT
+
+SWIPE.csh spacewarp_2013-08-04.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+# SWAPSHOP: previous run brought total retirements to:
+#   262756 CFHTLS_previously_retired.txt
+# SWAPSHOP: current run has suggested another batch:
+#   260243 CFHTLS_fuzzy_retire_these.txt
+# SWAPSHOP: after checking for uniqness, we need to retire these:
+#        0 CFHTLS_fuzzy_retire_these.txt
+# SWAPSHOP: 260243 subjects were already retired and can be ignored
+# SWAPSHOP: no subjects to retire
+
+# Eh? Something odd happened here. Check retirement list:
+
+wc -l CFHTLS_2013-0*/*retire_these.txt | tail
+#   247869 CFHTLS_2013-07-20_10:10:07/CFHTLS_2013-07-20_10:10:07_retire_these.txt
+#   248423 CFHTLS_2013-07-21_10:10:17/CFHTLS_2013-07-21_10:10:17_retire_these.txt
+#   249244 CFHTLS_2013-07-22_10:12:05/CFHTLS_2013-07-22_10:12:05_retire_these.txt
+#   251716 CFHTLS_2013-07-24_10:12:14/CFHTLS_2013-07-24_10:12:14_retire_these.txt
+#   254806 CFHTLS_2013-07-26_10:08:30/CFHTLS_2013-07-26_10:08:30_retire_these.txt
+#   259136 CFHTLS_2013-07-28_10:13:09/CFHTLS_2013-07-28_10:13:09_retire_these.txt
+#   261006 CFHTLS_2013-07-29_10:14:18/CFHTLS_2013-07-29_10:14:18_retire_these.txt
+#   262756 CFHTLS_2013-07-30_10:12:24/CFHTLS_2013-07-30_10:12:24_retire_these.txt
+#     2513 CFHTLS_2013-08-04_10:26:49/CFHTLS_2013-08-04_10:26:49_retire_these.txt
+
+# Why is August 4th's so short? OK, here's the problem:
+
+# SWAPSHOP: so far we have retired 262756 subjects. Let's do some more!
+# SWAPSHOP: starting batch number 1
+# ================================================================================
+#                    SWAP: the Space Warps Analysis Pipeline                      
+# ================================================================================
+# SWAP: updating all subjects with classifications made since 2013-07-30_10:12:24
+# SWAP: read an old bureau of 31351 classification agents from ./CFHTLS_bureau.pickle
+# SWAP: read an old collection of 296599 subjects from ./CFHTLS_collection.pickle
+# SWAP: interpreting up to 50000  classifications...
+# SWAP: .........................................................................
+# SWAP: total no. of classifications processed:  50000
+# SWAP: saving agents to ./CFHTLS_bureau.pickle
+# SWAP: saving subjects to ./CFHTLS_collection.pickle
+# ERROR: IOError: [Errno 28] No space left on device [swap.io]
+
+# Damn - so new pickle was started in the next batch :-(
+
+# Only solution is to re-run from scratch! And then manually compare the
+# retirement list generated with the one currently marked as "previously
+# retired". Do this in a new directory: newfuzzy
+
+# ======================================================================
+# 2013-08-05 (Monday) 09:13 PDT
+
+# Note to self: when re-activating at Stage 2, do not do ASW000000001 through
+# f - these have problematic labels, and in any case reappear in D11 without 
+# sims in them.
+
+# ======================================================================
+# 2013-08-05 (Monday) 09:15 PDT
+
+# Restarting from scratch! Do it fast though, no need for more plots.
+# Also, implement hasty=False in config, to run using all classifications, 
+# even on subjects that should have been retired. This way we will use 
+# all classifications! :-) Report should show all classifications used.
+
+# BTW, need to kill old mongo dir.
+
+mkdirf $SWAP_DIR/allfuzzy
+# /Users/pjm/public_html/SpaceWarps/Science/analysis/allfuzzy
+
+SWIPE.csh spacewarp_2013-08-05.gz
+
+# Copy old fuzzy retirees to here, so that the comparison can be done by 
+# SWAPSHOP:
+
+cp ../fuzzy/CFHTLS_previously_retired.txt .
+cp ../fuzzy/CFHTLS_fuzzy_retire_these.txt .
+
+# (The second file is empty.)
+
+# Now the analysis:
+
+SWAPSHOP.csh -s CFHTLS --fast --startup
+
+# SWAPSHOP: start-up configuration stored in startup.config
+# SWAPSHOP: so far we have retired 262756 subjects. Let's do some more!
+# ...
+# SWAPSHOP: previous run brought total retirements to:
+#   262756 CFHTLS_previously_retired.txt
+# SWAPSHOP: current run has suggested another batch:
+#    18003 CFHTLS_allfuzzy_retire_these.txt
+# SWAPSHOP: after checking for uniqness, we need to retire these:
+#     9352 CFHTLS_allfuzzy_retire_these.txt
+# SWAPSHOP: 8651 subjects were already retired and can be ignored
+# SWAPSHOP: if you want, you can go ahead and retire 9352 subjects with
+ 
+
+# Now compare this retirement list with the old fuzzy one:
+
+# wc -l CFHTLS_*/*retire*
+#   263457 CFHTLS_2013-08-05_10:14:39/CFHTLS_2013-08-05_10:14:39_retire_these.txt
+
+# Retirements required are in 
+wc -l CFHTLS_allfuzzy_retire_these.txt
+#    9352 CFHTLS_allfuzzy_retire_these.txt
+
+# Are there any resurrections needed? These are the subjects that are in the 
+# old fuzzy retirement list, but not in the new one.
+
+wc -l ../fuzzy/CFHTLS_previously_retired.txt 
+#   262756 ../fuzzy/CFHTLS_previously_retired.txt
+cp ../fuzzy/CFHTLS_previously_retired.txt CFHTLS_fuzzy_previously_retired.txt
+
+# Difference is echo "263457 - 262756" | bc = 701
+
+# Why is this different from the new number of retirements? 
+#  -> Some of the previously retired systems need resurrecting.
+
+# We might expect to have to resurrect 
+# (9352-701 = 8651) systems. Need to make this resurrection list.
+
+# From above: 
+#  Take the previously retired list, and remove the 
+#  subjects that appear in the fuzzy retirement list.
+# The leftovers are to be resurrected!
+
+set resurrections = CFHTLS_allfuzzy_resurrect_these.txt
+set allfuzzyretirements = CFHTLS_2013-08-05_10:14:39/CFHTLS_2013-08-05_10:14:39_retire_these.txt
+set fuzzyretirements = CFHTLS_fuzzy_previously_retired.txt
+set newretirements = CFHTLS_allfuzzy_retire_these.txt
+
+set count = 0
+\rm -f $resurrections
+foreach subject ( `cat $fuzzyretirements` )
+   set k = `grep $subject $allfuzzyretirements | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> $resurrections
+   endif
+end
+echo "$count subjects already happily retired, can be ignored" ; \
+echo "List of subjects to be resurrected:" ; \
+wc -l $resurrections
+
+# 253852 subjects already happily retired, can be ignored
+# List of subjects to be resurrected:
+#     8904 CFHTLS_allfuzzy_resurrect_these.txt
+
+# Some mismatch: this is not the expected 8651.
+#  - could some resurrections be in NEW retirement list?
+
+set count = 0
+foreach subject ( `cat $newretirements` )
+   set k = `grep $subject $resurrections | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   endif
+end
+echo "$count new retirements will have just been resurrected!"
+
+# 0 new retirements will have just been resurrected!
+# Hmm. 
+
+# Oh well. Do 8904 resurrections, then 9532 retirements, then 
+# start afresh tomorrow using the allfuzzy pickles.
+
+SWITCH.py -r CFHTLS_allfuzzy_resurrect_these.txt >& CFHTLS_allfuzzy_resurrect_these.log 
+
+# List includes 14 at the beginning that are not to be resurrected - but
+# script takes care of them.
+
+SWITCH.py CFHTLS_allfuzzy_retire_these.txt >& CFHTLS_allfuzzy_retire_these.log
+
+# OK, now need to make the correct previously retired list, for SWAPSHOP:
+
+cp $allfuzzyretirements CFHTLS_allfuzzy_previously_retired.txt
+
+# OK, SWAPSHOP will concatenate this with CFHTLS_allfuzzy_retire_these.txt
+# the next time the script runs.
+
+
+
+# Check stats on report!
+
+cp CFHTLS_2013-08-05_10:14:39/CFHTLS_2013-08-05_10:14:39_report.pdf \
+   CFHTLS_allfuzzy_2013-08-05_10:14:39_report.pdf
+
+# False negative rate is down to 2.9%
+# Lens completeness is 93.5%
+# Lens purity is 2.1% (1708 candidates)
+# Mean classifications per subject: 23.3 
+
+# Compare with most recent meaningful fuzzy report:
+
+cp ../fuzzy/CFHTLS_2013-07-30_10:12:24/CFHTLS_2013-07-30_10:12:24_report.pdf \
+   CFHTLS_fuzzy_2013-07-30_10:12:24_report.pdf
+
+# FN: 7.1%
+# C:  92.2%
+# P:  0.1% (2153 candidates)
+# Nc: 8.0
+
+# GREAT. However, these numbers depend on the sims, which are classified 
+# hundreds of times each: so they may well not be accurate :-/ Not sure what
+# to do about this. Previous system (hasty: True) had systems ignored,
+# and then retired, as soon as they crossed threshold - the same wa strue for
+# the sims. Return to this mode later?
+
+
+
+# ======================================================================
 
 
 

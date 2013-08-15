@@ -2230,6 +2230,189 @@ cp ../fuzzy/CFHTLS_2013-07-30_10:12:24/CFHTLS_2013-07-30_10:12:24_report.pdf \
 # and then retired, as soon as they crossed threshold - the same wa strue for
 # the sims. Return to this mode later?
 
+# ======================================================================
+# 2013-07-30 (Tuesday) 08:29 PDT
+
+SWIPE.csh spacewarp_2013-08-07.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: previous run brought total retirements to:
+#   263457 CFHTLS_allfuzzy_previously_retired.txt
+# SWAPSHOP: current run has suggested another batch:
+#     4411 CFHTLS_allfuzzy_retire_these.txt
+# SWAPSHOP: after checking for uniqness, we need to retire these:
+#     3853 CFHTLS_allfuzzy_retire_these.txt
+# SWAPSHOP: 558 subjects were already retired and can be ignored
+# SWAPSHOP: if you want, you can go ahead and retire 3853 subjects with
+ 
+SWITCH.py CFHTLS_allfuzzy_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-08-08 (Thursday) 13:36 PDT
+
+SWIPE.csh spacewarp_2013-08-08.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: 665 subjects were already retired and can be ignored
+# SWAPSHOP: if you want, you can go ahead and retire 3416 subjects with 
+
+SWITCH.py CFHTLS_allfuzzy_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-08-09 (Friday) 14:34 PDT
+
+SWIPE.csh spacewarp_2013-08-09.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 3118 subjects with
+
+SWITCH.py CFHTLS_allfuzzy_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-08-12 (Monday) 15:52 PDT
+
+SWIPE.csh spacewarp_2013-08-12.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 5864 subjects with
+
+SWITCH.py CFHTLS_allfuzzy_retire_these.txt > retirement.log &
+
+# Also, start fuzzy processing again, for comparison. Possible to run both?
+# Want to switch back to the hasty processing, in order to keep 
+# selection function clean. Run fuzzy from the beginning! Probably should do 
+# this on Weds, when we have lots of time... Start early at SLAC, then
+# leave while at football. Pick up laptop on the way home.
+
+# ======================================================================
+# 2013-08-13 (Tuesday) 13:44 PDT
+
+SWIPE.csh spacewarp_2013-08-13.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1540 subjects with
+
+SWITCH.py CFHTLS_allfuzzy_retire_these.txt > retirement.log &
+
+# ======================================================================
+# 2013-08-14 (Wednesday) 10:36 PDT
+
+# OK, switching back to hasty analysis, in analysis/hasty !
+
+# First kill off old mongo, in allfuzzy:
+\rm -rf spacewarp_2013-08-13* mongo
+
+# Then:
+
+cd ../hasty
+
+SWIPE.csh spacewarp_2013-08-14.gz
+
+# Edit startup.config to make hasty standard. Then run swapshop:
+
+SWAPSHOP.csh -s CFHTLS --fast --startup
+
+# OK, started at 12:27 PDT, finished 12.5 hours later!
+
+# SWAPSHOP: previous run brought total retirements to:
+#        0 CFHTLS_hasty_previously_retired.txt
+# SWAPSHOP: current run has suggested another batch:
+#   283791 CFHTLS_hasty_retire_these.txt
+# SWAPSHOP: after checking for uniqness, we need to retire these:
+#   283791 CFHTLS_hasty_retire_these.txt
+# SWAPSHOP: 0 subjects were already retired and can be ignored
+# SWAPSHOP: if you want, you can go ahead and retire 283791 subjects with
+
+# Stats from the report are:
+# 
+# Number of classifications: 	7924951
+# Number of classns used: 		2845249
+# Number of classifiers: 		31808
+# Number of test subjects: 		295030
+# Number of sims: 				3895
+# Number of duds: 				3150
+#  
+# Mean test classns/classifier:	223.8 
+# Mean classns/test subject:	9.2 
+# Test subject retirements:		283791 
+# Mean classns/retirement:		9.1 
+# Test subject rejections:		283791 
+# Test subject identifications:	2315
+# Lens completeness:			91.7% 
+# Lens purity:					0.2% 
+# FP contamination:				99.8%
+# Lenses missed (FN rate):		7.9%
+
+# OK, now need to compare hasty retirements with most recent allfuzzy list, 
+# as above. 
+
+# From above: 
+#  Take the previously retired list, and remove the 
+#  subjects that appear in the fuzzy retirement list.
+# The leftovers are to be resurrected!
+
+set resurrections = CFHTLS_hasty_resurrect_these.txt
+set allfuzzyretirements = ../allfuzzy/CFHTLS_2013-08-13_10:01:43/CFHTLS_2013-08-13_10:01:43_retire_these.txt
+set hastyretirements = ../hasty/CFHTLS_2013-08-14_10:03:28/CFHTLS_2013-08-14_10:03:28_retire_these.txt
+set newretirements = CFHTLS_hasty_actually_retire_these.txt
+
+set count = 0
+\rm -f $resurrections
+foreach subject ( `cat $allfuzzyretirements` )
+   set k = `grep $subject $hastyretirements | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> $resurrections
+   endif
+end
+echo "$count allfuzzy subjects already happily retired, can be ignored" ; \
+echo "List of subjects to be resurrected:" ; \
+wc -l $resurrections
+
+# 279390 allfuzzy subjects already happily retired, can be ignored
+# List of subjects to be resurrected:
+#      840 CFHTLS_hasty_resurrect_these.txt
+
+
+# Now look for new retirements, by doing the cross-check the other way:
+
+set count = 0
+\rm -f $newretirements
+foreach subject ( `cat $hastyretirements` )
+   set k = `grep $subject $allfuzzyretirements | wc -l`
+   if ($k == 1) then
+       @ count = $count + $k
+   else if ($k == 0) then
+       echo $subject >> $newretirements
+   endif
+end
+echo "$count hasty subjects already happily retired, can be ignored" ; \
+echo "List of subjects to be retired:" ; \
+wc -l $newretirements
+
+# 279390 hasty subjects already happily retired, can be ignored
+# List of subjects to be retired:
+#     4401 CFHTLS_hasty_actually_retire_these.txt
+
+# Next time around, the $hastyretirements list will get copied into the 
+# previously retired list, so no need to copy manually. 
+
+# Now SWITCH! 
+
+SWITCH.py -r CFHTLS_hasty_resurrect_these.txt >& CFHTLS_hasty_resurrect_these.log 
+
+# Done.
+
+SWITCH.py CFHTLS_hasty_actually_retire_these.txt >& CFHTLS_hasty_actually_retire_these.log
+
+# Pending...
+
+# Meanwhile, in the allfuzzy directory, run SWAPSHOP to keep the pickles
+# up to date.
+
+cd ../allfuzzy
+SWAPSHOP.csh -s CFHTLS --fast
 
 
 # ======================================================================

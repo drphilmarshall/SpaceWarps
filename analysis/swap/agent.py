@@ -35,14 +35,14 @@ class Agent(object):
         | "NOT" when it is NOT     "NOT" when it is a LENS   |
         | with probability PD        with probability (1-PL) |
         
-	It makes the simplest possible assignment for these probabilities,
-	namely that PX = 0.5 if NX = 0, and then updates from there using the
-	training subjects such that 
-	PX = (NX_correct + initialNX/2) / (NX+initialNX)
-	at all times. For example, if the volunteer is right about 80% of the
-	simulated lenses they see, the agent will assign:
-	PL = Pr("LENS"|LENS) = 0.8. initialNX are listed in the configuration
-	file.
+        It makes the simplest possible assignment for these probabilities,
+        namely that PX = 0.5 if NX = 0, and then updates from there using the
+        training subjects such that
+          PX = (NX_correct + initialNX/2) / (NX+initialNX)
+        at all times. For example, if the volunteer is right about 80% of the
+        simulated lenses they see, the agent will assign: 
+          PL = Pr("LENS"|LENS) = 0.8. 
+        initialNX are listed in the configuration file.
         
         Agents are initialised with PL = PD = some initial value, 
         provided in the configuration file. (0.5,0.5) would be a

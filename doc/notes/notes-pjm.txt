@@ -2411,9 +2411,330 @@ SWITCH.py CFHTLS_hasty_actually_retire_these.txt >& CFHTLS_hasty_actually_retire
 # Meanwhile, in the allfuzzy directory, run SWAPSHOP to keep the pickles
 # up to date.
 
-cd ../allfuzzy
+cd $SWAP_DIR/allfuzzy
 SWAPSHOP.csh -s CFHTLS --fast
 
+# Save transfer files:
+
+cd $SWAP_DIR/hasty
+
+mkdir transfer
+mv CFHTLS_hasty_actually_retire_these.* transfer/
+mv CFHTLS_hasty_resurrect_these.* transfer/
+cp CFHTLS_hasty_* transfer/
+
+
+# ======================================================================
+# 2013-08-16 (Friday) 09:09 PDT
+
+# New regime: both hasty and allfuzzy!
+
+SWIPE.csh spacewarp_2013-08-16.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 2489 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log &
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-17 (Saturday) 15:25 PDT
+
+SWIPE.csh spacewarp_2013-08-17.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 863 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log &
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-18 (Sunday) 09:41 PDT
+
+SWIPE.csh spacewarp_2013-08-18.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 715 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-19 (Monday) 10:34 PDT
+
+SWIPE.csh spacewarp_2013-08-19.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 502 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-20 (Tuesday) 09:32 PDT
+
+SWIPE.csh spacewarp_2013-08-20.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 457 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-21 (Wednesday) 13:08 PDT
+
+SWIPE.csh spacewarp_2013-08-21.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 352 subjects with
+# Low because D8 is now in play...
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-22 (Thursday) 10:48 PDT
+
+SWIPE.csh spacewarp_2013-08-22.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 424 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-23 (Friday) 08:56 PDT
+
+SWIPE.csh spacewarp_2013-08-23.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 766 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-24 (Saturday) 10:13 PDT
+
+SWIPE.csh spacewarp_2013-08-24.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAP: updating all subjects with classifications made since 2013-08-23_10:14:02
+# SWAP: should we use the marker positions on sims?  True
+# SWAP: read an old bureau of 32175 classification agents from ./CFHTLS_bureau.pickle
+# SWAP: read an old collection of 326666 subjects from ./CFHTLS_collection.pickle
+# SWAP: interpreting up to 50000  classifications...
+# 
+# SWAP: total no. of classifications processed:  0
+# SWAP: something went wrong - 0 classifications found.
+
+# SWIPE: mongorestoring into database 'ouroboros_staging'
+# SWIPE: mongorestore log stored in .spacewarp_2013-08-24_mongorestore.log
+# SWIPE: ERROR: failed to restore database, exiting
+
+# Hmm - not sure why. Trash 24, make diskspace, try 25.
+
+# ======================================================================
+# 2013-08-25 (Sunday) 15:33 PDT
+
+SWIPE.csh spacewarp_2013-08-25.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1547 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-26 (Monday) 17:20 PDT
+
+SWIPE.csh spacewarp_2013-08-26.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1369 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-27 (Tuesday) 08:47 PDT
+
+SWIPE.csh spacewarp_2013-08-27.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1925 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-28 (Wednesday) 17:24 PDT
+
+SWIPE.csh spacewarp_2013-08-28.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 2398 subjects with
+# That's better!
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-29 (Thursday) 10:29 PDT
+
+SWIPE.csh spacewarp_2013-08-29.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 2089 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-08-30 (Friday) 14:29 PDT
+
+SWIPE.csh spacewarp_2013-08-30.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1675 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-09-01 (Sunday) 18:38 PDT
+
+SWIPE.csh spacewarp_2013-09-01.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 4024 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
+
+# ======================================================================
+# 2013-09-02 (Monday) 11:09 PDT
+
+SWIPE.csh spacewarp_2013-09-02.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# Now update allfuzzy pickles:
+
+cd $SWAP_DIR/allfuzzy
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+cd $SWAP_DIR/hasty
 
 # ======================================================================
 

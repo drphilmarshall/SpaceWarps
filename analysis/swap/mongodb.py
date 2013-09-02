@@ -8,7 +8,7 @@ except:
     print "MongoDB: pymongo is not installed. You can still --practise though"
     # sys.exit()
 
-# Hard-coded for all Space Warps datasets? Or just beta?
+# Hard-coded for all Space Warps datasets:
 testGroup = '5154a3783ae74086ab000001'
 trainingGroup = '5154a3783ae74086ab000002'
     

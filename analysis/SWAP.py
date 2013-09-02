@@ -25,8 +25,8 @@ def SWAP(argv):
         classifier's agent's confusion matrix, and each subject's lens
         probability. The main reason for taking this approach is that
         it is the most logical one; secondarily, it opens up the
-        possibility of performing the analysis in real time (although
-        presumably not with this piece of python).
+        possibility of performing the analysis in real time (and maybe even 
+        with this piece of python).
 
         Currently, the agents' confusion matrices only depend on the
         classifications of training subjects. Upgrading this would be a
@@ -198,6 +198,9 @@ def SWAP(argv):
 
     batch = db.find('since',t1)
         
+    # Actually, batch is a cursor, now set to the first classification 
+    # after time t1.
+    
     # ------------------------------------------------------------------
     
     count_max = 50000

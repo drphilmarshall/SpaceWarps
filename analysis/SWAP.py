@@ -199,7 +199,10 @@ def SWAP(argv):
     batch = db.find('since',t1)
         
     # Actually, batch is a cursor, now set to the first classification 
-    # after time t1.
+    # after time t1. Maybe this could be a Kafka cursor instead? And then
+    # all of this could be in an infinite loop? Hmm - we'd still want to 
+    # produce some output periodically - but this should be done by querying
+    # the bureau and sample databases, separately from SWAP. 
     
     # ------------------------------------------------------------------
     
@@ -236,6 +239,11 @@ def SWAP(argv):
             bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
         elif category == 'training':
             bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
+
+        # If the bureau and the sample were being stored as Mongo databases,
+        # we would want to update those DBs here, with bureau.save or 
+        # agent.save...
+
 
         # Brag about it:
         count += 1
@@ -411,10 +419,10 @@ def SWAP(argv):
             sample.member[ID].plot_trajectory(fig3)
 
         # These are false negatives and true positives
-        for ID in sample.shortlist(15,kind='sim',status='rejected'):
-            sample.member[ID].plot_trajectory(fig3)
-        for ID in sample.shortlist(15,kind='sim',status='detected'):
-            sample.member[ID].plot_trajectory(fig3)
+        # for ID in sample.shortlist(15,kind='sim',status='rejected'):
+        #     sample.member[ID].plot_trajectory(fig3)
+        # for ID in sample.shortlist(15,kind='sim',status='detected'):
+        #     sample.member[ID].plot_trajectory(fig3)
 
         # Aprajita's false negative only plot:
         # for ID in sample.shortlist(Ns,kind='sim',status='rejected'):

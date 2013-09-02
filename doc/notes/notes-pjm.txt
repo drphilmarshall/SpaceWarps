@@ -2725,6 +2725,7 @@ cd $SWAP_DIR/hasty
 SWIPE.csh spacewarp_2013-09-02.gz
 
 SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1935 subjects with
 
 SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
 

@@ -3042,6 +3042,35 @@ SWAPSHOP.csh -s CFHTLS --fast
 SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
 
 # ======================================================================
+# 2013-10-10 (Thursday) 11:33 PDT
+
+SWIPE.csh spacewarp_2013-10-10.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1550 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-11 (Friday) 09:09 PDT
+
+SWIPE.csh spacewarp_2013-10-11.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-14 (Monday) 08:47 PDT
+
+SWIPE.csh spacewarp_2013-10-14.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 4186 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
 
 
 

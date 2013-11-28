@@ -366,6 +366,27 @@ def SWAP(argv):
         N = swap.write_list(sample,new_samplefile,item='false_negative')
         print "SWAP: "+str(N)+" lines written to "+new_samplefile
 
+        # Also write out catalogs of subjects, including the ZooID, subject ID,
+        # how many classifications, and probability:
+
+        catalog = swap.get_new_filename(tonights.parameters,'candidate_catalog')
+        print "SWAP: saving catalog of high probability subjects..."
+        Nlenses,Nsubjects = swap.write_catalog(sample,catalog,thresholds,kind='test')
+        print "SWAP: From "+str(Nsubjects)+" subjects classified,"
+        print "SWAP: "+str(Nlenses)+" candidates (with P > rejection) written to "+catalog
+
+        catalog = swap.get_new_filename(tonights.parameters,'sim_catalog')
+        print "SWAP: saving catalog of high probability subjects..."
+        Nsims,Nsubjects = swap.write_catalog(sample,catalog,thresholds,kind='sim')
+        print "SWAP: From "+str(Nsubjects)+" subjects classified,"
+        print "SWAP: "+str(Nsims)+" sim 'candidates' (with P > rejection) written to "+catalog
+
+        catalog = swap.get_new_filename(tonights.parameters,'dud_catalog')
+        print "SWAP: saving catalog of high probability subjects..."
+        Nduds,Nsubjects = swap.write_catalog(sample,catalog,thresholds,kind='dud')
+        print "SWAP: From "+str(Nsubjects)+" subjects classified,"
+        print "SWAP: "+str(Nduds)+" dud 'candidates' (with P > rejection) written to "+catalog
+
 
     # ------------------------------------------------------------------
     # Now, if there is more to do, over-write the update.config file so
@@ -408,28 +429,57 @@ def SWAP(argv):
         bureau.plot_probabilities(Nc,t,pngfile)        
         tonights.parameters['probabilitiesplot'] = pngfile
 
-        # Subject probabilities:
+        # Subject trajectories:
 
         fig3 = sample.start_trajectory_plot()
         pngfile = swap.get_new_filename(tonights.parameters,'trajectories')
+        
+        # Random 500  for display purposes:
         Ns = np.min([500,sample.size()])
         print "SWAP: plotting "+str(Ns)+" subject trajectories in "+pngfile
 
         for ID in sample.shortlist(Ns):
             sample.member[ID].plot_trajectory(fig3)
 
-        # These are false negatives and true positives
-        # for ID in sample.shortlist(15,kind='sim',status='rejected'):
-        #     sample.member[ID].plot_trajectory(fig3)
-        # for ID in sample.shortlist(15,kind='sim',status='detected'):
-        #     sample.member[ID].plot_trajectory(fig3)
-
-        # Aprajita's false negative only plot:
+        # To plot only false negatives, or only true positives:
         # for ID in sample.shortlist(Ns,kind='sim',status='rejected'):
         #     sample.member[ID].plot_trajectory(fig3)
-
-        sample.finish_trajectory_plot(fig3,t,pngfile)
+        # for ID in sample.shortlist(Ns,kind='sim',status='detected'):
+        #     sample.member[ID].plot_trajectory(fig3)
+        
+        sample.finish_trajectory_plot(fig3,pngfile,t=t)
         tonights.parameters['trajectoriesplot'] = pngfile
+
+        # Candidates! Plot all undecideds or detections:
+
+        fig4 = sample.start_trajectory_plot(final=True)
+        pngfile = swap.get_new_filename(tonights.parameters,'sample')
+        
+        # BigN = 100000 # Would get them all...
+        BigN = 500      # Can't see them all!
+        candidates = []
+        candidates += sample.shortlist(BigN,kind='test',status='detected')
+        candidates += sample.shortlist(BigN,kind='test',status='undecided')
+        sims = []
+        sims += sample.shortlist(BigN,kind='sim',status='detected')
+        sims += sample.shortlist(BigN,kind='sim',status='undecided')
+        duds = []
+        duds += sample.shortlist(BigN,kind='dud',status='detected')
+        duds += sample.shortlist(BigN,kind='dud',status='undecided')
+
+        print "SWAP: plotting "+str(len(sims))+" sims in "+pngfile
+        for ID in sims:
+            sample.member[ID].plot_trajectory(fig4)
+        print "SWAP: plotting "+str(len(duds))+" duds in "+pngfile
+        for ID in duds:
+            sample.member[ID].plot_trajectory(fig4)
+        print "SWAP: plotting "+str(len(candidates))+" candidates in "+pngfile
+        for ID in candidates:
+            sample.member[ID].plot_trajectory(fig4)
+
+        # They will all show up in the histogram though:
+        sample.finish_trajectory_plot(fig4,pngfile,final=True)
+        tonights.parameters['candidatesplot'] = pngfile
 
         # ------------------------------------------------------------------
         # Finally, write a PDF report:

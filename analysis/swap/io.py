@@ -129,6 +129,38 @@ def write_list(sample, filename, item=None):
     return count
     
 # ----------------------------------------------------------------------------
+# Write out a multi-column catalog of high probability candidates.
+
+def write_catalog(sample, filename, thresholds, kind='test'):
+
+    Nsubjects = 0
+    Nlenses = 0
+    
+    # Open a new catalog and write a header:
+    F = open(filename,'w')
+    F.write('%s\n' % "# zooid     P          Nclass  image")
+    
+    for ID in sample.list():
+        subject = sample.member[ID]
+        P = subject.mean_probability
+        
+        if P > thresholds['rejection'] and subject.kind == kind:
+        
+            zooid = subject.ZooID
+            png = subject.location
+            Nclass = subject.exposure
+
+            # Write a new line:
+            F.write('%s  %9.7f  %s       %s\n' % (zooid,P,str(Nclass),png))
+            Nlenses += 1
+    
+        Nsubjects += 1
+    
+    F.close()
+        
+    return Nlenses,Nsubjects
+    
+# ----------------------------------------------------------------------------
 # Make up a new filename, based on tonight's parameters:
 
 def get_new_filename(pars,flavour):
@@ -145,10 +177,16 @@ def get_new_filename(pars,flavour):
         folder = '.'
     elif flavour == 'histories' or \
          flavour == 'trajectories' or \
+         flavour == 'sample' or \
          flavour == 'probabilities':
         ext = 'png'
         folder = pars['dir']
     elif flavour == 'retire_these':
+        ext = 'txt'
+        folder = pars['dir']
+    elif flavour == 'candidate_catalog' or \
+         flavour == 'sim_catalog' or \
+         flavour == 'dud_catalog':
         ext = 'txt'
         folder = pars['dir']
     elif flavour == 'candidates' or \

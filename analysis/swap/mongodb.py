@@ -94,10 +94,10 @@ class MongoDB(object):
     def find(self,word,t):
 
        if word == 'since':
-            batch = self.classifications.find({'updated_at': {"$gt": t}})
+            batch = self.classifications.find({'updated_at': {"$gt": t}},timeout=False)
        
        elif word == 'before':
-            batch = self.classifications.find({'updated_at': {"$lt": t}})
+            batch = self.classifications.find({'updated_at': {"$lt": t}},timeout=False)
        
        else:
            print "MongoDB: error, cannot find classifications '"+word+"' "+str(t)
@@ -148,7 +148,7 @@ class MongoDB(object):
             ZooID = subject['zooniverse_id']
         
         # And finally pull the subject itself from the subject table:
-        subject = self.subjects.find_one({'_id': ID})
+        subject = self.subjects.find_one({'_id': ID},timeout=False)
         
         # Was it a training subject or a test subject?
         if subject.has_key('group_id'):
@@ -292,13 +292,13 @@ if __name__ == '__main__':
     # Make sure we catch them all!
     t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
 
-    batch = db.find('since',t1)
+    batch = db.find('since',t1,timeout=False)
 
     # How many did we get?
     total = db.classifications.count()
     print "Whoah! Found ",total," classifications!"
     print "Here's the last one:"
-    for classification in db.classifications.find().skip(total-1).limit(1):
+    for classification in db.classifications.find(timeout=False).skip(total-1).limit(1):
         items = db.digest(classification)
         print items[:]
     

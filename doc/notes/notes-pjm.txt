@@ -3071,8 +3071,423 @@ SWAPSHOP.csh -s CFHTLS --fast
 SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
 
 # ======================================================================
+# 2013-10-16 (Wednesday) 11:20 PDT
+
+SWIPE.csh spacewarp_2013-10-16.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-17 (Thursday) 12:33 PDT
+
+SWIPE.csh spacewarp_2013-10-17.gz
+
+# Argh - pickles corrupted. Redo all hasty analysis. 
+
+SWAPSHOP.csh -s CFHTLS --fast --startup
+# SWAPSHOP: if you want, you can go ahead and retire 392430 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-19 (Saturday) 10:12 PDT
+
+SWIPE.csh spacewarp_2013-10-18.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1069 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-21 (Monday) 11:23 PDT
+
+SWIPE.csh spacewarp_2013-10-21.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 4499 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-22 (Tuesday) 14:27 PDT
+
+SWIPE.csh spacewarp_2013-10-22.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 2013 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-23 (Wednesday) 15:49 PDT
+
+SWIPE.csh spacewarp_2013-10-23.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1025 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-24 (Thursday) 13:29 PDT
+
+SWIPE.csh spacewarp_2013-10-24.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1719 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-25 (Friday) 11:59 PDT
+
+SWIPE.csh spacewarp_2013-10-25.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1491 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-28 (Monday) 11:24 PDT
+
+SWIPE.csh spacewarp_2013-10-28.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 4245 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-29 (Tuesday) 13:49 CDT
+
+SWIPE.csh spacewarp_2013-10-29.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1488 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-10-30 (Wednesday) 11:03 CDT
+
+SWIPE.csh spacewarp_2013-10-30.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 933 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-02 (Saturday) 09:51 PDT
+
+SWIPE.csh spacewarp_2013-11-01.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 2402 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-04 (Monday) 09:31 PST
+
+SWIPE.csh spacewarp_2013-11-04.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 3073 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-05 (Tuesday) 09:38 PST
+
+SWIPE.csh spacewarp_2013-11-05.gz
+# x spacewarp_2013-11-05/spacewarp_classifications.bson: Truncated tar archive
+# tar: Error exit delayed from previous errors.
+
+# Hmm - see if tomorrow's is better...
+
+# ======================================================================
+# 2013-11-06 (Wednesday) 10:07 PST
+
+SWIPE.csh spacewarp_2013-11-06.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 1511 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-07 (Thursday) 08:32 PST
+
+SWIPE.csh spacewarp_2013-11-07.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 680 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-08 (Friday) 12:47 PST
+
+SWIPE.csh spacewarp_2013-11-08.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 442 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-09 (Saturday) 13:24 PST
+
+SWIPE.csh spacewarp_2013-11-09.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 414 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-11 (Monday) 09:35 PST
+
+SWIPE.csh spacewarp_2013-11-11.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAP: something went wrong - 0 classifications found.
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-14 (Thursday) 09:52 PST
+
+SWIPE.csh spacewarp_2013-11-14.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 784 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-15 (Friday) 14:13 PST
+
+SWIPE.csh spacewarp_2013-11-15.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-18 (Monday) 11:02 PST
+
+SWIPE.csh spacewarp_2013-11-18.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-19 (Tuesday) 12:06 PST
+
+SWIPE.csh spacewarp_2013-11-19.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-20 (Wednesday) 14:52 PST
+
+SWIPE.csh spacewarp_2013-11-20.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 30 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-21 (Thursday) 10:04 PST
+
+SWIPE.csh spacewarp_2013-11-21.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 46 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-22 (Friday) 11:45 PST
+
+sleep 500
+SWIPE.csh spacewarp_2013-11-22.gz && \
+SWAPSHOP.csh -s CFHTLS --fast && \
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# SWAPSHOP: if you want, you can go ahead and retire 20 subjects with
+
+# There's something funny going on here - 13,000 classifications and
+# only 20 retirements?
+
+# Probably we are down to the detections and the undecideds! Finishing
+# criterion may need resetting - via max classifications = 20?
+
+# ======================================================================
+# 2013-11-25 (Monday) 08:35 PST
+
+SWIPE.csh spacewarp_2013-11-25.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 77 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-26 (Tuesday) 12:11 PST
+
+SWIPE.csh spacewarp_2013-11-26.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 14 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-27 (Wednesday) 12:59 PST
+
+SWIPE.csh spacewarp_2013-11-27.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+# SWAPSHOP: if you want, you can go ahead and retire 31 subjects with
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# ======================================================================
+# 2013-11-27 (Wednesday) 15:02 PST
+
+# Investigating undecideds. Hampered by SWAP's enormous (1.8Gb!) pickle,
+# so try developing in a testplots directory having run SWAP on just the 
+# autumn data (since Nov 1).
+
+mkdirf testplots
+cp ../hasty/startup.config autumn.config
+
+# Edited startup.config...
+
+SWAP.py autumn.config
+
+# Takes some time to get to the right part of teh file... Then does 50k,
+# and stops. Good! Now have pickles for plot testing.
+
+SWAG.py update.config
+
+# This worked well for testing. Then I upgraded SWAP to output catalogs with
+# probabilities, and an extra trajectories plot showing *all* the 
+# undecided/detected test subjects, sims and duds. 
+# I ran SWAP on a copy of update.config, that had report=True and
+# repickle=False:
+
+SWAP.py plot.config
+
+# ...
+# SWAP: updating all subjects with classifications made since 2013-11-27_10:20:43
+# SWAP: read an old bureau of 36536 classification agents from ./CFHTLS_bureau.pickle
+# SWAP: read an old collection of 437276 subjects from ./CFHTLS_collection.pickle
+# ...
+# SWAP: saving lens candidates...
+# SWAP: 3348 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_candidates.txt
+# ...
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 6409 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5337 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_dud_catalog.txt
+# ...
+# SWAP: plotting 500 candidates in /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_sample.png
+# SWAP: plotting 500 sims in /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_sample.png
+# SWAP: plotting 5 duds in /Users/pjm/public_html/SpaceWarps/Science/analysis/hasty/CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_sample.png
+
+# So, 3348 candidates, (6409-3348) = 3061 undecideds.
+
+# OK, look at completeness as a function of probability threshold.
+# 5712 sims in total: 5337 sim candidates = 93.4% completeness 
+
+set candidatecat = CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_candidate_catalog.txt
+set simcat = CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_sim_catalog.txt
+
+set thresholds = ( 0.01 0.05 0.10 0.25 0.50 0.90 0.95 )
+
+foreach threshold ( $thresholds )
+   set Ncandidates = `grep -v '#' $candidatecat | awk '{if ($2 > '$threshold') print $1}' | wc -l`
+   set Nsims = `grep -v '#' $simcat | awk '{if ($2 > '$threshold') print $1}' | wc -l`
+   set completeness = `echo $Nsims 5712 | awk '{printf "%.1f\n", 100.0*$1/$2}'`
+   echo "P > ${threshold}: ${Ncandidates} candidates at ${completeness}% completeness"
+end
+
+# P > 0.01: 3837 candidates at 93.0% completeness
+# P > 0.05: 3675 candidates at 92.9% completeness
+# P > 0.10: 3609 candidates at 92.9% completeness
+# P > 0.25: 3514 candidates at 92.9% completeness
+# P > 0.50: 3456 candidates at 92.8% completeness
+# P > 0.90: 3358 candidates at 92.8% completeness
+# P > 0.95: 3348 candidates at 92.8% completeness
+
+# Interesting. I think this shows that accepting candidates below 
+# P = 0.95 is barely worth it - we're adding a lot of noise for very little
+# gain in completeness. Distribution of P's is highly bimodal!
+
+# How many subjects have P > rejection, P < detection and Nclass < 20?
+
+grep -v '#' $candidatecat | awk '{if ($2 < 0.95 && $3 < 20) print $1}' | wc -l
+#     1403
+grep -v '#' $candidatecat | awk '{if ($2 < 0.95 && $3 < 10) print $1}' | wc -l
+#     1062
+
+# This is how many "unfinished" subjects there are. If we set
+# max_classifications to 20, we only have 1403 images to go. Request from
+# Michael!
+
+# OK, what about even better samples? Can we select at P > 99%?
+
+set thresholds = ( 0.95 0.96 0.97 0.99 0.995 0.999 )
+
+foreach threshold ( $thresholds )
+   set Ncandidates = `grep -v '#' $candidatecat | awk '{if ($2 > '$threshold') print $1}' | wc -l`
+   set Nsims = `grep -v '#' $simcat | awk '{if ($2 > '$threshold') print $1}' | wc -l`
+   set completeness = `echo $Nsims 5712 | awk '{printf "%.1f\n", 100.0*$1/$2}'`
+   echo "P > ${threshold}: ${Ncandidates} candidates at ${completeness}% completeness"
+end
+
+# P > 0.95: 3348 candidates at 92.8% completeness
+# P > 0.96: 2921 candidates at 82.9% completeness
+# P > 0.97: 2463 candidates at 71.8% completeness
+# P > 0.99: 1153 candidates at 37.6% completeness
+# P > 0.995: 581 candidates at 23.8% completeness
+# P > 0.999: 37 candidates at 2.2% completeness
+
+# Interesting: 0.95 looks somewhat special, the completeness drops off above
+# that number. What do the 0.999 systems look like? ~ the top 40?
+
+mkdir -p top40
+set urls = `grep -v '#' $candidatecat | awk '{if ($2 > 0.999) print $4}'`
+foreach url ( $urls )
+  set x = `grep $url $candidatecat`
+  set png = "top40/${x[1]}.png"
+  wget -O $png -o junk $url 
+  du -h $png
+end
+cd top40
+gallery.pl -o top40.pdf -x 2 -y 2 -pdf -t *png
+
+# Hah! Only a few look like solid lenses. Stage 1 P is noisy...
 
 
+# ======================================================================
 
 
 

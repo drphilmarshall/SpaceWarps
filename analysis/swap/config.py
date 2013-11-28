@@ -9,7 +9,7 @@ import os, glob
 pmin,pmax = 2e-8,1.1
 
 # Plotting limits for no. of classifications (per subject):
-Ncmin,Ncmax = 0.2,50
+Ncmin,Ncmax = 0.2,60
 
 # Limits to confusion matrix elements - the volunteers are only human:
 PDmax,PLmax = 0.99,0.99

@@ -97,8 +97,13 @@ class Collection(object):
                      longlist.append(ID)
                      count += 1
             if count < N: N = count
+
+        if N == 0:
+            shortlist = []
+        else:    
+            shortlist = longlist[0::int(len(longlist)/N)][0:N]
         
-        return longlist[0::int(len(longlist)/N)][0:N]
+        return shortlist
             
 # ----------------------------------------------------------------------------
 # Get the probability thresholds for this sample:
@@ -220,7 +225,7 @@ class Collection(object):
 # ----------------------------------------------------------------------
 # Prepare to plot subjects' trajectories:
 
-    def start_trajectory_plot(self):
+    def start_trajectory_plot(self,final=False):
     
         fig = plt.figure(figsize=(5,8), dpi=300)
 
@@ -265,7 +270,10 @@ class Collection(object):
         upper.set_ylabel('No. of classifications')
         for label in upper.get_xticklabels():
             label.set_visible(False)
-        upper.set_title('Example Subject Trajectories')
+        if final:
+            upper.set_title('Candidate Trajectories')
+        else:
+            upper.set_title('Example Subject Trajectories')
         
         # Lower panel: histogram:
         lower = fig.add_axes(lowerarea, sharex=upper)
@@ -285,7 +293,7 @@ class Collection(object):
 # ----------------------------------------------------------------------
 # Prepare to plot subjects' trajectories:
 
-    def finish_trajectory_plot(self,axes,t,filename):
+    def finish_trajectory_plot(self,axes,filename,t=None,final=None):
     
         # Plot histograms! 0 is the upper panel, 1 the lower.
         plt.sca(axes[1])
@@ -294,6 +302,7 @@ class Collection(object):
         bins = 10.0**bins
         colors = ['blue','red','black']
         labels = ['Training: Sims','Training: Duds','Test: Survey']
+        thresholds = self.thresholds()
         
         for j,kind in enumerate(['sim','dud','test']):
             
@@ -305,13 +314,18 @@ class Collection(object):
             p[p<swap.pmin] = swap.pmin
             # print "kind,bins,p = ",kind,bins,p
             
+            # Final plot - only show subjects above threshold:
+            if final:
+                p = p[p>thresholds['rejection']]
+                
             # Pylab histogram:
             plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=0.7, label=labels[j])
             plt.legend(prop={'size':10})
         
-        # Add timestamp in top righthand corner:
-        plt.sca(axes[0])
-        plt.text(1.3*swap.prior,0.27,t,color='gray')
+        if t is not None:
+            # Add timestamp in top righthand corner:
+            plt.sca(axes[0])
+            plt.text(1.3*swap.prior,0.27,t,color='gray')
         
         # Write out to file:
         plt.savefig(filename,dpi=300)

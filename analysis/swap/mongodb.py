@@ -147,7 +147,16 @@ class MongoDB(object):
             ID = subject['id']
             ZooID = subject['zooniverse_id']
         
-        # And finally pull the subject itself from the subject table:
+        # Pull out the annotations and get the stage the classification was made at:
+        annotations = classification['annotations']
+        
+        stage = 1
+        for annotation in annotations:
+           if annotation.has_key('stage'):
+               stage = annotation['stage']
+        
+        
+        # Now pull the subject itself from the subject table:
         subject = self.subjects.find_one({'_id': ID},timeout=False)
         
         # Was it a training subject or a test subject?
@@ -157,11 +166,21 @@ class MongoDB(object):
             # Subject is tutorial and has no group id:
             return None
         
+        metadata = subject['metadata']
+        
+        # Check stage:
+        if metadata.has_key('stage2'):
+            if stage == 1: 
+                # This happens when the data is uploaded, but the site has
+                # not been taken down... Need to ignore these classifications!
+                # print "WARNING: classification labelled stage 1, while subject is stage 2!"
+                return None
+       
+        
         # What kind of subject was it? Training or test? A sim or a dud?
         kind = ''
         if str(groupId) == trainingGroup:
             category = 'training'
-            metadata = subject['metadata']
             things = metadata['training']
             # things is either a list of dictionaries, or in beta, a 
             # single dictionary:
@@ -170,10 +189,12 @@ class MongoDB(object):
             else:
                 thing = things
             word = thing['type']
-            if word == 'empty':
-                kind = 'dud'
-            else:
+            if (word == 'lensing cluster' \
+               or word == 'lensed galaxy' \
+               or word == 'lensed quasar'):
                 kind = 'sim'
+            else:
+                kind = 'dud'
         else: # It's a test subject:
             category = 'test'
             kind = 'test'
@@ -185,9 +206,8 @@ class MongoDB(object):
         else:
             location = None
         
+        
         # What did the volunteer say about this subject?
-        # First select the annotations:
-        annotations = classification['annotations']
 
         # For sims, we really we want to know if the volunteer hit the 
         # arcs - but this is not yet stored in the database 
@@ -238,9 +258,9 @@ class MongoDB(object):
         # Testing to see what people do:
         # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
         
-        # Check we got all 9 items:            
-        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location)
-        if len(items) != 9: print "MongoDB: digest failed: ",items[:] 
+        # Check we got all 10 items:            
+        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(stage)
+        if len(items) != 10: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]
 

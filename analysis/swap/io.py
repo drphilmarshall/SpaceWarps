@@ -232,6 +232,7 @@ def write_config(filename, pars):
                  'start', \
                  'bureaufile', \
                  'samplefile', \
+                 'stage', \
                  'verbose', \
                  'one_by_one', \
                  'report', \

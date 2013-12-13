@@ -3486,8 +3486,374 @@ gallery.pl -o top40.pdf -x 2 -y 2 -pdf -t *png
 
 # Hah! Only a few look like solid lenses. Stage 1 P is noisy...
 
+# ======================================================================
+# 2013-12-02 (Monday) 15:33 PST
+
+# Look up probabilities of real lenses!
+# Do this in hasty directory.
+
+set manifest = /Users/pjm/public_html/SpaceWarps/Science/training/SpottersGuide/CFHTLS/knownlenses/listfiles_d1_d11
+set lenscat = /Users/pjm/public_html/SpaceWarps/Science/training/SpottersGuide/CFHTLS/knownlenses/finlenscat_updated.txt
+set candidatecat = CFHTLS_2013-11-27_10:20:43/CFHTLS_2013-11-27_10:20:43_candidate_catalog.txt
+
+\rm -f junk*
+foreach stem ( `grep -v '#' $lenscat | awk '{print $1}'` )
+  set zooid = `grep $stem $manifest | awk '{print $3}'`
+  foreach k ( 2 3 )
+    set altstem = `echo $stem | sed s/CFHTLS_0/CFHTLS_$k/g | sed s/CFHTLS_1/CFHTLS_$k/g`
+    set altzooid = `grep $altstem $manifest | awk '{print $3}'`
+    if ($#altzooid) then
+      set stem = $altstem
+      set zooid = $altzooid
+    endif
+  end
+  grep $zooid $candidatecat >> junk1
+  grep $stem $lenscat >> junk2
+  grep $zooid $manifest >> junk3
+end
+
+# Note how we had to check for teh alt ids, for teh subjects that have real 
+# lenses in them AND had sims put in them. The later ids are from D11, when
+# we put these subjects back in without sims.
+
+paste junk1 junk2 junk3 > ${candidatecat:r}_knownlenses.txt
+# This is wrong - the components don't match up!
+
+wc -l junk*     
+     133 junk1
+     199 junk2
+     216 junk3
+
+# How many real lenses are there?
+awk '{print $1}' junk2 | sort -n | uniq | wc -l
+# 163
+# So not 216!...
+
+# And how many are candidates?
+awk '{print $1}' junk1 | sort -n | uniq | wc -l
+#       121
+
+# So, 121 out of 163 - 74%.
+
+# Grab 2 columns, uniq by 1 and sort by 2?
+
+awk '{print $1,$2}' junk1 | sort -n | uniq | sort -rn -k2 | tail -20
+# ASW0004p94 0.9515456
+# ASW00099md 0.9510602
+# ASW0009cro 0.5296275
+# ASW0005aj2 0.0881583
+# ASW0009clg 0.0525023
+# ASW0000dlz 0.0206259
+# ASW0009bn8 0.0059907
+# ASW00056pq 0.0011886
+# ASW000037r 0.0004669
+# ASW00099dy 0.0004428
+# ASW0009d7g 0.0000261
+# ASW0008mw7 0.0000027
+
+# OK: all but 10 have P > 0.95!
+# So 111 make candidates list, out of 163: 68% complete. 
+# Full catalog including undecideds is 121/163 = 74% complete.
+
+# BUG: some "lenses" in the lenscat are actually training images (they 
+# had sims put in them!) - so they do not appear in the candidate catalog,
+# just because they are not test subjects. Caught and reran, code above is
+# now correct.
 
 # ======================================================================
+# 2013-12-04 (Wednesday) 07:31 EST
+
+# Make galleries of real lenses that are detected, undecided and rejected
+
+mkdir -p detected
+cd detected
+set detected = `awk '{if ($2 > 0.95) print $1}' ../junk1 | sort -n | uniq`
+set pngs = ()
+foreach subject ( $detected )
+  set url = `grep $subject ../junk1 | head -1 | awk '{print $4}'`
+  set zooid = `grep $subject ../junk1 | head -1 | awk '{print $1}'`
+  wget -O ${zooid}.png "$url"
+  set pngs = ( $pngs ${zooid}.png )
+end
+gallery.pl -pdf -x 2 -y 2 -t -o gallery_detected.pdf $pngs
+cd ../
+
+# set new = `ls $pngs | & grep directory | cut -d':' -f2 | cut -d'.' -f1`
+# foreach subject ( $new )
+#   set url = `grep $subject ../junk1 | head -1 | awk '{print $4}'`
+#   set zooid = `grep $subject ../junk1 | head -1 | awk '{print $1}'`
+#   wget -O ${zooid}.png "$url"
+# end
+
+
+mkdir -p undecided
+cd undecided
+set undecided = `awk '{if ($2 < 0.95) print $1}' ../junk1 | sort -n | uniq`
+set pngs = ()
+foreach subject ( $undecided )
+  set url = `grep $subject ../junk1 | head -1 | awk '{print $4}'`
+  set zooid = `grep $subject ../junk1 | head -1 | awk '{print $1}'`
+  wget -O ${zooid}.png "$url"
+  set pngs = ( $pngs ${zooid}.png )
+end
+gallery.pl -pdf -x 2 -y 2 -t -o gallery_undecided.pdf $pngs
+cd ../
+
+# set new = `ls $pngs | & grep directory | cut -d':' -f2 | cut -d'.' -f1`
+# foreach subject ( $new )
+#   set url = `grep $subject ../junk1 | head -1 | awk '{print $4}'`
+#   set zooid = `grep $subject ../junk1 | head -1 | awk '{print $1}'`
+#   wget -O ${zooid}.png "$url"
+# end
+
+
+mkdir -p rejected
+cd rejected
+set lenses = ( $detected $undecided )
+set all = `awk '{print $3}' ../junk3 | sort -n | uniq`
+set pngs = ()
+foreach subject ( $all )
+  set k = 0
+  set ignore = 0
+  while ($k < $#lenses) 
+    @ k = $k + 1
+    if ($subject == $lenses[$k]) then
+      set ignore = 1
+      set k = 100000
+    endif
+  end
+  if ($ignore == 0) then  
+    set url = `grep $subject ../junk3 | head -1 | awk '{print $1}'`
+    set zooid = `grep $subject ../junk3 | head -1 | awk '{print $3}'`
+    # wget -N -O ${zooid}.png "$url"
+    set pngs = ( $pngs ${zooid}.png )
+  endif  
+end
+gallery.pl -pdf -x 2 -y 2 -t -o gallery_rejected.pdf $pngs
+cd ../
+
+# set new = `ls $pngs | & grep directory | cut -d':' -f2 | cut -d'.' -f1`
+# foreach subject ( $new )
+#   set url = `grep $subject ../junk3 | head -1 | awk '{print $1}'`
+#   set zooid = `grep $subject ../junk3 | head -1 | awk '{print $3}'`
+#   wget -O ${zooid}.png "$url"
+# end
+
+
+# ======================================================================
+# 2013-12-08 (Sunday) 15:32 GMT
+
+# In Oxfordshire, haven't run for a while!
+
+SWIPE.csh spacewarp_2013-12-08.gz
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# SWAP: interpreting up to 50000  classifications...
+# SWAP: 
+# SWAP: total no. of classifications processed:  1
+
+# Something wrong...
+# Mongo was the old one, from doing the testplots. Killed it, can now 
+# move on!
+
+SWAPSHOP.csh -s CFHTLS --fast
+
+SWITCH.py CFHTLS_hasty_retire_these.txt > retirement.log
+
+# OK good! 100 more retirements.
+
+# Now have 3381 candidates - send these to Adler for Stage 2!
+# Final analysis time is CFHTLS_2013-12-08_10:20:56
+
+# Cut catalog at 0.95:
+
+set cat = CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidate_catalog.txt
+
+set finalcat = CFHTLS_2013-12-08_10:20:56_good_candidate_catalog.txt
+
+head -1 $cat > $finalcat
+grep -v '#' $cat | awk '{if ($2 > 0.95) print $0}' >> $finalcat
+
+# Make a copy in Science folder...
+cp $finalcat ../stage1_results/.
+cp -r CFHTLS_2013-12-08_10:20:56/* ../stage1_results/
+
+# ======================================================================
+# 2013-12-10 (Tuesday) 13:22 GMT
+
+# Test stage 2 labels in database:
+
+cd ../stage2_test
+
+SWIPE.csh stage2_2013-12-03.tar.gz
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --stage2
+
+# No classifications read in - possibly due to name changes? (Parrish)
+# Retry with live database tomorrow.
+
+# ======================================================================
+# 2013-12-11 (Wednesday) 12:02 GMT
+
+cd ../stage2
+
+SWIPE.csh spacewarp_2013-12-11.gz
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --stage2
+
+# Good - runs OK! Aborted, restarted with printing turned off. Will be slow at
+# first as it has to page through all classifications since the_beginning
+# - so manually edited startup.config to avouid this (and commented
+# out the copy from swap dir in SWAPSHOP)
+# Used:
+#   start: 2013-12-10_00:00:00
+
+# Hmm - what time zone is this? Would be good to have a more accurate 
+# start time...
+
+# Anyway, classifications are not being correctly recognised as stage 2 by 
+# SWAP. Here's an example:
+
+Found classification from different stage:  ('2013-12-11_00:09:55',
+'51f5063e0aab2a718b00000c', '5183f151e4bb210219045886', 'ASW00063ra', 'test',
+'test', 'NOT', 'UNKNOWN',
+'http://spacewarps.org/subjects/standard/5183f151e4bb210219045886.png', 1)
+
+# Switched to taking stage from metadata.
+
+# Looks like classifier.coffee is not labelling classifications correctly:
+
+WARNING: classification labelled stage 1, while subject is stage 2
+Found classification from this stage:  ('2013-12-11_10:20:33', '109.30.36.48',
+'5183f151e4bb21021900e52b', 'ASW000199n', 'test', 'test', 'NOT', 'UNKNOWN',
+'http://spacewarps.org/subjects/standard/5183f151e4bb21021900e52b.png', 2)
+
+# And also, here's a classification of a stage 1 subject! 
+
+Found classification from different stage:  ('2013-12-11_10:20:33',
+'109.30.36.48', '5183f151e4bb21021904738b', 'ASW000693f', 'training', 'sim',
+'NOT', 'LENS',
+'http://spacewarps.org/subjects/standard/5183f151e4bb21021904738b.png', 1)
+
+# DAMN. Some training images are still labelled stage 1.
+# AND: No classifications are labelled stage 2! 
+# FUCK. Now we have to use timestamps.
+
+# Re-run and save output, then browse to find first timestamp.
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --stage2 >& swap.log &
+
+# Looks like magic start time was:
+
+# 2013-12-10_13:29:41
+
+# Set this as start time in stage2.config and edit SWAPSHOP to read it
+
+# Now re-run looking at classifications to see if stage is labelled...
+
+\rm -rf CFHTLS_* swap.log update.config
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --stage2 --config stage2.config >& swap.log &
+
+# Ohhhhh it's an ANNOTATION:
+
+# {u'_id': ObjectId('52a759815b6a137dd400021a'), u'user_id':
+# ObjectId('50ef25bc6b34c90aab000017'), u'created_at': datetime.datetime(2013,
+# 12, 10, 18, 12, 17), u'updated_at': datetime.datetime(2013, 12, 10, 18, 12,
+# 17, 343000), u'user_ip': u'94.3.55.144', u'workflow_id':
+# ObjectId('528107773ae7400fd4000001'), u'subjects': [{u'zooniverse_id':
+# u'ASW0001gfp', u'coords': [], u'id': ObjectId('5183f151e4bb210219010975'),
+# u'location': {u'thumbnail':
+# u'http://spacewarps.org/subjects/thumbnail/5183f151e4bb210219010975.png',
+# u'standard':
+# u'http://spacewarps.org/subjects/standard/5183f151e4bb210219010975.png'}}],
+# u'subject_ids': [ObjectId('5183f151e4bb210219010975')], u'project_id':
+# ObjectId('5101a1341a320ea77f000001'), u'user_name': u'coulditbemanilow',
+# u'annotations': [{u'stage': u'2'}, {u'finished_at': u'Tue, 10 Dec 2013
+# 18:12:14 GMT', u'started_at': u'Tue, 10 Dec 2013 18:10:59 GMT'},
+# {u'user_agent': u'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:25.0) Gecko/20100101
+# Firefox/25.0'}, {u'lang': u'en'}]}
+
+# Edit SWAP and try again:
+
+\rm -rf CFHTLS_* swap.log update.config
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --stage2 --config stage2.config >& swap.log &
+
+# Did we get any stage 1 subject warnings?
+# Yes:
+
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# Found classification from different stage:  1  cf.  2 , items = 
+# ('2013-12-10_16:30:38', '52a735e65b6a1304ad00005b',
+# '5183f151e4bb210219068fd0', 'ASW00097tc', 'test', 'test', 'LENS', 'UNKNOWN',
+# 'http://spacewarps.org/subjects/standard/5183f151e4bb210219068fd0.png', '1')
+
+grep WARNING swap.log | wc -l
+#      651
+
+# Set SWAP to ignore these completely.
+
+# First correct stage 2 classification is this one:
+
+# Found classification from this stage:  ('2013-12-10_16:47:03',
+# '503f1bff0454e20bf40004b3', '5183f151e4bb21021905aa13', 'ASW0007yfn', 'test',
+# 'test', 'NOT', 'UNKNOWN',
+# 'http://spacewarps.org/subjects/standard/5183f151e4bb21021905aa13.png', '2')
+
+# Use this time in stage2.config instead! 2013-12-10_16:47:00
+
+# Looks like times are GMT! (Or perhaps UTC?)
+
+
+# OK, need to read things in subject metadata properly, to interpret 
+# false positives. What words are used?
+
+\rm -rf CFHTLS_* swap.log update.config
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --stage2 --config stage2.config >& swap.log &
+
+# Great. Noticed this was done in hasty mode - want to turn this off, 
+# to use all classifications and reduce false neg rate! Re-ran, ready for 
+# production.
+
+# ======================================================================
+# 2013-12-12 (Thursday) 12:54 GMT
+
+SWIPE.csh spacewarp_2013-12-12.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2
+
+# Good - first five candidates! Start downloading images, based on 
+# cands catalog (ie into informatively named files!)
+
+open `grep -v '#'  CFHTLS_2013-12-12_10:23:40/CFHTLS_2013-12-12_10:23:40_candidate_catalog.txt | \
+        awk '{if ($2 > 0.95) printf "http://talk.spacewarps.org/#/subjects/%s\n", $1}'
+
+# Add to download script...
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2013-12-13 (Friday) 12:23 GMT
+
+SWIPE.csh spacewarp_2013-12-13.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+
+
+
+
+
+
+
+
+
 
 
 

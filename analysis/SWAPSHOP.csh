@@ -19,6 +19,8 @@
 #   -t --test N       Only run SWAP.py N times
 #   -a --animate      Make animated plot of subject trajectories
 #   -d --download     Download images of candidates, false +ves etc
+#   -2 --stage2       Run in Stage 2 mode (NB. no retirement)
+#   --no-analysis     Skip to downloads and animations.
 #
 # OUTPUTS:
 #
@@ -40,6 +42,9 @@ set startup = 0
 set animate = 0
 set download = 0
 set fast = 0
+set stage = 1
+set configfile = 'None'
+set noanalysis = 0
 
 while ( $#argv > 0 )
    switch ($argv[1])
@@ -95,8 +100,30 @@ while ( $#argv > 0 )
       set N = $argv[1]
       shift argv
       breaksw
+   case -2:        
+      shift argv
+      set stage = 2
+      breaksw
+   case --{stage2}:        
+      shift argv
+      set stage = 2
+      breaksw
+   case -c:        
+      shift argv
+      set configfile = $argv[1]
+      shift argv
+      breaksw
+   case --{config}:        
+      shift argv
+      set configfile = $argv[1]
+      shift argv
+      breaksw
    case --{fast}:        
       set fast = 1
+      shift argv
+      breaksw
+   case --{no-analysis}:        
+      set noanalysis = 1
       shift argv
       breaksw
    case *:        
@@ -119,6 +146,8 @@ echo '==========================================================================
 
 date
 
+if ($noanalysis) goto ANIMATIONSANDDOWNLOADS
+
 echo "SWAPSHOP: running SWAP.py over and over again until all"
 echo "SWAPSHOP: classifications in survey '$survey' are analysed"
 
@@ -127,8 +156,11 @@ echo "SWAPSHOP: classifications in survey '$survey' are analysed"
 # First write a startup.config file based on the standard one in swap:
 
 if ($startup) then
-    set configfile = startup.config
-    cat $SWAP_DIR/swap/$configfile | sed s/SURVEY/$survey/g > $configfile
+    if ($configfile == 'None') then
+      set configfile = startup.config
+      cat $SWAP_DIR/swap/$configfile | sed s/SURVEY/$survey/g \
+                                       | sed s/STAGE/$stage/g > $configfile
+    endif
     echo "SWAPSHOP: start-up configuration stored in $configfile"
 else
     set configfile = 'update.config'
@@ -146,10 +178,11 @@ if ($fast) then
 endif
 
 # ----------------------------------------------------------------------
-# Where did we get to? Save the previous batch of retirees for 
-# comparison:
 
 set here = $cwd:t
+
+# Where did we get to? Save the previous batch of retirees for 
+# comparison:
 
 set retirees = ${survey}_${here}_retire_these.txt
 set previousretirees = ${survey}_${here}_previously_retired.txt
@@ -235,6 +268,7 @@ endif
 set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
 
 # - - - - - - - - - - 
+
 # 1) Retirement plan:
 
 # Compare latest grand total with previous list, and take the difference
@@ -299,6 +333,14 @@ cp $latest/*report.pdf  $report
 echo "SWAPSHOP: final report: $report"
 
 # - - - - - - - - - -
+
+# Skip here if doing --no-analysis
+
+ANIMATIONSANDDOWNLOADS:
+
+set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
+
+# - - - - - - - - - -
 # 3) Animated plots:
 
 if ($animate) then
@@ -325,22 +367,43 @@ endif
 
 if ($download) then
 
-    foreach type ( candidates \
+    set types = ( candidates \
                    training_false_negatives \
                    training_false_positives )
+
+    foreach k ( 1 2 3 )
+        
+        set type = $types[$k]
         mkdir -p $type
         chdir $type
         echo "SWAPSHOP: in folder '$type',"
 
-        set catalog = `\ls ../${latest}/*${type}*txt`
-        set N = `cat $catalog | wc -l`
-        echo -n "SWAPSHOP: downloading $N images from $catalog..."
+        if ($k == 1) then
+            set catalog = `\ls ../${latest}/*candidate_catalog.txt`
+        else if ($k == 2) then
+            set catalog = `\ls ../${latest}/*sim_catalog.txt`
+        else if ($k == 3) then
+            set catalog = `\ls ../${latest}/*dud_catalog.txt`
+        endif
 
-        foreach url ( `cat $catalog` )
-            set png = $url:t
-            set log = .$png:r.log
-            wget -O $png "$url" >& $log
-            echo -n "."
+        # Select objects:
+        if ($k == 1) then
+            set IDs = ( `grep -v '#' $catalog | awk '{if ($2 > 0.95) print $1}'` )
+        else if ($k == 2) then
+            set IDs = ( `grep -v '#' $catalog | awk '{if ($2 < 2e-7) print $1}'` )
+        else if ($k == 3) then
+            set IDs = ( `grep -v '#' $catalog | awk '{if ($2 > 0.95) print $1}'` )
+        endif
+        echo -n "SWAPSHOP: downloading $#IDs images from $catalog..."
+
+        foreach ID ( $IDs )
+            set url = `grep $ID $catalog | awk '{print $4}'`
+            set png = $ID.png
+            if (! -e $png) then
+                set log = .$png:r.log
+                wget -O $png "$url" >& $log
+                echo -n "."
+            endif
         end
         echo "SWAPSHOP: ...done."
 

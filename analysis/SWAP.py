@@ -111,6 +111,10 @@ def SWAP(argv):
     else:
         print "SWAP: data will be read from the current live Mongo database"
     
+    stage = str(int(tonights.parameters['stage']))
+    survey = tonights.parameters['survey']
+    print "SWAP: looks like we are on Stage "+stage+" of the ",survey," survey project"
+
     agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
     if agents_willing_to_learn:
         a_few_at_the_start = tonights.parameters['a_few_at_the_start']
@@ -197,7 +201,7 @@ def SWAP(argv):
     # start time:
 
     batch = db.find('since',t1)
-        
+    
     # Actually, batch is a cursor, now set to the first classification 
     # after time t1. Maybe this could be a Kafka cursor instead? And then
     # all of this could be in an infinite loop? Hmm - we'd still want to 
@@ -208,17 +212,29 @@ def SWAP(argv):
     
     count_max = 50000
     print "SWAP: interpreting up to",count_max," classifications..."
-    if one_by_one: print "SWAP: (one by one - hit return for the next one)"
+    if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 
     count = 0
     for classification in batch:
-
+        
         # Get the vitals for this classification:
         items = db.digest(classification,method=use_marker_positions)
         if items is None: 
             continue # Tutorial subjects fail!
-        t,Name,ID,ZooID,category,kind,X,Y,location = items
+        t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
 
+        # If the stage of this classification does not match the stage we are
+        # on, skip to the next one!
+        if thisstage != stage: 
+            if vb:
+                print "Found classification from different stage: ",thisstage," cf. ",stage,", items = ",items
+                print " "
+            continue
+        else:
+            if vb:
+                print "Found classification from this stage: ",items
+                print " "
+            
         # Register new volunteers, and create an agent for each one:
         # Old, slow code: if Name not in bureau.list():  
         try: test = bureau.member[Name]
@@ -249,7 +265,7 @@ def SWAP(argv):
         count += 1
         if vb:
             print swap.dashedline
-            print "SWAP: Subject "+ID+" was classified by "+Name
+            print "SWAP: Subject "+ID+" was classified by "+Name+" during Stage ",stage
             print "SWAP: he/she said "+X+" when it was actually "+Y
             print "SWAP: their agent reckons their contribution (in bits) = ",bureau.member[Name].contribution
             print "SWAP: while estimating their PL,PD as ",bureau.member[Name].PL,bureau.member[Name].PD
@@ -272,7 +288,7 @@ def SWAP(argv):
             break
     
         if one_by_one: next = raw_input()
-    
+        
     sys.stdout.write('\n')
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
@@ -286,7 +302,7 @@ def SWAP(argv):
     else:
         more_to_do = True
         
-        
+            
     # ------------------------------------------------------------------
     
     # Set up outputs based on where we got to.

@@ -1,0 +1,213 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Space Warps Publication Policy
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper]{article}
+
+% Packages:
+\usepackage{xspace}
+\usepackage{verbatim}
+\usepackage{hyperref}
+
+% Macros:
+\input{macros.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+             
+\title{Guidelines and Policy for Surveys using \SW}
+\author{Phil Marshall \& Aprajita Verma}
+\date{April 15, 2013}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract} 
+\noindent \sw was conceived as a strong lens
+discovery {\it service}, that any survey science team can make use of
+(within the logistical constraints). In this document we discuss the relationship
+between the survey teams and the \sw collaboration. 
+This document includes guidelines for data provision, the data policy and for publications of \sw-enabled discoveries.
+\end{abstract}
+
+\setcounter{footnote}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction to \sw}
+
+The \sw website is designed to motivate and  enable tens of thousands of
+people to perform the scientific tasks of strong gravitational lens
+identification and classification.  \sw comprises a primary classification interface (www.spacewarps.org) that allows citizen scientists to inspect images and mark those that contain potential gravitational lenses. In addition, the citizens are shown simulated lenses (appropriate for the survey being conducted) as an interactive training tool that also allows us to establish the Citizens' likelihood of identifying potential lenses and blank fields using the \sw Analysis Pipeline (SWAP). 
+
+A key part of the \sw project is the ability for all members of the \sw collaboration (see Section \ref{sec:members}) to communicate with each other and discuss interesting candidates through \Talk\footnote{\Talk (found at \texttt{talk.spacewarps.org}) is a forum for \sw collaborators to discuss individual sources and the \sw project in general. Bugs can also be reported. This is the direct portal for communication with the \sw community.}).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Collaboration Membership Types}
+\label{sec:members}
+
+The \sw collaboration comprises the \sw science team, development team and all the volunteers who have 
+logged in\footnote{with a Zooniverse ID. It is possible to classify anonymously, and we count those classification but as we don't know who they are, we are unable to collaborate with them directly.} and contributed classifications to the project. 
+
+An expanded definition of the \sw membership is given in the document ``\sw Publication Policy: CFHT-LS''.  In this document we discuss the relationship between the \sw collaboration and future Survey Science Teams (SST) who are foreseen to liaise with the \sw science and development teams to ingest their survey data into the \sw interface. \sw was established with future surveys in mind and therefore there may be some overlap between current \sw members and the future SSTs.
+
+
+In the remaining sections we look at discovery publications that might
+arise from future \sw projects, and suggest reasonable guidelines for
+deciding on their authorship. First, however, we remind ourselves about data
+access via \sw.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Survey Data Policy}
+\label{sec:data}
+
+\sw is a public website. All images displayed there are by definition in the
+public domain, and so must be expected to be downloaded, copied and
+redistributed by any \sw user. This is a \textbf{good thing}: images of the sky taken
+with publicly-funded telescopes belong to everyone. It is the responsibility
+of the SSTs to provide images in a way that is consistent
+with their own data access rules. There are two things that SSTs can
+do to in order to respect any proprietary period that they have imposed on
+themselves:
+\begin{enumerate}
+
+\item Add a ``LICENSE'' keyword to the FITS and PNG image headers, explaining
+what the rules for redistribution of these images are. This will almost
+certainly be ignored, but it would be a nice reminder that nothing comes free
+of either cost or responsibility. Other keywords could also be included as
+well: data provenance is important, and links to useful survey webpages would
+be most welcome!
+
+\item Remove all WCS information from all images provided. The \sw interface ``dashboards'' do allow FITS and JPG files to be downloaded. If images from a proprietary dataset being made available is a concern for an SST, they should remove the WCS. This also has the consequence that it minimises the potential ``scooping'' of potential lens candidate by anyone other than the SST. 
+In practice, the objects contained in the \sw images will be too faint
+for anyone without access to a large telescope to observe, and may also be
+absent from any public catalogs, so the opportunities for follow-up will be
+quite limited. Images
+with field of view less than about 3~arcminutes in diameter are not solvable
+by \texttt{astrometry.net}. Please note, however, that we cannot exclude the possibility that object co-ordinates are posted in \Talk. For example, co-ordinates of previously published lens candidates or recognisable fields from CFHT-LS have appeared in \Talk.
+
+% becuase being ``scooped'' is a concern,  for an SST then this is a means of prevention. We do
+
+%This would prevent
+%follow-up of any of the objects in the survey by anyone other than the survey
+%team. In practice, the objects contained in the \sw images will be too faint
+%for anyone without access to a large telescope to observe, and may also be
+%absent from any public catalogs, so the opportunities for follow-up will be
+%quite limited. Removing the WCS information is an insurance policy against any
+%competing professional scientists looking to ``scoop'' the survey team,
+%despite the damage it would do to their reputations\footnote{Please note that we cannot exclude the possibility that object co-ordinates are posted in \Talk. For example, co-ordinates of previously published lens candidates or recognisable fields from CFHT-LS have appeared in \Talk.} . We note that images
+%with field of view less than about 3~arcminutes in diameter are not solvable
+%by \texttt{astrometry.net}.
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data Preparation and Publications for Future Survey Teams}
+\label{sec:series}
+
+There is a reasonable amount of work in preparing data and images for delivery to \sw. The \sw team will provide assistance to future teams in data preparation. We hope the benefits of using the \sw service will far outweigh the time needed to prepare data. 
+
+\subsection{Future Project Proposals}
+Any future \sw projects are requested to liaise with the PIs regarding their project. We ask that potential project teams first approach the PIs (Marshall, Verma, More) with a short description of their project that includes the following information.
+
+\begin{itemize}
+\item Survey
+\item Bands to be included
+\item Total number of images to be viewed (approx.)
+\item Targeted survey or blind field search \footnote{Targeted: inspection of a list of candidates; Blind: inspection of tiles of a survey area}
+\item Brief outline of the overall goal(s) 
+\end{itemize}
+
+The \sw PIs will then arrange a hangout/telecon with the SSTs to discuss their project further.
+
+
+The original \sw papers by definition, provide a complete description of the system, and its results from the CFHTLS survey. The science team of
+any other survey (such as DES, RCS, KIDS, PS1, HSC \etc) should be able
+to read these papers before designing their own \sw project, and cite them as justification for some of their decisions. As the \sw paper series appears links to the papers will be given in this draft. Prior to publications, draft papers can also be shared on request by the \sw PIs (\href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com})
+
+\subsection{Collaborating with \sw Science Team}
+
+Implementing a new project based on different survey data will require support from the \sw Science Team, in three
+respects: 
+\begin{enumerate}
+
+\item In {\bf preparing data} for the site, and uploading it onto the
+Zooniverse servers. The \sw Science Team can advise on suitable Training
+Subjects and image display settings, and also on formatting the data
+ready for ingestion and display.
+
+\item In {\bf reconfiguring the site itself} ready for the new data. The
+survey team will need to include new Spotter's Guide images and text,
+modified tutorial content, and additional survey-specific site content;
+the \sw Science Team can help with all of this.
+
+\item In {\bf maintaining the site} so that it continues to function
+correctly. This will involve technical support from the Zooniverse team,
+but will also require the continued engagement of the wider
+collaboration by the Science Team in \Talk. Since this social filter is
+a key part of the sample refinement, the latter may involve a
+significant time commitment.
+
+\end{enumerate}
+
+\subsection{Resulting Publications}
+
+\subsubsection{Journal Papers}
+
+In return for the work outlined in Section \ref{sec:series} in setting up the new surveys, the \sw PIs will nominate a
+small number of core \sw collaboration members as authors on \textbf{papers that
+present discovery of a lens or sample of lenses enabled by the \sw system}. A ``discovery'' is defined by the announcement of the source(s) to the astronomical community in a journal paper. We would expect the \sw author list to be a small number (less than ten), primarily the Principal Investigators and a few others working on the ingestion of the new data. All post-discovery follow-up papers would of course be exempt from this: the idea is that \sw is purely a gravitational lens discovery
+service, but not one that runs by magic.
+
+We request that authors of \sw-enabled discovery papers should circulate drafts to the list of \sw authors and allow a minimum of two weeks to give time for comments. We also request that any papers based on \sw enabled discoveries should cite the \sw system papers. This policy document will be updated with the correct citations to the \sw system papers when available.
+
+\sw runs an analysis pipeline (SWAP) that will be tailored to the science goals of each new survey. Any large changes to the analysis code will be documented  by the \sw Science Team. The \sw Science Team reserved the right to update the \sw methodology papers.
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsubsection{Zooniverse \Letters}
+\label{sec:comm}
+
+Any \sw collaboration member, simply by virtue of their Zooniverse
+registration, may write a Zooniverse
+Letter\footnote{\texttt{http://letters.zooniverse.org}} describing their
+investigation of any lens candidate they find in \sw. This, along with
+posts in  \Talk, is the primary means by which we expect collaboration
+members will communicate their findings to the rest of the
+astronomical community. The investigation of any \sw images that are
+provided without world coordinate system (WCS) information will be
+necessarily limited but the \sw Zooniverse \Letters will contribute to the collective knowledge and understanding of the presented system(s). Zooniverse \Letters are citable
+objects, and in some cases will appear listed on ADS\footnote{To be confirmed.}. 
+
+
+As \sw classifications are a community wide activity, it is impossible to attribute the discovery of a candidate to a single community member, or group  of members. Therefore, in recognition of their contribution to the \sw project, \sw community members will be listed (on their approval) on the \sw members web page. This web page will be linked in every ensuing \sw publication. If a community member makes a significant contribution e.g.\,in the further investigation of a lens candidate with modelling tools, they are strongly encouraged to write Zooniverse \Letters. This may lead to them being invited to join journal publications by the lead author of a ``discovery'' publication. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Publication Guidelines}
+\label{sec:publ}
+Any \sw series and \sw enabled discovery papers should include
+\begin{itemize}
+\item citations to the \sw system papers, \sw I \& II
+\item the collaboration should be acknowledged in the acknowledgement section with a link to the collaboration membership page (URL: to be confirmed when available).
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

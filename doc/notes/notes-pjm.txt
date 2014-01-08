@@ -3998,13 +3998,114 @@ SWAP.py stage1.config
 
 # OK, start the agents at 20:00 GMT for the start of Stargazing Live:
 # Need to trash mongo in old CFHTLS stage 2 dir.
+# Do 5 million at a time for speed! 
 
 SWIPE.csh spacewarp_2014-01-08.gz 
 
 SWAPSHOP.csh -s VICS82 --startup --fast --config stage1.config 
 
-# ?
+# Wed Jan  8 01:14:32 PST 2014
+# SWAP: updating all subjects with classifications made since 2014-01-07_20:00:00
+# SWAP: interpreting up to 5000000  classifications...
+# SWAP: ..................
+# SWAP: total no. of classifications processed:  1235829
+# ...
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 2421 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 24 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidates.txt
+# ...
+# SWAP: From 11471 subjects classified,
+# SWAP: 8654 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidate_catalog.txt
+# Wed Jan  8 02:04:03 PST 2014
 
+# SWAP takes about 50 mins to do 1.2 million classifications. 40 mins per
+# million.
+
+# Only 11k subjects served?! DB problem?
+
+# Low number of retirees; cascade plot shows a lot of images with high
+# uncertainty, hanging out in the middle.
+
+# 24 candidates with P > 0.95 - need to check these out!
+
+SWAPSHOP.csh -s VICS82 --startup --fast --no-analysis --download 
+
+# SWAPSHOP: in folder 'candidates',
+# SWAPSHOP: downloading 24 images from
+# ../VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidate_catalog.txt...........................SWAPSHOP:
+# ...done.
+mv candidates candidates_P.gt.0.95
+
+# Hmm - one or two mildly interesting but nothing remarkable. Try digging
+# deeper, P > 0.10
+
+# SWAPSHOP: downloading 87 images from ../VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidate_catalog.txt
+
+mv candidates candidates_P.gt.0.10
+
+# Not much to be gained! Made galleries:
+
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_P.gt.0.95.pdf \
+  candidates_P.gt.0.95/*.png
+
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_P.gt.0.10.pdf \
+  candidates_P.gt.0.10/*.png
+  
+# Focus on P > 0.95.
+# Highlights:
+
+Cluster with several candidate lensed images; no obvious conjugate systems 
+but some images are very red: 
+
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_Cluster.pdf \
+    candidates_P.gt.0.10/ASW0009i4s.png
+
+Several nearly-lensed quasars: quasars close to massive galaxies, some
+possibly with faint counter-images buried in lens galaxy.
+
+  gallery.pl -pdf -x 2 -y 2 -t -o VICS82_1stmillion_4NLQs.pdf \
+    candidates_P.gt.0.10/ASW0009kg3.png \
+    candidates_P.gt.0.10/ASW0009kj8.png \
+    candidates_P.gt.0.10/ASW0009okd.png \
+    candidates_P.gt.0.10/ASW0009pbd.png
+  
+Possible long blue arc:
+
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_LongArc.pdf \
+    candidates_P.gt.0.10/ASW0009jxt.png
+  
+Short red arc:
+
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_ShortRedArc.pdf \
+    candidates_P.gt.0.10/ASW0009jlw.png
+
+
+# Miscellaneous, not yet SWAP or Talk-detected:
+
+Double purple quasar?
+   http://talk.spacewarps.org/#/subjects/ASW0009lgi
+
+Aprajita's bright double:
+   http://talk.spacewarps.org/#/subjects/ASW0009uo2
+   
+Jim's eyeball ring:
+   http://talk.spacewarps.org/#/subjects/ASW0009io9
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 22:53 PST
+
+# Second run, on 3 million classifications. Over-wrote tarball, so trash mongo
+# and old dir.
+
+\rm -rf spacewarp_2014-01-08 mongo
+
+SWIPE.csh spacewarp_2014-01-08.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+# Started swiping at 0415. If my estimate of 3 hours is correct, it shoudl be
+# done by 0800 PST = 1600 GMT
 
 # ======================================================================
 # Running list of candidates!

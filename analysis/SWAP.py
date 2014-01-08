@@ -217,10 +217,13 @@ def SWAP(argv):
     count = 0
     for classification in batch:
         
+        if one_by_one: next = raw_input()
+        
         # Get the vitals for this classification:
-        items = db.digest(classification,method=use_marker_positions)
+        items = db.digest(classification,survey,method=use_marker_positions)
+        if vb: print "#"+str(count+1)+". items = ",items
         if items is None: 
-            continue # Tutorial subjects fail!
+            continue # Tutorial subjects fail, as do stage/project mismatches!
         t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
 
         # If the stage of this classification does not match the stage we are
@@ -287,8 +290,6 @@ def SWAP(argv):
         elif count == count_max: 
             break
     
-        if one_by_one: next = raw_input()
-        
     sys.stdout.write('\n')
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count

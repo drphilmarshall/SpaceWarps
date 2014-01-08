@@ -108,7 +108,7 @@ class MongoDB(object):
 # Return a tuple of the key quantities, given a cursor pointing to a 
 # record in the classifications table:
 
-    def digest(self,classification,method=False):
+    def digest(self,classification,survey,method=False):
         
         # When was this classification made?
         t = classification['updated_at']
@@ -152,9 +152,22 @@ class MongoDB(object):
         
         stage = 1
         for annotation in annotations:
-           if annotation.has_key('stage'):
-               stage = annotation['stage']
+            if annotation.has_key('stage'):
+                stage = annotation['stage']
         
+        # Also get the survey name!
+        project = "CFHTLS"
+        for annotation in annotations:
+            if annotation.has_key('project'):
+                project = annotation['project']
+        
+        # Check project: ignore this classification by returning None 
+        # if classification is from a different project:
+        if project != survey:
+            # print "Fail! A classification from "+project+" ( != "+survey+" ), stage = ",stage
+            return None
+        # else:
+            # Success! A classification from "+project+" ( = "+survey+" ), stage = ",stage
         
         # Now pull the subject itself from the subject table:
         subject = self.subjects.find_one({'_id': ID},timeout=False)
@@ -166,7 +179,7 @@ class MongoDB(object):
             # Subject is tutorial and has no group id:
             return None
         
-        metadata = subject['metadata']
+        metadata = subject['metadata']        
         
         # Check stage:
         if metadata.has_key('stage2'):

@@ -3878,6 +3878,135 @@ SWIPE.csh spacewarp_2013-12-19.gz
 SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
 
 # ======================================================================
+# 2013-12-29 (Sunday) 18:30 PST
+
+SWIPE.csh spacewarp_2013-12-29.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 17:34 PST
+
+# Been a while, but here's the final stage 2 database. It contains some 
+# VICS82 classifications, but they are labelled stage 1 so shouldn't feature. 
+# Turned on stage 1 warning, just to see them!
+
+SWIPE.csh spacewarp_2014-01-07.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# Run this before doing VICS82 stuff - doesn't take long.
+
+# Good news - stage flagged OK:
+
+# SWAP: ....................WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# .........................
+# SWAP: total no. of classifications processed:  31034
+
+# However, subsequent runs of SWAP fail for some reason. 0 classifications
+# found? Some problem with final timestamp?
+
+# Check out candidates: 
+
+ls candidates/*png | wc -l
+#       88
+
+# But, some of the downloaded images are empty - maybe because they were
+# supposed to be VICS82 ones?! Look at catalog:
+
+du -h candidates/*png | grep 0B
+#   0B    candidates/ASW0000ctm.png
+#   0B    candidates/ASW000234o.png
+#   0B    candidates/ASW0002bmc.png
+#   0B    candidates/ASW0002qtn.png
+#   0B    candidates/ASW0003mb7.png
+#   0B    candidates/ASW00047ae.png
+#   0B    candidates/ASW00048x4.png
+#   0B    candidates/ASW00059a7.png
+#   0B    candidates/ASW0005kad.png
+#   0B    candidates/ASW0005lmz.png
+#   0B    candidates/ASW0005u1n.png
+#   0B    candidates/ASW00062bc.png
+#   0B    candidates/ASW0006e0o.png
+#   0B    candidates/ASW0006ker.png
+#   0B    candidates/ASW0006ksp.png
+#   0B    candidates/ASW0006ktg.png
+#   0B    candidates/ASW00072kz.png
+#   0B    candidates/ASW00078we.png
+#   0B    candidates/ASW0007e08.png
+#   0B    candidates/ASW0007sez.png
+#   0B    candidates/ASW0007u3n.png
+#   0B    candidates/ASW0007uda.png
+#   0B    candidates/ASW0007vx2.png
+#   0B    candidates/ASW0008mtv.png
+#   0B    candidates/ASW0009a68.png
+#   0B    candidates/ASW0009bq9.png
+#   0B    candidates/ASW0009coy.png
+
+# check talk...
+
+ASW0009coy is CFHTLS
+ASW0006ker is CFHTLS
+
+# Probably these are all stage 2 candidates, but server is refusing image
+# requests... check logs:
+
+more candidates/.ASW0009coy.log
+# --2013-12-29 19:44:04--  http://spacewarps.org/subjects/standard/5183f151e4bb21021906a882.png
+# Resolving spacewarps.org... failed: nodename nor servname provided, or not known.
+# wget: unable to resolve host address `spacewarps.org'
+
+# Whoah! Tested wgetting one, and it worked OK. Phew. Need to redownload 
+# these, preferably by re-running SWAP sometime...
+
+# Now though, need to focus on VICS82! 
+# Start downloading new dump, try reading VICS82 classifications.
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 21:18 PST
+
+# Run SWAP in VICS82/stage1 directory - testing for project!
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config stage1.config 
+
+# Config file copied from CFHTLS stage 2 dir - don't be hasty, 
+# set initial date to the beginning of the week.
+
+# Fail - 0 classifications found etc. Maybe mongo is broken?
+# OK, trash old mongo and swipe the new one. Gulp! Can always just start from 
+# half an hour ago for testing... First, rerun verbose, see whats happening?
+
+# oops, all classifications have items=None, must have screwed up somewhere.
+# To do one by one test, need to run python directly:
+
+SWAP.py stage1.config
+
+# OK, fixed bugs, survey vs project comparison now in operation.
+
+# Good! Seems to be working OK. Test classifications (not on live site)
+# mostly junk, see report in attic. Onwards!
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 22:53 PST
+
+# OK, start the agents at 20:00 GMT for the start of Stargazing Live:
+# Need to trash mongo in old CFHTLS stage 2 dir.
+
+SWIPE.csh spacewarp_2014-01-08.gz 
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config stage1.config 
+
+# ?
+
+
+# ======================================================================
 # Running list of candidates!
 
 # Select at P > 0.95

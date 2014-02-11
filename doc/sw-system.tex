@@ -45,20 +45,31 @@
 
 \begin{abstract} 
 
-\sw is a web-based service
- that enables the discovery of strong
-gravitational lenses in wide-field imaging surveys by arbitrarily large
-numbers of people. Carefully produced color composite images are
-displayed to volunteers via a flexible interface, which records
-their estimates of the positions of candidate lensed features. Simulated
-lenses, and expert-classified non-lenses, are inserted into the stream
-at random intervals; this training set is used to give the volunteers
-feedback on their performance as well as estimate a dynamically-updated
-probability for any given image containing a lens. High probability
-systems are filtered into the Zooniverse \Talk discussion system; this
-smaller sample is further classified and analysed by volunteers into a
-final set. We analyze the classification of the training set itself, and
-find that 1) $<$volunteers learn$>$... 2) $<$the filter works$>$... 
+\sw is a web-based service that enables the discovery of strong gravitational
+lenses in wide-field imaging surveys by large numbers of people. Carefully
+produced color composite images are displayed to volunteers via a flexible
+interface, which records their estimates of the positions of candidate lensed
+features. Simulated lenses, and expert-classified non-lenses, are inserted
+into the stream at random intervals; this training set is used to give the
+volunteers feedback on their performance, and to estimate a
+dynamically-updated probability for any given image to contain a lens. Low
+probability systems are retired from the site daily, concentrating the sample
+towards a set of candidates; these are then re-classified by the volunteers in
+a second  refinement stage. Analyzing the classification of the training set,
+we predict that the first stage should yield a sample with C\% completeness
+and P\% purity, while leading to the rejection of R\% of the initial target
+sample. Having divided the 150 square degree CFHTLS imaging survey into 430000
+overlapping 70 by 70 arcminute tiles and displayed them on the site, we were
+joined by 33000 volunteers who contributed X million image classifications
+over the course of N months. The sample was reduced to 3500 stage 1
+candidates; these were then refined to yield a sample of candidates rankable
+by their stage 2 probability. We expect this sample to be X\% complete and Y\%
+pure at a threshold of 95\% classification probability. We estimate the mean
+information contributed per person to be X bits, over a session lasting, on
+average, N classifications per volunteer -- although the distributions of
+these quantities are highly skewed. We comment on the scalability of the \sw
+system, and its potential to operate beyond its design as a supervised
+classification system. 
 
 \end{abstract}
 
@@ -66,7 +77,8 @@ find that 1) $<$volunteers learn$>$... 2) $<$the filter works$>$...
 
 \begin{keywords}
   gravitational lensing   --
-  methods: statistical    
+  methods: statistical    --
+  methods: citizen science
 \end{keywords}
 
 \setcounter{footnote}{1}
@@ -89,12 +101,13 @@ training sets. Need for quality control: always present.
 Novel solution: crowd-sourcing. Brief review of similar problems.
 PlanetHunters. \sw as an experiment.
 
-In this paper, we describe the \sw website, an online system that
-enables crowd-sourced detection of gravitational lenses. 
-Other papers in this series will present new gravitational lenses
-discovered in our first imaging survey dataset, and investigate the
-differences between lens detections made in \sw and those made with
-automated techniques. Here, we try to answer the following questons:
+In this paper, we describe the \sw website, an online system that enables
+crowd-sourced detection of gravitational lenses.  In a companion paper we will
+present the new gravitational lenses discovered in our first imaging survey
+dataset, and begin to investigate the differences between lens detections made
+in \sw and those made with automated techniques. Here though, we try to answer
+the following questions:
+
 \begin{itemize}
 
 \item How reliably can we find gravitational lenses using the \sw
@@ -103,17 +116,15 @@ system? What is the completeness of the sample produced?
 \item How noisy is the system? What is the purity of the sample
 produced?
 
-\item How accurately can gravitational lenses be located on the sky
-during the identification process?
-
 \item How quickly can lenses be detected, and non-lenses be rejected?
-How many volunteers are needed per target, and how quickly can they
-mobilise?
+How many classifications, and so how many volunteers are needed per target?
+
+\item What can we learn about the scalability of the crowd-sourcing approach?
 
 \end{itemize}
 
 In \Sref{sec:design} we introduce the \sw system, describing and
-explaining its various features. We then briefly 
+explaining its various features. We then briefly...
 
 
 
@@ -124,67 +135,100 @@ explaining its various features. We then briefly
 
 Unfamiliar objects: need to learn what lenses look like, fast. Rare
 objects: need to be able to reject rapidly, and get through sample.
-Confusion with non-lenses: further filtering via scientific discussion
-and further classification (voting). 
+Confusion with non-lenses: further filtering after advanced training, and 
+scientific discussion in Talk.
+
+Intro to Classification Interface. Basic description of site. 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Tutorial Material}
-\label{sec:design:tutorial}
+\subsection{Training}
+\label{sec:design:training}
 
-Learning what lenses do: Spotter's Guide and LensToy. Learning how
+Learning what lenses do: Spotter's Guide. Learning how
 lenses work (science page, FAQ). 
 
-Inline tutorial. Merge into stream. Instant feedback, positive and
+More on what lenses do: inline tutorial and feedback. 
+Merge into stream. Instant feedback, positive and
 negative. Anecdotal support for this.
 
+Training requires lenses to be more common than is realistic. How to manage
+expectations, avoid high false positive rate? "Lenses are rare" messaging;
+simulation frequency marker.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{The Classification Interface}
-\label{sec:design:classification}
-
-Image presentation. Consistency in size and appearance. 
+\subsection{Stage 1: Initial Classification}
+\label{sec:design:stage1}
 
 Interface fast due to pre-loading of images, and minimizing interaction.
-
-Spotting lenses: Markers to be placed. Two reasons: first, to give good
-feedback. Second, to improve quality of discussion later.
+Trade-off between speed and accuracy. Decreasing training rate.
 
 Quick dashboard provides simple ways to explore further: zoom, contrast
 controls.
 
+Spotting lenses: Markers to be placed. Two reasons: first, to give good
+feedback. Second, to focus attention.
+
 Non-lenses marked? Favourite button instead, enabling serendipitous
 discovery of other interesting things, separate from lenses.
 
+Retirement of low probability systems. Concentrates sample, provides more
+``bacon'' (while slightly skewing "sim frequency"). Note that this feature
+means that everyone contributes to detection of lenses: luck is made for the
+few that happen to see the new lenses, by the masses that did the rejection.
+Group effort.
+
+Sims vs duds leads to inclusive search -- click on anything you think etc...
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Collaborative Filtering with ``Talk''}
-\label{sec:design:classification}
+\subsection{Stage 2: Refinement}
+\label{sec:design:stage2}
 
-Feeding in collections, following online analysis. 
-Taking subjects to Talk individually, too.
+Goal: assess candidates, reject false positives by comparing with training set
+of non-obvious non-lenses. Produce a sample rankable by probability.
 
-Mental modeling. Further inspection on Dashboard. Voting. 
-
-Final sample generation.
-
+Reconfigured website: more detailed SG, more detailed feedback. Orange
+background to make it obvious stage 2 is different. Slower image presentation.
+Higher, constant training rate.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Data}
 \label{sec:data}
 
-Training data and test data. Refer to Paper II for CFHTLS details.
+Definitions: training subjects and test subjects. Sims and duds.
 
-Presentation of images. Arcsinh stretch, calibration. Approximately
-optimized.
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{The CFHT Legacy Survey}
+\label{sec:data:CFHTLS}
+
+Describe survey. Refs. 
+
+Why this one? Good IQ, deep, colorful, homogeneous. Precursor to Stage III and
+IV imaging surveys, DES, KIDS, LSST etc. Already searched by robots: enables
+comparison of techniques. Lenses not yet found by robots, detectable by
+humans? 
+
+Blind search strategy.
+Preparation of data: divide survey into overlapping tiles. 
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Image Presentation}
+\label{sec:data:display}
+
+Presentation of images. Uniform scales, to build intuition and avoid rescales
+due to bright objects. Arcsinh stretch, to bring out low SB features. 
+Approximately optimized, how? Examples of images.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Identification Analysis}
+\section{Classification Analysis}
 \label{sec:IDanalysis}
 
 In this section we outline our methodology for interpreting the
@@ -219,31 +263,39 @@ crowd's ability to identify gravitational lenses during the course of
 the project, and the completeness and purity of the lens candidate
 sample generated.
 
-Where to describe probabilistic classifier stuff? Here or in an
-appendix? Not sure.
+Describe SWAP here. (Move from appendix.)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Identification Results}
-\label{sec:IDresults}
+\section{Results}
+\label{sec:results}
 
 Understanding crowd, so we can help them learn faster. Understanding
 images given the crowd, so we can find lenses.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Learned Behavior}
-\label{sec:results:learning}
+\subsection{Crowd Properties}
+\label{sec:results:crowd}
+
+Enthusiasm: histogram of classifications, stage 1 vs stage 2. Information
+contributed. Correlation with number of classifications. 
+
+PL and PD as measures of skill. not quite talent, due to possibility of
+learning - but agents assume talent. Performance of crowd re PD and PL.
+Correlations with N classifications.
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{Sample completeness and purity}
-\label{sec:results:learning}
+\label{sec:results:sample}
 
-Vary the acceptance and rejection thresholds, look at completeness and
-purity as a function of this. How much time can be saved by retiring
-subjects into candidate list or rejection list?
+Rejection rate. Completeness and purity at P > retirement, P > 95\%, and 
+as function of probability P. Compare stage 1 and stage 2. 
+
+Summarize performance at some fiducial threshold: eg P = 95\%.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -262,13 +314,33 @@ We draw the following conclusions:
 
 \begin{itemize} 
 
-\item Ability to detect lenses
+\item Crowd-sourced gravitational lens detection works, as shown on sims and duds:
 
-\item What we can say about the next steps
+\item Participation (crowd size, activity rate) enabled project completion
+
+\item Both stages (1 and 2) achieved the required rejection rates
+
+\item Integrated humanpower = X, cf hours taken by small team of experts 
+
+\item Nightly processing is inefficient: more classifications were made than
+was necessary during peak participation. Need kafka...
+
+\item Completeness and purity were estimated as C\% and P\%, from sim and dud
+recovery/miss rates Which sims were missed? False negatives
+
+\item The lens-finding crowd shows some interesting properties, with
+consequences for future scalability
+
+\item The information comes predominantly from volunteers with agents with P =
+...
+
+\item The agents show a high mean information per classification, which
+increased/decreased with time; this does/doesn?t correlate with active crowd
+size, showing how the crowd changed over time...
 
 \end{itemize}
 
-Summarize, end.
+Sum up, end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  ACKNOWLEDGMENTS

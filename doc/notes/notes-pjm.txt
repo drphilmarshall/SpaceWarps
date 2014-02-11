@@ -4484,7 +4484,7 @@ http://talk.spacewarps.org/#/subjects/ASW0004pbz   # Tiny binary lens
 http://talk.spacewarps.org/#/subjects/ASW0004nan   # Bright UV arc under LRG
 http://talk.spacewarps.org/#/subjects/ASW00008a0   # Thin arcs, multiple imaging
 http://talk.spacewarps.org/#/subjects/ASW0009bbq   # Faint cluster arc
-http://talk.spacewarps.org/#/subjects/ASW000096rm  # Nice tiny quad
+http://talk.spacewarps.org/#/subjects/ASW00096rm  # Nice tiny quad
 http://talk.spacewarps.org/#/subjects/ASW000993q   # Cluster lens, plus galaxy pertuber
 http://talk.spacewarps.org/#/subjects/ASW0006i2r   # Nice arc next to LRG
 http://talk.spacewarps.org/#/subjects/ASW0004106   # Sheared arc! 3-plane lens :-)
@@ -4504,12 +4504,73 @@ http://talk.spacewarps.org/#/subjects/ASW0000hng   # Odd U-shaped arc, v bright 
 http://talk.spacewarps.org/#/subjects/ASW00024id   # Weird high radius arc, ring galaxy?
 
 # ======================================================================
+# 2014-01-30
 
+# Zooming in on the good candidates:
 
+set goods = `grep 'http://talk' ../../doc/notes/notes-pjm.txt | grep '# ' | head -12 | cut -d'/' -f6 | awk '{printf "candidates/%s.png\n", $1}' | sort`
 
+mkdir goods
+cp $goods goods/.
 
+# Now zooms! Estimate fractional central x and y from preview…
 
+set images = ( \
+ASW0004nan.png \
+ASW0004pbz.png \
+ASW0005o38.png \
+ASW0004dv8.png \
+ASW0006i2r.png \
+ASW0007h27.png \
+ASW0007xrs.png \
+ASW00008a0.png \
+ASW0009bbq.png \
+ASW00096rm.png \
+ASW000993q.png \
+ASW0004106.png \
+)
 
+set x = (\
+0.75 \
+0.7 \
+0.7 \
+0.45 \
+0.8 \
+0.35 \
+0.2 \
+0.75 \
+0.6 \
+0.75 \
+0.55 \
+0.45 \
+)
+
+set y = ( \
+0.65 \
+0.45 \
+0.3 \
+0.8 \
+0.75 \
+0.85 \
+0.87 \
+0.2 \
+0.85 \
+0.8 \
+0.75 \
+0.7 \
+)
+
+foreach k ( `seq $#images` )
+  set image = goods/$images[$k]
+  set zoom = ${image:r}_zoom.png 
+  set i = `echo $x[$k] | awk '{printf "%d\n", $1*440 - 50}'`
+  set j = `echo $y[$k] | awk '{printf "%d\n", $1*440 - 50}'`
+  set string = "100x100+$i+$j"
+  convert -crop $string $image $zoom
+  du -h $zoom
+end
+
+# Good!
 
 
 

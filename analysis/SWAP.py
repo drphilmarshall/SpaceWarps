@@ -115,20 +115,28 @@ def SWAP(argv):
     survey = tonights.parameters['survey']
     print "SWAP: looks like we are on Stage "+stage+" of the ",survey," survey project"
 
+
     agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
     if agents_willing_to_learn:
+
+        supervised = tonights.parameters['supervised']
+        if supervised:
+            print "SWAP: agents will use training data to update their confusion matrices"
+        else:
+            print "SWAP: agents will only use test data to update their confusion matrices"
+
         a_few_at_the_start = tonights.parameters['a_few_at_the_start']
-        print "SWAP: agents will update their confusion matrices as new data arrives"
         if a_few_at_the_start > 0: 
-            print "SWAP: but at first they'll ignore the classifier until "
-            print "SWAP: they've done ",int(a_few_at_the_start)," training images"
+            print "SWAP: but at first they'll ignore their volunteer until "
+            print "SWAP: they've done ",int(a_few_at_the_start)," images"
     else:
         a_few_at_the_start = 0
         print "SWAP: agents will use fixed confusion matrices without updating them"    
 
+
     waste = tonights.parameters['hasty']
     if waste:
-        print "SWAP: agents will ignore classifications of rejected subjects"
+        print "SWAP: agents will ignore the classifications of rejected subjects"
     else:
         print "SWAP: agents will use all classifications, even of rejected subjects"
 
@@ -210,7 +218,7 @@ def SWAP(argv):
     
     # ------------------------------------------------------------------
     
-    count_max = 5000000
+    count_max = 500000
     print "SWAP: interpreting up to",count_max," classifications..."
     if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 
@@ -224,7 +232,6 @@ def SWAP(argv):
         if vb: print "#"+str(count+1)+". items = ",items
         if items is None: 
             continue # Tutorial subjects fail, as do stage/project mismatches!
-        # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
         t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
 
         # If the stage of this classification does not match the stage we are
@@ -252,37 +259,35 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the 
         # classifier. We send that classifier's agent to the subject
         # to do this.  
-        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,while_ignoring=a_few_at_the_start,haste=waste)
 
         # Update the agent's confusion matrix, based on what it heard:
-        # if learning == 'supervised':
         
-        if category == 'training' and agents_willing_to_learn:
-            bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
-        elif category == 'training':
-            bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
+        if supervised:
 
-        # else:
-        
-           # bureau.member[Name].heard(it_was=X,but_it_might_be=P,ignore=False)
+            P = sample.member[ID].mean_probability
+            
+            if category == 'training' and agents_willing_to_learn:
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+            elif category == 'training':
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
 
-        # Notes:
-        #  * Assuming unsupervised learning will work means that the 
-        #      initial values of PD and PL have to be greater than 0.5, ie that
-        #      the volunteers are not random classifiers...
-        #  * Will we get away without iterating these steps?
-
-        # If the bureau and the sample were being stored as Mongo databases,
-        # we would want to update those DBs here, with bureau.save or 
-        # agent.save...
-
+        else:
+            
+            P = sample.member[ID].mean_probability
+            
+            if category == 'test' and agents_willing_to_learn:
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+            elif category == 'test':
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
+            
 
         # Brag about it:
         count += 1
         if vb:
             print swap.dashedline
             print "SWAP: Subject "+ID+" was classified by "+Name+" during Stage ",stage
-            print "SWAP: he/she said "+X+" when it was actually "+Y
+            print "SWAP: he/she said "+X+" when it was actually "+Y+", with Pr(LENS) = "+str(P)
             print "SWAP: their agent reckons their contribution (in bits) = ",bureau.member[Name].contribution
             print "SWAP: while estimating their PL,PD as ",bureau.member[Name].PL,bureau.member[Name].PD
             print "SWAP: and the subject's new probability as ",sample.member[ID].probability

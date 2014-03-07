@@ -4606,24 +4606,60 @@ grep -v '#' $master | \
 # directory. Do a three-way comparison with the first 10^6 classifications
 # only. Just run SWAP once, with batch of 10^6.
 
-set test_dir $SWAP_DIR/VICS82/stage1/supervision_tests
+set test_dir = $SWAP_DIR/VICS82/stage1/supervision_tests
 mkdirf $test_dir
 cp $SWAP_DIR/VICS82/stage1/stage1.config template.config
 
-# Edit this, etc.
+# Edit this, to include learning = supervised etc.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 1 - standard operation
+
+# supervised: True        
+# initialPL: 0.5
+# initialPD: 0.5
 
 set expt = 'supervised_random'
-mkdirf ${expt}
-cp ../template.config ${expt}_stage1.config
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
 
-SWAPSHOP.csh -s VICS82 --test 1 --startup --fast --config \
-    ${expt}_stage1.config 
+SWAP.py ${expt}_stage1.config 
+
+# VICS82 terrible data? Seems like a lot of test subjects drifting up...
+# Need to compare with old code.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 2 - supervised, agents assume astute volunteers
+
+# supervised: True        
+# initialPL: 0.75
+# initialPD: 0.75
 
 set expt = 'supervised_astute'
-set expt = 'unsupervised_random'
-set expt = 'unsupervised_astute'
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
 
-# And so on. OK, switch to unsupervised branch before breaking the code!!
+SWAP.py ${expt}_stage1.config 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 3 - unsupervised, agents assume astute volunteers
+
+# supervised: False        
+# initialPL: 0.75
+# initialPD: 0.75
+
+set expt = 'unsupervised_astute'
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
+
+SWAP.py ${expt}_stage1.config 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+
+# set expt = 'unsupervised_random'
+
+# Switched to unsupervised branch before breaking the code!!
 
 # ======================================================================
 

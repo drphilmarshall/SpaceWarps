@@ -116,7 +116,10 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,ignore=0,haste=False):
+    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False):
+
+        # Rename some variables:
+        a_few_at_the_start = while_ignoring
 
         # Update agent: 
         by.N += 1
@@ -149,7 +152,7 @@ class Subject(object):
         # have seen NT > a_few_at_the_start (ie they've had a 
         # certain amount of training):
             
-            if by.NT > ignore:
+            if by.NT > a_few_at_the_start:
                
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
                 PL_realization=by.get_PL_realization(Ntrajectory);

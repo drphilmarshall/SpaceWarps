@@ -3970,6 +3970,112 @@ more candidates/.ASW0009coy.log
 # Start downloading new dump, try reading VICS82 classifications.
 
 # ======================================================================
+
+# Running list of CFHTLS stage 2 candidates!
+
+# Select at P > 0.95
+#
+# 43 candidates, most of them known, one or two false positives, some new lenses!
+
+# Good candidates:
+http://talk.spacewarps.org/#/subjects/ASW0007xrs   # Commenters disagree
+http://talk.spacewarps.org/#/subjects/ASW0007h27   # 2 possible lenses
+http://talk.spacewarps.org/#/subjects/ASW0005o38   # Nice galaxy-scale arc
+http://talk.spacewarps.org/#/subjects/ASW0004pbz   # Tiny binary lens
+http://talk.spacewarps.org/#/subjects/ASW0004nan   # Bright UV arc under LRG
+http://talk.spacewarps.org/#/subjects/ASW00008a0   # Thin arcs, multiple imaging
+http://talk.spacewarps.org/#/subjects/ASW0009bbq   # Faint cluster arc
+http://talk.spacewarps.org/#/subjects/ASW00096rm   # Nice tiny quad
+http://talk.spacewarps.org/#/subjects/ASW000993q   # Cluster lens, plus galaxy pertuber
+http://talk.spacewarps.org/#/subjects/ASW0006i2r   # Nice arc next to LRG
+http://talk.spacewarps.org/#/subjects/ASW0004106   # Sheared arc! 3-plane lens :-)
+http://talk.spacewarps.org/#/subjects/ASW0005vog   # Binary lens, faint arc with knot
+
+# False positives:
+http://talk.spacewarps.org/#/subjects/ASW0003ox0   # Dashboard shows it to be a merging spiral
+http://talk.spacewarps.org/#/subjects/ASW000279i   # Nearby dwarf with companions
+http://talk.spacewarps.org/#/subjects/ASW00032ae   # 3-way merger, plus orange/blue spiral
+http://talk.spacewarps.org/#/subjects/ASW00011ls   # Spiral/Ring?
+
+# Unknown:
+http://talk.spacewarps.org/#/subjects/ASW0001rcc   # Wierd g-band circular blob, bigger than i/r
+http://talk.spacewarps.org/#/subjects/ASW0006noe   # Promising but needs more work
+http://talk.spacewarps.org/#/subjects/ASW0009ans   # Bright UV arc, 2 or 3 blobs?
+http://talk.spacewarps.org/#/subjects/ASW0000hng   # Odd U-shaped arc, v bright star nearby
+http://talk.spacewarps.org/#/subjects/ASW00024id   # Weird high radius arc, ring galaxy?
+
+# ======================================================================
+# 2014-01-30
+
+# Zooming in on the good candidates:
+
+set goods = `grep 'http://talk' ../../doc/notes/notes-pjm.txt | grep '# ' | head -12 | cut -d'/' -f6 | awk '{printf "candidates/%s.png\n", $1}' | sort`
+
+mkdir goods
+cp $goods goods/.
+
+# Now zooms! Estimate fractional central x and y from preview…
+
+set images = ( \
+ASW0004nan.png \
+ASW0004pbz.png \
+ASW0005o38.png \
+ASW0004dv8.png \
+ASW0006i2r.png \
+ASW0007h27.png \
+ASW0007xrs.png \
+ASW00008a0.png \
+ASW0009bbq.png \
+ASW00096rm.png \
+ASW000993q.png \
+ASW0004106.png \
+)
+
+set x = (\
+0.75 \
+0.7 \
+0.7 \
+0.45 \
+0.8 \
+0.35 \
+0.2 \
+0.75 \
+0.6 \
+0.75 \
+0.55 \
+0.45 \
+)
+
+set y = ( \
+0.65 \
+0.45 \
+0.3 \
+0.8 \
+0.75 \
+0.85 \
+0.87 \
+0.2 \
+0.85 \
+0.8 \
+0.75 \
+0.7 \
+)
+
+foreach k ( `seq $#images` )
+  set image = goods/$images[$k]
+  set zoom = ${image:r}_zoom.png 
+  set i = `echo $x[$k] | awk '{printf "%d\n", $1*440 - 50}'`
+  set j = `echo $y[$k] | awk '{printf "%d\n", $1*440 - 50}'`
+  set string = "100x100+$i+$j"
+  convert -crop $string $image $zoom
+  du -h $zoom
+end
+
+# Good!
+
+# ======================================================================
+VICS82START:
+# ======================================================================
 # 2014-01-07 (Tuesday) 21:18 PST
 
 # Run SWAP in VICS82/stage1 directory - testing for project!
@@ -4469,111 +4575,56 @@ cp VICS82_2014-01-15_09:36:47/VICS82_2014-01-15_09:36:47_candidate_catalog.txt \
 # Only 19 have fewer than 20 classificatiosn, only 1 has less than 10.
 
 # ======================================================================
+# 2014-02-28 (Friday) 17:59 PST
 
-# Running list of CFHTLS stage 2 candidates!
+# OK, get IDs for CFHTLS stage 2 candidates, P > 0.95.
 
-# Select at P > 0.95
-#
-# 43 candidates, most of them known, one or two false positives, some new lenses!
+# Search back in notes, just before "VICS82START:"
 
-# Good candidates:
-http://talk.spacewarps.org/#/subjects/ASW0007xrs   # Commenters disagree
-http://talk.spacewarps.org/#/subjects/ASW0007h27   # 2 possible lenses
-http://talk.spacewarps.org/#/subjects/ASW0005o38   # Nice galaxy-scale arc
-http://talk.spacewarps.org/#/subjects/ASW0004pbz   # Tiny binary lens
-http://talk.spacewarps.org/#/subjects/ASW0004nan   # Bright UV arc under LRG
-http://talk.spacewarps.org/#/subjects/ASW00008a0   # Thin arcs, multiple imaging
-http://talk.spacewarps.org/#/subjects/ASW0009bbq   # Faint cluster arc
-http://talk.spacewarps.org/#/subjects/ASW00096rm  # Nice tiny quad
-http://talk.spacewarps.org/#/subjects/ASW000993q   # Cluster lens, plus galaxy pertuber
-http://talk.spacewarps.org/#/subjects/ASW0006i2r   # Nice arc next to LRG
-http://talk.spacewarps.org/#/subjects/ASW0004106   # Sheared arc! 3-plane lens :-)
-http://talk.spacewarps.org/#/subjects/ASW0005vog   # Binary lens, faint arc with knot
+# In stage2 directory, take most recent catalog of candidates and 
+# threshold... Some systems have low prob because they have not been 
+# classified enough, unfortunately.
 
-# False positives:
-http://talk.spacewarps.org/#/subjects/ASW0003ox0   # Dashboard shows it to be a merging spiral
-http://talk.spacewarps.org/#/subjects/ASW000279i   # Nearby dwarf with companions
-http://talk.spacewarps.org/#/subjects/ASW00032ae   # 3-way merger, plus orange/blue spiral
-http://talk.spacewarps.org/#/subjects/ASW00011ls   # Spiral/Ring?
+set LASTANALYSIS = CFHTLS_2013-12-29_10:22:57
 
-# Unknown:
-http://talk.spacewarps.org/#/subjects/ASW0001rcc   # Wierd g-band circular blob, bigger than i/r
-http://talk.spacewarps.org/#/subjects/ASW0006noe   # Promising but needs more work
-http://talk.spacewarps.org/#/subjects/ASW0009ans   # Bright UV arc, 2 or 3 blobs?
-http://talk.spacewarps.org/#/subjects/ASW0000hng   # Odd U-shaped arc, v bright star nearby
-http://talk.spacewarps.org/#/subjects/ASW00024id   # Weird high radius arc, ring galaxy?
+cp ${LASTANALYSIS}/${LASTANALYSIS}_candidate_catalog.txt \
+   CFHTLS_stage2_candidate_catalog.txt
+
+set master = CFHTLS_stage2_candidate_catalog.txt
+set p95cat = ${master:r}_p.gt.0.95.txt
+
+grep -e '#' $master > $p95cat
+grep -v '#' $master | \
+  awk '{if ($2 > 0.95) print $0}' >> $p95cat
+  
+# 84 out of a possible 1419 stage 2 targets.
 
 # ======================================================================
-# 2014-01-30
+# 2014-03-07 (Friday) 10:29 CST
 
-# Zooming in on the good candidates:
+# Experimenting with unsupervised learning, in VICS82/unsupervised 
+# directory. Do a three-way comparison with the first 10^6 classifications
+# only. Just run SWAP once, with batch of 10^6.
 
-set goods = `grep 'http://talk' ../../doc/notes/notes-pjm.txt | grep '# ' | head -12 | cut -d'/' -f6 | awk '{printf "candidates/%s.png\n", $1}' | sort`
+set test_dir $SWAP_DIR/VICS82/stage1/supervision_tests
+mkdirf $test_dir
+cp $SWAP_DIR/VICS82/stage1/stage1.config template.config
 
-mkdir goods
-cp $goods goods/.
+# Edit this, etc.
 
-# Now zooms! Estimate fractional central x and y from preview…
+set expt = 'supervised_random'
+mkdirf ${expt}
+cp ../template.config ${expt}_stage1.config
 
-set images = ( \
-ASW0004nan.png \
-ASW0004pbz.png \
-ASW0005o38.png \
-ASW0004dv8.png \
-ASW0006i2r.png \
-ASW0007h27.png \
-ASW0007xrs.png \
-ASW00008a0.png \
-ASW0009bbq.png \
-ASW00096rm.png \
-ASW000993q.png \
-ASW0004106.png \
-)
+SWAPSHOP.csh -s VICS82 --test 1 --startup --fast --config \
+    ${expt}_stage1.config 
 
-set x = (\
-0.75 \
-0.7 \
-0.7 \
-0.45 \
-0.8 \
-0.35 \
-0.2 \
-0.75 \
-0.6 \
-0.75 \
-0.55 \
-0.45 \
-)
+set expt = 'supervised_astute'
+set expt = 'unsupervised_random'
+set expt = 'unsupervised_astute'
 
-set y = ( \
-0.65 \
-0.45 \
-0.3 \
-0.8 \
-0.75 \
-0.85 \
-0.87 \
-0.2 \
-0.85 \
-0.8 \
-0.75 \
-0.7 \
-)
+# And so on. OK, switch to unsupervised branch before breaking the code!!
 
-foreach k ( `seq $#images` )
-  set image = goods/$images[$k]
-  set zoom = ${image:r}_zoom.png 
-  set i = `echo $x[$k] | awk '{printf "%d\n", $1*440 - 50}'`
-  set j = `echo $y[$k] | awk '{printf "%d\n", $1*440 - 50}'`
-  set string = "100x100+$i+$j"
-  convert -crop $string $image $zoom
-  du -h $zoom
-end
-
-# Good!
-
-
-
-
+# ======================================================================
 
 

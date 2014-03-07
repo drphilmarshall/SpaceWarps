@@ -66,7 +66,7 @@ class Agent(object):
         Agent.update_contribution()  Calculate the expected 
                                           information contributed 
                                           per classification
-        Agent.said(it_was=X,actually_it_was=Y)     Read report.
+        Agent.heard(it_was=X,actually_it_was=Y)     Read report.
         Agent.plot_history(axes)
         
     BUGS

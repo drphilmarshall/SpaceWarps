@@ -4655,11 +4655,30 @@ cp ${test_dir}/template.config ${expt}_stage1.config
 SWAP.py ${expt}_stage1.config 
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 4 - unsupervised, agents assume random volunteers
 
+# supervised: False        
+# initialPL: 0.5
+# initialPD: 0.5
 
-# set expt = 'unsupervised_random'
+set expt = 'unsupervised_random'
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
+
+SWAP.py ${expt}_stage1.config 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
 # Switched to unsupervised branch before breaking the code!!
+
+# Interesting! 
+# * Astute, unsupervised agents are quicker to reject subjects, 
+#   as they are continuously reinforced in the "lenses are rare" mantra
+# * These agents' PL values do not change much, because they don't see 
+#   many lenses.
+# * Random, unsupervised agents stay random in PL - and do worst of all
+#   in lens detection?
+
 
 # ======================================================================
 

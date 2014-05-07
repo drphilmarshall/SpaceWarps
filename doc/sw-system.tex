@@ -24,7 +24,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title[\sw I]
-{\SW: I. Crowd-sourcing the Discovery of Gravitational Lenses}
+{\SW: Crowd-sourcing the Discovery of Gravitational Lenses}
     
 \author[Marshall et al.]{%
   \input{sw-system-authors.tex}
@@ -47,29 +47,31 @@
 
 \sw is a web-based service that enables the discovery of strong gravitational
 lenses in wide-field imaging surveys by large numbers of people. Carefully
-produced color composite images are displayed to volunteers via a flexible
-interface, which records their estimates of the positions of candidate lensed
-features. Simulated lenses, and expert-classified non-lenses, are inserted
-into the stream at random intervals; this training set is used to give the
-volunteers feedback on their performance, and to estimate a
+produced color composite images are displayed to volunteers via a
+classification interface which records their estimates of the positions of
+candidate lensed features. Simulated lenses, and expert-classified non-lenses,
+are inserted into the image stream at random intervals; this training set is
+used to give the volunteers feedback on their performance, and to estimate a
 dynamically-updated probability for any given image to contain a lens. Low
-probability systems are retired from the site daily, concentrating the sample
-towards a set of candidates; these are then re-classified by the volunteers in
-a second  refinement stage. Analyzing the classification of the training set,
-we predict that the first stage should yield a sample with C\% completeness
-and P\% purity, while leading to the rejection of R\% of the initial target
-sample. Having divided the 150 square degree CFHTLS imaging survey into 430000
-overlapping 70 by 70 arcminute tiles and displayed them on the site, we were
-joined by 33000 volunteers who contributed X million image classifications
-over the course of N months. The sample was reduced to 3500 stage 1
-candidates; these were then refined to yield a sample of candidates rankable
-by their stage 2 probability. We expect this sample to be X\% complete and Y\%
-pure at a threshold of 95\% classification probability. We estimate the mean
-information contributed per person to be X bits, over a session lasting, on
-average, N classifications per volunteer -- although the distributions of
-these quantities are highly skewed. We comment on the scalability of the \sw
-system, and its potential to operate beyond its design as a supervised
-classification system. 
+probability systems are retired from the site periodically, concentrating the
+sample towards a set of candidates; this ``stage 1'' set is then re-classified
+by the volunteers in a second  refinement stage. Analyzing the classification
+of the training set, we predict that the first stage alone should yield a
+sample that is C\% complete, while leading to the rejection of R\% of the
+initial target sample. Having divided the 150 square degree CFHTLS imaging
+survey into 430000 overlapping 70 by 70 arcminute tiles and displayed them on
+the site, we were joined by 33000 volunteers who contributed X million image
+classifications over the course of N months. The sample was reduced to 3500
+stage 1 candidates; these were then refined to yield a sample of 1400
+candidates rankable by their stage 2 probability. We expect this sample to be
+X\% complete and Y\% pure at a threshold of 95\% classification probability.
+We find that, on average, and given the assumptions we make in our analysis,
+we need 9 classifications per image during the first stage, X in the second.
+We estimate the mean information contributed per person to be X bits, over a
+session lasting, on average, N classifications per volunteer, and present the
+highly skewed distributions of these quantities. We comment on the scalability
+of the \sw system to the wide field survey era, and its potential to operate
+beyond its design as a supervised classification system. 
 
 \end{abstract}
 
@@ -229,42 +231,57 @@ Approximately optimized, how? Examples of images.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Classification Analysis}
-\label{sec:IDanalysis}
+\label{sec:swap}
 
-In this section we outline our methodology for interpreting the
-interactions of the volunteers with the identification interface.  Each
-classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs, a timestamp and the classification results. 
-The {\it kind} of subject -- whether it is a training subject (a 
-simulated lens or a known non-lens) or a test subject (an unseen image
-drawn from the survey) -- is also recorded. For all subjects, the
-positions of all Markers are recorded, in pixel coordinates. For
-training subjects, we also store the ``classification'' of the subject
-as a lens, or a non-lens, and also the type of object present in the
-image. These types are summarized in \Tref{tab:objecttypes}. 
-This classification is used to provide instant feedback, but is also the
-basic measurement used in a probabilistic classification of every
-subject based on all image views to date.
+In this section we outline our methodology for interpreting the interactions
+of the volunteers with the identification interface.  Each classification made
+is logged in a database, storing subject IDs, (anonymous) volunteer IDs, a
+timestamp and the classification results.  The {\it kind} of subject --
+whether it is a training subject (a  simulated lens or a known non-lens) or a
+test subject (an unseen image drawn from the survey) -- is also recorded. For
+all subjects, the positions of all Markers are recorded, in pixel coordinates.
+For training subjects, we also store the ``classification'' of the subject as
+a lens, or a non-lens, and also the type of object present in the image. These
+types are summarized in \Tref{tab:objecttypes}.  This classification is used
+to provide instant feedback, but is also the basic measurement used in a
+probabilistic classification of every subject based on all image views to
+date.
 
-We perform a ``Pseudo-online'' analysis of the classifications, 
-updating a probabilistic model of every (anonymous) volunteer's
-data, and also updating the lens probability of each subject 
-(in both the training and test sets), on a
-daily(??) basis. This allows us to track the speed with which the crowd
-learns about lenses, and also gives us a dynamic estimate of the
-posterior probability for  any given  subject being a lens, given all
-classifications of it. Assigning thresholds in this lens probability
-allows us to make good decisions about whether or not to accept a
-subject into the collection of candidates visible in \Talk, and also
-whether or not to  carry on classifying a subject at all. 
+We perform an online analysis of the classifications,  updating a
+probabilistic model of every (anonymous) volunteer's data, and also updating
+the lens probability of each subject  (in both the training and test sets), on
+a daily basis. This gives us a dynamic estimate of the posterior probability
+for  any given  subject being a lens, given all classifications of it to date.
+Assigning thresholds in this lens probability then allows us to make good
+decisions about whether or not to retire a subject from the system, in order to
+focus attention on new images. 
 
-In this paper we focus on the training data,  investigating  how the 
-crowd's ability to identify gravitational lenses during the course of
-the project, and the completeness and purity of the lens candidate
-sample generated.
+The details of how the lens probabilities are calculated are given in
+\Aref{appendix:swap}. In summary:
+\begin{itemize}
 
-Describe SWAP here. (Move from appendix.)
+\item Each volunteer is assigned a simple software agent, characterised by a
+confusion matrix. The two independent elements of this matrix are the
+probabilities, as estimated by the agent, that the volunteer is going to be 1)
+correct when they report that an image contains a lens when it really does
+contain a lens, $\pr(\saidLENS|\LENS,T)$, and 2) correct when they report that
+an image does not contain a lens when it really doesn't contain a lens,
+$\pr(\saidNOT|\LENS,T)$.
 
+\item Each agent updates its confusion matrix elements based on the number of
+times its volunteer has been right in each way while classifying subjects from
+the training set, accounting for noise early on due to small number
+statistics: $T$ is the set of all training images seen to date.
+
+\item Each agent uses its confusion matrices to update, via Bayes' theorem,
+the probability of an image from the test set containing a lens,
+$\pr(\LENS|C,T)$, when that image is classified by its volunteer. ($C$ is the
+set of all classifications made of this subject.)
+
+\end{itemize}
+
+In the next section we present results in terms of all three of these
+probabilities, as we investigate the performance of the \SW system.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -314,7 +331,8 @@ We draw the following conclusions:
 
 \begin{itemize} 
 
-\item Crowd-sourced gravitational lens detection works, as shown on sims and duds:
+\item Crowd-sourced gravitational lens detection works, as shown on sims and
+duds:
 
 \item Participation (crowd size, activity rate) enabled project completion
 
@@ -326,7 +344,7 @@ We draw the following conclusions:
 was necessary during peak participation. Need kafka...
 
 \item Completeness and purity were estimated as C\% and P\%, from sim and dud
-recovery/miss rates Which sims were missed? False negatives
+recovery/miss rates. Which sims were missed? False negatives
 
 \item The lens-finding crowd shows some interesting properties, with
 consequences for future scalability
@@ -358,13 +376,13 @@ Sum up, end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Probabilistic Classification Data Model}
-\label{appendix:probmodel}
+\section{Probabilistic Classification Analysis}
+\label{appendix:swap}
 
 Our aim is to enable the construction of a sample of good lens candidates.
 Since we aspire to making logical  decisions, we define a  ``good candidate''
 as one which has a high posterior probability of being a lens, given the data:
-$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data
+$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data~$\data$
 in our case are the pixel values of a colour image. However, we can greatly
 compress these complex, noisy sets of data by asking each volunteer what they
 think about them. A complete  classification in \sw consists of a set of
@@ -372,26 +390,29 @@ Marker positions, or none at all. The null set encodes the statement from
 the volunteer that the image in question is $\saidNOT$ a lens, while the
 placement of any  Markers indicates that the volunteer considers this image to
 contain a $\saidLENS$.  We simplify the problem by only using the Marker
-positions to assess whether t
-he volunteer  correctly assigned the
+positions to assess whether the volunteer  correctly assigned the
 classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
 the training set of subjects. 
 
 How should we model these compressed data? The circumstances of each
-classification are quite complex: the volunteers learn more about the problem
-as they go, but also inevitably make occasional mistakes (perhaps because a
-lens is difficult to see, or they became distracted by the television). To
-cope with this uncertainty, we assign a software agent to partner each
-volunteer. The agent's task is to interpret their volunteer's classification
-data as best it can, using a model that makes a number of necessary
-approximations. These interpretations will then include uncertainty arising as
-a result of the volunteer's efforts and also the agent's approximations, but
-they will have two important redeeming features. First, the interpretations
-will be quantitative (where before they were qualititative),  and thus will be
-useful in decision-making. Second, the agent will be able to predict, using
-its model, the probability of a test subject being a $\LENS$, given both its
-volunteer's classification, and its volunteer's experience. We now
-describe how each agent works.
+classification are quite complex, as are the human classifiers in general: the
+volunteers learn more about the problem as they go, but also inevitably make
+occasional mistakes (perhaps because a lens is difficult to see, or they
+became distracted during the task). To cope with this uncertainty, we assign a
+simple software {\it agent} to partner each volunteer. The agent's task is to
+interpret their volunteer's classification data as best it can, using a model
+that makes a number of necessary approximations. These interpretations will
+then include uncertainty arising as a result of the volunteer's efforts and
+also the agent's approximations, but they will have two important redeeming
+features. First, the interpretations will be quantitative (where before they
+were qualititative),  and thus will be useful in decision-making. Second, the
+agent will be able to predict, using its model, the probability of a test
+subject being a $\LENS$, given both its volunteer's classification, and its
+volunteer's experience. In this appendix we describe how these agents work.
+
+
+\subsection{Agents and their Confusion Matrices}
+\label{appendix:swap:probabilities}
 
 Each agent assumes that the probability of a volunteer recognising any given
 simulated lens as a lens is some number, $\pr(\saidLENS|\LENS,T)$, that
@@ -452,7 +473,10 @@ update this prior probability into a posterior one using this new information:
 which can be evaluated numerically using the elements of the confusion
 matrix. 
 
-As an example, suppose we have a volunteer who is always right about the true
+\subsection{Examples}
+\label{appendix:swap:examples}
+
+Suppose we have a volunteer who is always right about the true
 nature of a training subject. 
 Their agent's confusion matrix would be
 \be
@@ -488,10 +512,15 @@ confusion matrix, their agent would calculate
            {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
    &= 1.0.
 \end{align}
-{\it Obtuse} classifiers are as helpful as {\it perfect} ones!
+{\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones.
 
-Indeed, the information content of each classification can be estimated by an
-agent before the next classification is made, just from its confusion matrix.
+
+\subsection{Information Contribution}
+\label{appendix:swap:examples}
+
+The information likely to be contributed by each agent for a given subject
+can be estimated before the next classification of that subject is made, 
+just from its confusion matrix.
 The Shannon entropy generated by a classifier upon performing a
 classification is
 \be
@@ -520,7 +549,10 @@ that actually do have previous experience of what gravitational lenses look
 like, but should help prevent large numbers of false positives being assigned
 high probability. Plotting  $\langle I_k \rangle$ as a function of time will,
 to some extent, illustrate the learning process undergone by the $k^{\rm th}$
-volunteer-agent partnership.
+volunteer-agent partnership. 
+
+\subsection{Updating the Subject Probabilities}
+\label{appendix:swap:examples}
 
 Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
 subject just classified by the $k^{\rm th}$ volunteer. We can generalise
@@ -542,32 +574,39 @@ and by comparing it to a lower or upper thresholds, make decisions about
 whether to retire the subject from the classification interface or
 promote it in \Talk, respectively.
 
+
+\subsection{Uncertainty in the Agent Confusion Matrices}
+\label{appendix:swap:uncertainty}
+
 The confusion matrix obtained from the application of Equation
-(\ref{eq:app:fraction}) has some inherent noise which reduces as the number
-of training subjects classified by the user increases. For simplicity, the
-discussion thus far assumed the case when the confusion matrix is known
-perfectly. Let us first discuss how to characterize the noise in the confusion
-matrix. ** This needs work **
+(\ref{eq:app:fraction}) has some inherent noise which reduces as the number of
+training subjects classified by the agent's volunteer increases. For
+simplicity, the discussion thus far assumed the case when the confusion matrix
+is known perfectly; in practice, we allow for uncertainty in the agent
+confusion matrices by averaging over a small number of samples drawn from
+Binomial distributions characterised by the matrix elements
+$\pr(C_k|\LENS,T_k)$ and  $\pr(C_k|\NOT,T_k)$. The associated standard
+deviation in the estimated subject probability provides an error bar for this
+quantity.
 
-
-For ease of notation, we will denote $\pr(C_k|\LENS,T_k)\equiv p_L$ and
-$\pr(C_k|\NOT,T_k)\equiv p_N$. In reality, there is a probability distribution
-for both $p_L$ and $p_N$. Let $p_0$ be the prior probability of the subject
-being a lens. Then the posterior probability, $p_0'$ of the subject being a
-lens after the classification $C_k$ is
-\be
-  \label{eq:app:sec}
-p_0' = \frac{p_L p_0}{\left[ p_L p_0 + p_N (1- p_0) \right]},
-\ee
-The posterior probability distribution $p_0'$ can be obtained by marginalizing
-over the probability distributions of $p_L$, $p_N$ and the prior probability
-distribution $p_0$ such that,
-\be
-P(p_0') = \int p_0' P(p_L) P(p_N) P(p_0) dp_L dp_N dp_0\,.
-\ee
-This marginalization is not analytically tractable. Therefore, we have
-implemented the following Monte-Carlo solution for this problem.
-
+% For ease of notation, we will denote $\pr(C_k|\LENS,T_k)\equiv p_L$ and
+% $\pr(C_k|\NOT,T_k)\equiv p_N$. In reality, there is a probability distribution
+% for both $p_L$ and $p_N$. Let $p_0$ be the prior probability of the subject
+% being a lens. Then the posterior probability, $p_0'$ of the subject being a
+% lens after the classification $C_k$ is
+% \be
+%   \label{eq:app:sec}
+% p_0' = \frac{p_L p_0}{\left[ p_L p_0 + p_N (1- p_0) \right]},
+% \ee
+% The posterior probability distribution $p_0'$ can be obtained by marginalizing
+% over the probability distributions of $p_L$, $p_N$ and the prior probability
+% distribution $p_0$ such that,
+% \be
+% P(p_0') = \int p_0' P(p_L) P(p_N) P(p_0) dp_L dp_N dp_0\,.
+% \ee
+% This marginalization is not analytically tractable. Therefore, we have
+% implemented the following Monte-Carlo solution for this problem.
+% 
 
 %Finally, we also need to update the confusion matrix of an agent and obtain the
 %variance on each element of the matrix, once a training subject has been
@@ -581,6 +620,7 @@ implemented the following Monte-Carlo solution for this problem.
 %true strictly speaking given that our agents are learning and the values of the
 %confusion matrix are moving. Modelling the learning curve of our users is yet
 %another complicated extension we could think about.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  REFERENCES

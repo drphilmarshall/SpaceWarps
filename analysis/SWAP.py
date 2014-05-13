@@ -210,17 +210,21 @@ def SWAP(argv):
     
     # ------------------------------------------------------------------
     
-    count_max = 50000
+    count_max = 5000000
     print "SWAP: interpreting up to",count_max," classifications..."
     if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 
     count = 0
     for classification in batch:
         
+        if one_by_one: next = raw_input()
+        
         # Get the vitals for this classification:
-        items = db.digest(classification,method=use_marker_positions)
+        items = db.digest(classification,survey,method=use_marker_positions)
+        if vb: print "#"+str(count+1)+". items = ",items
         if items is None: 
-            continue # Tutorial subjects fail!
+            continue # Tutorial subjects fail, as do stage/project mismatches!
+        # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
         t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
 
         # If the stage of this classification does not match the stage we are
@@ -251,10 +255,22 @@ def SWAP(argv):
         sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste)
 
         # Update the agent's confusion matrix, based on what it heard:
+        # if learning == 'supervised':
+        
         if category == 'training' and agents_willing_to_learn:
             bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
         elif category == 'training':
             bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
+
+        # else:
+        
+           # bureau.member[Name].heard(it_was=X,but_it_might_be=P,ignore=False)
+
+        # Notes:
+        #  * Assuming unsupervised learning will work means that the 
+        #      initial values of PD and PL have to be greater than 0.5, ie that
+        #      the volunteers are not random classifiers...
+        #  * Will we get away without iterating these steps?
 
         # If the bureau and the sample were being stored as Mongo databases,
         # we would want to update those DBs here, with bureau.save or 
@@ -287,8 +303,6 @@ def SWAP(argv):
         elif count == count_max: 
             break
     
-        if one_by_one: next = raw_input()
-        
     sys.stdout.write('\n')
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count

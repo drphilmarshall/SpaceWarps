@@ -3845,15 +3845,786 @@ SWIPE.csh spacewarp_2013-12-13.gz
 SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
 
 # ======================================================================
+# 2013-12-16 (Monday) 11:14 GMT
+
+SWIPE.csh spacewarp_2013-12-15.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
 
 
+SWIPE.csh spacewarp_2013-12-16.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2013-12-17 (Tuesday) 12:28 GMT
+
+SWIPE.csh spacewarp_2013-12-17.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2013-12-18 (Wednesday) 14:36 GMT
+
+SWIPE.csh spacewarp_2013-12-18.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2013-12-19 (Thursday) 14:28 GMT
+
+SWIPE.csh spacewarp_2013-12-19.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2013-12-29 (Sunday) 18:30 PST
+
+SWIPE.csh spacewarp_2013-12-29.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 17:34 PST
+
+# Been a while, but here's the final stage 2 database. It contains some 
+# VICS82 classifications, but they are labelled stage 1 so shouldn't feature. 
+# Turned on stage 1 warning, just to see them!
+
+SWIPE.csh spacewarp_2014-01-07.gz 
+
+SWAPSHOP.csh -s CFHTLS --fast --stage2 --download
+
+# Run this before doing VICS82 stuff - doesn't take long.
+
+# Good news - stage flagged OK:
+
+# SWAP: ....................WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# WARNING: classification labelled stage 1, while subject is stage 2!
+# .........................
+# SWAP: total no. of classifications processed:  31034
+
+# However, subsequent runs of SWAP fail for some reason. 0 classifications
+# found? Some problem with final timestamp?
+
+# Check out candidates: 
+
+ls candidates/*png | wc -l
+#       88
+
+# But, some of the downloaded images are empty - maybe because they were
+# supposed to be VICS82 ones?! Look at catalog:
+
+du -h candidates/*png | grep 0B
+#   0B    candidates/ASW0000ctm.png
+#   0B    candidates/ASW000234o.png
+#   0B    candidates/ASW0002bmc.png
+#   0B    candidates/ASW0002qtn.png
+#   0B    candidates/ASW0003mb7.png
+#   0B    candidates/ASW00047ae.png
+#   0B    candidates/ASW00048x4.png
+#   0B    candidates/ASW00059a7.png
+#   0B    candidates/ASW0005kad.png
+#   0B    candidates/ASW0005lmz.png
+#   0B    candidates/ASW0005u1n.png
+#   0B    candidates/ASW00062bc.png
+#   0B    candidates/ASW0006e0o.png
+#   0B    candidates/ASW0006ker.png
+#   0B    candidates/ASW0006ksp.png
+#   0B    candidates/ASW0006ktg.png
+#   0B    candidates/ASW00072kz.png
+#   0B    candidates/ASW00078we.png
+#   0B    candidates/ASW0007e08.png
+#   0B    candidates/ASW0007sez.png
+#   0B    candidates/ASW0007u3n.png
+#   0B    candidates/ASW0007uda.png
+#   0B    candidates/ASW0007vx2.png
+#   0B    candidates/ASW0008mtv.png
+#   0B    candidates/ASW0009a68.png
+#   0B    candidates/ASW0009bq9.png
+#   0B    candidates/ASW0009coy.png
+
+# check talk...
+
+ASW0009coy is CFHTLS
+ASW0006ker is CFHTLS
+
+# Probably these are all stage 2 candidates, but server is refusing image
+# requests... check logs:
+
+more candidates/.ASW0009coy.log
+# --2013-12-29 19:44:04--  http://spacewarps.org/subjects/standard/5183f151e4bb21021906a882.png
+# Resolving spacewarps.org... failed: nodename nor servname provided, or not known.
+# wget: unable to resolve host address `spacewarps.org'
+
+# Whoah! Tested wgetting one, and it worked OK. Phew. Need to redownload 
+# these, preferably by re-running SWAP sometime...
+
+# Now though, need to focus on VICS82! 
+# Start downloading new dump, try reading VICS82 classifications.
+
+# ======================================================================
+
+# Running list of CFHTLS stage 2 candidates!
+
+# Select at P > 0.95
+#
+# 43 candidates, most of them known, one or two false positives, some new lenses!
+
+# Good candidates:
+http://talk.spacewarps.org/#/subjects/ASW0007xrs   # Commenters disagree
+http://talk.spacewarps.org/#/subjects/ASW0007h27   # 2 possible lenses
+http://talk.spacewarps.org/#/subjects/ASW0005o38   # Nice galaxy-scale arc
+http://talk.spacewarps.org/#/subjects/ASW0004pbz   # Tiny binary lens
+http://talk.spacewarps.org/#/subjects/ASW0004nan   # Bright UV arc under LRG
+http://talk.spacewarps.org/#/subjects/ASW00008a0   # Thin arcs, multiple imaging
+http://talk.spacewarps.org/#/subjects/ASW0009bbq   # Faint cluster arc
+http://talk.spacewarps.org/#/subjects/ASW00096rm   # Nice tiny quad
+http://talk.spacewarps.org/#/subjects/ASW000993q   # Cluster lens, plus galaxy pertuber
+http://talk.spacewarps.org/#/subjects/ASW0006i2r   # Nice arc next to LRG
+http://talk.spacewarps.org/#/subjects/ASW0004106   # Sheared arc! 3-plane lens :-)
+http://talk.spacewarps.org/#/subjects/ASW0005vog   # Binary lens, faint arc with knot
+
+# False positives:
+http://talk.spacewarps.org/#/subjects/ASW0003ox0   # Dashboard shows it to be a merging spiral
+http://talk.spacewarps.org/#/subjects/ASW000279i   # Nearby dwarf with companions
+http://talk.spacewarps.org/#/subjects/ASW00032ae   # 3-way merger, plus orange/blue spiral
+http://talk.spacewarps.org/#/subjects/ASW00011ls   # Spiral/Ring?
+
+# Unknown:
+http://talk.spacewarps.org/#/subjects/ASW0001rcc   # Wierd g-band circular blob, bigger than i/r
+http://talk.spacewarps.org/#/subjects/ASW0006noe   # Promising but needs more work
+http://talk.spacewarps.org/#/subjects/ASW0009ans   # Bright UV arc, 2 or 3 blobs?
+http://talk.spacewarps.org/#/subjects/ASW0000hng   # Odd U-shaped arc, v bright star nearby
+http://talk.spacewarps.org/#/subjects/ASW00024id   # Weird high radius arc, ring galaxy?
+
+# ======================================================================
+# 2014-01-30
+
+# Zooming in on the good candidates:
+
+set goods = `grep 'http://talk' ../../doc/notes/notes-pjm.txt | grep '# ' | head -12 | cut -d'/' -f6 | awk '{printf "candidates/%s.png\n", $1}' | sort`
+
+mkdir goods
+cp $goods goods/.
+
+# Now zooms! Estimate fractional central x and y from previewÉ
+
+set images = ( \
+ASW0004nan.png \
+ASW0004pbz.png \
+ASW0005o38.png \
+ASW0004dv8.png \
+ASW0006i2r.png \
+ASW0007h27.png \
+ASW0007xrs.png \
+ASW00008a0.png \
+ASW0009bbq.png \
+ASW00096rm.png \
+ASW000993q.png \
+ASW0004106.png \
+)
+
+set x = (\
+0.75 \
+0.7 \
+0.7 \
+0.45 \
+0.8 \
+0.35 \
+0.2 \
+0.75 \
+0.6 \
+0.75 \
+0.55 \
+0.45 \
+)
+
+set y = ( \
+0.65 \
+0.45 \
+0.3 \
+0.8 \
+0.75 \
+0.85 \
+0.87 \
+0.2 \
+0.85 \
+0.8 \
+0.75 \
+0.7 \
+)
+
+foreach k ( `seq $#images` )
+  set image = goods/$images[$k]
+  set zoom = ${image:r}_zoom.png 
+  set i = `echo $x[$k] | awk '{printf "%d\n", $1*440 - 50}'`
+  set j = `echo $y[$k] | awk '{printf "%d\n", $1*440 - 50}'`
+  set string = "100x100+$i+$j"
+  convert -crop $string $image $zoom
+  du -h $zoom
+end
+
+# Good!
+
+# ======================================================================
+VICS82START:
+# ======================================================================
+# 2014-01-07 (Tuesday) 21:18 PST
+
+# Run SWAP in VICS82/stage1 directory - testing for project!
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config stage1.config 
+
+# Config file copied from CFHTLS stage 2 dir - don't be hasty, 
+# set initial date to the beginning of the week.
+
+# Fail - 0 classifications found etc. Maybe mongo is broken?
+# OK, trash old mongo and swipe the new one. Gulp! Can always just start from 
+# half an hour ago for testing... First, rerun verbose, see whats happening?
+
+# oops, all classifications have items=None, must have screwed up somewhere.
+# To do one by one test, need to run python directly:
+
+SWAP.py stage1.config
+
+# OK, fixed bugs, survey vs project comparison now in operation.
+
+# Good! Seems to be working OK. Test classifications (not on live site)
+# mostly junk, see report in attic. Onwards!
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 22:53 PST
+
+# OK, start the agents at 20:00 GMT for the start of Stargazing Live:
+# Need to trash mongo in old CFHTLS stage 2 dir.
+# Do 5 million at a time for speed! 
+
+SWIPE.csh spacewarp_2014-01-08.gz 
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config stage1.config 
+
+# Wed Jan  8 01:14:32 PST 2014
+# SWAP: updating all subjects with classifications made since 2014-01-07_20:00:00
+# SWAP: interpreting up to 5000000  classifications...
+# SWAP: ..................
+# SWAP: total no. of classifications processed:  1235829
+# ...
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 2421 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 24 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidates.txt
+# ...
+# SWAP: From 11471 subjects classified,
+# SWAP: 8654 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidate_catalog.txt
+# Wed Jan  8 02:04:03 PST 2014
+
+# SWAP takes about 50 mins to do 1.2 million classifications. 40 mins per
+# million.
+
+# Only 11k subjects served?! DB problem?
+
+# Low number of retirees; cascade plot shows a lot of images with high
+# uncertainty, hanging out in the middle.
+
+# 24 candidates with P > 0.95 - need to check these out!
+
+SWAPSHOP.csh -s VICS82 --startup --fast --no-analysis --download 
+
+# SWAPSHOP: in folder 'candidates',
+# SWAPSHOP: downloading 24 images from
+# ../VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidate_catalog.txt...........................SWAPSHOP:
+# ...done.
+mv candidates candidates_P.gt.0.95
+
+# Hmm - one or two mildly interesting but nothing remarkable. Try digging
+# deeper, P > 0.10
+
+# SWAPSHOP: downloading 87 images from ../VICS82_2014-01-08_01:20:51/VICS82_2014-01-08_01:20:51_candidate_catalog.txt
+
+mv candidates candidates_P.gt.0.10
+
+# Not much to be gained! Made galleries:
+
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_P.gt.0.95.pdf \
+  candidates_P.gt.0.95/*.png
+
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_P.gt.0.10.pdf \
+  candidates_P.gt.0.10/*.png
+  
+# Focus on P > 0.95.
+# Highlights:
+
+Cluster with several candidate lensed images; no obvious conjugate systems 
+but some images are very red: 
+
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_Cluster.pdf \
+    candidates_P.gt.0.10/ASW0009i4s.png
+
+Several nearly-lensed quasars: quasars close to massive galaxies, some
+possibly with faint counter-images buried in lens galaxy.
+
+  gallery.pl -pdf -x 2 -y 2 -t -o VICS82_1stmillion_4NLQs.pdf \
+    candidates_P.gt.0.10/ASW0009kg3.png \
+    candidates_P.gt.0.10/ASW0009kj8.png \
+    candidates_P.gt.0.10/ASW0009okd.png \
+    candidates_P.gt.0.10/ASW0009pbd.png
+  
+Possible long blue arc:
+
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_LongArc.pdf \
+    candidates_P.gt.0.10/ASW0009jxt.png
+  
+Short red arc:
+
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_1stmillion_ShortRedArc.pdf \
+    candidates_P.gt.0.10/ASW0009jlw.png
 
 
+# Miscellaneous, not yet SWAP or Talk-detected:
+
+Double purple quasar?
+   http://talk.spacewarps.org/#/subjects/ASW0009lgi
+
+Aprajita's bright double:
+   http://talk.spacewarps.org/#/subjects/ASW0009uo2
+   
+Jim's eyeball ring:
+   http://talk.spacewarps.org/#/subjects/ASW0009io9
+   02:09:41.3 +00:15:58.7
+
+# BTW what else is nearby?
+
+askSDSS -f -w 1 --hms 02:09:41.3 +00:15:58.7
+# askSDSS: query the SDSS website for images, catalogues and spectra
+# askSDSS: required position: 32.42208 0.26631
+# askSDSS: TODO: make finding chart
+# askSDSS: field size / arcmin: 1
+# askSDSS: ra (J2000): 02 09 41.3
+# askSDSS: dec (J2000): +00 15 58.7
+# askSDSS: IAU name of search position: SDSSJ020941.3+001558.7
+# askSDSS: downloading image...
+# askSDSS: finding chart image:
+#   SDSSJ020941.3+001558.7_1x1arcmin.jpg
+# askSDSS: Explorer URL:
+#   http://skyserver.sdss3.org/public/en/tools/chart/chart.asp?ra=32.42208&dec=0.26631&opt=G&
+# askSDSS: all done
+
+# Not much! :-) Here's the 40" SDSS view:
+
+askSDSS -f -w 0.67 --hms 02:09:41.3 +00:15:58.7
+
+# ======================================================================
+# 2014-01-07 (Tuesday) 22:53 PST
+
+# Second run, on 3 million classifications. Over-wrote tarball, so trash mongo
+# and old dir.
+
+\rm -rf spacewarp_2014-01-08 mongo
+
+SWIPE.csh spacewarp_2014-01-08.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+# Started swiping at 0415. If my estimate of 3 hours is correct, it shoudl be
+# done by 0800 PST = 1600 GMT 
+# Finished at 0730 PST. Good!
+
+# First, check for 0209:
+grep ASW0009io9 VICS82_2014-01-08_10:35:11/VICS82_2014-01-08_10:35:11_candidate_catalog.txt 
+# ASW0009io9  0.0000575  3       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019e4.png
+
+# Bizarre - P < P0 by a factor of 3. Oh well, only 3 classifications.
+
+wget -O ASW0009io9.png http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019e4.png
+
+# Now then, candidates:
+
+SWAPSHOP: in folder 'candidates',
+SWAPSHOP: downloading 52 images from ../VICS82_2014-01-08_10:35:11/VICS82_2014-01-08_10:35:11_candidate_catalog.txt
+
+mv candidates VICS82_2million_candidates_P.gt.0.95
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_2million_candidates_P.gt.0.95.pdf \
+  VICS82_2million_candidates_P.gt.0.95/*.png
+
+# Nice arc:
+
+VICS82_2million_candidates_P.gt.0.95/ASW0009dqb.png
+
+# Copy report:
+
+cp VICS82_stage1_report.pdf VICS82_2million_report.pdf
+
+# Cascade looks *much* better! Some good rejection going on, and 39804
+# subjecst now classified. Try pulling out systems above 1%:
+
+SWAPSHOP.csh -s VICS82 --fast --no-analysis --download 
+
+# 398 images! Cool. Browse these.
+mv candidates VICS82_2million_candidates_P.gt.0.01
+gallery.pl -pdf -x 2 -y 2 -t -o VICS82_2million_candidates_P.gt.0.01.pdf \
+  VICS82_2million_candidates_P.gt.0.01/*.png
+
+# Quite like this one:
+ASW0009iov.png
+
+# Grab these two:
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_2million_NiceArcs.pdf \
+    VICS82_2million_candidates_P.gt.0.95/ASW0009dqb.png \
+    VICS82_2million_candidates_P.gt.0.01/ASW0009iov.png
+
+# From Christine: "2 red dots"
+http://talk.spacewarps.org/#/subjects/ASW0009i91
+
+# From Claude:
+http://talk.spacewarps.org/#/subjects/ASW0009dk6
+
+head -1 \
+  VICS82_2014-01-08_10:35:11/VICS82_2014-01-08_10:35:11_candidate_catalog.txt ; \
+grep -e ASW0009dqb -e ASW0009iov -e ASW0009io9 \
+     -e ASW0009i91 -e ASW0009dk6 \
+  VICS82_2014-01-08_10:35:11/VICS82_2014-01-08_10:35:11_candidate_catalog.txt 
+
+# # zooid     P          Nclass  image
+# ASW0009dqb  1.0000000  279       http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c0000de.png
+# ASW0009i91  0.0000306  7       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0017c0.png
+# ASW0009dk6  0.0007486  7       http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c000001.png
+# ASW0009io9  0.0000575  3       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019e4.png
+# ASW0009iov  0.0128811  46       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019fa.png
+
+wget -O ASW0009dk6.png http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c000001.png
+wget -O ASW0009i91.png http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0017c0.png 
+
+# Retirements?
+
+wc -l VICS82_2million_retire_these.txt
+#     5745 VICS82_2million_retire_these.txt
+
+# Sent to Michael.
+
+# Best arcs for lenshunters:
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_2million_best.pdf \
+    ASW0009io9.png \
+    VICS82_2million_candidates_P.gt.0.95/ASW0009dqb.png \
+    VICS82_2million_candidates_P.gt.0.01/ASW0009iov.png
 
 
+# OK, on with the next batch!
+
+# ======================================================================
+# 2014-01-08 (Wednesday) 08:55 PST
+
+\rm -rf spacewarp_2014-01-08 mongo
+
+SWIPE.csh spacewarp_2014-01-08.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+Summary of output:
+
+SWAP: total no. of classifications processed:  338074
+SWAP: saving lens candidates...
+SWAP: 69 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-08_15:29:15/VICS82_2014-01-08_15:29:15_candidates.txt
+SWAPSHOP: if you want, you can go ahead and retire 10656 subjects with
+
+# Cool. Report shows 2.7 million classifications of 41538 subjects by
+# 38k users, 69 candidates, 18725 rejections. Plots very encouraging.
+
+mv VICS82_stage1_report.pdf VICS82_2.7million_report.pdf
+mv VICS82_stage1_retire_these.txt VICS82_2.7million_retire_these.txt
+wc -l VICS82_2.7million_retire_these.txt
+#   10656 VICS82_2.7million_retire_these.txt
+
+# Quick look for new candidates:
+
+mv candidates VICS82_2.7million_candidates_P.gt.0.95
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_2.7million_candidates_P.gt.0.95.pdf \
+  VICS82_2.7million_candidates_P.gt.0.95/*.png
+
+# YES! 9io9 detected :-)
+   http://talk.spacewarps.org/#/subjects/ASW0009io9
+
+# Possibly interesting blue arcs:
+   http://talk.spacewarps.org/#/subjects/ASW000a8ep
+
+# Anu reports this one from Talk:
+   http://talk.spacewarps.org/#/subjects/ASW0009l59
+#   00:39:08.6 -00:58:28.1
+
+head -1 \
+   VICS82_2014-01-08_15:29:15/VICS82_2014-01-08_15:29:15_candidate_catalog.txt ; \
+grep -e ASW0009io9 -e ASW0009l59 \
+   VICS82_2014-01-08_15:29:15/VICS82_2014-01-08_15:29:15_candidate_catalog.txt
+   
+# # zooid     P          Nclass  image
+# ASW0009l59  0.0000064  4       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c002668.png
+# ASW0009io9  0.9640383  13       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019e4.png
+
+# Again, 9l59 needs more classifications. Talk FTW!
+
+# For now, make gallery of all best candidates - I count 6:
+
+head -1 \
+   VICS82_2014-01-08_15:29:15/VICS82_2014-01-08_15:29:15_candidate_catalog.txt ; \
+grep -e ASW0009dqb \
+     -e ASW0009iov \
+     -e ASW0009io9 \
+     -e ASW0009i91 \
+     -e ASW0009dk6 \
+     -e ASW0009l59 \
+   VICS82_2014-01-08_15:29:15/VICS82_2014-01-08_15:29:15_candidate_catalog.txt
+
+# # zooid     P          Nclass  image
+# ASW0009dqb  1.0000000  288      http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c0000de.png
+# ASW0009i91  0.0183210  16       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0017c0.png
+# ASW0009dk6  0.5566131  11       http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c000001.png
+# ASW0009l59  0.0000064  4        http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c002668.png
+# ASW0009io9  0.9640383  13       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019e4.png
+# ASW0009iov  0.0053120  51       http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019fa.png     
+
+wget -O ASW0009dqb.png http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c0000de.png
+wget -O ASW0009iov.png http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019fa.png     
+wget -O ASW0009l59.png http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c002668.png
 
 
+# Download these 
+  gallery.pl -pdf -x 1 -y 1 -t -o VICS82_2.7million_Top5.pdf \
+    ASW0009io9.png \
+    ASW0009l59.png \
+    ASW0009iov.png \
+    ASW0009dqb.png \
+    ASW0009dk6.png
 
+# ======================================================================
+# 2014-01-08 (Wednesday) 20:42 PST
 
+\rm -rf spacewarp_2014-01-08*
+
+SWIPE.csh spacewarp_2014-01-09.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+# Whoah - db is 21GB! SWAP runs very slowly - or even gets stuck on 
+# db.find()? No - it couldnt connect to the mongo...
+# RE-swipe! God-damnint. OK scratch that, got a new dump.
+     
+
+# ======================================================================
+# 2014-01-09 (Thursday) 05:39 PST
+
+SWIPE.csh spacewarp_2014-01-09.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+# OK, what have we got here?
+
+SWAP: total no. of classifications processed:  2449799
+# +2.7million = 5.1 million
+# 55609 classification agents, 41998 subjects 
+
+SWAP: saving retiree subject Zooniverse IDs...
+SWAP: 36791 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-09_11:00:00/VICS82_2014-01-09_11:00:00_retire_these.txt
+SWAP: saving lens candidates...
+SWAP: 153 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/VICS82/stage1/VICS82_2014-01-09_11:00:00/VICS82_2014-01-09_11:00:00_candidates.txt
+
+# Cool! 37k subjects to be retired in total, 28655 still to do.
+# Report: 
+
+mv VICS82_stage1_report.pdf VICS82_5.1million_report.pdf
+mv VICS82_stage1_retire_these.txt VICS82_5.1million_retire_these.txt
+
+# 153 P.gt.0.95 candidates! Including some new ones, pulled these out by hand:
+
+mv candidates VICS82_5.1million_candidates_P.gt.0.95
+
+gallery.pl -pdf -x 2 -y 2 -t -o VICS82_5.1million_candidates_P.gt.0.95.pdf \
+  VICS82_5.1million_candidates_P.gt.0.95/ASW*png
+
+# Nice little red arc?
+  http://talk.spacewarps.org/#/subjects/ASW000a2y7
+
+# Blue fuzz under pair:
+  http://talk.spacewarps.org/#/subjects/ASW0009dvs
+
+# A little double?
+  http://talk.spacewarps.org/#/subjects/ASW0009fht
+
+# Little red arc? With extent plus counterimage?
+  http://talk.spacewarps.org/#/subjects/ASW0009ifa
+
+# Pink quad?
+  http://talk.spacewarps.org/#/subjects/ASW0009klz
+
+# Yellow! With blue fuzz underneath.
+  http://talk.spacewarps.org/#/subjects/ASW0009vfi
+
+# Combine with others:
+
+head -1 \
+  VICS82_2014-01-09_11:00:00/VICS82_2014-01-09_11:00:00_candidate_catalog.txt ; \
+grep \
+-e ASW0009io9 \
+-e ASW0009l59 \
+-e ASW0009iov \
+-e ASW0009dqb \
+-e ASW0009dk6 \
+-e ASW000a2y7 \
+-e ASW0009dvs \
+-e ASW0009fht \
+-e ASW0009ifa \
+-e ASW0009klz \
+-e ASW0009vfi \
+  VICS82_2014-01-09_11:00:00/VICS82_2014-01-09_11:00:00_candidate_catalog.txt
+
+# zooid     P          Nclass  image
+ASW0009klz  0.9999979  24      http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0023b2.png
+ASW0009dqb  1.0000000  288     http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c0000de.png
+ASW0009dk6  0.9998838  46      http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c000001.png
+ASW0009ifa  1.0000000  132     http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0018a1.png
+ASW0009l59  1.0000000  363     http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c002668.png
+ASW0009fht  1.0000000  119     http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c0009cc.png
+ASW0009vfi  0.9844575  25      http://spacewarps.org/subjects/standard/52c1c4d03ae740492c005a79.png
+ASW0009io9  1.0000000  51      http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019e4.png
+ASW000a2y7  0.9999997  108     http://spacewarps.org/subjects/standard/52c1c4d03ae740492c00808a.png
+ASW0009dvs  0.9959316  43      http://spacewarps.org/subjects/standard/52c1c4ce3ae740492c0001a3.png
+ASW0009iov  0.9999985  127     http://spacewarps.org/subjects/standard/52c1c4cf3ae740492c0019fa.png
+
+# Check out those probabilities!!
+# OK, make gallery:
+
+gallery.pl -pdf -x 1 -y 1 -t -o VICS82_5.1million_Top11.pdf \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009io9.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009l59.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009klz.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009dqb.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009dk6.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009ifa.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009fht.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009vfi.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW000a2y7.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009dvs.png \
+   VICS82_5.1million_candidates_P.gt.0.95/ASW0009iov.png
+
+# OK, send all to team.
+
+# ======================================================================
+# 2014-01-14 (Tuesday) 06:48 PST
+
+\rm -rf spacewarp_2014-01-09*
+
+SWIPE.csh spacewarp_2014-01-14.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+# From report:
+
+# 7.3 million classifications, 71894 classifiers, 196 candidates.
+
+mv VICS82_stage1_report.pdf VICS82_7.3million_report.pdf
+mv candidates VICS82_7.3million_candidates_P.gt.0.95
+mv VICS82_stage1_retire_these.txt VICS82_7.3million_retire_these.txt
+
+# Gallery of 196 candidates:
+gallery.pl -pdf -x 2 -y 2 -t -o VICS82_7.3million_candidates_P.gt.0.95.pdf \
+  VICS82_7.3million_candidates_P.gt.0.95/ASW*png
+
+# Nice, but short, red arcs:
+  http://talk.spacewarps.org/#/subjects/ASW0009hu7
+
+# That's about it.
+
+# ======================================================================
+# 2014-01-15 (Wednesday) 10:01 PST
+
+# Is this the last SWAP run?
+
+\rm -rf spacewarp_2014-01-14*
+
+SWIPE.csh spacewarp_2014-01-15.gz 
+
+SWAPSHOP.csh -s VICS82 --fast --download
+
+# From report:
+
+# 7.3 million classifications, 71895 classifiers, 196 candidates.
+# Looks like its converged.
+
+mkdir -p 7.3million
+mv VICS82_stage1_report.pdf 7.3million/VICS82_7.3million_report.pdf
+mv candidates 7.3million/VICS82_7.3million_candidates_P.gt.0.95
+mv VICS82_stage1_retire_these.txt 7.3million/VICS82_7.3million_retire_these.txt
+
+# Gallery of 196 candidates:
+gallery.pl -pdf -x 2 -y 2 -t -o 7.3million/VICS82_7.3million_candidates_P.gt.0.95.pdf \
+  7.3million/VICS82_7.3million_candidates_P.gt.0.95/ASW*png
+
+# Nice, but short, red arcs:
+  http://talk.spacewarps.org/#/subjects/ASW0009hu7
+
+# Check candidate catalog:
+
+cp VICS82_2014-01-15_09:36:47/VICS82_2014-01-15_09:36:47_candidate_catalog.txt \
+   7.3million/VICS82_7.3million_candidate_catalog.txt 
+
+# Only 19 have fewer than 20 classificatiosn, only 1 has less than 10.
+
+# ======================================================================
+# 2014-02-28 (Friday) 17:59 PST
+
+# OK, get IDs for CFHTLS stage 2 candidates, P > 0.95.
+
+# Search back in notes, just before "VICS82START:"
+
+# In stage2 directory, take most recent catalog of candidates and 
+# threshold... Some systems have low prob because they have not been 
+# classified enough, unfortunately.
+
+set LASTANALYSIS = CFHTLS_2013-12-29_10:22:57
+
+cp ${LASTANALYSIS}/${LASTANALYSIS}_candidate_catalog.txt \
+   CFHTLS_stage2_candidate_catalog.txt
+
+set master = CFHTLS_stage2_candidate_catalog.txt
+set p95cat = ${master:r}_p.gt.0.95.txt
+
+grep -e '#' $master > $p95cat
+grep -v '#' $master | \
+  awk '{if ($2 > 0.95) print $0}' >> $p95cat
+  
+# 84 out of a possible 1419 stage 2 targets.
+
+# ======================================================================
+# 2014-03-07 (Friday) 10:29 CST
+
+# Experimenting with unsupervised learning, in VICS82/unsupervised 
+# directory. Do a three-way comparison with the first 10^6 classifications
+# only. Just run SWAP once, with batch of 10^6.
+
+set test_dir $SWAP_DIR/VICS82/stage1/supervision_tests
+mkdirf $test_dir
+cp $SWAP_DIR/VICS82/stage1/stage1.config template.config
+
+# Edit this, etc.
+
+set expt = 'supervised_random'
+mkdirf ${expt}
+cp ../template.config ${expt}_stage1.config
+
+SWAPSHOP.csh -s VICS82 --test 1 --startup --fast --config \
+    ${expt}_stage1.config 
+
+set expt = 'supervised_astute'
+set expt = 'unsupervised_random'
+set expt = 'unsupervised_astute'
+
+# And so on. OK, switch to unsupervised branch before breaking the code!!
+
+# ======================================================================
 
 

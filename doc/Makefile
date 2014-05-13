@@ -4,7 +4,9 @@ all: papers
 clean:
 	-rm -f *.aux *.log *.dvi *.blg *.out *.bbl sw-system.pdf
 
-papers: sw-system.pdf
+papers: system
+
+system: sw-system.pdf
 
 # ----------------------------------------------------------------------------
 # Paper I:

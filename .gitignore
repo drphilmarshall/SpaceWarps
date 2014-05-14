@@ -8,4 +8,5 @@
 *.pdf
 workspace
 attic
+litter
 *.pickle

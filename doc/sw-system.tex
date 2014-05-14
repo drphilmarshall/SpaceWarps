@@ -198,22 +198,24 @@ Systematic detection of rare astronomical objects by such ``crowd-sourced''
 visual inspection has recently been achieved by the online citizen science
 project PlanetHunters \citep{SchwambEtal2012}. PlanetHunters was designed to
 enable the discovery of transiting exoplanets in data taken by the Kepler
-satellite; a community of N inspectors found, after each undergoing a small
-amount of training, N new exoplanet candidates by visual inspection of the
-Kepler lightcurves that were presented in a custom web-based classification
-interface. The older Galaxy Zoo morphological classification project
-\citep{LintottEtal2008} has also enabled the discovery of rare objects, via its
-flexible inspection interface and discussion forum \citep{LintottEtal2009}. Indeed, several of us
-(AV,EB,CC,TJ,CM,LW) were active in an informal Galaxy Zoo gravitational lens
-search, an experience which led to the present hypothesis that a systematic
-online visual lens search could be successful. 
+satellite; a community of N inspectors from the general public found, after
+each undergoing a small amount of training, N new exoplanet candidates by
+visual inspection of the Kepler lightcurves that were presented in a custom
+web-based classification interface. The older Galaxy Zoo morphological
+classification project \citep{LintottEtal2008} has also enabled the discovery
+of rare objects, via its flexible inspection interface and discussion forum
+\citep{LintottEtal2009}. Indeed, several of us (AV,EB,CC,TJ,CM,LW) were active
+in an informal Galaxy Zoo gravitational lens search, an experience which led
+to the present hypothesis that a systematic online visual lens search could be
+successful. 
 
 In this paper, we describe the \sw website, an online system that enables 
-crowd-sourced gravitational lens detection.  In a companion paper we will
-present the new gravitational lenses discovered in our first experimental lens
-search, and begin to investigate the differences between lens detections made
-in \sw and those made with automated techniques. Here though, we try to answer
-the following questions:
+crowd-sourced gravitational lens detection by inviting volunteers to classify
+astronomical survey images as containing lens candidates or not.  In a
+companion paper we will present the new gravitational lenses discovered in our
+first experimental lens search, and begin to investigate the differences
+between lens detections made in \sw and those made with automated techniques.
+Here though, we try to answer the following questions:
 
 \begin{itemize}
 
@@ -230,19 +232,19 @@ How many classifications, and so how many volunteers are needed per target?
 
 \end{itemize}
 
-This paper is organised as follows. 
-In \Sref{sec:design} we introduce the \sw classification interface,  explain
-how we use training images, and describe our two stage candidate selection
-strategy. We then briefly introduce, in \Sref{sec:data} the particular dataset
-used in the first experimental tests of the \sw system, and how we prepared
-the images prior to displaying them in the web interface. In \Sref{sec:swap}
-we describe our methodology for interpreting the classifications made by the
-volunteers, and then present the results of system performance tests 
-made on the training images in \Sref{sec:results}.
-% In this section, we also investigate the properties of the crowd, to
-% understand where the information is coming from.
-We discuss the implications of our results for future lens searches in
-\Sref{sec:discuss} and draw conclusions in \Sref{sec:conclude}.
+This paper is organised as follows.  In \Sref{sec:design} we introduce the \sw
+classification interface and the volunteers who make up the \sw
+collaboration,  explain how we use training images, and describe our two stage
+candidate selection strategy. We then briefly introduce, in \Sref{sec:data}
+the particular dataset used in the first experimental tests of the \sw system,
+and how we prepared the images prior to displaying them in the web interface.
+In \Sref{sec:swap} we describe our methodology for interpreting the
+classifications made by the volunteers, and then present the results of system
+performance tests  made on the training images in \Sref{sec:results}. % In
+this section, we also investigate the properties of the crowd, to % understand
+where the information is coming from. We discuss the implications of our
+results for future lens searches in \Sref{sec:discuss} and draw conclusions in
+\Sref{sec:conclude}.
 
 % \section{Introduction}
 % \label{sec:intro}
@@ -278,17 +280,73 @@ We discuss the implications of our results for future lens searches in
 \section{Experiment Design}
 \label{sec:design}
 
-Unfamiliar objects: need to learn what lenses look like, fast. Rare
-objects: need to be able to reject rapidly, and get through sample.
-Confusion with non-lenses: further filtering after advanced training, and 
-scientific discussion in Talk.
+The basic steps of a visual search for gravitational lenses are: 1) prepare
+images, 2) display them to an inspector, 3) record the inspector's
+classification of each image (as, for example, containing a lens candidate or
+not) and 4) analyzing those classifications (and all others) in order to
+produce a final candidate list. We describe step 1 in \Sref{sec:data} and step
+4 in \Sref{sec:swap}. In this section we take a volunteer's eye view and
+begin by describing the \sw classification interface, the crowd of volunteers,
+and the interactions between the two.
 
-Intro to Classification Interface. Basic description of site. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\centerline{
+\includegraphics[width=0.9\linewidth]{sw-system-figs/sw-screengrab-marker+feedback.png}}
+\caption{Screenshot of the \sw classification interface.}
+\label{fig:interface}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Classification Interface}
+\label{sec:design:interface}
+
+A screenshot of the \sw classification interface (CI) is shown in
+\Fref{fig:interface}. The CI is the centrepiece of the \sw website,
+\texttt{http://spacewarps.org}; the web application is written in
+coffeescript, css and html and follows the general design of others written by
+the Zooniverse team.\footnote{The \sw web application code is open source and
+can be accessed from \texttt{https://github.com/zooniverse/Lens-Zoo}}  The
+focus of the CI is a large display of the current pre-prepared PNG image of
+the ``subject'' being inspected.   When the image is clicked on by the
+volunteer, a marker symbol appears where the pointer was. Several markers can
+be placed.  The next image moves rapidly in from a queue formed at the right
+hand side of the screen when the ``Finished marking'' button is pressed. At
+the same time, the positions of the markers are written out to the
+classification database, in an entry that also stores the ID of the subject,
+the username (or IP address) of the volunteer, a timestamp and some other
+metadata. 
+
+Gravitational lenses are rare: typically, most of the images will not contain
+a lens candidate, and these need to be quickly rejected by the inspector. The
+queue allows several images to be pre-loaded while the volunteer is
+classifying the current subject, and the rapid movement is designed to
+encourage volunteers to classify rapidly.
+
+For the more interesting subjects, the CI offers two features that  enable
+further investigation of the subjects. First is the ``Quick Dashboard,'' a
+more advanced image viewer. This allows the viewer to compare three different
+contrast and color balance settings, to help bring out subtle features, and to
+zoom in on interesting regions of the image to assess small features. Markers
+can be placed in the Quick Dashboard just the same as in the main CI image
+viewer. The second is a link to that subject's page in the project discussion
+forum, \texttt{http://talk.spacewarps.org}. Here, volunteers can discuss the
+features they have seen either before they submit their classification, or
+after, if they ``favorite'' the subject. There is no ``back'' button, however:
+each volunteer may only classify a given subject once.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{Training}
 \label{sec:design:training}
+
+Gravitational lenses are unfamiliar objects to volunteers who are new
+to the site. New volunteers need to learn what lenses look like as quickly as
+possible, so that they can contribute informative classifications. They also
+need to learn what lenses do not look like, in order to reduce the false
+positive detection rate.
 
 Learning what lenses do: Spotter's Guide. Learning how
 lenses work (science page, FAQ). 

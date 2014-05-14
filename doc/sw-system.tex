@@ -430,24 +430,36 @@ Challenges for future.
 \section{Conclusions}
 \label{sec:conclude}
 
-We draw the following conclusions:
+Summary of system.
+
+Crowd-sourced gravitational lens detection works, in terms of the
+classification of the training set as described here, in the following
+specific ways: 
 
 \begin{itemize} 
-
-\item Crowd-sourced gravitational lens detection works, as shown on sims and
-duds:
 
 \item Participation (crowd size, activity rate) enabled project completion
 
 \item Both stages (1 and 2) achieved the required rejection rates
 
-\item Integrated humanpower = X, cf hours taken by small team of experts 
+\item Integrated humanpower = X (stage 1) and y (stage 2), cf hours taken by
+small team of experts 
 
 \item Nightly processing is inefficient: more classifications were made than
 was necessary during peak participation. Need kafka...
 
-\item Completeness and purity were estimated as C\% and P\%, from sim and dud
-recovery/miss rates. Which sims were missed? False negatives
+\item Retirement rate. False negatives: which sims were missed?
+
+\item The optimal true positive rate (completeness) and false positive rate in
+the training set were estimated to be TPR\% and FPR\% at Stage 1, assuming a
+detection threshold of xxx.  
+
+\item In the ``refinement'' stage 2, X\% of the stage 1 candidates were
+rejected (with P less than threshold), and the remainder assigned lens
+``probabilities.'' Ranking
+subjects by their Stage 2 lens probability gives an ROC curve for the system
+with X properties. The optimal true positive rate (completeness) and false
+positive rate in the training set were estimated as TPR\% and FPR\%; 
 
 \item The lens-finding crowd shows some interesting properties, with
 consequences for future scalability

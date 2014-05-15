@@ -294,7 +294,7 @@ and the interactions between the two.
 \centerline{
 \includegraphics[width=0.9\linewidth]{sw-system-figs/sw-screengrab-marker+feedback.png}}
 \caption{Screenshot of the \sw classification interface.}
-\label{fig:interface}
+\label{fig:screenshot}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -304,7 +304,7 @@ and the interactions between the two.
 \label{sec:design:interface}
 
 A screenshot of the \sw classification interface (CI) is shown in
-\Fref{fig:interface}. The CI is the centrepiece of the \sw website,
+\Fref{fig:screenshot}. The CI is the centrepiece of the \sw website,
 \texttt{http://spacewarps.org}; the web application is written in
 coffeescript, css and html and follows the general design of others written by
 the Zooniverse team.\footnote{The \sw web application code is open source and
@@ -326,7 +326,7 @@ classifying the current subject, and the rapid movement is designed to
 encourage volunteers to classify rapidly.
 
 For the more interesting subjects, the CI offers two features that  enable
-further investigation of the subjects. First is the ``Quick Dashboard,'' a
+further investigation of the subjects. First is the ``Quick Dashboard'' (QD) a
 more advanced image viewer. This allows the viewer to compare three different
 contrast and color balance settings, to help bring out subtle features, and to
 zoom in on interesting regions of the image to assess small features. Markers
@@ -353,18 +353,65 @@ Gravitational lenses are unfamiliar objects to volunteers who are new
 to the site. New volunteers need to learn what lenses look like as quickly as
 possible, so that they can contribute informative classifications. They also
 need to learn what lenses do not look like, in order to reduce the false
-positive detection rate.
+positive detection rate. There are three primary mechanisms in the \sw system
+for teaching the volunteers what to look for. These are, in the order in which
+they are encountered, an inline tutorial, instant feedback,
+and a ``Spotter's Guide.''
+
+\subsubsection{Inline Tutorial}
+
+New volunteers are welcomed to the site with a very short tutorial, in which
+the task is introduced, a typical image containing a simulated lens is
+displayed, and the marking procedure walked through, using pop-up message
+boxes. Subsequent images gradually introduce the more advanced
+features of the classification interface (the QD and Talk buttons), also using
+pop-up messages. The tutorial was purposely kept as short as possible so as to
+provide the minimal barrier to entry.
+
+\subsubsection{Instant Feedback}
+
+The second image viewed after the initial tutorial image is already a survey
+image, in order to get the volunteers engaged in the real task as quickly as
+possible. Training continues beyond the first image tutorial through
+``training subjects'' inserted randomly into the stream.  These training
+subjects are either simulated lenses (known as ``sims''), or survey images
+that were expert-classified (by AV, AM and PM) and found not to contain any
+lens candidates (these images are known as ``duds''). The tutorial explains
+that the volunteers  will be shown such training images. They are also
+informed that they will receive instant feedback about their performance after
+classifying (blind) any of these training subjects. Indeed, after a volunteer
+finishes marking a training subject and hits ``Finished marking,'' a pop-up
+message is generated, containing either positive feedback for a successful
+classification (for example, ``Well done! You spotted a simulated lens,'' as
+in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
+example, ``There is no gravitational lens in this field!'') 
+
+\question{PJM}{Does the feedback lead to volunteers leaving the site more 
+quickly, or less quickly? Does negative feedback have more impact than
+positive?}
+
+The initial frequency of the training images is set to be two in five;
+subjects are drawn randomly from the pool of training images with this
+frequency. The pool contains equal numbers of sims and duds, and the draw is
+made without replacement (for that volunteer). As the number of
+classifications made by a volunteer increases, this frequency is decreased, to
+$2/(5\times2^{(\textrm{int}(N_c/20)+1)/2})$ ($\approx 0.3$ for the second 20
+subjects, $0.2$ for the third 20 subjects, and so on).
+
+This training regime means that in the first 60 images viewed, each volunteer
+is shown (on average) 9 simulated gravitational lenses, and 9 empty fields. 
+This is a much higher rate than the natural one: to try and avoid this leading
+to over-optimism among the inspectors (and a resulting high false positive
+rate), we display the current ``Simulation Frequency'' on the classification
+interface (``1 in 5'' in \Fref{fig:screenshot}) and maintain the consistent
+theme in the feedback messages that lenses are rare.
+
+
+\subsubsection{Spotter's Guide}
 
 Learning what lenses do: Spotter's Guide. Learning how
 lenses work (science page, FAQ). 
 
-More on what lenses do: inline tutorial and feedback. 
-Merge into stream. Instant feedback, positive and
-negative. Anecdotal support for this.
-
-Training requires lenses to be more common than is realistic. How to manage
-expectations, avoid high false positive rate? "Lenses are rare" messaging;
-simulation frequency marker.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 

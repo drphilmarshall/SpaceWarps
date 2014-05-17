@@ -210,8 +210,11 @@ class Subject(object):
 
                 # Update agent - training history is taken care of elsewhere: 
                 if self.kind == 'test':
+
                      by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
-                     by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
+                     # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
+                     by.testhistory['I'] = np.append(by.testhistory['I'], self.informationGain(by.PL, by.PD, as_being))
+
 
             else:
                 # Still advance exposure, even if by.NT <= ignore:
@@ -262,4 +265,44 @@ class Subject(object):
                 
         return
 
-# ======================================================================
+    # ======================================================================
+
+    #calculate the information contributed by a user for a given classification
+
+    def informationGain(self, M_ll, M_nn, as_being):
+        # (p_lens before classification, user lens-finding skill, user dud-finding skill, user current response)
+
+        if as_being == 'LENS':
+            M_cl = M_ll
+            M_cn = 1-M_nn
+        elif as_being == 'NOT':
+            M_cl = 1-M_ll
+            M_cn = M_nn
+
+        p0 = self.mean_probability
+        
+        p1 = 1-p0
+        
+        pc = M_cl*p0 + M_cn*p1
+
+        p0_c = M_cl/pc
+        p1_c = M_cn/pc
+        
+        I = p0*shannon(p0_c) + p1*shannon(p1_c)
+
+
+        return I
+
+#============================================================================
+#calculate shannon information
+
+def shannon(x):
+    if isinstance(x, np.ndarray) == False:
+        if x>0:
+            return x*np.log2(x)
+        else:
+            return 0.0
+    
+    
+    x[x == 0] = 1.0
+    return x*np.log2(x)

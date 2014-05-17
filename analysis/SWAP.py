@@ -216,6 +216,7 @@ def SWAP(argv):
     # ------------------------------------------------------------------
 
     count_max = N_per_batch
+
     print "SWAP: interpreting up to",count_max," classifications..."
     if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 

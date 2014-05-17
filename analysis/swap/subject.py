@@ -211,7 +211,7 @@ class Subject(object):
                 # Update agent - training history is taken care of elsewhere: 
                 if self.kind == 'test':
                      by.testhistory['ID'] = self.ID
-                     by.testhistory['I'] = by.contribution
+                     by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
 
             else:
                 # Still advance exposure, even if by.NT <= ignore:

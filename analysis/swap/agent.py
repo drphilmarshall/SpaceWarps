@@ -13,7 +13,7 @@ class Agent(object):
         Agent
 
     PURPOSE
-        A little robot who will interpret the classifications of an 
+        A little robot who will interpret the classifications of an
         individual volunteer.
 
     COMMENTS
@@ -26,53 +26,53 @@ class Agent(object):
         analysis. Each Agent carries a "confusion matrix"
         parameterised by two numbers, PD and PL, the meaning of which is
         as follows:
-        
+
         An Agent assumes that its volunteer says:
-        
+
         | "LENS" when it is NOT    "LENS" when it is a LENS  |
         | with probability (1-PD)    with probability PL     |
         |                                                    |
         | "NOT" when it is NOT     "NOT" when it is a LENS   |
         | with probability PD        with probability (1-PL) |
-        
+
         It makes the simplest possible assignment for these probabilities,
         namely that PX = 0.5 if NX = 0, and then updates from there using the
         training subjects such that
           PX = (NX_correct + initialNX/2) / (NX+initialNX)
         at all times. For example, if the volunteer is right about 80% of the
-        simulated lenses they see, the agent will assign: 
-          PL = Pr("LENS"|LENS) = 0.8. 
+        simulated lenses they see, the agent will assign:
+          PL = Pr("LENS"|LENS) = 0.8.
         initialNX are listed in the configuration file.
-        
-        Agents are initialised with PL = PD = some initial value, 
+
+        Agents are initialised with PL = PD = some initial value,
         provided in the configuration file. (0.5,0.5) would be a
-        conservative choice - but it may well underestimate the 
-        volunteers' natural lens-spotting talent. PL and PD are capped 
-        because the agents assume that their volunteers are 
-        only human. The upper limits are kept in swap.PDmax and 
+        conservative choice - but it may well underestimate the
+        volunteers' natural lens-spotting talent. PL and PD are capped
+        because the agents assume that their volunteers are
+        only human. The upper limits are kept in swap.PDmax and
         swap.PLmax.
-        
-        The big assumption the Agent is making is that its 
-        volunteer has a single, constant PL and a single, constant 
+
+        The big assumption the Agent is making is that its
+        volunteer has a single, constant PL and a single, constant
         PD, which it estimates using all the volunteer's data. This is
-        clearly sub-optimal, but might be good enough for a first 
+        clearly sub-optimal, but might be good enough for a first
         attempt. We'll see!
-        
-        
+
+
     INITIALISATION
         name
-    
+
     METHODS
-        Agent.update_contribution()  Calculate the expected 
-                                          information contributed 
+        Agent.update_contribution()  Calculate the expected
+                                          information contributed
                                           per classification
         Agent.heard(it_was=X,actually_it_was=Y)     Read report.
         Agent.plot_history(axes)
-        
+
     BUGS
 
     AUTHORS
-      This file is part of the Space Warps project, and is distributed 
+      This file is part of the Space Warps project, and is distributed
       under the GPL v2 by the Space Warps Science Team.
       http://spacewarps.org/
 
@@ -90,8 +90,8 @@ class Agent(object):
         self.NL = 2 + pars['skepticism']
         self.N = 0
         self.NT = 0
-        self.contribution = self.update_contribution()
-        self.traininghistory = {'ID':'tutorial','I':np.array([self.contribution]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
+        self.skill = self.update_skill()
+        self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         self.testhistory = {'ID':[],'I':np.array([])}
         return None
 
@@ -99,18 +99,25 @@ class Agent(object):
 
     def __str__(self):
         return 'individual classification agent representing %s with contribution %.2f' % \
-               (self.name,self.contribution)       
-        
+               (self.name,self.contribution)
+
 # ----------------------------------------------------------------------
 # Compute expected information per classification:
 
-    def update_contribution(self):
-        plogp = np.zeros([2])
-        plogp[0] = 0.5*(self.PD+self.PL)*np.log2(self.PD+self.PL)
-        plogp[1] = 0.5*(1.0-self.PD+1.0-self.PL)*np.log2(1.0-self.PD+1.0-self.PL)
-        self.contribution = np.sum(plogp)
-        return self.contribution
-        
+    def update_skill(self):
+        ## plogp = np.zeros([2])
+        ## plogp[0] = 0.5*(self.PD+self.PL)*np.log2(self.PD+self.PL)
+        ## plogp[1] = 0.5*(1.0-self.PD+1.0-self.PL)*np.log2(1.0-self.PD+1.0-self.PL)
+        ## self.contribution = np.sum(plogp)
+        ## return self.contribution
+
+        I = swap.expectedInformationGain(0.5, self.PL, self.PD)
+
+        return I
+
+
+
+
 # ----------------------------------------------------------------------
 # Update confusion matrix with latest result:
 #   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT')
@@ -137,9 +144,9 @@ class Agent(object):
                     self.NT += 1
                 else:
                     raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
- 
+
             # Always log progress, even if not learning:
-            self.traininghistory['I'] = np.append(self.traininghistory['I'],self.update_contribution())
+            self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
             self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
             self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
 
@@ -149,15 +156,15 @@ class Agent(object):
 # Plot agent's history, as an overlay on an existing plot:
 
     def plot_history(self,axes):
-    
+
         plt.sca(axes)
-        I = self.traininghistory['I']
+        I = self.traininghistory['Skill']
         N = np.linspace(1, len(I), len(I), endpoint=True)
-        
+
         # Information contributions:
         plt.plot(N, I, color="green", alpha=0.2, linewidth=2.0, linestyle="-")
         plt.scatter(N[-1], I[-1], color="green", alpha=0.5)
-        
+
         return
 
 # ----------------------------------------------------------------------
@@ -189,4 +196,3 @@ class Agent(object):
         return PD_realize;
 
 # ======================================================================
-   

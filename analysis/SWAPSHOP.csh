@@ -35,6 +35,7 @@
 #-
 # ==============================================================================
 
+setenv SWAP_DIR "/Users/mbaumer/SpaceWarps/analysis"
 set help = 0
 set survey = 'CFHTLS'
 set N = 'infinity'

@@ -91,6 +91,8 @@ class Agent(object):
         self.N = 0
         self.NT = 0
         self.skill = self.update_skill()
+        # back-compatibility:
+        self.contribution = self.skill
         self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         self.testhistory = {'ID':[],'I':np.array([])}
         return None

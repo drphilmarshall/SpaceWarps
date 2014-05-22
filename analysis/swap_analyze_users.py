@@ -7,14 +7,18 @@
 
 from skimage import io
 from subprocess import call
-from colors import blues_r
+#from colors import blues_r
 import numpy as np
 from matplotlib import pyplot as plt
 import swap
 
-cornerplotter_path = '/Users/cpd/SWAP/pappy/CornerPlotter.py'
-bureau_path = '/Users/cpd/SWAP/SpaceWarps/analysis/CFHTLS_bureau.pickle'
-output_directory = '/Users/cpd/SWAP/swap_analysis/'
+#cornerplotter_path = '/Users/cpd/SWAP/pappy/CornerPlotter.py'
+#bureau_path = '/Users/cpd/SWAP/SpaceWarps/analysis/CFHTLS_bureau.pickle'
+#output_directory = '/Users/cpd/SWAP/swap_analysis/'
+
+cornerplotter_path = '/Users/mbaumer/SWAP/pappy/CornerPlotter.py'
+bureau_path = '/Users/mbaumer/SpaceWarps/analysis/CFHTLS_bureau.pickle'
+output_directory = '/Users/mbaumer/SWAP/swap_analysis'
 
 bureau = swap.read_pickle(bureau_path, 'bureau')
 len(bureau.list())

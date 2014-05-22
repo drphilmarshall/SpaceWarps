@@ -215,6 +215,7 @@ class Subject(object):
                      # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
                      by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(
                          self.mean_probability, by.PL, by.PD, as_being))
+                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
 
 
             else:

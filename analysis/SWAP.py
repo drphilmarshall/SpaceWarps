@@ -316,8 +316,8 @@ def SWAP(argv):
 
     # All good things come to an end:
     if count == 0:
-        print "SWAP: something went wrong - 0 classifications found."
-        return
+        print "SWAP: something went wrong? 0 classifications found..."
+        # return
     elif count < count_max: # ie we didn't make it to 10,000 this time!
         more_to_do = False
     else:
@@ -349,7 +349,7 @@ def SWAP(argv):
     # taken care of in io.py. Note that we update the parameters as
     # we go - this will be useful later when we write update.config.
 
-    if tonights.parameters['repickle']:
+    if tonights.parameters['repickle'] and count > 0:
 
         new_bureaufile = swap.get_new_filename(tonights.parameters,'bureau')
         print "SWAP: saving agents to "+new_bureaufile

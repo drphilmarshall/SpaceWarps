@@ -94,7 +94,7 @@ class Agent(object):
         # back-compatibility:
         self.contribution = self.skill
         self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
-        self.testhistory = {'ID':[],'I':np.array([])}
+        self.testhistory = {'ID':[],'I':np.array([]),'Skill':np.array([])}
         return None
 
 # ----------------------------------------------------------------------

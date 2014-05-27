@@ -15,17 +15,17 @@ def SWAP(argv):
 
     PURPOSE
         Space Warps Analysis Pipeline
-        
-        Read in a Space Warps classification database from a MongoDB 
+
+        Read in a Space Warps classification database from a MongoDB
         database, and analyse it.
 
     COMMENTS
-        The SW analysis is "online" in the statistical sense: we step 
+        The SW analysis is "online" in the statistical sense: we step
         through the classifications one by one, updating each
         classifier's agent's confusion matrix, and each subject's lens
         probability. The main reason for taking this approach is that
         it is the most logical one; secondarily, it opens up the
-        possibility of performing the analysis in real time (and maybe even 
+        possibility of performing the analysis in real time (and maybe even
         with this piece of python).
 
         Currently, the agents' confusion matrices only depend on the
@@ -43,7 +43,7 @@ def SWAP(argv):
         classification to be SWAPped. The bureau has to always be read
         in in its entirety, because a classifier can reappear any time
         to  have their agent update its confusion matrix.
-        
+
     FLAGS
         -h            Print this message
 
@@ -56,14 +56,14 @@ def SWAP(argv):
         *_collection.pickle
 
     EXAMPLE
-        
+
         cd workspace
         SWAP.py startup.config > CFHTLS-beta-day01.log
 
     BUGS
 
     AUTHORS
-      This file is part of the Space Warps project, and is distributed 
+      This file is part of the Space Warps project, and is distributed
       under the GPL v2 by the Space Warps Science Team.
       http://spacewarps.org/
 
@@ -81,7 +81,7 @@ def SWAP(argv):
        print str(err) # will print something like "option -a not recognized"
        print SWAP.__doc__  # will print the big comment above.
        return
-    
+
     for o,a in opts:
        if o in ("-h", "--help"):
           print SWAP.__doc__
@@ -102,15 +102,21 @@ def SWAP(argv):
 
     # ------------------------------------------------------------------
     # Read in run configuration:
-    
+
     tonights = swap.Configuration(configfile)
-    
+
+    # Read the pickled random state file
+    random_file = open(tonights.parameters['random_file'],"r");
+    random_state = cPickle.load(random_file);
+    random_file.close();
+    np.random.RandomState().set_state(random_state);
+
     practise = (tonights.parameters['dbspecies'] == 'Toy')
     if practise:
         print "SWAP: doing a dry run using a Toy database"
     else:
         print "SWAP: data will be read from the current live Mongo database"
-    
+
     stage = str(int(tonights.parameters['stage']))
     survey = tonights.parameters['survey']
     print "SWAP: looks like we are on Stage "+stage+" of the ",survey," survey project"
@@ -119,12 +125,12 @@ def SWAP(argv):
     if agents_willing_to_learn:
         a_few_at_the_start = tonights.parameters['a_few_at_the_start']
         print "SWAP: agents will update their confusion matrices as new data arrives"
-        if a_few_at_the_start > 0: 
+        if a_few_at_the_start > 0:
             print "SWAP: but at first they'll ignore the classifier until "
             print "SWAP: they've done ",int(a_few_at_the_start)," training images"
     else:
         a_few_at_the_start = 0
-        print "SWAP: agents will use fixed confusion matrices without updating them"    
+        print "SWAP: agents will use fixed confusion matrices without updating them"
 
     waste = tonights.parameters['hasty']
     if waste:
@@ -135,7 +141,7 @@ def SWAP(argv):
 
     vb = tonights.parameters['verbose']
     if not vb: print "SWAP: only reporting minimal stdout"
-    
+
     one_by_one = tonights.parameters['one_by_one']
 
     report = tonights.parameters['report']
@@ -143,7 +149,7 @@ def SWAP(argv):
         print "SWAP: will make plots and write report at the end"
     else:
         print "SWAP: postponing reporting until the last minute"
-    
+
     # From when shall we take classifications to analyze?
     if tonights.parameters['start'] == 'the_beginning':
         t1 = datetime.datetime(1978, 2, 28, 12, 0, 0, 0)
@@ -155,7 +161,7 @@ def SWAP(argv):
     else:
         t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H:%M:%S')
     print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
-    
+
     # How will we decide if a sim has been seen?
     try: use_marker_positions = tonights.parameters['use_marker_positions']
     except: use_marker_positions = False
@@ -167,69 +173,69 @@ def SWAP(argv):
     thresholds['rejection'] = tonights.parameters['rejection_threshold']
 
     # ------------------------------------------------------------------
-    # Read in, or create, a bureau of agents who will represent the 
+    # Read in, or create, a bureau of agents who will represent the
     # volunteers:
-    
+
     bureau = swap.read_pickle(tonights.parameters['bureaufile'],'bureau')
-   
+
     # ------------------------------------------------------------------
     # Read in, or create, an object representing the candidate list:
-    
+
     sample = swap.read_pickle(tonights.parameters['samplefile'],'collection')
-        
+
     # ------------------------------------------------------------------
     # Open up database:
-    
+
     if practise:
-        
+
         db = swap.read_pickle(tonights.parameters['dbfile'],'database')
-        
+
         if db is None:
             print "SWAP: making a new Toy database..."
             db = swap.ToyDB(pars=tonights.parameters)
-        
+
         print "SWAP: database has ",db.size()," Toy classifications"
         print "SWAP: of ",db.surveysize," Toy subjects"
         print "SWAP: made by ",db.population," Toy classifiers"
         print "SWAP: where each classifier makes ",db.enthusiasm," classifications, on average"
-       
+
     else:
-    
+
         db = swap.MongoDB()
 
-    # Read in a batch of classifications, made since the aforementioned 
+    # Read in a batch of classifications, made since the aforementioned
     # start time:
 
     batch = db.find('since',t1)
-    
-    # Actually, batch is a cursor, now set to the first classification 
+
+    # Actually, batch is a cursor, now set to the first classification
     # after time t1. Maybe this could be a Kafka cursor instead? And then
-    # all of this could be in an infinite loop? Hmm - we'd still want to 
+    # all of this could be in an infinite loop? Hmm - we'd still want to
     # produce some output periodically - but this should be done by querying
-    # the bureau and sample databases, separately from SWAP. 
-    
+    # the bureau and sample databases, separately from SWAP.
+
     # ------------------------------------------------------------------
-    
+
     count_max = 5000000
     print "SWAP: interpreting up to",count_max," classifications..."
     if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 
     count = 0
     for classification in batch:
-        
+
         if one_by_one: next = raw_input()
-        
+
         # Get the vitals for this classification:
         items = db.digest(classification,survey,method=use_marker_positions)
         if vb: print "#"+str(count+1)+". items = ",items
-        if items is None: 
+        if items is None:
             continue # Tutorial subjects fail, as do stage/project mismatches!
         # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
         t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
 
         # If the stage of this classification does not match the stage we are
         # on, skip to the next one!
-        if thisstage != stage: 
+        if thisstage != stage:
             if vb:
                 print "Found classification from different stage: ",thisstage," cf. ",stage,", items = ",items
                 print " "
@@ -238,42 +244,42 @@ def SWAP(argv):
             if vb:
                 print "Found classification from this stage: ",items
                 print " "
-            
+
         # Register new volunteers, and create an agent for each one:
-        # Old, slow code: if Name not in bureau.list():  
+        # Old, slow code: if Name not in bureau.list():
         try: test = bureau.member[Name]
         except: bureau.member[Name] = swap.Agent(Name,tonights.parameters)
-        
-        # Register newly-classified subjects:
-        # Old, slow code: if ID not in sample.list(): 
-        try: test = sample.member[ID]          
-        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,Y,thresholds,location)    
 
-        # Update the subject's lens probability using input from the 
+        # Register newly-classified subjects:
+        # Old, slow code: if ID not in sample.list():
+        try: test = sample.member[ID]
+        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,Y,thresholds,location)
+
+        # Update the subject's lens probability using input from the
         # classifier. We send that classifier's agent to the subject
-        # to do this.  
+        # to do this.
         sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste)
 
         # Update the agent's confusion matrix, based on what it heard:
         # if learning == 'supervised':
-        
+
         if category == 'training' and agents_willing_to_learn:
             bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
         elif category == 'training':
             bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
 
         # else:
-        
+
            # bureau.member[Name].heard(it_was=X,but_it_might_be=P,ignore=False)
 
         # Notes:
-        #  * Assuming unsupervised learning will work means that the 
+        #  * Assuming unsupervised learning will work means that the
         #      initial values of PD and PL have to be greater than 0.5, ie that
         #      the volunteers are not random classifiers...
         #  * Will we get away without iterating these steps?
 
         # If the bureau and the sample were being stored as Mongo databases,
-        # we would want to update those DBs here, with bureau.save or 
+        # we would want to update those DBs here, with bureau.save or
         # agent.save...
 
 
@@ -292,42 +298,42 @@ def SWAP(argv):
             elif np.mod(count,int(count_max/73.0)) == 0: sys.stdout.write('.')
             # elif count == db.size(): sys.stdout.write('\n')
             sys.stdout.flush()
-        
+
         # When was the first classification made?
-        if count == 1: 
+        if count == 1:
             t1 = t
         # Did we at least manage to do 1?
         elif count == 2:
             swap.set_cookie(True)
         # Have we done enough for this run?
-        elif count == count_max: 
+        elif count == count_max:
             break
-    
+
     sys.stdout.write('\n')
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
 
     # All good things come to an end:
-    if count == 0: 
+    if count == 0:
         print "SWAP: something went wrong - 0 classifications found."
         return
     elif count < count_max: # ie we didn't make it to 10,000 this time!
         more_to_do = False
     else:
         more_to_do = True
-        
-            
+
+
     # ------------------------------------------------------------------
-    
+
     # Set up outputs based on where we got to.
-    
-    # And what will we call the new files we make? Use the first 
+
+    # And what will we call the new files we make? Use the first
     # classification timestamp!
     tonights.parameters['finish'] = t1
-    
+
     # Let's also update the start parameter, ready for next time:
     tonights.parameters['start'] = t
-        
+
     # Use the following directory for output lists and plots:
     tonights.parameters['trunk'] = \
         tonights.parameters['survey']+'_'+tonights.parameters['finish']
@@ -336,14 +342,14 @@ def SWAP(argv):
     subprocess.call(["mkdir","-p",tonights.parameters['dir']])
 
     # ------------------------------------------------------------------
-    # Pickle the bureau, sample, and database, if required. If we do 
+    # Pickle the bureau, sample, and database, if required. If we do
     # this, its because we want to pick up from where we left off
     # (ie with SWAPSHOP) - so save the pickles in the $cwd. This is
-    # taken care of in io.py. Note that we update the parameters as 
+    # taken care of in io.py. Note that we update the parameters as
     # we go - this will be useful later when we write update.config.
-        
+
     if tonights.parameters['repickle']:
-    
+
         new_bureaufile = swap.get_new_filename(tonights.parameters,'bureau')
         print "SWAP: saving agents to "+new_bureaufile
         swap.write_pickle(bureau,new_bureaufile)
@@ -364,8 +370,8 @@ def SWAP(argv):
 
     if report:
 
-        # Output list of subjects to retire, based on this batch of 
-        # classifications. Note that what is needed here is the ZooID, 
+        # Output list of subjects to retire, based on this batch of
+        # classifications. Note that what is needed here is the ZooID,
         # not the subject ID:
 
         new_retirementfile = swap.get_new_filename(tonights.parameters,'retire_these')
@@ -380,7 +386,7 @@ def SWAP(argv):
         N = swap.write_list(sample,new_samplefile,item='candidate')
         print "SWAP: "+str(N)+" lines written to "+new_samplefile
 
-        # Now save the training images, for inspection: 
+        # Now save the training images, for inspection:
         new_samplefile = swap.get_new_filename(tonights.parameters,'training_true_positives')
         print "SWAP: saving true positives..."
         N = swap.write_list(sample,new_samplefile,item='true_positive')
@@ -422,18 +428,26 @@ def SWAP(argv):
     # Now, if there is more to do, over-write the update.config file so
     # that we can carry on where we left off. Note that the pars are
     # already updated! :-)
-    
+
     if not more_to_do:
         tonights.parameters['start'] = t
         swap.set_cookie(False)
     # SWAPSHOP will read this cookie and act accordingly.
-    
+
     configfile = 'update.config'
+
+    # First update the name of the random_file parameter
+    tonights.parameters['random_file']=tonights.parameters['random_file']+'_updated'
+    random_file = open(tonights.parameters['random_file'],"r");
+    random_state = np.random.RandomState().get_state();
+    cPickle.dump(random_state,random_file);
+    random_file.close();
+
     swap.write_config(configfile, tonights.parameters)
-    
-    
+
+
     # ------------------------------------------------------------------
-    
+
     if report:
 
         # Make plots! Can't plot everything - uniformly sample 200 of each
@@ -456,14 +470,14 @@ def SWAP(argv):
 
         pngfile = swap.get_new_filename(tonights.parameters,'probabilities')
         print "SWAP: plotting "+str(Nc)+" agent probabilities in "+pngfile
-        bureau.plot_probabilities(Nc,t,pngfile)        
+        bureau.plot_probabilities(Nc,t,pngfile)
         tonights.parameters['probabilitiesplot'] = pngfile
 
         # Subject trajectories:
 
         fig3 = sample.start_trajectory_plot()
         pngfile = swap.get_new_filename(tonights.parameters,'trajectories')
-        
+
         # Random 500  for display purposes:
         Ns = np.min([500,sample.size()])
         print "SWAP: plotting "+str(Ns)+" subject trajectories in "+pngfile
@@ -476,7 +490,7 @@ def SWAP(argv):
         #     sample.member[ID].plot_trajectory(fig3)
         # for ID in sample.shortlist(Ns,kind='sim',status='detected'):
         #     sample.member[ID].plot_trajectory(fig3)
-        
+
         sample.finish_trajectory_plot(fig3,pngfile,t=t)
         tonights.parameters['trajectoriesplot'] = pngfile
 
@@ -484,7 +498,7 @@ def SWAP(argv):
 
         fig4 = sample.start_trajectory_plot(final=True)
         pngfile = swap.get_new_filename(tonights.parameters,'sample')
-        
+
         # BigN = 100000 # Would get them all...
         BigN = 500      # Can't see them all!
         candidates = []
@@ -514,16 +528,16 @@ def SWAP(argv):
         # ------------------------------------------------------------------
         # Finally, write a PDF report:
 
-        swap.write_report(tonights.parameters,bureau,sample) 
+        swap.write_report(tonights.parameters,bureau,sample)
 
     # ------------------------------------------------------------------
-    
+
     print swap.doubledashedline
     return
 
 # ======================================================================
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     SWAP(sys.argv[1:])
 
 # ======================================================================

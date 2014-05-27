@@ -8,7 +8,7 @@ being developed by the science team.
 Training webpages are visible (but pretty old at this point) 
 [here](http://drphilmarshall.github.com/SpaceWarps/).
 
-The web app itself is being developed **[here](https://github.com/zooniverse/Lens-Zoo)** as part of the **[Zooniverse](http://zooniverse.org) project. If you are interested in building a site like Space Warps using Zooniverse techology, keep an eye on their website or drop them a line.
+The web app itself is being developed **[here](https://github.com/zooniverse/Lens-Zoo)** as part of the **[Zooniverse](http://zooniverse.org)** project. If you are interested in building a site like Space Warps using Zooniverse techology, keep an eye on their website or drop them a line.
 
 See also, for fun:
 * [LensToy](http://github.com/slowe/LensToy/)

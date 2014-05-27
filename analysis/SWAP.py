@@ -438,8 +438,7 @@ def SWAP(argv):
     configfile = 'update.config'
 
     # First update the name of the random_file parameter
-    tonights.parameters['random_file']=tonights.parameters['random_file']+'_updated'
-    random_file = open(tonights.parameters['random_file'],"r");
+    random_file = open(tonights.parameters['random_file'],"w");
     random_state = np.random.RandomState().get_state();
     cPickle.dump(random_state,random_file);
     random_file.close();

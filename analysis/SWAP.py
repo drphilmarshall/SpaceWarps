@@ -317,6 +317,8 @@ def SWAP(argv):
     # All good things come to an end:
     if count == 0:
         print "SWAP: something went wrong? 0 classifications found..."
+        t1 = t1.strftime('%Y-%m-%d_%H:%M:%S')
+        more_to_do = False
         # return
     elif count < count_max: # ie we didn't make it to 10,000 this time!
         more_to_do = False

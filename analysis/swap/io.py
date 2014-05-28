@@ -241,6 +241,7 @@ def write_config(filename, pars):
                  'initialPD', \
                  'agents_willing_to_learn', \
                  'a_few_at_the_start', \
+                 'N_per_batch', \
                  'hasty', \
                  'skepticism', \
                  'use_marker_positions', \

@@ -171,7 +171,7 @@ if ($startup) then
     endif
     echo "SWAPSHOP: start-up configuration stored in $configfile"
     # Generate the random state based on the seed 
-    cat $configfile | awk -F':' '{if($1=="random_file")print $2}' > $random_file
+    set random_file = `cat $configfile | awk -F':' '{if($1=="random_file")print $2}'`
     generate_random_state.py $random_file $seed
     echo "SWAPSHOP: Random seed state stored in $random_file"
 else

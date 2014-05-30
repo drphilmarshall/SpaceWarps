@@ -230,6 +230,7 @@ def write_config(filename, pars):
 
     shortlist = ['survey', \
                  'start', \
+                 'end', \
                  'bureaufile', \
                  'samplefile', \
                  'stage', \
@@ -246,8 +247,8 @@ def write_config(filename, pars):
                  'use_marker_positions', \
                  'detection_threshold', \
                  'rejection_threshold', \
-                 'dbspecies', \
-                 'random_file']
+                 'random_file', \
+                 'dbspecies']
 
     for keyword in shortlist:
         F.write('\n')

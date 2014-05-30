@@ -4700,6 +4700,37 @@ SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1.config
 
 # * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * 
 
+# Did everything finish correctly, does it run repeatably?
 
+# SWAP: From 438654 subjects classified,
+# SWAP: 7580 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 438654 subjects classified,
+# SWAP: 5529 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 438654 subjects classified,
+# SWAP: 257 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_dud_catalog.txt
+
+# Hmm - 44 candidates, 7580 with P > rejection - this is 
+# different to previous run! Are stage 2 classifications being used?
+# Last date (on trajectory plot) is 2014-05-05_20:30:04, which is strange.
+# Plot shows a spike at P = P0, about 4500 high. What are these subjects?
+
+# Looks like there's some junk in the db. Need to set an end date for the
+# survey, let's say 2014-01-07_23:59:59 
+
+# Test this code, just using December's classifications.
+# First, archive the problem run:
+
+mkdir -p too-many-subjects-44-candidates
+mv CFHTLS* random_state.pickle update.config too-many-subjects-44-candidates/
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# Needed to fix time, strings and datetimes...
+
+
+
+# When checked, merge into master, push and close pull request.
 
 # ======================================================================

@@ -1,8 +1,10 @@
+client.py
 *.pyc
 *.DS_Store
 *.log
 *.aux
 *.dvi
+*.out
 *.bbl
 *.blg
 *.pdf
@@ -10,3 +12,13 @@ workspace
 attic
 litter
 *.pickle
+fin*
+listfiles_d1_d11
+data
+*tar.gz
+falsepositives
+*.mov
+*.m4v
+*.mp4
+talks
+SIMCT

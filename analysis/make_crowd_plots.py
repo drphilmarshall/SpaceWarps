@@ -39,14 +39,16 @@ def make_crowd_plots(argv):
     EXAMPLE
 
     BUGS
+        - Code is not tested yet...
 
     AUTHORS
-      This file is part of the Space Warps project, and is distributed
-      under the GPL v2 by the Space Warps Science Team.
-      http://spacewarps.org/
+        This file is part of the Space Warps project, and is distributed
+        under the GPL v2 by the Space Warps Science Team.
+        http://spacewarps.org/
 
     HISTORY
       2013-05-17  started Baumer & Davis (KIPAC)
+      2013-05-30  opts, docs Marshall (KIPAC)
     """
 
     # ------------------------------------------------------------------

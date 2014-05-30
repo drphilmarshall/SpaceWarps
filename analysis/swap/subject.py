@@ -101,7 +101,7 @@ class Subject(object):
 
         self.location = location
 
-        self.testhistory = {'Name': np.arary([]),
+        self.testhistory = {'Name': np.array([]),
                             'ItWas': np.array([], dtype=int)}
 
         return None

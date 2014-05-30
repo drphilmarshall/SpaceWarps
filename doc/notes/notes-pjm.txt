@@ -4626,5 +4626,52 @@ set expt = 'unsupervised_astute'
 # And so on. OK, switch to unsupervised branch before breaking the code!!
 
 # ======================================================================
+# 2014-05-28 (Wednesday) 18:07 PDT
+
+# Pull request from Surhud:
+# 
+#     I have added a random number seed to SWAPSHOP so that the results are reproducible.
+# 
+#     Changes are as follows:
+# 
+#     1) Add an extra argument to SWAPSHOP.csh which takes as input a random
+#        seed. However it only works when startup is specified.
+#     2) SWAPSHOP.csh runs the program generate_random_state.py to generate a
+#        random state file from the seed provided by the user.
+#     3) The config files have an extra compulsory option (random_file) which is
+#        the name of the file which stores the pickled random state.
+#     4) SWAP.py stores the random_state in a the random_file at the end of a
+#        run when update.config has to be written.
+
+# Test on VICS82, in stage1 directory (linked to from new test dir):
+
+mkdirf VICS82/random-test
+ln -s ../stage1/mongo .
+ln -s ../stage1/spacewarp_2014-01-15 .
+cp ../stage1/stage1.config VICS82_stage1.config
+
+# Edit config file to include random_state pickle...
+
+# OK, restart mongo:
+
+SWIPE.csh spacewarp_2014-01-15.gz
+
+# OMG, mongorestore takes ages!
+
+# Now try running all of VICS82, with 5 million per batch:
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config VICS82_stage1.config
+
+# Hmm - no classifications found. Something wrong with mongo.
+# Tear it down and start again, might as well run on CFHTLS then, using 
+# latest downloaded db. Keep VICS82_stage1.config in new projects dir.
 
 
+
+# ======================================================================
+# 2014-05-29 (Thursday) 17:45 PDT
+
+# Housekeeping - put all analysis subdirs in workspace, where they are ignored
+# by git...
+
+# ======================================================================

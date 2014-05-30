@@ -172,7 +172,7 @@ if ($startup) then
     echo "SWAPSHOP: start-up configuration stored in $configfile"
     # Generate the random state based on the seed 
     set random_file = `cat $configfile | awk -F':' '{if($1=="random_file")print $2}'`
-    generate_random_state.py $random_file $seed
+    $SWAP_DIR/utils/generate_random_state.py $random_file $seed
     echo "SWAPSHOP: Random seed state stored in $random_file"
 else
     set configfile = 'update.config'
@@ -245,7 +245,10 @@ while ($more_to_do)
         # That means replacing the new start time in update.config
         # with the actual start time of the latest run:
 
-        set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
+        set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? |& tail -1`
+        set fail = `echo $latest | grep 'No match' | wc -l`
+        if ($fail) goto FINISH
+        
         set now = `echo $latest | sed s/$survey//g | cut -c2-50`
         
         set tomorrow = `grep 'start:' $configfile | \

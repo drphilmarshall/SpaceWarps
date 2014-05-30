@@ -4871,11 +4871,39 @@ mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run4/
 # start: the_beginning
 # end: 2013-12-10_16:47:00
 
-goto CFHTLS_STAGE1
-
 # ======================================================================
+# 2014-05-30 (Friday) 15:38 PDT
 
 # Now need to run all the way through stage 1 and stage 2 to make good
 # bureaus for crowd plots, and to get final samples of candidates. 
+
+goto CFHTLS_STAGE1
+
+# Results:
+
+
+# And now stage 2:
+
+############################################################################## 
+############################################################################## 
+
+CFHTLS_STAGE2:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage2
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage2.config .
+
+# start: 2013-12-10_13:29:41
+# end: 2014-01-06_23:59:59
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2.config
+
+############################################################################## 
+############################################################################## 
 
 # ======================================================================

@@ -4681,39 +4681,9 @@ cp workspace/CFHTLS/hasty/startup.config projects/CFHTLS_stage1.config
 
 # Edit to include random file stuff... and also stage = 1(!)
 
+goto CFHTLS_STAGE1
 
-
-############################################################################## 
-############################################################################## 
-
-CFHTLS_STAGE1:
-
-# Set up workspace:
-set workspace = $SWAP_DIR/workspace/CFHTLS/stage1
-mkdir -p $workspace
-cd $workspace
-
-# Get the configuration file for this project:
-cp $SWAP_DIR/projects/CFHTLS_stage1.config .
-
-# start: the_beginning
-# end: 2013-12-10_16:47:00
-
-# Download the db dump if necessary:
-set datadir = spacewarp_2014-05-29
-if (! -e spacewarp_2014-05-29) then
-  wget -O spacewarp_2014-05-29.tar.gz \
-    "https://zooniverse-code.s3.amazonaws.com/databases/2014-05-29/ouroboros_projects/spacewarp_2014-05-29.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1401968753&Signature=FDzTX4QX1pFjcwZ1tiGD05UDc0s%3D"
-  SWIPE.csh spacewarp_2014-05-29.tar.gz
-endif
-
-# Run SWAP, save plots:
-SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
-
-############################################################################## 
-############################################################################## 
-
-
+# ...
 
 # Did everything finish correctly, does it run repeatably?
 
@@ -4891,10 +4861,51 @@ goto CFHTLS_STAGE1
 
 ...
 
-# And now stage 2:
+# And now stage 2. Try running in parallel?!
 
-############################################################################## 
-############################################################################## 
+goto CFHTLS_STAGE2
+
+# Results:
+
+# SWAP: updating all subjects classified between 2013-12-10_13:29:41
+# SWAP: and 2014-01-06_23:59:59
+
+
+...
+
+# Merge back in to master branch, and push so that Surhud and Anu can 
+# test / fix bugs in random state setting.
+
+# ======================================================================
+
+# Standard runs, for various projects and their reproducibility.
+
+# ----------------------------------------------------------------------
+CFHTLS_STAGE1:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage1
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage1.config .
+
+# start: the_beginning
+# end: 2013-12-10_16:47:00
+
+# Download the db dump if necessary:
+set datadir = spacewarp_2014-05-29
+if (! -e spacewarp_2014-05-29) then
+  wget -O spacewarp_2014-05-29.tar.gz \
+    "https://zooniverse-code.s3.amazonaws.com/databases/2014-05-29/ouroboros_projects/spacewarp_2014-05-29.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1401968753&Signature=FDzTX4QX1pFjcwZ1tiGD05UDc0s%3D"
+  SWIPE.csh spacewarp_2014-05-29.tar.gz
+endif
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
+
+# ----------------------------------------------------------------------
 
 CFHTLS_STAGE2:
 
@@ -4912,16 +4923,4 @@ cp $SWAP_DIR/projects/CFHTLS_stage2.config .
 # Run SWAP, save plots:
 SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2.config
 
-############################################################################## 
-############################################################################## 
-
-# Results:
-
-...
-
-
-
-# Merge back in to master branch, and push so that Surhud and Anu can 
-# test / fix bugs in random state setting.
-
-# ======================================================================
+# ----------------------------------------------------------------------

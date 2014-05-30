@@ -4716,8 +4716,8 @@ SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1.config
 # Last date (on trajectory plot) is 2014-05-05_20:30:04, which is strange.
 # Plot shows a spike at P = P0, about 4500 high. What are these subjects?
 
-# Looks like there's some junk in the db. Need to set an end date for the
-# survey, let's say 2014-01-07_23:59:59 
+# Looks like there's some junk in the db, from somewhere... 
+# Need to set an end date for the survey, let's say 2014-01-07_23:59:59 
 
 # Test this code, just using December's classifications.
 # First, archive the problem run:
@@ -4727,10 +4727,18 @@ mv CFHTLS* random_state.pickle update.config too-many-subjects-44-candidates/
 
 SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
 
-# Needed to fix time, strings and datetimes...
+# Needed to fix time, strings and datetimes... OK! 
 
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
 
+# Final date (on plots) is 2014-01-08_00:00:29
+# Good! 
 
-# When checked, merge into master, push and close pull request.
+# Do reproduction test with Anu: do all of CFHTLS stage 1, and compare candidate catalogs.
+# Merge Chris and Mike in first, though - to get the new information stuff.
+
+# Merge into master, push and close Surhud's pull request.
 
 # ======================================================================

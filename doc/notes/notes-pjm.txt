@@ -4626,5 +4626,16 @@ set expt = 'unsupervised_astute'
 # And so on. OK, switch to unsupervised branch before breaking the code!!
 
 # ======================================================================
+# 2014-05-30 (Friday) 12:40 PDT
 
+# Merging in Chris and Mike's information and plotting code:
 
+git remote add git@github.com:cpadavis/SpaceWarps.git chris
+git checkout -b chris
+git pull chris master
+
+# Did this last week. Now need to merge in Surhud's stuff from master, and resolve conflicts:
+
+git merge master
+
+# ======================================================================

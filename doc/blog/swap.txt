@@ -1,0 +1,88 @@
+
+What happens to your markers? The Space Warps Analysis Pipeline	
+
+Once you hit the big Next button, you're moving on to a new image of the
+deep night sky - but what happens to the marker you just placed? And you
+may have noticed us in Talk commenting that each image is seen by about
+ten people - so what happens to all of those markers? In this post we
+take you inside the Space Warps Analysis Pipeline, where your markers,
+get interpreted and
+translated into image classifications and eventually, lens discoveries.
+
+The marker positions  are automatically stored in a database  which is
+then copied and sent to the Science Team every morning for analysis. The
+first problem we have to face at Space Warps is the same one we run into
+in life every day - namely, that we are only human, and we make
+mistakes. Lots of them! If we were all perfect, then the Space Warps
+analysis would be easy, and the CFHTLS project would be done by now.
+Instead though, we have to allow for mistakes - mistakes that we make
+when we've done hundreds of images tonight already and we're tired, or
+mistakes we make because we didn't realise what we were supposed to be
+looking for, or mistakes we make - well, you know how it goes. We all
+make mistakes! And it means that there's a lot of uncertainty encoded in
+the Space Warps database.
+
+What we can do to cope with this uncertainty is simply to allow for it.
+It's OK to make mistakes at Space Warps! Other people will see the same
+images and make up for them. What we do is try and understand what each
+volunteer is good at: Spotting lenses? Or rejecting images that don't
+contain lenses? We do this by using the information that we have about
+how often each volunteer gets images "right", so that when a new image
+comes along, we can estimate the probability that they got it "right"
+that time. This information comes from the few images where we do
+actually know the right answer - the training images. Each time you do a
+training image, the database records whether you spotted the sim or
+caught the empty image, and the analysis software uses this information
+to estimate how likely you are to be right about a new, unseen survey
+image. But this estimation process also introduces uncertainty, which we
+also have to cope with!
+
+We wrote the analysis software that we use ourselves, specially for
+Space Warps. It's called "SWAP", and is written in a language called
+python (which hopefully makes it easy for you to read!) Here's how it
+works. Every volunteer, when they do their first classification, is
+assigned a software "agent" whose job it is to interpret its volunteers
+marker placements, and estimate the probability of the image at hand
+containing a gravitational lens. These "agents" are very simple-minded:
+in order to make sense of the markers, we've programmed them to make a
+basic assumption: that they can interpret their volunteer's
+classification behaviour using just two numbers, the probabilities of
+being right when a lens is present, and of being right when a lens is
+not present. The advantage of working with such simple agents is that
+SWAP runs quickly (easily in time for the next day's database dump!),
+and can be esily checked: it's robust. The whole collaboration of
+volunteers and their SWAP agents makes up a giant "supervised learning"
+system: you guys train on the sims, and the agents then try and learn
+how likely you are to make mistakes.
+
+What we find is that the agents have a reasonably wide spread of
+probabilities: the Space Warps collaboration is fairly diverse!  Even
+so,  *everyone* is contributing - we can plot, for each image, its
+probability of containing a lens, and follow how this probability
+changes over time as more and more people classify it. You can see one
+of these "trajectory" plots above: images start out at the top, assigned
+a "prior" probability of 1 in 5000 (about how often we expect lenses to
+occur). As they are classified more and more times they drift down the
+plot, and either to the left (the low probability side) if no markers
+are placed on them, and to the right (the high probability side) if they
+get marked. You can see that we do pretty well at rejecting images for
+not containing lenses! All of the red "dud" images (where we know there
+is no lens) end up on the left hand side, along with more than 99% of
+the survey images. All survey images that end up to the left of the red
+dashed line get "retired" - withdrawn from the interface and not shown
+any more. The sims, meanwhile, end up mostly on the right as they are
+correctly classified as lenses: at the moment we are only missing about
+8% of the sims, and it does turn out these are the ones that are the
+most difficult to see. This gives us a lot of confidence that we will
+end up with a fairly complete sample of real lenses.
+
+Indeed, what do we expect to find based on the classifications you have
+made so far? We have already been able to retire almost 200,000 images
+with SWAP, and have identified over 1500 images that the agents think
+contain lenses with over 95% probability. That means that we are almost
+halfway through, and that we can expect a final sample of a bit more
+than 3000 lens candidates. Many of these images will turn out not to
+contain lenses - but it's looking like we are doing pretty well at
+filtering out empty images while spotting almost all the visible lenses.
+There will be some exciting times ahead!
+

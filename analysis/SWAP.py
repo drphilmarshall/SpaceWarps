@@ -445,7 +445,7 @@ def SWAP(argv):
     # already updated! :-)
 
     if not more_to_do:
-        tonights.parameters['start'] = t
+        tonights.parameters['start'] = tstring
         swap.set_cookie(False)
     # SWAPSHOP will read this cookie and act accordingly.
 

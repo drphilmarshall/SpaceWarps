@@ -93,8 +93,12 @@ class Agent(object):
         self.skill = self.update_skill()
         # back-compatibility:
         self.contribution = self.skill
-        self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
-        self.testhistory = {'ID':[],'I':np.array([]),'Skill':np.array([])}
+        self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD]),
+                'ItWas':np.array([], dtype=int),
+                'ActuallyItWas':np.array([], dtype=int)}
+        self.testhistory = {'ID':[],'I':np.array([]),'Skill':np.array([]),
+                            'ItWas':np.array([], dtype=int)}
+        self.actually_it_was_dictionary = {'LENS': 1, 'NOT': 0, 'UNKNOWN': -1}
         return None
 
 # ----------------------------------------------------------------------
@@ -151,6 +155,9 @@ class Agent(object):
             self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
             self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
             self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
+            self.traininghistory['ItWas'] = np.append(self.traininghistory['ItWas'], self.actually_it_was_dictionary[it_was])
+            self.traininghistory['ActuallyItWas'] = np.append(self.traininghistory['ActuallyItWas'], self.actually_it_was_dictionary[actually_it_was])
+
 
         return
 

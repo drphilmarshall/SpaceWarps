@@ -101,6 +101,9 @@ class Subject(object):
 
         self.location = location
 
+        self.testhistory = {'Name': np.arary([]),
+                            'ItWas': np.array([], dtype=int)}
+
         return None
 
 # ----------------------------------------------------------------------
@@ -158,10 +161,12 @@ class Subject(object):
                 if as_being == 'LENS':
                     likelihood = PL_realization
                     likelihood /= (PL_realization*self.probability + (1-PD_realization)*(1-self.probability))
+                    as_being_number = 1
 
                 elif as_being == 'NOT':
                     likelihood = (1-PL_realization)
                     likelihood /= ((1-PL_realization)*self.probability + PD_realization*(1-self.probability))
+                    as_being_number = 0
 
                 else:
                     raise Exception("Unrecognised classification result: "+as_being)
@@ -216,6 +221,12 @@ class Subject(object):
                      by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(
                          self.mean_probability, by.PL, by.PD, as_being))
                      by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
+                     by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
+
+                self.testhistory['Name'] = np.append(self.testhistory['Name'],
+                                                     by.name)
+                self.testhistory['ItWas'] = np.append(self.testhistory['ItWas'],
+                                                      as_being_number)
 
 
             else:

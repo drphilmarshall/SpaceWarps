@@ -90,9 +90,8 @@ class Agent(object):
         self.NL = 2 + pars['skepticism']
         self.N = 0
         self.NT = 0
-        self.skill = self.update_skill()
         # back-compatibility:
-        self.contribution = self.skill
+        self.contribution = 0.0*self.update_skill() # This call also sets self.skill, internally
         self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD])}
         self.testhistory = {'ID':[],'I':np.array([]),'Skill':np.array([])}
         return None
@@ -107,18 +106,15 @@ class Agent(object):
 # Compute expected information per classification:
 
     def update_skill(self):
+
         ## plogp = np.zeros([2])
         ## plogp[0] = 0.5*(self.PD+self.PL)*np.log2(self.PD+self.PL)
         ## plogp[1] = 0.5*(1.0-self.PD+1.0-self.PL)*np.log2(1.0-self.PD+1.0-self.PL)
         ## self.contribution = np.sum(plogp)
-        ## return self.contribution
 
-        I = swap.expectedInformationGain(0.5, self.PL, self.PD)
+        self.skill = swap.expectedInformationGain(0.5, self.PL, self.PD)
 
-        return I
-
-
-
+        return self.skill
 
 # ----------------------------------------------------------------------
 # Update confusion matrix with latest result:
@@ -151,7 +147,7 @@ class Agent(object):
             self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
             self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
             self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
-
+            
         return
 
 # ----------------------------------------------------------------------

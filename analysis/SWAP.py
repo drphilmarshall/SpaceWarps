@@ -5,6 +5,7 @@ import swap
 
 import sys,getopt,datetime,os,subprocess
 import numpy as np
+import cPickle
 
 # ======================================================================
 
@@ -105,6 +106,12 @@ def SWAP(argv):
 
     tonights = swap.Configuration(configfile)
 
+    # Read the pickled random state file
+    random_file = open(tonights.parameters['random_file'],"r");
+    random_state = cPickle.load(random_file);
+    random_file.close();
+    np.random.RandomState().set_state(random_state);
+
     practise = (tonights.parameters['dbspecies'] == 'Toy')
     if practise:
         print "SWAP: doing a dry run using a Toy database"
@@ -154,7 +161,14 @@ def SWAP(argv):
         return
     else:
         t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H:%M:%S')
-    print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
+    print "SWAP: updating all subjects classified between "+tonights.parameters['start']
+
+    # When will we stop considering classifications?
+    if tonights.parameters['end'] == 'the_end_of_time':
+        t2 = datetime.datetime(2100, 1, 1, 12, 0, 0, 0)
+    else:
+        t2 = datetime.datetime.strptime(tonights.parameters['end'], '%Y-%m-%d_%H:%M:%S')
+    print "SWAP: and "+tonights.parameters['end']
 
     # How many classifications do we look at per batch?
     try: N_per_batch = tonights.parameters['N_per_batch']
@@ -216,7 +230,6 @@ def SWAP(argv):
     # ------------------------------------------------------------------
 
     count_max = N_per_batch
-
     print "SWAP: interpreting up to",count_max," classifications..."
     if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 
@@ -230,9 +243,8 @@ def SWAP(argv):
         if vb: print "#"+str(count+1)+". items = ",items
         if items is None:
             continue # Tutorial subjects fail, as do stage/project mismatches!
-        # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
-        # X, Y: result,truth (LENS,NOT,UNKNOWN)
-        t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
+        tstring,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
+        t = datetime.datetime.strptime(tstring, '%Y-%m-%d_%H:%M:%S')
 
         # If the stage of this classification does not match the stage we are
         # on, skip to the next one!
@@ -245,6 +257,10 @@ def SWAP(argv):
             if vb:
                 print "Found classification from this stage: ",items
                 print " "
+
+        # Break out if we've reached the time limit:
+        if t > t2:
+            break
 
         # Register new volunteers, and create an agent for each one:
         # Old, slow code: if Name not in bureau.list():
@@ -259,7 +275,7 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the
         # classifier. We send that classifier's agent to the subject
         # to do this.
-        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=tstring,ignore=a_few_at_the_start,haste=waste)
 
         # Update the agent's confusion matrix, based on what it heard:
         # if learning == 'supervised':
@@ -316,11 +332,11 @@ def SWAP(argv):
 
     # All good things come to an end:
     if count == 0:
-        print "SWAP: something went wrong? 0 classifications found..."
-        t1 = t1.strftime('%Y-%m-%d_%H:%M:%S')
+        print "SWAP: if we're not plotting, something might be wrong: 0 classifications found."
+        t = t1
         more_to_do = False
         # return
-    elif count < count_max: # ie we didn't make it to 10,000 this time!
+    elif count < count_max: # ie we didn't make it through the whole batch  this time!
         more_to_do = False
     else:
         more_to_do = True
@@ -332,10 +348,10 @@ def SWAP(argv):
 
     # And what will we call the new files we make? Use the first
     # classification timestamp!
-    tonights.parameters['finish'] = t1
+    tonights.parameters['finish'] = t1.strftime('%Y-%m-%d_%H:%M:%S')
 
     # Let's also update the start parameter, ready for next time:
-    tonights.parameters['start'] = t
+    tonights.parameters['start'] = tstring
 
     # Use the following directory for output lists and plots:
     tonights.parameters['trunk'] = \
@@ -433,11 +449,18 @@ def SWAP(argv):
     # already updated! :-)
 
     if not more_to_do:
-        tonights.parameters['start'] = t
+        tonights.parameters['start'] = tstring
         swap.set_cookie(False)
     # SWAPSHOP will read this cookie and act accordingly.
 
     configfile = 'update.config'
+
+    # Do not update random_file!
+    # random_file = open(tonights.parameters['random_file'],"w");
+    # random_state = np.random.RandomState().get_state();
+    # cPickle.dump(random_state,random_file);
+    # random_file.close();
+
     swap.write_config(configfile, tonights.parameters)
 
 

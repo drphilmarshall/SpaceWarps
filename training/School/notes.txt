@@ -1,0 +1,48 @@
+# ============================================================================
+# 2013-02-27 (Wednesday) 17:55 GMT
+# 
+# School (incl tutorial/stream) needs known SL2S lenses!
+# Use the Sonnenfeld et al 2013 sample (paper in prep). 
+
+set SL2S_DIR = $LATEX_DIR/papers/SL2S/SL2S-Rings
+set SL2S_STATUS_DIR = $WORK_DIR/stronglensing/SL2S/status
+
+set ringcat = CFHTLS/CFHTLS_Rings_Sonnenfeld++2013.txt
+echo "# SL2S ring catalog" > $ringcat
+echo "#   from Sonnenfeld et al 2013 lens model table" >> $ringcat
+echo "# " >> $ringcat
+echo "# name    grade    ra     dec" >> $ringcat
+
+# First get list of lenses with grades, from Sonnenfeld paper:
+
+set table = $SL2S_DIR/tables/rm/lensfit.tex
+
+grep SL2S $table | awk '{print $1,$17}' > names+grades.txt
+
+# Now get positions from v17 cat:
+
+set master = $SL2S_STATUS_DIR/rings.v17.cat
+
+set N = `cat names+grades.txt | wc -l`
+foreach k ( `seq $N` )
+  set x = `tail -n +$k names+grades.txt | head -1`
+  set coords = `grep $x[1] $master | awk '{print $2,$3}'`
+  echo $x $coords >> $ringcat
+end  
+
+rm names+grades.txt
+
+# Email to Anu!
+
+# What about arcs? Ask Anu.
+
+# ============================================================================
+# 2013-04-22 (Monday) 19:34 BST
+
+# Upload Anu's movie to Space Warps' vimeo channel!
+
+# "lensanim.mov"
+
+
+
+# ============================================================================

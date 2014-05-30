@@ -82,6 +82,7 @@ class Bureau(object):
         PLarray = np.array([])
         PDarray = np.array([])
         contributions = np.array([])
+        skills = np.array([])
         Ntraining = np.array([])
         Ntotal = np.array([])
         for ID in self.list():
@@ -89,12 +90,14 @@ class Bureau(object):
             PLarray = np.append(PLarray,agent.PL)
             PDarray = np.append(PDarray,agent.PD)
             contributions = np.append(contributions,agent.contribution)
+            skills = np.append(skills,agent.skill)
             Ntraining = np.append(Ntraining,agent.NT)
             Ntotal = np.append(Ntotal,agent.N)  # Nc
 
         self.probabilities['LENS'] = PLarray
         self.probabilities['NOT'] = PDarray
         self.contributions = contributions
+        self.skills = skills
         self.Ntraining = Ntraining
         self.Ntotal = Ntotal
         self.Ntest = Ntotal - Ntraining
@@ -183,6 +186,7 @@ class Bureau(object):
         PD = self.probabilities['NOT'][index]
         PL = self.probabilities['LENS'][index]
         I = self.contributions[index]
+        S = self.skills[index]
         NT = self.Ntraining[index]
         
         # Add a little bit of scatter to the probabilities, to make
@@ -215,8 +219,12 @@ class Bureau(object):
         size = 4*NT + 6.0
         plt.scatter(PL, PD, s=size, color='yellow', alpha=0.5)
         
-        # Information contributed:
-        size = 200*I + 3.0
+        # # Information contributed (summed skill):
+        # size = 4*I + 3.0
+        # plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
+
+        # Information contributed per classification (skill):
+        size = 200*S + 3.0
         plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
 
 

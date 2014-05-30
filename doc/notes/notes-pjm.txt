@@ -1,4 +1,7 @@
 # ============================================================================
+# Shortcuts to useful snippets, for reproducing the SW results:
+goto CFHTLS_STAGE1
+# ============================================================================
 # 2013-04-07 (Sunday) 00:58 IST
 #
 # Get beta click database and start writing analysis code for it.
@@ -4626,6 +4629,139 @@ set expt = 'unsupervised_astute'
 # And so on. OK, switch to unsupervised branch before breaking the code!!
 
 # ======================================================================
+# 2014-05-29 (Thursday) 17:45 PDT
+
+# Housekeeping - put all analysis subdirs in workspace, where they are ignored
+# by git...
+
+# ======================================================================
+# 2014-05-28 (Wednesday) 18:07 PDT
+
+# Pull request from Surhud:
+# 
+#     I have added a random number seed to SWAPSHOP so that the results are reproducible.
+# 
+#     Changes are as follows:
+# 
+#     1) Add an extra argument to SWAPSHOP.csh which takes as input a random
+#        seed. However it only works when startup is specified.
+#     2) SWAPSHOP.csh runs the program generate_random_state.py to generate a
+#        random state file from the seed provided by the user.
+#     3) The config files have an extra compulsory option (random_file) which is
+#        the name of the file which stores the pickled random state.
+#     4) SWAP.py stores the random_state in a the random_file at the end of a
+#        run when update.config has to be written.
+
+# Test on VICS82, in stage1 directory (linked to from new test dir):
+
+mkdirf VICS82/random-test
+ln -s ../stage1/mongo .
+ln -s ../stage1/spacewarp_2014-01-15 .
+cp ../stage1/stage1.config VICS82_stage1.config
+
+# Edit config file to include random_state pickle...
+
+# OK, restart mongo:
+
+SWIPE.csh spacewarp_2014-01-15.gz
+
+# OMG, mongorestore takes ages!
+
+# Now try running all of VICS82, with 5 million per batch:
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config VICS82_stage1.config
+
+# Hmm - no classifications found. Something wrong with mongo.
+# Tear it down and start again, might as well run on CFHTLS then, using 
+# latest downloaded db. Keep VICS82_stage1.config in new projects dir.
+
+# OK, re-doing CFHTLS stage 1:
+
+cp workspace/CFHTLS/hasty/startup.config projects/CFHTLS_stage1.config
+
+# Edit to include random file stuff... and also stage = 1(!)
+
+
+
+############################################################################## 
+############################################################################## 
+
+CFHTLS_STAGE1:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage1
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage1.config .
+
+# Download the db dump if necessary:
+set datadir = spacewarp_2014-05-29
+if (! -e spacewarp_2014-05-29) then
+  wget -O spacewarp_2014-05-29.tar.gz \
+    "https://zooniverse-code.s3.amazonaws.com/databases/2014-05-29/ouroboros_projects/spacewarp_2014-05-29.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1401968753&Signature=FDzTX4QX1pFjcwZ1tiGD05UDc0s%3D"
+  SWIPE.csh spacewarp_2014-05-29.tar.gz
+endif
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
+
+############################################################################## 
+############################################################################## 
+
+
+
+# Did everything finish correctly, does it run repeatably?
+
+# SWAP: From 438654 subjects classified,
+# SWAP: 7580 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 438654 subjects classified,
+# SWAP: 5529 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 438654 subjects classified,
+# SWAP: 257 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_dud_catalog.txt
+
+# Hmm - 44 candidates, 7580 with P > rejection - this is 
+# different to previous run! Are stage 2 classifications being used?
+# Last date (on trajectory plot) is 2014-05-05_20:30:04, which is strange.
+# Plot shows a spike at P = P0, about 4500 high. What are these subjects?
+
+# Looks like there's some junk in the db, from somewhere... 
+# Need to set an end date for the survey, let's say 2014-01-07_23:59:59 
+
+# Test this code, just using December's classifications.
+# First, archive the problem run:
+
+mkdir -p too-many-subjects-44-candidates
+mv CFHTLS* random_state.pickle update.config too-many-subjects-44-candidates/
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# Needed to fix time, strings and datetimes... OK! 
+
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
+# SWAP: From 46736 subjects classified,
+# SWAP: 34374 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3439 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# Final date (on plots) is 2014-01-08_00:00:29
+# Good! 
+
+# Do reproduction test with Anu: do all of CFHTLS stage 1, and compare candidate catalogs.
+# Merge Chris and Mike in first, though - to get the new information stuff.
+
+# Merge into master, push and close Surhud's pull request.
+
+# ======================================================================
 # 2014-05-30 (Friday) 12:40 PDT
 
 # Merging in Chris and Mike's information and plotting code:
@@ -4637,5 +4773,109 @@ git pull chris master
 # Did this last week. Now need to merge in Surhud's stuff from master, and resolve conflicts:
 
 git merge master
+
+# OK, fixed conflicts. Compare test outputs with previous test run!
+
+mkdir -p test_old-bureaucracy
+mv CFHTLS* random_state.pickle update.config test_old-bureaucracy/
+
+cp ../../../projects/CFHTLS_stage1.config CFHTLS_stage1_test.config
+# Edit to have same start time as old-bureacracy config, start: 2013-12-01_00:00:01
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
+# SWAP: From 46736 subjects classified,
+# SWAP: 34385 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: From 46736 subjects classified,
+# SWAP: 3434 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# Hmm: small differences in catalogs. Surhud-only had 34374 candidates (with P > rejection)
+# Is this just the random_state? Both were run with no seed (is seed = 7368)
+
+# Run again to test! Made some tweaks to plotting as well.
+
+mkdir -p test_new-bureaucracy_run1
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run1/
+
+cp test_new-bureaucracy_run1/CFHTLS_stage1_test.config .
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
+# SWAP: From 46736 subjects classified,
+# SWAP: 34363 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3437 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# OK, different again. random_state not working!
+# Try NOT over-writing random_state. Should be better? 
+# It doesn't matter if we always use same random state at beginning.
+
+# run3: constant random_state, plus tweaks to plots (skill not contribution in agent probs plot). 
+
+mkdir -p test_new-bureaucracy_run2
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run2/
+
+cp test_new-bureaucracy_run1/CFHTLS_stage1_test.config .
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: From 46736 subjects classified,
+# SWAP: 34372 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3437 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+
+# Now do a run 4 that is identical, to check numbers. Fixed bug in bureau to keep track of agent skills.
+
+mkdir -p test_new-bureaucracy_run3
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run3/
+
+cp test_new-bureaucracy_run1/CFHTLS_stage1_test.config .
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: From 46736 subjects classified,
+# SWAP: 34361 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3436 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# Damn. Numbers still inconsistent. Some problem with random_state. Punt to Surhud!
+
+mkdir -p test_new-bureaucracy_run4
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run4/
+
+# Check in SWAP code. Changed N_per_batch to 3million to get some rough
+# sense of how crowd, sample changes with time.
+
+# Edited end time in config file, to match start time of stage 2:
+
+# start: the_beginning
+# end: 2013-12-10_16:47:00
+
+goto CFHTLS_STAGE1
+
+# ======================================================================
+
+# Now need to run all the way through stage 1 and stage 2 to make good
+# bureaus for crowd plots, and to get final samples of candidates. 
 
 # ======================================================================

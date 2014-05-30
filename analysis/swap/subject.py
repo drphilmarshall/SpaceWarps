@@ -213,11 +213,11 @@ class Subject(object):
 
                      by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
                      # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
-                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(
-                         self.mean_probability, by.PL, by.PD, as_being))
-                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
-
-
+                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
+                     # by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
+                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
+                     by.contribution += by.skill
+                     
             else:
                 # Still advance exposure, even if by.NT <= ignore:
                 # it would be incorrect to calculate mean classns/retirement

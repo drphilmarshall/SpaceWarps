@@ -4696,6 +4696,9 @@ cd $workspace
 # Get the configuration file for this project:
 cp $SWAP_DIR/projects/CFHTLS_stage1.config .
 
+# start: the_beginning
+# end: 2013-12-10_16:47:00
+
 # Download the db dump if necessary:
 set datadir = spacewarp_2014-05-29
 if (! -e spacewarp_2014-05-29) then
@@ -4729,7 +4732,7 @@ SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
 # Plot shows a spike at P = P0, about 4500 high. What are these subjects?
 
 # Looks like there's some junk in the db, from somewhere... 
-# Need to set an end date for the survey, let's say 2014-01-07_23:59:59 
+# Need to set an end date for the survey, for now let's say 2014-01-07_23:59:59 
 
 # Test this code, just using December's classifications.
 # First, archive the problem run:
@@ -4871,6 +4874,8 @@ mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run4/
 # start: the_beginning
 # end: 2013-12-10_16:47:00
 
+# Add this to the CFHTLS_STAGE1 notes block above.
+
 # ======================================================================
 # 2014-05-30 (Friday) 15:38 PDT
 
@@ -4881,6 +4886,10 @@ goto CFHTLS_STAGE1
 
 # Results:
 
+# SWAP: updating all subjects classified between the_beginning
+# SWAP: and 2013-12-10_16:47:00
+
+...
 
 # And now stage 2:
 

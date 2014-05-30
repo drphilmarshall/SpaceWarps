@@ -4915,4 +4915,13 @@ SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2.config
 ############################################################################## 
 ############################################################################## 
 
+# Results:
+
+...
+
+
+
+# Merge back in to master branch, and push so that Surhud and Anu can 
+# test / fix bugs in random state setting.
+
 # ======================================================================

@@ -238,7 +238,7 @@ def make_crowd_plots(argv):
     cfrac1 = cumulativecontribution1 / totalcontribution1_all
     vfrac1 = np.arange(Nv1) / float(Nv1)
     plt.plot(vfrac1, cfrac1, '--b', linewidth=4, label='CFHTLS Stage 1: Experienced Volunteers')
-    print "make_crowd_plots: ",Nv1,"stage 1 volunteers contributed",phr(totalcontribution1),"bits of information"
+    print "make_crowd_plots: ",Nv1,"experienced stage 1 volunteers contributed",phr(totalcontribution1),"bits of information"
     index = np.where(cfrac1 > 0.9)[0][0]
     print "make_crowd_plots: ",phr(100*vfrac1[index]),"% of the experienced volunteers -",int(Nv1*vfrac1[index]),"people - contributed 90% of the information at Stage 1"
 
@@ -256,7 +256,8 @@ def make_crowd_plots(argv):
 
     plt.xlabel('Fraction of Volunteers')
     plt.ylabel('Fraction of Total Contribution')
-    plt.xlim(0, 0.2)
+    plt.xlim(0.0, 0.21)
+    plt.ylim(0.0, 1.0)
     plt.legend(loc='lower right')
     pngfile = output_directory+'crowd_contrib_cumul.png'
     plt.savefig(pngfile, bbox_inches='tight')
@@ -264,8 +265,12 @@ def make_crowd_plots(argv):
 
 
     # ------------------------------------------------------------------
+    # Plot 1.5: skill histograms? linear x axis, logarithmic y?
 
-    # Plot #2: final skill predicted by early skill?
+
+    # ------------------------------------------------------------------
+
+    # Plot #2: is final skill predicted by early skill?
 
     plt.figure(figsize=(10,8))
     plt.xlim(-0.05,0.25)
@@ -273,7 +278,7 @@ def make_crowd_plots(argv):
     plt.xlabel('Early Skill, $\langle I \\rangle_{j<10}$ / bits')
     plt.ylabel('Final Skill, $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
     plt.scatter(early_skill,final_skill,c='b',alpha=0.05)
-    pngfile = output_directory+'early_final_skill.png'
+    pngfile = output_directory+'early_vs_final_skill.png'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: skill-skill plot saved to "+pngfile
 
@@ -290,11 +295,16 @@ def make_crowd_plots(argv):
     pos_filter *= contribution_all > 1e-11
     X = np.log10(X[pos_filter])
 
-    comment = 'Final Skill, Effort, Contribution, Information, Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
+    comment = 'log(Skill), log(Effort), log(Contribution), log(Information), log(Experience)\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
                                                                                                                                     X[:, 1].min(), X[:, 1].max(),
                                                                                                                                     X[:, 2].min(), X[:, 2].max(),
                                                                                                                                     X[:, 3].min(), X[:, 3].max(),
                                                                                                                                     X[:, 4].min(), X[:, 4].max(),)
+#     comment = 'Final Skill, Effort, Contribution, Information, Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
+#                                                                                                                                     X[:, 1].min(), X[:, 1].max(),
+#                                                                                                                                     X[:, 2].min(), X[:, 2].max(),
+#                                                                                                                                     X[:, 3].min(), X[:, 3].max(),
+#                                                                                                                                     X[:, 4].min(), X[:, 4].max(),)
 #     comment = '$\log_{10}$ Skill, $\log_{10}$ Effort, $\log_{10}$ Contribution, $\log_{10}{\sum_k I_k}$, $\log_{10}$ Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(
 #                                                                                                                                                                                           X[:, 0].min(), X[:, 0].max(),  
 #                                                                                                                                                                                           X[:, 1].min(), X[:, 1].max(),  

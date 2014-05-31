@@ -218,20 +218,44 @@ def make_crowd_plots(argv):
     # Plot #1: cumulative distribution of contribution
     plt.figure(figsize=(10,8))
 
-    worth_plot1 = np.cumsum(np.sort(contribution_all)[::-1])
-    N1 = np.arange(worth_plot1.size) / worth_plot1.size
-    plt.plot(N1, worth_plot1 / worth_plot1[-1], '-b', linewidth=4, label='CFHTLS Stage 1: All Volunteers')
+    # All Stage 1 volunteers:
+    cumulativecontribution1_all = np.cumsum(np.sort(contribution_all)[::-1])
+    totalcontribution1_all = cumulativecontribution1_all[-1]
+    Nv1_all = len(cumulativecontribution1_all)
+    # Fraction of total contribution, fraction of volunteers:
+    cfrac1_all = cumulativecontribution1_all / totalcontribution1_all
+    vfrac1_all = np.arange(Nv1_all) / float(Nv1_all)
+    plt.plot(vfrac1_all, cfrac1_all, '-b', linewidth=4, label='CFHTLS Stage 1: All Volunteers')
+    print "make_crowd_plots: ",Nv1_all,"stage 1 volunteers contributed",phr(totalcontribution1_all),"bits of information"
+    index = np.where(cfrac1_all > 0.9)[0][0]
+    print "make_crowd_plots: ",phr(100*vfrac1_all[index]),"% of the volunteers -",int(Nv1_all*vfrac1_all[index]),"people - contributed 90% of the information at Stage 1"
 
-    worth_plot = np.cumsum(np.sort(contribution)[::-1])
-    N2 = np.arange(worth_plot.size) / worth_plot.size
-    plt.plot(N2, worth_plot / worth_plot[-1], '--b', linewidth=4, label='CFHTLS Stage 1: Experienced Volunteers')
+    # Experienced Stage 1 volunteers (normalize to all!):
+    cumulativecontribution1 = np.cumsum(np.sort(contribution)[::-1])
+    totalcontribution1 = cumulativecontribution1[-1]
+    Nv1 = len(cumulativecontribution1)
+    # Fraction of total contribution (from experienced volunteers), fraction of (experienced) volunteers:
+    cfrac1 = cumulativecontribution1 / totalcontribution1_all
+    vfrac1 = np.arange(Nv1) / float(Nv1)
+    plt.plot(vfrac1, cfrac1, '--b', linewidth=4, label='CFHTLS Stage 1: Experienced Volunteers')
+    print "make_crowd_plots: ",Nv1,"stage 1 volunteers contributed",phr(totalcontribution1),"bits of information"
+    index = np.where(cfrac1 > 0.9)[0][0]
+    print "make_crowd_plots: ",phr(100*vfrac1[index]),"% of the experienced volunteers -",int(Nv1*vfrac1[index]),"people - contributed 90% of the information at Stage 1"
 
-    worth_plot = np.cumsum(np.sort(contribution_all2)[::-1])
-    N3 = np.arange(worth_plot.size) / worth_plot.size
-    plt.plot(N3, worth_plot / worth_plot[-1], '#FF8000', linewidth=4, label='CFHTLS Stage 2: All Volunteers')
+    # All Stage 2 volunteers:
+    cumulativecontribution2_all = np.cumsum(np.sort(contribution_all2)[::-1])
+    totalcontribution2_all = cumulativecontribution2_all[-1]
+    Nv2_all = len(cumulativecontribution2_all)
+    # Fraction of total contribution, fraction of volunteers:
+    cfrac2_all = cumulativecontribution2_all / totalcontribution2_all
+    vfrac2_all = np.arange(Nv2_all) / float(Nv2_all)
+    plt.plot(vfrac2_all, cfrac2_all, '#FF8000', linewidth=4, label='CFHTLS Stage 2: All Volunteers')
+    print "make_crowd_plots: ",Nv2_all,"stage 2 volunteers contributed",phr(totalcontribution2_all),"bits of information"
+    index = np.where(cfrac2_all > 0.9)[0][0]
+    print "make_crowd_plots: ",phr(100*vfrac2_all[index]),"% of the volunteers -",int(Nv2_all*vfrac2_all[index]),"people - contributed 90% of the information at Stage 2"
 
     plt.xlabel('Fraction of Volunteers')
-    plt.ylabel('Fraction of Contribution $\sum_k \langle I \\rangle_k$ / bits')
+    plt.ylabel('Fraction of Total Contribution')
     plt.xlim(0, 0.2)
     plt.legend(loc='lower right')
     pngfile = output_directory+'crowd_contrib_cumul.png'
@@ -317,6 +341,11 @@ def make_crowd_plots(argv):
     print "make_crowd_plots: all done!"
 
     return
+
+# ======================================================================
+
+def phr(x):
+    return "%.1f" % x
 
 # ======================================================================
 

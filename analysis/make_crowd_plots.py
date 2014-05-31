@@ -180,6 +180,7 @@ def make_crowd_plots(argv):
     
     new_s2_contribution = []
     new_s2_skill = []
+    new_s2_effort = []
 
     for ID in bureau2.list():
         agent = bureau2.member[ID]
@@ -191,6 +192,7 @@ def make_crowd_plots(argv):
         if agent.name not in stage2_veteran_members:
             new_s2_contribution.append(agent.testhistory['Skill'].sum())
             new_s2_skill.append(agent.traininghistory['Skill'][-1])
+            new_s2_effort.append(agent.N-agent.NT)
             continue
 
         final_skill2.append(agent.traininghistory['Skill'][-1])
@@ -211,6 +213,7 @@ def make_crowd_plots(argv):
     contribution_all2 = np.array(contribution_all2)
     new_s2_contribution = np.array(new_s2_contribution)
     new_s2_skill = np.array(new_s2_skill)
+    new_s2_effort = np.array(new_s2_effort)
 
 
     # ------------------------------------------------------------------
@@ -273,11 +276,12 @@ def make_crowd_plots(argv):
     # Plot #2: is final skill predicted by early skill?
 
     plt.figure(figsize=(10,8))
-    plt.xlim(-0.05,0.25)
-    plt.ylim(-0.1,0.8)
+    plt.xlim(-0.02,0.25)
+    plt.ylim(-0.02,0.8)
     plt.xlabel('Early Skill, $\langle I \\rangle_{j<10}$ / bits')
     plt.ylabel('Final Skill, $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
-    plt.scatter(early_skill,final_skill,c='b',alpha=0.05)
+    size = 400.0
+    plt.scatter(early_skill,final_skill,s=size,color='blue',alpha=0.05)
     pngfile = output_directory+'early_vs_final_skill.png'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: skill-skill plot saved to "+pngfile
@@ -337,11 +341,39 @@ def make_crowd_plots(argv):
     # Plot #4: stage 2 -- new volunteers vs. veterans: contribution.
 
     plt.figure(figsize=(10,8))
+    plt.xlim(-10.0,895.0)
+    plt.ylim(-0.02,0.85)
     plt.xlabel('Stage 2 Contribution $\sum_k \langle I \\rangle_k$ / bits')
     plt.ylabel('Stage 2 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
-    plt.scatter(contribution2, final_skill2,c='b',label='Veteran volunteers from Stage 1')
-    plt.scatter(new_s2_contribution, new_s2_skill,c='#FFA500', label='New Stage 2 volunteers')
-    plt.legend(loc='lower right')
+
+    size = 0.5*effort2
+    plt.scatter(contribution2, final_skill2, s=size, color='blue', alpha=0.4)
+    plt.scatter(contribution2, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
+    size = 0.5*new_s2_effort
+    plt.scatter(new_s2_contribution, new_s2_skill,s = size, color='#FFA500', alpha=0.4)
+    plt.scatter(new_s2_contribution, new_s2_skill,          color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
+
+    Nvets = len(contribution2)
+    Nnewb = len(new_s2_contribution)
+    N = Nvets + Nnewb
+    totalvets = np.sum(contribution2)
+    totalnewb = np.sum(new_s2_contribution)
+    total = totalvets + totalnewb
+    print "make_crowd_plots: total contribution in Stage 2 was",phr(total),"bits by",N,"volunteers"
+
+    x0,y0,z0 = np.mean(contribution2),np.mean(final_skill2),np.mean(effort2)
+    l = plt.axvline(x=x0,color='blue',ls='--')
+    l = plt.axhline(y=y0,color='blue',ls='--')
+    print "make_crowd_plots: ",Nvets,"veteran users (",phr(100*Nvets/N),"% of the total) made",phr(100*totalvets/total),"% of the contribution"
+    print "make_crowd_plots: the average stage 2 veteran had skill, contribution, effort = ",phr(y0,ndp=2),phr(x0),int(z0)
+    
+    x0,y0,z0 = np.mean(new_s2_contribution),np.mean(new_s2_skill),np.mean(new_s2_effort)
+    l = plt.axvline(x=x0,color='#FFA500',ls='--')
+    l = plt.axhline(y=y0,color='#FFA500',ls='--')
+    print "make_crowd_plots: ",Nnewb,"new users (",phr(100*Nnewb/N),"% of the total) made",phr(100*totalnewb/total),"% of the contribution"
+    print "make_crowd_plots: the average stage 2 newbie had skill, contribution, effort = ",phr(y0,ndp=2),phr(x0),int(z0)
+
+    plt.legend(loc='upper right')
     pngfile = output_directory+'stage2_veteran_contribution.png'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: newbies vs veterans plot saved to "+pngfile
@@ -354,8 +386,10 @@ def make_crowd_plots(argv):
 
 # ======================================================================
 
-def phr(x):
-    return "%.1f" % x
+def phr(x,ndp=1):
+    fmt = "%d" % ndp
+    fmt = '%.'+fmt+'f'
+    return fmt % x
 
 # ======================================================================
 

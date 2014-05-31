@@ -14,6 +14,7 @@ litter
 fin*
 listfiles_d1_d11
 data
+*.cpt
 *tar.gz
 falsepositives
 *.mov

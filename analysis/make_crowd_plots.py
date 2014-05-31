@@ -181,6 +181,7 @@ def make_crowd_plots(argv):
     new_s2_contribution = []
     new_s2_skill = []
     new_s2_effort = []
+    new_s2_information = []
 
     for ID in bureau2.list():
         agent = bureau2.member[ID]
@@ -193,27 +194,31 @@ def make_crowd_plots(argv):
             new_s2_contribution.append(agent.testhistory['Skill'].sum())
             new_s2_skill.append(agent.traininghistory['Skill'][-1])
             new_s2_effort.append(agent.N-agent.NT)
+            new_s2_information.append(agent.testhistory['I'].sum())
             continue
 
-        final_skill2.append(agent.traininghistory['Skill'][-1])
-        information2.append(agent.testhistory['I'].sum())
-        effort2.append(agent.N-agent.NT)
-        experience2.append(agent.NT)
         contribution2.append(agent.testhistory['Skill'].sum())
+        final_skill2.append(agent.traininghistory['Skill'][-1])
+        effort2.append(agent.N-agent.NT)
+        information2.append(agent.testhistory['I'].sum())
+        experience2.append(agent.NT)
 
     experience2 = np.array(experience2)
     effort2 = np.array(effort2)
     final_skill2 = np.array(final_skill2)
     contribution2 = np.array(contribution2)
+    information2 = np.array(information2)
+
     experience_all2 = np.array(experience_all2)
     effort_all2 = np.array(effort_all2)
     final_skill_all2 = np.array(final_skill_all2)
     contribution_all2 = np.array(contribution_all2)
-    contribution2 = np.array(contribution2)
-    contribution_all2 = np.array(contribution_all2)
+    information_all2 = np.array(information_all2)
+
     new_s2_contribution = np.array(new_s2_contribution)
     new_s2_skill = np.array(new_s2_skill)
     new_s2_effort = np.array(new_s2_effort)
+    new_s2_information = np.array(new_s2_information)
 
 
     # ------------------------------------------------------------------
@@ -229,9 +234,11 @@ def make_crowd_plots(argv):
     cfrac1_all = cumulativecontribution1_all / totalcontribution1_all
     vfrac1_all = np.arange(Nv1_all) / float(Nv1_all)
     plt.plot(vfrac1_all, cfrac1_all, '-b', linewidth=4, label='CFHTLS Stage 1: All Volunteers')
-    print "make_crowd_plots: ",Nv1_all,"stage 1 volunteers contributed",phr(totalcontribution1_all),"bits of information"
+    print "make_crowd_plots: ",Nv1_all,"stage 1 volunteers contributed",phr(totalcontribution1_all),"bits"
     index = np.where(cfrac1_all > 0.9)[0][0]
     print "make_crowd_plots: ",phr(100*vfrac1_all[index]),"% of the volunteers -",int(Nv1_all*vfrac1_all[index]),"people - contributed 90% of the information at Stage 1"
+
+    print "make_crowd_plots: total amount of information generated at stage 1 = ",phr(np.sum(information_all)),"bits"
 
     # Experienced Stage 1 volunteers (normalize to all!):
     cumulativecontribution1 = np.cumsum(np.sort(contribution)[::-1])
@@ -241,7 +248,7 @@ def make_crowd_plots(argv):
     cfrac1 = cumulativecontribution1 / totalcontribution1_all
     vfrac1 = np.arange(Nv1) / float(Nv1)
     plt.plot(vfrac1, cfrac1, '--b', linewidth=4, label='CFHTLS Stage 1: Experienced Volunteers')
-    print "make_crowd_plots: ",Nv1,"experienced stage 1 volunteers contributed",phr(totalcontribution1),"bits of information"
+    print "make_crowd_plots: ",Nv1,"experienced stage 1 volunteers contributed",phr(totalcontribution1),"bits"
     index = np.where(cfrac1 > 0.9)[0][0]
     print "make_crowd_plots: ",phr(100*vfrac1[index]),"% of the experienced volunteers -",int(Nv1*vfrac1[index]),"people - contributed 90% of the information at Stage 1"
 
@@ -253,9 +260,11 @@ def make_crowd_plots(argv):
     cfrac2_all = cumulativecontribution2_all / totalcontribution2_all
     vfrac2_all = np.arange(Nv2_all) / float(Nv2_all)
     plt.plot(vfrac2_all, cfrac2_all, '#FF8000', linewidth=4, label='CFHTLS Stage 2: All Volunteers')
-    print "make_crowd_plots: ",Nv2_all,"stage 2 volunteers contributed",phr(totalcontribution2_all),"bits of information"
+    print "make_crowd_plots: ",Nv2_all,"stage 2 volunteers contributed",phr(totalcontribution2_all),"bits"
     index = np.where(cfrac2_all > 0.9)[0][0]
     print "make_crowd_plots: ",phr(100*vfrac2_all[index]),"% of the volunteers -",int(Nv2_all*vfrac2_all[index]),"people - contributed 90% of the information at Stage 2"
+
+    print "make_crowd_plots: total amount of information generated at stage 2 = ",phr(np.sum(information_all2)),"bits"
 
     plt.xlabel('Fraction of Volunteers')
     plt.ylabel('Fraction of Total Contribution')
@@ -290,7 +299,7 @@ def make_crowd_plots(argv):
 
     # Plot #3: corner plot for 5 variables of interest; stage1 = blue shaded, stage2 = orange outlines.
 
-    X = np.vstack((final_skill_all, effort_all, contribution_all, information_all, experience_all)).T
+    X = np.vstack((effort_all, experience_all, final_skill_all, contribution_all, information_all)).T
 
     pos_filter = True
     for Xi in X.T:
@@ -299,25 +308,14 @@ def make_crowd_plots(argv):
     pos_filter *= contribution_all > 1e-11
     X = np.log10(X[pos_filter])
 
-    comment = 'log(Skill), log(Effort), log(Contribution), log(Information), log(Experience)\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
+    comment = 'log(Effort), log(Experience),log(Skill), log(Contribution), log(Information)\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
                                                                                                                                     X[:, 1].min(), X[:, 1].max(),
                                                                                                                                     X[:, 2].min(), X[:, 2].max(),
                                                                                                                                     X[:, 3].min(), X[:, 3].max(),
                                                                                                                                     X[:, 4].min(), X[:, 4].max(),)
-#     comment = 'Final Skill, Effort, Contribution, Information, Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
-#                                                                                                                                     X[:, 1].min(), X[:, 1].max(),
-#                                                                                                                                     X[:, 2].min(), X[:, 2].max(),
-#                                                                                                                                     X[:, 3].min(), X[:, 3].max(),
-#                                                                                                                                     X[:, 4].min(), X[:, 4].max(),)
-#     comment = '$\log_{10}$ Skill, $\log_{10}$ Effort, $\log_{10}$ Contribution, $\log_{10}{\sum_k I_k}$, $\log_{10}$ Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(
-#                                                                                                                                                                                           X[:, 0].min(), X[:, 0].max(),  
-#                                                                                                                                                                                           X[:, 1].min(), X[:, 1].max(),  
-#                                                                                                                                                                                           X[:, 2].min(), X[:, 2].max(),  
-#                                                                                                                                                                                           X[:, 3].min(), X[:, 3].max(),  
-#                                                                                                                                                                                           X[:, 4].min(), X[:, 4].max(),) 
     np.savetxt(output_directory+'volunteer_analysis1.cpt', X, header=comment)
 
-    X = np.vstack((final_skill_all2, effort_all2, contribution_all2, information_all2, experience_all2)).T
+    X = np.vstack((effort_all2, experience_all2, final_skill_all2, contribution_all2, information_all2)).T
 
     pos_filter = True
     for Xi in X.T:
@@ -346,10 +344,12 @@ def make_crowd_plots(argv):
     plt.xlabel('Stage 2 Contribution $\sum_k \langle I \\rangle_k$ / bits')
     plt.ylabel('Stage 2 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
 
-    size = 0.5*effort2
+    # size = 0.5*effort2
+    size = 20 + 10*information2
     plt.scatter(contribution2, final_skill2, s=size, color='blue', alpha=0.4)
     plt.scatter(contribution2, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
-    size = 0.5*new_s2_effort
+    # size = 0.5*new_s2_effort
+    size = 20 + 10*new_s2_information
     plt.scatter(new_s2_contribution, new_s2_skill,s = size, color='#FFA500', alpha=0.4)
     plt.scatter(new_s2_contribution, new_s2_skill,          color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
 

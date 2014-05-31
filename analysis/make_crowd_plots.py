@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # ======================================================================
 
 # from __future__ import division
@@ -7,7 +8,23 @@ from subprocess import call
 
 import sys,getopt,numpy as np
 
+import matplotlib
+# Force matplotlib to not use any Xwindows backend:
+matplotlib.use('Agg')
+
+# Fonts, latex:
+matplotlib.rc('font',**{'family':'serif', 'serif':['TimesNewRoman']})
+matplotlib.rc('text', usetex=True)
+
 from matplotlib import pyplot as plt
+
+bfs,sfs = 20,16
+params = { 'axes.labelsize': bfs,
+            'text.fontsize': bfs,
+          'legend.fontsize': bfs,
+          'xtick.labelsize': sfs,
+          'ytick.labelsize': sfs}
+plt.rcParams.update(params)
 
 import swap
 
@@ -68,21 +85,23 @@ def make_crowd_plots(argv):
           print make_crowd_plots.__doc__
           return
        elif o in ("-c", "--cornerplotter"):
-          cornerplotter_path = a
+          cornerplotter_path = a+'/'
        else:
           assert False, "unhandled option"
 
     # Check for pickles in array args:
     if len(args) == 2:
         bureau1_path = args[0]
-        bureau2_path = args[0]
-        print "make_crowd_plots: illustrating behaviour captured in bureau files: ",bureau1_path,bureau2_path
+        bureau2_path = args[1]
+        print "make_crowd_plots: illustrating behaviour captured in bureau files: "
+        print "make_crowd_plots: ",bureau1_path
+        print "make_crowd_plots: ",bureau2_path
     else:
         print make_crowd_plots.__doc__
         return
 
-    cornerplotter_path = cornerplotter_path+'/CornerPlotter.py'
-    output_directory = '.'
+    cornerplotter_path = cornerplotter_path+'CornerPlotter.py'
+    output_directory = './'
 
     # ------------------------------------------------------------------
 
@@ -90,7 +109,7 @@ def make_crowd_plots(argv):
 
     bureau1 = swap.read_pickle(bureau1_path, 'bureau')
     bureau2 = swap.read_pickle(bureau2_path, 'bureau')
-    print len(bureau1.list()), len(bureau2.list())
+    print "make_crowd_plots: stage 1, 2 agent numbers: ",len(bureau1.list()), len(bureau2.list())
 
     # make lists by going through agents
     N_early = 10
@@ -100,7 +119,7 @@ def make_crowd_plots(argv):
     for ID in bureau2.list():
         if ID in list1:
             stage2_veteran_members.append(ID)
-    print len(stage2_veteran_members), " users stayed on for Stage 2 from Stage 1"
+    print "make_crowd_plots: ",len(stage2_veteran_members), " volunteers stayed on for Stage 2 from Stage 1"
 
     final_skill = []
     contribution = []
@@ -108,6 +127,7 @@ def make_crowd_plots(argv):
     effort = []
     information = []
     early_skill = []
+    
     final_skill_all = []
     contribution_all = []
     experience_all = []
@@ -144,18 +164,20 @@ def make_crowd_plots(argv):
     contribution_all = np.array(contribution_all)
 
 
-    #same setup for stage 2, except special class is veteran users rather than "experienced" users
+    #same setup for stage 2, except special class is veteran volunteers rather than "experienced" volunteers
 
     final_skill2 = []
     contribution2 = []
     experience2 = []
     effort2 = []
     information2 = []
+    
     final_skill_all2 = []
     contribution_all2 = []
     experience_all2 = []
     effort_all2 = []
     information_all2 = []
+    
     new_s2_contribution = []
     new_s2_skill = []
 
@@ -198,21 +220,23 @@ def make_crowd_plots(argv):
 
     worth_plot1 = np.cumsum(np.sort(contribution_all)[::-1])
     N1 = np.arange(worth_plot1.size) / worth_plot1.size
-    plt.plot(N1, worth_plot1 / worth_plot1[-1], '-b', linewidth=4, label='Stage 1: All Users')
+    plt.plot(N1, worth_plot1 / worth_plot1[-1], '-b', linewidth=4, label='CFHTLS Stage 1: All Volunteers')
 
     worth_plot = np.cumsum(np.sort(contribution)[::-1])
     N2 = np.arange(worth_plot.size) / worth_plot.size
-    plt.plot(N2, worth_plot / worth_plot[-1], '--b', linewidth=4, label='Stage 1: Experienced Users')
+    plt.plot(N2, worth_plot / worth_plot[-1], '--b', linewidth=4, label='CFHTLS Stage 1: Experienced Volunteers')
 
     worth_plot = np.cumsum(np.sort(contribution_all2)[::-1])
     N3 = np.arange(worth_plot.size) / worth_plot.size
-    plt.plot(N3, worth_plot / worth_plot[-1], '#FF8000', linewidth=4, label='Stage 2: All Users')
+    plt.plot(N3, worth_plot / worth_plot[-1], '#FF8000', linewidth=4, label='CFHTLS Stage 2: All Volunteers')
 
-    plt.xlabel('Fraction of Users')
-    plt.ylabel('Fraction of Contribution')
+    plt.xlabel('Fraction of Volunteers')
+    plt.ylabel('Fraction of Contribution $\sum_k \langle I \\rangle_k$ / bits')
     plt.xlim(0, 0.2)
     plt.legend(loc='lower right')
-    plt.savefig(output_directory + 'crowd_contrib_cumul.png', bbox_inches='tight')
+    pngfile = output_directory+'crowd_contrib_cumul.png'
+    plt.savefig(pngfile, bbox_inches='tight')
+    print "make_crowd_plots: cumulative contribution plot saved to "+pngfile
 
 
     # ------------------------------------------------------------------
@@ -222,10 +246,12 @@ def make_crowd_plots(argv):
     plt.figure(figsize=(10,8))
     plt.xlim(-0.05,0.25)
     plt.ylim(-0.1,0.8)
-    plt.xlabel('Early Skill')
-    plt.ylabel('Final Skill')
+    plt.xlabel('Early Skill, $\langle I \\rangle_{j<10}$ / bits')
+    plt.ylabel('Final Skill, $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
     plt.scatter(early_skill,final_skill,c='b',alpha=0.05)
-    plt.savefig(output_directory + 'early_final_skill.png', bbox_inches='tight')
+    pngfile = output_directory+'early_final_skill.png'
+    plt.savefig(pngfile, bbox_inches='tight')
+    print "make_crowd_plots: skill-skill plot saved to "+pngfile
 
     # ------------------------------------------------------------------
 
@@ -240,13 +266,18 @@ def make_crowd_plots(argv):
     pos_filter *= contribution_all > 1e-11
     X = np.log10(X[pos_filter])
 
-    comment = 'Final Skill, Effort, Contribution, Information, Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(
-                                                                                                                                    X[:, 0].min(), X[:, 0].max(),
+    comment = 'Final Skill, Effort, Contribution, Information, Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(X[:, 0].min(), X[:, 0].max(),
                                                                                                                                     X[:, 1].min(), X[:, 1].max(),
                                                                                                                                     X[:, 2].min(), X[:, 2].max(),
                                                                                                                                     X[:, 3].min(), X[:, 3].max(),
                                                                                                                                     X[:, 4].min(), X[:, 4].max(),)
-    np.savetxt(output_directory + 'user_analysis1.cpt', X, header=comment)
+#     comment = '$\log_{10}$ Skill, $\log_{10}$ Effort, $\log_{10}$ Contribution, $\log_{10}{\sum_k I_k}$, $\log_{10}$ Experience\n{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}'.format(
+#                                                                                                                                                                                           X[:, 0].min(), X[:, 0].max(),  
+#                                                                                                                                                                                           X[:, 1].min(), X[:, 1].max(),  
+#                                                                                                                                                                                           X[:, 2].min(), X[:, 2].max(),  
+#                                                                                                                                                                                           X[:, 3].min(), X[:, 3].max(),  
+#                                                                                                                                                                                           X[:, 4].min(), X[:, 4].max(),) 
+    np.savetxt(output_directory+'volunteer_analysis1.cpt', X, header=comment)
 
     X = np.vstack((final_skill_all2, effort_all2, contribution_all2, information_all2, experience_all2)).T
 
@@ -257,29 +288,33 @@ def make_crowd_plots(argv):
     pos_filter *= contribution_all2 > 1e-11
     X = np.log10(X[pos_filter])
 
-    np.savetxt(output_directory + 'user_analysis2.cpt', X, header=comment)
+    np.savetxt(output_directory+'volunteer_analysis2.cpt', X, header=comment)
 
-    call([cornerplotter_path,
-          '-o',
-          output_directory + 'all_skill_contribution_experience_education.png',
-          output_directory + 'user_analysis1.cpt,blue,shaded',
-          output_directory + 'user_analysis2.cpt,orange,outlines'])
+    pngfile = output_directory+'all_skill_contribution_experience_education.png'
+    input1 = output_directory+'volunteer_analysis1.cpt,blue,shaded'
+    input2 = output_directory+'volunteer_analysis2.cpt,orange,shaded'
+
+    call([cornerplotter_path,'-o',pngfile,input1,input2])
+
+    print "make_crowd_plots: corner plot saved to "+pngfile
 
     # ------------------------------------------------------------------
 
-    # Plot #4: stage 2 -- new users vs. veterans: contribution.
+    # Plot #4: stage 2 -- new volunteers vs. veterans: contribution.
 
     plt.figure(figsize=(10,8))
-    plt.xlabel('Stage 2 Contribution')
-    plt.ylabel('Stage 2 Skill')
-    plt.scatter(contribution2, final_skill2,c='b',label='Veteran users from Stage 1')
-    plt.scatter(new_s2_contribution, new_s2_skill,c='#FFA500', label='New Stage 2 users')
+    plt.xlabel('Stage 2 Contribution $\sum_k \langle I \\rangle_k$ / bits')
+    plt.ylabel('Stage 2 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
+    plt.scatter(contribution2, final_skill2,c='b',label='Veteran volunteers from Stage 1')
+    plt.scatter(new_s2_contribution, new_s2_skill,c='#FFA500', label='New Stage 2 volunteers')
     plt.legend(loc='lower right')
-    plt.savefig(output_directory + 'stage2_veteran_contribution.png', bbox_inches='tight')
+    pngfile = output_directory+'stage2_veteran_contribution.png'
+    plt.savefig(pngfile, bbox_inches='tight')
+    print "make_crowd_plots: newbies vs veterans plot saved to "+pngfile
 
     # ------------------------------------------------------------------
 
-    print "All done!"
+    print "make_crowd_plots: all done!"
 
     return
 

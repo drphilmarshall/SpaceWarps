@@ -4846,6 +4846,9 @@ mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run4/
 
 # Add this to the CFHTLS_STAGE1 notes block above.
 
+# Merge back in to master branch, and push so that Surhud and Anu can 
+# test / fix bugs in random state setting.
+
 # ======================================================================
 # 2014-05-30 (Friday) 15:38 PDT
 
@@ -4869,12 +4872,67 @@ goto CFHTLS_STAGE2
 
 # SWAP: updating all subjects classified between 2013-12-10_13:29:41
 # SWAP: and 2014-01-06_23:59:59
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 2288 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 91 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 119 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 1 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 14 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 1391 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 138 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 20 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_dud_catalog.txt
+
+# Report says:
+#   Number of classifications:    224745
+#   Number of classns used:       224745
+#   Number of classifiers:        1964
+#   Number of test subjects:      3679
+#   Number of sims:               152
+#   Number of duds:               201
+#   Mean test classns/classifier: 81.0
+#   Mean classns/test subject:    43.2
+#   Test subject retirements:     2288
+#   Mean classns/retirement:      47.0
+#   Test subject rejections:      2288
+#   Test subject identifications: 91
+#   Lens completeness:            78.3%
+#   Lens purity:                  10.0%
+#   FP contamination:             90.0%
+#   Lenses missed (FN rate):      9.2%
 
 
-...
+# NB. I Forgot to set report = True in config files, this is now fixed. 
+# I ran SWAPSHOP again, with update.config edited to do reporting:
 
-# Merge back in to master branch, and push so that Surhud and Anu can 
-# test / fix bugs in random state setting.
+cd $SWAP_DIR/workspace/CFHTLS/stage1
+SWAPSHOP.csh -s CFHTLS 
+
+cd $SWAP_DIR/workspace/CFHTLS/stage2
+SWAPSHOP.csh -s CFHTLS --stage2 
+
+# ======================================================================
+# 2014-05-30 (Friday) 17:50 PDT
+
+# Make crowd plots, using stage 1 and stage 2 bureaus from above.
+
+cd $SWAP_DIR/../doc/sw-system-figs/
+
+set stage1bureau = $SWAP_DIR/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle 
+set stage2bureau = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+
+make_crowd_plots.py $stage1bureau $stage2bureau
+
+# Seem to work OK: tweaked labels etc, need to write out numbers next.
 
 # ======================================================================
 

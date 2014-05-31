@@ -4932,7 +4932,32 @@ set stage2bureau = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
 
 make_crowd_plots.py $stage1bureau $stage2bureau
 
-# Seem to work OK: tweaked labels etc, need to write out numbers next.
+# Seem to work OK: tweaked labels etc, now write out numbers 
+# (stage 1 analysis not quite done but these will be close)...
+
+# make_crowd_plots: illustrating behaviour captured in bureau files: 
+# make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
+# make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+# SWAP: read an old bureau of 36985 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
+# SWAP: read an old bureau of 1964 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+# make_crowd_plots: stage 1, 2 agent numbers:  36985 1964
+# make_crowd_plots:  783  volunteers stayed on for Stage 2 from Stage 1
+# make_crowd_plots:  36985 stage 1 volunteers contributed 1269574.7 bits of information
+# make_crowd_plots:  1.0 % of the volunteers - 374 people - contributed 90% of the information at Stage 1
+# make_crowd_plots:  9119 experienced stage 1 volunteers contributed 1268069.5 bits of information
+# make_crowd_plots:  4.1 % of the experienced volunteers - 374 people - contributed 90% of the information at Stage 1
+# make_crowd_plots:  1964 stage 2 volunteers contributed 21895.8 bits of information
+# make_crowd_plots:  7.2 % of the volunteers - 141 people - contributed 90% of the information at Stage 2
+# make_crowd_plots: cumulative contribution plot saved to ./crowd_contrib_cumul.png
+# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
+# make_crowd_plots: corner plot saved to ./all_skill_contribution_experience_education.png
+# make_crowd_plots: total contribution in Stage 2 was 21895.8 bits by 1964 volunteers
+# make_crowd_plots:  783 stage 1 veteran users ( 39.0 % of the total) made 94.0 % of the contribution
+# make_crowd_plots: the average stage 1 veteran had skill, contribution, effort =  0.10 26.3 166
+# make_crowd_plots:  1181 new users ( 60.0 % of the total) made 6.0 % of the contribution
+# make_crowd_plots: the average stage 2 newbie had skill, contribution, effort =  0.02 1.1 24
+# make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
+# make_crowd_plots: all done!
 
 # ======================================================================
 

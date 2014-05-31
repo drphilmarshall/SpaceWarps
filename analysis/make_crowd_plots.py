@@ -364,8 +364,8 @@ def make_crowd_plots(argv):
     x0,y0,z0 = np.mean(contribution2),np.mean(final_skill2),np.mean(effort2)
     l = plt.axvline(x=x0,color='blue',ls='--')
     l = plt.axhline(y=y0,color='blue',ls='--')
-    print "make_crowd_plots: ",Nvets,"veteran users (",phr(100*Nvets/N),"% of the total) made",phr(100*totalvets/total),"% of the contribution"
-    print "make_crowd_plots: the average stage 2 veteran had skill, contribution, effort = ",phr(y0,ndp=2),phr(x0),int(z0)
+    print "make_crowd_plots: ",Nvets,"stage 1 veteran users (",phr(100*Nvets/N),"% of the total) made",phr(100*totalvets/total),"% of the contribution"
+    print "make_crowd_plots: the average stage 1 veteran had skill, contribution, effort = ",phr(y0,ndp=2),phr(x0),int(z0)
     
     x0,y0,z0 = np.mean(new_s2_contribution),np.mean(new_s2_skill),np.mean(new_s2_effort)
     l = plt.axvline(x=x0,color='#FFA500',ls='--')

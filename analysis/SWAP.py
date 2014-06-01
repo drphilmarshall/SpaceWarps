@@ -110,7 +110,7 @@ def SWAP(argv):
     random_file = open(tonights.parameters['random_file'],"r");
     random_state = cPickle.load(random_file);
     random_file.close();
-    np.random.RandomState().set_state(random_state);
+    np.random.set_state(random_state);
 
     practise = (tonights.parameters['dbspecies'] == 'Toy')
     if practise:
@@ -455,11 +455,12 @@ def SWAP(argv):
 
     configfile = 'update.config'
 
-    # Do not update random_file!
-    # random_file = open(tonights.parameters['random_file'],"w");
-    # random_state = np.random.RandomState().get_state();
-    # cPickle.dump(random_state,random_file);
-    # random_file.close();
+    # Random_file needs updating, else we always start from the same random
+    # state when update.config is reread!
+    random_file = open(tonights.parameters['random_file'],"w");
+    random_state = np.random.get_state();
+    cPickle.dump(random_state,random_file);
+    random_file.close();
 
     swap.write_config(configfile, tonights.parameters)
 

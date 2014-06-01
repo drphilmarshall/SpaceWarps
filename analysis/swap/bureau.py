@@ -17,23 +17,23 @@ class Bureau(object):
 
     COMMENTS
         The members of a Bureau are all Agents.  The Bureau knows how
-        big it is, and also holds a summary of its agents' 
+        big it is, and also holds a summary of its agents'
         classifiers' information contributions.
 
     INITIALISATION
         From scratch.
-    
+
     METHODS AND VARIABLES
         Bureau.member(Name)         The agent assigned to Name
         Bureau.list                 The Names of the Bureau's members
         Bureau.size()               The size of the Bureau
         Bureau.start_history_plot()
         Bureau.finish_history_plot()
-        
+
     BUGS
 
     AUTHORS
-      This file is part of the Space Warps project, and is distributed 
+      This file is part of the Space Warps project, and is distributed
       under the GPL v2 by the Space Warps Science Team.
       http://spacewarps.org/
 
@@ -47,38 +47,38 @@ class Bureau(object):
         self.member = {}
         self.probabilities = {'LENS':np.array([]), 'NOT':np.array([])}
         self.contributions = np.array([])
-        
+
         return None
 
 # ----------------------------------------------------------------------------
 
     def __str__(self):
-        return 'bureau of %d classification agents' % (self.size())       
-        
+        return 'bureau of %d classification agents' % (self.size())
+
 # ----------------------------------------------------------------------------
 # Return the number of bureau members:
 
     def size(self):
         return len(self.member)
-        
+
 # ----------------------------------------------------------------------------
 # Return a complete list of bureau members:
 
     def list(self):
         return self.member.keys()
-        
+
 # ----------------------------------------------------------------------------
 # Return a list of N bureau members, selected at regular intervals:
 
     def shortlist(self,N):
         longlist = self.list()
         return longlist[0::int(len(longlist)/N)][0:N]
-            
+
 # ----------------------------------------------------------------------------
 # Extract all the classification probabilities used by the agents:
 
     def collect_probabilities(self):
-    
+
         PLarray = np.array([])
         PDarray = np.array([])
         contributions = np.array([])
@@ -103,19 +103,19 @@ class Bureau(object):
         self.Ntest = Ntotal - Ntraining
 
         return
-        
+
 # ----------------------------------------------------------------------
 # Prepare to plot agents' histories:
 
     def start_history_plot(self):
-        
+
         Nmin = 0.5
         Nmax = 2000.0
-        
+
         bins = np.linspace(np.log10(Nmin),np.log10(Nmax),20,endpoint=True)
         self.collect_probabilities()
         logN = np.log10(self.Ntraining)
-        
+
         fig = plt.figure(figsize=(6,5), dpi=300)
 
         # Linear xes for histogram:
@@ -126,15 +126,15 @@ class Bureau(object):
             label.set_visible(False)
         for label in hax.get_yticklabels():
             label.set_visible(False)
-        for tick in hax.xaxis.get_ticklines(): 
-            tick.set_visible(False) 
-        for tick in hax.yaxis.get_ticklines(): 
-            tick.set_visible(False) 
-            
+        for tick in hax.xaxis.get_ticklines():
+            tick.set_visible(False)
+        for tick in hax.yaxis.get_ticklines():
+            tick.set_visible(False)
+
         plt.hist(logN, bins=bins, histtype='stepfilled', color='yellow', alpha=0.5)
-            
- 
-        # Logarithmic axes for information contribution plot: 
+
+
+        # Logarithmic axes for information contribution plot:
         axes = fig.add_axes([0.15,0.15,0.85,0.80], frameon=False)
         axes.set_xlim(Nmin,Nmax)
         axes.set_xscale('log')
@@ -143,29 +143,29 @@ class Bureau(object):
         axes.set_xlabel('No. of training subjects classified')
         axes.set_ylabel('Contributed information per classification (bits)')
         axes.set_title('Example Agent Histories')
-        
+
         return axes
 
 # ----------------------------------------------------------------------
 # Prepare to plot agents' histories:
 
     def finish_history_plot(self,axes,t,filename):
-    
+
         plt.sca(axes)
-        
+
         # Timestamp:
         plt.text(100,swap.Imax+0.02,t,color='gray')
-       
+
         plt.savefig(filename,dpi=300)
-            
+
         return
 
 # ----------------------------------------------------------------------
-# Plot scattergraph and histograms of agents' confusion matrix 
+# Plot scattergraph and histograms of agents' confusion matrix
 # element probabilities:
 
     def plot_probabilities(self,Nc,t,filename):
-    
+
         fig = plt.figure(figsize=(6,6), dpi=300)
 
         width,height,margin = 0.65,0.2,0.1
@@ -179,7 +179,7 @@ class Bureau(object):
 
         pmin,pmax = 0.0,1.0
         self.collect_probabilities()
-        
+
         # Only plot a shortlist of 200, or fewer, uniformly sampled:
         TheseFewNames = self.shortlist(np.min([Nc,self.size()]))
         index = [i for i,Name in enumerate(self.list()) if Name in set(TheseFewNames)]
@@ -188,12 +188,15 @@ class Bureau(object):
         I = self.contributions[index]
         S = self.skills[index]
         NT = self.Ntraining[index]
-        
+
         # Add a little bit of scatter to the probabilities, to make
         # the ones near the starting point visible:
-        PD += 4.0*(1.0-PD)*PD*0.005*np.random.randn(len(PD))
-        PL += 4.0*(1.0-PL)*PL*0.005*np.random.randn(len(PL))
-        
+        # Avoid interference with the random number used by agents by using a
+        # new pseudo random number generator
+        prng=np.random.RandomState(3948);
+        PD += 4.0*(1.0-PD)*PD*0.005*prng.randn(len(PD))
+        PL += 4.0*(1.0-PL)*PL*0.005*prng.randn(len(PL))
+
         bins = np.linspace(0.0,1.0,20,endpoint=True)
 
         # Scatter plot:
@@ -214,11 +217,11 @@ class Bureau(object):
 
         # Plot the random classifier line
         plt.plot(np.arange(2),1-np.arange(2),color='grey');
-        
+
         # Training received:
         size = 4*NT + 6.0
         plt.scatter(PL, PD, s=size, color='yellow', alpha=0.5)
-        
+
         # # Information contributed (summed skill):
         # size = 4*I + 3.0
         # plt.scatter(PL, PD, s=size, color='green', alpha=0.5)
@@ -232,7 +235,7 @@ class Bureau(object):
         PD=self.probabilities['NOT']
         PL=self.probabilities['LENS']
 
-        # Right histogram panel: 
+        # Right histogram panel:
         plt.sca(righthist)
         righthist.set_ylim(pmin,pmax)
         righthist.set_xlim(0.5*len(PD),0.0)
@@ -241,11 +244,11 @@ class Bureau(object):
             label.set_visible(False)
         for label in righthist.get_xticklabels():
             label.set_visible(False)
-           
+
         plt.hist(PD, bins=bins, orientation='horizontal', histtype='stepfilled', color='red', alpha=0.7)
 
 
-        # Lower histogram panel: 
+        # Lower histogram panel:
         plt.sca(lowerhist)
         lowerhist.set_xlim(pmin,pmax)
         lowerhist.set_ylim(0.0,0.5*len(PL))
@@ -253,16 +256,16 @@ class Bureau(object):
         for label in lowerhist.get_yticklabels():
             label.set_visible(False)
         lowerhist.set_xlabel('Pr("LENS"|LENS)')
-           
+
         plt.hist(PL, bins=bins, histtype='stepfilled', color='blue', alpha=0.7)
 
         # Timestamp:
         plt.text(0.03,0.82*0.5*len(PL),t,color='gray')
 
         plt.savefig(filename,dpi=300)
-        
+
         return
 
 
 # ======================================================================
-   
+

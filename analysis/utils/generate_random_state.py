@@ -16,7 +16,7 @@ except OSError:
 # Generate random state and pickle it:
 pfile=open(filename,"w")
 np.random.seed(int(seed))
-cPickle.dump(np.random.RandomState().get_state(),pfile)
+cPickle.dump(np.random.get_state(),pfile)
 pfile.close()
 
 # That's it.

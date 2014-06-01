@@ -652,7 +652,7 @@ had higher probability.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.png}
-\caption{Narrow cumulutive distributions of the contributions made by the
+\caption{Narrow cumulative distributions of the contributions made by the
 agents: for example, 90\% of the stage 2 contributions were made by the
 highest contributing  7\% of the crowd. The stage 1 agents are shown in blue,
 the stage 2 agents in orange. ``Experienced volunteers'' classified 10 or more
@@ -688,7 +688,7 @@ matter of choice (or perhaps, availability of time!).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_skill_cumul.png}
-\caption{Broad cumulutive distributions of agent skill: 
+\caption{Broad cumulative distributions of agent skill: 
 the most skilled 20\% of the crowd only possess 79\% of the skill at stage 1.
 The stage 1 agents
 are shown in blue, the stage 2 agents in orange. ``Experienced volunteers''
@@ -698,19 +698,52 @@ classified 10 or more training subjects.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.png}
+\caption{Stage 2 agent properties, separating veterans from stage 1 from new
+volunteers. Point size represents total information generated, dashed lines
+are drawn at the mean values for each sample.}
+\label{fig:crowd:stage1vstage2}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We now look at the transition between stage 1 and stage 2 in more detail. Of
+the 1964 volunteers who took part in the stage 2 classification round, only
+783 were veterans from stage 1. However, these volunteers showed significantly
+higher skill levels than the new users, and also made more classifications
+(and hence made greater contributions. This is illustrated in  
+\Fref{fig:crowd:stage1vstage2}. In this figure, point size is proportional to
+information generated: the higher skill, higher effort stage 1 veterans
+generated most of the information.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/early_vs_final_skill.png}
+\caption{Predictability of final skill from early skill (after 10 training
+classifications) in stage 1 agents. The dashed lines enclose 649 agents with
+early skill greater than 0.1 
+who retain final skill of greater than 0.05.}
+\label{fig:crowd:skillprediction}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Having seen the importance of the high skill volunteers at both stage 1 and
+stage 2, we might ask, can we predict agent skill after, say, the volunteer
+has experienced 10 training subjects? In \Fref{fig:crowd:skillprediction} we
+plot this ``early skill'' against final skill, for all experienced stage 1
+volunteers. The majority of the crowd shows little correlation, but at the
+high early skill end, some predictability appears. The 649 experienced  stage
+1 volunteers who had early skill greater than 0.1 went on to attain a mean
+final skill of 0.22, with 97\% remaining at skill 0.05 or higher. This
+suggests that it might be worth tracking volunteers' skill as a project
+progresses, in order to encourage those showing an aptitude for the task to
+take part in the more difficult activities, such as stage 2 refinement.
+
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
 information generated in both stage 1 and 2 of the CFHTLS project, with the
 total numbers of agents and subjects for comparison. These numbers allow us to
 quantify the efficiency of the system. 
-
-Can we predict skill? Early skill vs final skill - some correlation,
-especially in high skill users, but very broad distribution though: not
-possible to predict.
-\Fref{fig:crowd:skillprediction}
-
-Stage 1 skill vs Stage 2 skill. 
-Who continued to do Stage 2? Numbers. 
-\Fref{fig:crowd:stage1vstage2}
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 

@@ -338,12 +338,16 @@ def make_crowd_plots(argv):
 
 
     # ------------------------------------------------------------------
-    # Plot 1.5: skill histograms? linear x axis, logarithmic y?
-
-
-    # ------------------------------------------------------------------
 
     # Plot #2: is final skill predicted by early skill?
+
+    N = len(final_skill)
+    prodigies_final_skill = final_skill[np.where(early_skill > 0.1)]
+    Nprodigies = len(prodigies_final_skill)
+    mean_prodigies_skill = np.mean(prodigies_final_skill)
+    Ngood_prodigies = len(np.where(prodigies_final_skill > 0.05)[0])
+    print "make_crowd_plots: the",Nprodigies,"-",phr(100*Nprodigies/N),"% - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of",phr(mean_prodigies_skill,ndp=2)
+    print "make_crowd_plots: with",phr(100*Ngood_prodigies/Nprodigies),"% of them remaining at skill 0.05 or higher"
 
     plt.figure(figsize=(10,8))
     plt.xlim(-0.02,0.25)
@@ -352,6 +356,8 @@ def make_crowd_plots(argv):
     plt.ylabel('Final Skill, $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
     size = 400.0
     plt.scatter(early_skill,final_skill,s=size,color='blue',alpha=0.05)
+    plt.plot((0.1, 0.1), (0.05, 0.8),color='black',ls='--')
+    plt.plot((0.1, 0.25), (0.05, 0.05),color='black',ls='--')
     pngfile = output_directory+'early_vs_final_skill.png'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: skill-skill plot saved to "+pngfile

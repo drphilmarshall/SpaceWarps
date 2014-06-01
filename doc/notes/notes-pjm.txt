@@ -5006,8 +5006,8 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots:  77.0 % of the skill possessed by the (20%) most skilled 393 people
 # make_crowd_plots: cumulative skill plot saved to ./crowd_skill_cumul.png
 
-# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
-
+# make_crowd_plots: the 649 - 7.0 % - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of 0.22
+# make_crowd_plots: with 97.0 % of them remaining at skill 0.05 or higher# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
 # make_crowd_plots: corner plot saved to ./all_skill_contribution_experience_education.png
 
 # make_crowd_plots: total contribution in Stage 2 was 21895.8 bits by 1964 volunteers

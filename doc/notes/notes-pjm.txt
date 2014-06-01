@@ -4904,7 +4904,8 @@ goto CFHTLS_STAGE1
 
 # SATURDAY - NOW INCLUDING ALL STAGE 2 SUBJECTS!
 
-
+# Also, set stage 1 end time to same as hasty (as used in defining stage 2 sample!)
+# 2013-12-08_10:20:56
 
 
 

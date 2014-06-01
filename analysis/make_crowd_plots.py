@@ -163,6 +163,10 @@ def make_crowd_plots(argv):
     contribution = np.array(contribution)
     contribution_all = np.array(contribution_all)
 
+    print "make_crowd_plots: mean stage 1 volunteer effort = ",phr(np.mean(effort_all))
+    print "make_crowd_plots: mean stage 1 volunteer experience = ",phr(np.mean(experience_all))
+    print "make_crowd_plots: mean stage 1 volunteer contribution = ",phr(np.mean(contribution_all)),"bits"
+    print "make_crowd_plots: mean stage 1 volunteer skill = ",phr(np.mean(final_skill_all),ndp=2),"bits"
 
     #same setup for stage 2, except special class is veteran volunteers rather than "experienced" volunteers
 
@@ -220,10 +224,17 @@ def make_crowd_plots(argv):
     new_s2_effort = np.array(new_s2_effort)
     new_s2_information = np.array(new_s2_information)
 
+    print "make_crowd_plots: mean stage 2 volunteer effort = ",phr(np.mean(effort_all2))
+    print "make_crowd_plots: mean stage 2 volunteer experience = ",phr(np.mean(experience_all2))
+    print "make_crowd_plots: mean stage 2 volunteer contribution = ",phr(np.mean(contribution_all2)),"bits"
+    print "make_crowd_plots: mean stage 2 volunteer skill = ",phr(np.mean(final_skill_all2),ndp=2),"bits"
 
     # ------------------------------------------------------------------
 
-    # Plot #1: cumulative distribution of contribution
+    # Plot 1.1 and 1.2: cumulative distributions of contribution and skill
+    
+    # 1.1 Contribution
+    
     plt.figure(figsize=(10,8))
 
     # All Stage 1 volunteers:
@@ -274,6 +285,56 @@ def make_crowd_plots(argv):
     pngfile = output_directory+'crowd_contrib_cumul.png'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: cumulative contribution plot saved to "+pngfile
+
+
+    # 1.2 Skill
+    
+    plt.figure(figsize=(10,8))
+
+    # All Stage 1 volunteers:
+    cumulativeskill1_all = np.cumsum(np.sort(final_skill_all)[::-1])
+    totalskill1_all = cumulativeskill1_all[-1]
+    Nv1_all = len(cumulativeskill1_all)
+    # Fraction of total skill, fraction of volunteers:
+    cfrac1_all = cumulativeskill1_all / totalskill1_all
+    vfrac1_all = np.arange(Nv1_all) / float(Nv1_all)
+    plt.plot(vfrac1_all, cfrac1_all, '-b', linewidth=4, label='CFHTLS Stage 1: All Volunteers')
+    print "make_crowd_plots: ",Nv1_all,"stage 1 volunteers possess",phr(totalskill1_all),"bits worth of skill"
+    index = np.where(vfrac1_all > 0.2)[0][0]
+    print "make_crowd_plots: ",phr(100*cfrac1_all[index]),"% of the skill possessed by the (20%) most skilled",int(Nv1_all*vfrac1_all[index]),"people"
+
+    # Experienced Stage 1 volunteers (normalize to all!):
+    cumulativeskill1 = np.cumsum(np.sort(final_skill)[::-1])
+    totalskill1 = cumulativeskill1[-1]
+    Nv1 = len(cumulativeskill1)
+    # Fraction of total skill (from experienced volunteers), fraction of (experienced) volunteers:
+    cfrac1 = cumulativeskill1 / totalskill1_all
+    vfrac1 = np.arange(Nv1) / float(Nv1)
+    plt.plot(vfrac1, cfrac1, '--b', linewidth=4, label='CFHTLS Stage 1: Experienced Volunteers')
+    print "make_crowd_plots: ",Nv1,"experienced stage 1 volunteers possess",phr(totalskill1),"bits worth of skill"
+    index = np.where(vfrac1 > 0.2)[0][0]
+    print "make_crowd_plots: ",phr(100*cfrac1[index]),"% of the skill possessed by the (20%) most skilled",int(Nv1*vfrac1[index]),"people"
+
+    # All Stage 2 volunteers:
+    cumulativeskill2_all = np.cumsum(np.sort(final_skill_all2)[::-1])
+    totalskill2_all = cumulativeskill2_all[-1]
+    Nv2_all = len(cumulativeskill2_all)
+    # Fraction of total skill, fraction of volunteers:
+    cfrac2_all = cumulativeskill2_all / totalskill2_all
+    vfrac2_all = np.arange(Nv2_all) / float(Nv2_all)
+    plt.plot(vfrac2_all, cfrac2_all, '#FF8000', linewidth=4, label='CFHTLS Stage 2: All Volunteers')
+    print "make_crowd_plots: ",Nv2_all,"stage 2 volunteers possess",phr(totalskill2_all),"bits worth of skill"
+    index = np.where(vfrac2_all > 0.2)[0][0]
+    print "make_crowd_plots: ",phr(100*cfrac2_all[index]),"% of the skill possessed by the (20%) most skilled",int(Nv2_all*vfrac2_all[index]),"people"
+
+    plt.xlabel('Fraction of Volunteers')
+    plt.ylabel('Fraction of Total Skill')
+    plt.xlim(0.0, 0.21)
+    plt.ylim(0.0, 1.0)
+    plt.legend(loc='upper left')
+    pngfile = output_directory+'crowd_skill_cumul.png'
+    plt.savefig(pngfile, bbox_inches='tight')
+    print "make_crowd_plots: cumulative skill plot saved to "+pngfile
 
 
     # ------------------------------------------------------------------

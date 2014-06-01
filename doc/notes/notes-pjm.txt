@@ -4978,6 +4978,16 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # SWAP: read an old bureau of 1964 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
 # make_crowd_plots: stage 1, 2 agent numbers:  36985 1964
 # make_crowd_plots:  783  volunteers stayed on for Stage 2 from Stage 1
+
+# make_crowd_plots: mean stage 1 volunteer effort =  259.2
+# make_crowd_plots: mean stage 1 volunteer experience =  28.9
+# make_crowd_plots: mean stage 1 volunteer contribution =  34.3 bits
+# make_crowd_plots: mean stage 1 volunteer skill =  0.04 bits
+# make_crowd_plots: mean stage 2 volunteer effort =  81.0
+# make_crowd_plots: mean stage 2 volunteer experience =  33.5
+# make_crowd_plots: mean stage 2 volunteer contribution =  11.1 bits
+# make_crowd_plots: mean stage 2 volunteer skill =  0.05 bits
+
 # make_crowd_plots:  36985 stage 1 volunteers contributed 1269574.7 bits
 # make_crowd_plots:  1.0 % of the volunteers - 374 people - contributed 90% of the information at Stage 1
 # make_crowd_plots: total amount of information generated at stage 1 =  61032.7 bits
@@ -4987,8 +4997,19 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots:  7.2 % of the volunteers - 141 people - contributed 90% of the information at Stage 2
 # make_crowd_plots: total amount of information generated at stage 2 =  1641.9 bits
 # make_crowd_plots: cumulative contribution plot saved to ./crowd_contrib_cumul.png
+
+# make_crowd_plots:  36985 stage 1 volunteers possess 1472.1 bits worth of skill
+# make_crowd_plots:  79.2 % of the skill possessed by the (20%) most skilled 7397 people
+# make_crowd_plots:  9119 experienced stage 1 volunteers possess 1115.7 bits worth of skill
+# make_crowd_plots:  43.1 % of the skill possessed by the (20%) most skilled 1824 people
+# make_crowd_plots:  1964 stage 2 volunteers possess 102.4 bits worth of skill
+# make_crowd_plots:  77.0 % of the skill possessed by the (20%) most skilled 393 people
+# make_crowd_plots: cumulative skill plot saved to ./crowd_skill_cumul.png
+
 # make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
+
 # make_crowd_plots: corner plot saved to ./all_skill_contribution_experience_education.png
+
 # make_crowd_plots: total contribution in Stage 2 was 21895.8 bits by 1964 volunteers
 # make_crowd_plots:  783 stage 1 veteran users ( 39.0 % of the total) made 94.0 % of the contribution
 # make_crowd_plots: the average stage 1 veteran had skill, contribution, effort =  0.10 26.3 166

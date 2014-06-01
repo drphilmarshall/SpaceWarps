@@ -149,10 +149,10 @@ class MongoDB(object):
         # Pull out the annotations and get the stage the classification was made at:
         annotations = classification['annotations']
         
-        stage = 1
+        classification_stage = 1
         for annotation in annotations:
             if annotation.has_key('stage'):
-                stage = annotation['stage']
+                classification_stage = annotation['stage']
         
         # Also get the survey name!
         project = "CFHTLS"
@@ -163,10 +163,10 @@ class MongoDB(object):
         # Check project: ignore this classification by returning None 
         # if classification is from a different project:
         if project != survey:
-            # print "Fail! A classification from "+project+" ( != "+survey+" ), stage = ",stage
+            # print "Fail! A classification from "+project+" ( != "+survey+" ), stage = ",classification_stage
             return None
         # else:
-            # Success! A classification from "+project+" ( = "+survey+" ), stage = ",stage
+            # Success! A classification from "+project+" ( = "+survey+" ), stage = ",classification_stage
         
         # Now pull the subject itself from the subject table:
         subject = self.subjects.find_one({'_id': ID},timeout=False)
@@ -178,22 +178,26 @@ class MongoDB(object):
             # Subject is tutorial and has no group id:
             return None
         
-        metadata = subject['metadata']        
+        subject_metadata = subject['metadata']        
         
-        # Check stage:
-        if metadata.has_key('stage2'):
-            if stage == 1: 
-                # This happens when the data is uploaded, but the site has
-                # not been taken down... Need to ignore these classifications!
-                # print "WARNING: classification labelled stage 1, while subject is stage 2!"
-                return None
+        # Check subject stage:
+        # if subject_metadata.has_key('stage2'):
+        #     if classification_stage == 1: 
+        #         # This happens when the data is uploaded, but the site has
+        #         # not been taken down... Need to ignore these classifications!
+        #         # print "WARNING: classification labelled stage 1, while subject is stage 2!"
+        #         return None
+        
+        # PJM: The above code causes a bug when SWAP is re-run on stage 1 later on!
+        # Commented out, and moved to using timestamps rigorously to delineate 
+        # stage 1 and stage 2, as well as checking classification stage, that is.
        
         
         # What kind of subject was it? Training or test? A sim or a dud?
         kind = ''
         if str(groupId) == trainingGroup:
             category = 'training'
-            things = metadata['training']
+            things = subject_metadata['training']
             # things is either a list of dictionaries, or in beta, a 
             # single dictionary:
             if type(things) == list:
@@ -271,7 +275,7 @@ class MongoDB(object):
         # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
         
         # Check we got all 10 items:            
-        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(stage)
+        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(classification_stage)
         if len(items) != 10: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]

@@ -243,14 +243,14 @@ def SWAP(argv):
         if vb: print "#"+str(count+1)+". items = ",items
         if items is None:
             continue # Tutorial subjects fail, as do stage/project mismatches!
-        tstring,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
+        tstring,Name,ID,ZooID,category,kind,X,Y,location,classification_stage = items
         t = datetime.datetime.strptime(tstring, '%Y-%m-%d_%H:%M:%S')
 
         # If the stage of this classification does not match the stage we are
         # on, skip to the next one!
-        if thisstage != stage:
+        if classification_stage != stage:
             if vb:
-                print "Found classification from different stage: ",thisstage," cf. ",stage,", items = ",items
+                print "Found classification from different stage: ",classification_stage," cf. ",stage,", items = ",items
                 print " "
             continue
         else:

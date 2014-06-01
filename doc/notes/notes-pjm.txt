@@ -4859,6 +4859,8 @@ goto CFHTLS_STAGE1
 
 # Results:
 
+# FRIDAY - IGNORING ALL STAGE 2 SUBJECTS!
+
 # SWAP: updating all subjects classified between the_beginning
 # SWAP: and 2013-12-10_16:47:00
 # SWAP: saving retiree subject Zooniverse IDs...
@@ -4898,6 +4900,16 @@ goto CFHTLS_STAGE1
 #    Lens purity:                  0.3%
 #    FP contamination:             99.7%
 #    Lenses missed (FN rate):      6.6%
+
+
+# SATURDAY - NOW INCLUDING ALL STAGE 2 SUBJECTS!
+
+
+
+
+
+
+
 
 
 # And now stage 2. Try running in parallel?!

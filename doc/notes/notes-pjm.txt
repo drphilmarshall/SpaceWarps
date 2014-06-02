@@ -4913,6 +4913,9 @@ goto CFHTLS_STAGE2
 
 # Results:
 
+# REPLACE THE FOLLOWING ON MONDAY MORNING!
+
+
 # SWAP: updating all subjects classified between 2013-12-10_13:29:41
 # SWAP: and 2014-01-06_23:59:59
 # SWAP: saving retiree subject Zooniverse IDs...
@@ -4962,6 +4965,11 @@ SWAPSHOP.csh -s CFHTLS
 
 cd $SWAP_DIR/workspace/CFHTLS/stage2
 SWAPSHOP.csh -s CFHTLS --stage2 
+
+# 2014-06-01 (Sunday) 23:14 PDT
+
+# Re-running stage 2 so that it agrees with Anu's run - with random state
+# fixed. Number about to change again...
 
 # ======================================================================
 # 2014-05-30 (Friday) 17:50 PDT

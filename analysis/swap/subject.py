@@ -102,7 +102,9 @@ class Subject(object):
         self.location = location
 
         self.testhistory = {'Name': np.array([]),
-                            'ItWas': np.array([], dtype=int)}
+                            'ItWas': np.array([], dtype=int),
+                            'At_X': np.array([]),
+                            'At_Y': np.array([])}
 
         return None
 
@@ -119,7 +121,7 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,ignore=0,haste=False):
+    def was_described(self,by=None,as_being=None,at_time=None,ignore=0,haste=False,at_x=-1,at_y=-1):
 
         # Update agent:
         by.N += 1
@@ -227,6 +229,10 @@ class Subject(object):
                                                      by.name)
                 self.testhistory['ItWas'] = np.append(self.testhistory['ItWas'],
                                                       as_being_number)
+                self.testhistory['At_X'] = np.append(self.testhistory['At_X'],
+                                                     (at_x))
+                self.testhistory['At_Y'] = np.append(self.testhistory['At_Y'],
+                                                     (at_y))
 
 
             else:

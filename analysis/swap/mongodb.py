@@ -232,9 +232,18 @@ class MongoDB(object):
 
         N_markers = 0
         simFound = False
+        # CPD 31.5.14: added annotation values
+        annotation_x = -1
+        annotation_y = -1
         for annotation in annotations:
             if annotation.has_key('x'): 
                 N_markers += 1
+                annotation_x = annotation['x']
+                annotation_y = annotation['y']
+                if str(annotation_x) == '':
+                    annotation_x = -1
+                    annotation_y = -1
+
         
         # Detect whether sim was found or not:
         if kind == 'sim':
@@ -272,8 +281,8 @@ class MongoDB(object):
         # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
         
         # Check we got all 10 items:            
-        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(stage)
-        if len(items) != 10: print "MongoDB: digest failed: ",items[:] 
+        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(stage),str(annotation_x),str(annotation_y)
+        if len(items) != 12: print "MongoDB: digest failed: ",items[:] 
                          
         return items[:]
 

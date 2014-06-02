@@ -232,7 +232,11 @@ def SWAP(argv):
             continue # Tutorial subjects fail, as do stage/project mismatches!
         # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
         # X, Y: result,truth (LENS,NOT,UNKNOWN)
-        t,Name,ID,ZooID,category,kind,X,Y,location,thisstage = items
+        # cpd 31.5.14: added annotation_x, annotation_y : locations of clicks
+        t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,at_x,at_y = items
+
+        at_x = np.float(at_x)
+        at_y = np.float(at_y)
 
         # If the stage of this classification does not match the stage we are
         # on, skip to the next one!
@@ -259,7 +263,7 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the
         # classifier. We send that classifier's agent to the subject
         # to do this.
-        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste,at_x=at_x,at_y=at_y)
 
         # Update the agent's confusion matrix, based on what it heard:
         # if learning == 'supervised':

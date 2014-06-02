@@ -354,8 +354,10 @@ def make_crowd_plots(argv):
     plt.ylim(-0.02,0.8)
     plt.xlabel('Early Skill, $\langle I \\rangle_{j<10}$ / bits')
     plt.ylabel('Final Skill, $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
-    size = 400.0
-    plt.scatter(early_skill,final_skill,s=size,color='blue',alpha=0.05)
+    # Point size prop to contribution!
+    # size = 400.0
+    size = 20 + 0.01*contribution
+    plt.scatter(early_skill,final_skill,s=size,color='blue',alpha=0.4)
     plt.plot((0.1, 0.1), (0.05, 0.8),color='black',ls='--')
     plt.plot((0.1, 0.25), (0.05, 0.05),color='black',ls='--')
     pngfile = output_directory+'early_vs_final_skill.png'

@@ -4913,30 +4913,27 @@ goto CFHTLS_STAGE2
 
 # Results:
 
-# REPLACE THE FOLLOWING ON MONDAY MORNING!
-
-
 # SWAP: updating all subjects classified between 2013-12-10_13:29:41
 # SWAP: and 2014-01-06_23:59:59
 # SWAP: saving retiree subject Zooniverse IDs...
-# SWAP: 2288 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_retire_these.txt
+# SWAP: 2289 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_retire_these.txt
 # SWAP: saving lens candidates...
-# SWAP: 91 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_candidates.txt
+# SWAP: 90 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidates.txt
 # SWAP: saving true positives...
-# SWAP: 119 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_training_true_positives.txt
+# SWAP: 119 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_true_positives.txt
 # SWAP: saving false positives...
-# SWAP: 1 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_training_false_positives.txt
+# SWAP: 1 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_positives.txt
 # SWAP: saving false negatives...
-# SWAP: 14 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_training_false_negatives.txt
+# SWAP: 14 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_negatives.txt
 # SWAP: saving catalog of high probability subjects...
 # SWAP: From 4032 subjects classified,
-# SWAP: 1391 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_candidate_catalog.txt
+# SWAP: 1390 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidate_catalog.txt
 # SWAP: saving catalog of high probability subjects...
 # SWAP: From 4032 subjects classified,
-# SWAP: 138 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_sim_catalog.txt
+# SWAP: 138 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt
 # SWAP: saving catalog of high probability subjects...
 # SWAP: From 4032 subjects classified,
-# SWAP: 20 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_dud_catalog.txt
+# SWAP: 18 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt
 
 # Report says:
 #   Number of classifications:    224745
@@ -4947,13 +4944,13 @@ goto CFHTLS_STAGE2
 #   Number of duds:               201
 #   Mean test classns/classifier: 81.0
 #   Mean classns/test subject:    43.2
-#   Test subject retirements:     2288
+#   Test subject retirements:     2289
 #   Mean classns/retirement:      47.0
-#   Test subject rejections:      2288
-#   Test subject identifications: 91
+#   Test subject rejections:      2289
+#   Test subject identifications: 90
 #   Lens completeness:            78.3%
 #   Lens purity:                  10.0%
-#   FP contamination:             90.0%
+#   FP contamination:             91.0%
 #   Lenses missed (FN rate):      9.2%
 
 
@@ -4984,16 +4981,16 @@ set stage2bureau = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
 make_crowd_plots.py $stage1bureau $stage2bureau
 
 # Seem to work OK: tweaked labels etc, now write out numbers 
-# Stage 1 analysis is now done! Final numbers:
+# Stage 1 and 2 analysis is now done! Final numbers:
 
 # make_crowd_plots: illustrating behaviour captured in bureau files: 
 # make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
 # make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
 # SWAP: read an old bureau of 36929 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
 # SWAP: read an old bureau of 1964 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
-# 
 # make_crowd_plots: stage 1, 2 agent numbers:  36929 1964
 # make_crowd_plots:  774  volunteers stayed on for Stage 2 from Stage 1
+# 
 # make_crowd_plots: mean stage 1 volunteer effort =  262.8
 # make_crowd_plots: mean stage 1 volunteer experience =  28.8
 # make_crowd_plots: mean stage 1 volunteer contribution =  35.0 bits
@@ -5002,7 +4999,7 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots: mean stage 2 volunteer experience =  33.5
 # make_crowd_plots: mean stage 2 volunteer contribution =  11.1 bits
 # make_crowd_plots: mean stage 2 volunteer skill =  0.05 bits
-
+# 
 # make_crowd_plots:  36929 stage 1 volunteers contributed 1291997.4 bits
 # make_crowd_plots:  1.0 % of the volunteers - 375 people - contributed 90% of the information at Stage 1
 # make_crowd_plots: total amount of information generated at stage 1 =  91110.7 bits
@@ -5010,7 +5007,7 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots:  4.1 % of the experienced volunteers - 375 people - contributed 90% of the information at Stage 1
 # make_crowd_plots:  1964 stage 2 volunteers contributed 21895.8 bits
 # make_crowd_plots:  7.2 % of the volunteers - 141 people - contributed 90% of the information at Stage 2
-# make_crowd_plots: total amount of information generated at stage 2 =  1641.9 bits
+# make_crowd_plots: total amount of information generated at stage 2 =  1640.4 bits
 # make_crowd_plots: cumulative contribution plot saved to ./crowd_contrib_cumul.png
 # 
 # make_crowd_plots:  36929 stage 1 volunteers possess 1469.9 bits worth of skill
@@ -5035,7 +5032,6 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
 # 
 # make_crowd_plots: all done!
-
 
 
 # ======================================================================

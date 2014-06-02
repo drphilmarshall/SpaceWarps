@@ -595,7 +595,7 @@ agents, and plot the distributions of their logarithms in
 \begin{description}
 %
 \item{\noindent\bf ``Effort:''} The number of test images, $\effort$, classified by a
-volunteer. In stage 1, the mean effort per agent was 259; in the shorter stage
+volunteer. In stage 1, the mean effort per agent was 263; in the shorter stage
 2 it was 81.
 %
 \item{\noindent\bf ``Experience:''} The number of training images, $\experience$,
@@ -666,14 +666,14 @@ distributions of logarithmic effort, skill, and contribution. To better
 quantify the contributions made by the volunteers, we show their cumulative
 distribution on a linear scale in \Fref{fig:crowd:cumulplot}. This plot shows
 clearly the importance of the hardest-working, most active volunteers: at
-stage 1,  1.0\% of the volunteers -- 374 people -- made 90\% of the
+stage 1,  1.0\% of the volunteers -- 375 people -- made 90\% of the
 contribution.  At stage 2, where it was not possible to make as
 many classifications before running out of subjects, 7.2\% of the volunteers
 -- 141 people -- made 90\% of the contribution. 
 
 However, it is not the case that only these small groups were capable of
-making this large contribution: 9119 volunteers were ``experienced'' in that
-they had all classified at least 10 training images; the 374 highest
+making this large contribution: 9097 volunteers were ``experienced'' in that
+they had all classified at least 10 training images; the 375 highest
 contributing volunteers make up just 4\% of this experienced volunteer pool.
 The cumulative distribution of agent skill is shown in
 \Fref{fig:crowd:cumulskillplot}: these distributions are significantly broader
@@ -681,7 +681,7 @@ than the corresponding distributions of agent contribution in
 \Fref{fig:crowd:cumulplot}. The most skilled 20\% of agents possess only  79\%
 of the skill at stage 1, and 77\% at stage 2. The inexperienced volunteers
 also possess a significant fraction of the skill: the most skillful 20\% of
-experienced volunteers (1824 people)  possess just 43\% of the total skill.
+experienced volunteers (1820 people)  possess just 43\% of the total skill.
 The level of contribution made at \sw by experienced volunteers is largely a
 matter of choice (or perhaps, availability of time!).
 
@@ -710,7 +710,7 @@ are drawn at the mean values for each sample.}
 
 We now look at the transition between stage 1 and stage 2 in more detail. Of
 the 1964 volunteers who took part in the stage 2 classification round, only
-783 were veterans from stage 1. However, these volunteers showed significantly
+774 were veterans from stage 1. However, these volunteers showed significantly
 higher skill levels than the new users, and also made more classifications
 (and hence made greater contributions. This is illustrated in  
 \Fref{fig:crowd:stage1vstage2}. In this figure, point size is proportional to
@@ -753,7 +753,7 @@ contribution is therefore a measure of the stage's inefficiency. We find our
 inefficiency (by dividing column 2 by column 3) to be 33\% and 17\% in stage 1
 and 2 respectively. In stage 1, this inefficiency is due to the daily
 processing: we were not able to retire subjects fast enough, and so they,
-remained in the system, being over-classified. Only 3644943 classifications
+remained in the system, being over-classified. Only 3705704 classifications
 were needed to retire all the subjects: the ratio of this to the total number
 made is 34\%. (The remaining 1\% is due to not all subjects being classified
 to 1 or 0 probability.) At stage 2, we did not retire any subjects at all; the
@@ -763,7 +763,7 @@ appreciate what they had found together!
 The total skill of the crowd, computed by summing the skill of all the agents,
 is, similarly, a measure of the effective crowd size: a crowd of perfect
 classifiers would be this size. The stage 1 crowd was equivalent to a team of
-1472.1 perfect classifiers; the stage 2 crowd was equivalent to a team of
+1469.9 perfect classifiers; the stage 2 crowd was equivalent to a team of
 102.4 perfect classifiers. 
 
 The total information generated during the survey is harder to interpret,
@@ -776,9 +776,9 @@ inefficiency to get a very rough estimate for the effective number of
 detections corresponding to the crowd's contribution. With a prior probability
 of $2\times10^{-4}$, it takes 11.6 bits to make a detection; the effective
 number of detections contributed by the stage 1 and stage 2 volunteers is then
-1736 and 24 respectively. These figures lie roughly between the numbers of
-detections and non-rejections given in column 7 of
-\Tref{tab:crowd:contributions}. The uncertainty in the interpretation of the
+2670 and 24 respectively. These figures are close to the numbers of detections
+given in column 7 of \Tref{tab:crowd:contributions}. 
+The uncertainty in the interpretation of the
 information generated provides further justification for our focus on the
 expected information gain as a measure of volunteer contribution.
 
@@ -792,8 +792,8 @@ expected information gain as a measure of volunteer contribution.
   \hline {Stage} & Subjects & Contribution                          & Agents & Skill      & Classifications          & Candidates & Information \\
                  & $\Ns$    & $\sum_k^{\Nv} \contribution_k$ (bits) & $\Nv$  & $\sum_k^{\Nv} \skill_k$ (bits) & $\sum_k^{\Nv} \thiseffort$ & $\Ncands$  & $\sum_j^{\Ns}\sum_k^{\Nv} \information_{j,k}$ (bits) \\
   \hline 
-            1    & $423683$ & $1269574.7$ & $36985$ & $1472.1$ & $10654285$ & $43 (3225)$ & $61032.7$ \\
-            2    & $3679$   &   $21895.8$ &  $1964$ &  $102.4$ &   $224745$ & $91 (1391)$ &  $1641.9$ \\
+            1    & $427064$ & $1291997.4$ & $36929$ & $1469.9$ & $10768759$ & $3367$ & $91110.7$ \\
+            2    & $3679$   &   $21895.8$ &  $1964$ &  $102.4$ &   $224745$ &   $91$ &  $1641.9$ \\
   \hline \hline
 \end{tabular}
 \medskip\\

@@ -4906,10 +4906,48 @@ goto CFHTLS_STAGE1
 
 # Also, set stage 1 end time to same as hasty (as used in defining stage 2 sample!)
 # 2013-12-08_10:20:56
+# ... and merged in Surhud's pull request, so results should be reproducible.
 
 
+# SWAP: updating all subjects classified between the_beginning
+# SWAP: and 2013-12-08_10:20:56
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 420474 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3367 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5306 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 4 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 377 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 6590 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5335 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
 
-
+# Report says:
+#    Number of classifications:    10768759
+#    Number of classns used:       3705704
+#    Number of classifiers:        36929
+#    Number of test subjects:      427064
+#    Number of sims:               5712
+#    Number of duds:               4509
+#    Mean test classns/classifier: 262.8
+#    Mean classns/test subject:    8.4
+#    Test subject retirements:     420474
+#    Mean classns/retirement:      8.2
+#    Test subject rejections:      420474
+#    Test subject identifications: 3367
+#    Lens completeness:            92.9%
+#    Lens purity:                  0.1%
+#    FP contamination:             99.9%
+#    Lenses missed (FN rate):      6.6%
 
 
 
@@ -4987,50 +5025,99 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots: illustrating behaviour captured in bureau files: 
 # make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
 # make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
-# SWAP: read an old bureau of 36985 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
+# SWAP: read an old bureau of 36929 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
 # SWAP: read an old bureau of 1964 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
-# make_crowd_plots: stage 1, 2 agent numbers:  36985 1964
-# make_crowd_plots:  783  volunteers stayed on for Stage 2 from Stage 1
-
-# make_crowd_plots: mean stage 1 volunteer effort =  259.2
-# make_crowd_plots: mean stage 1 volunteer experience =  28.9
-# make_crowd_plots: mean stage 1 volunteer contribution =  34.3 bits
+# 
+# make_crowd_plots: stage 1, 2 agent numbers:  36929 1964
+# make_crowd_plots:  774  volunteers stayed on for Stage 2 from Stage 1
+# make_crowd_plots: mean stage 1 volunteer effort =  262.8
+# make_crowd_plots: mean stage 1 volunteer experience =  28.8
+# make_crowd_plots: mean stage 1 volunteer contribution =  35.0 bits
 # make_crowd_plots: mean stage 1 volunteer skill =  0.04 bits
 # make_crowd_plots: mean stage 2 volunteer effort =  81.0
 # make_crowd_plots: mean stage 2 volunteer experience =  33.5
 # make_crowd_plots: mean stage 2 volunteer contribution =  11.1 bits
 # make_crowd_plots: mean stage 2 volunteer skill =  0.05 bits
 
-# make_crowd_plots:  36985 stage 1 volunteers contributed 1269574.7 bits
-# make_crowd_plots:  1.0 % of the volunteers - 374 people - contributed 90% of the information at Stage 1
-# make_crowd_plots: total amount of information generated at stage 1 =  61032.7 bits
-# make_crowd_plots:  9119 experienced stage 1 volunteers contributed 1268069.5 bits
-# make_crowd_plots:  4.1 % of the experienced volunteers - 374 people - contributed 90% of the information at Stage 1
+# make_crowd_plots:  36929 stage 1 volunteers contributed 1291997.4 bits
+# make_crowd_plots:  1.0 % of the volunteers - 375 people - contributed 90% of the information at Stage 1
+# make_crowd_plots: total amount of information generated at stage 1 =  91110.7 bits
+# make_crowd_plots:  9097 experienced stage 1 volunteers contributed 1290468.4 bits
+# make_crowd_plots:  4.1 % of the experienced volunteers - 375 people - contributed 90% of the information at Stage 1
 # make_crowd_plots:  1964 stage 2 volunteers contributed 21895.8 bits
 # make_crowd_plots:  7.2 % of the volunteers - 141 people - contributed 90% of the information at Stage 2
 # make_crowd_plots: total amount of information generated at stage 2 =  1641.9 bits
 # make_crowd_plots: cumulative contribution plot saved to ./crowd_contrib_cumul.png
-
-# make_crowd_plots:  36985 stage 1 volunteers possess 1472.1 bits worth of skill
-# make_crowd_plots:  79.2 % of the skill possessed by the (20%) most skilled 7397 people
-# make_crowd_plots:  9119 experienced stage 1 volunteers possess 1115.7 bits worth of skill
-# make_crowd_plots:  43.1 % of the skill possessed by the (20%) most skilled 1824 people
+# 
+# make_crowd_plots:  36929 stage 1 volunteers possess 1469.9 bits worth of skill
+# make_crowd_plots:  79.2 % of the skill possessed by the (20%) most skilled 7386 people
+# make_crowd_plots:  9097 experienced stage 1 volunteers possess 1113.9 bits worth of skill
+# make_crowd_plots:  43.1 % of the skill possessed by the (20%) most skilled 1820 people
 # make_crowd_plots:  1964 stage 2 volunteers possess 102.4 bits worth of skill
 # make_crowd_plots:  77.0 % of the skill possessed by the (20%) most skilled 393 people
 # make_crowd_plots: cumulative skill plot saved to ./crowd_skill_cumul.png
-
+# 
 # make_crowd_plots: the 649 - 7.0 % - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of 0.22
-# make_crowd_plots: with 97.0 % of them remaining at skill 0.05 or higher# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
+# make_crowd_plots: with 97.0 % of them remaining at skill 0.05 or higher
+# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
+# 
 # make_crowd_plots: corner plot saved to ./all_skill_contribution_experience_education.png
-
+# 
 # make_crowd_plots: total contribution in Stage 2 was 21895.8 bits by 1964 volunteers
-# make_crowd_plots:  783 stage 1 veteran users ( 39.0 % of the total) made 94.0 % of the contribution
-# make_crowd_plots: the average stage 1 veteran had skill, contribution, effort =  0.10 26.3 166
-# make_crowd_plots:  1181 new users ( 60.0 % of the total) made 6.0 % of the contribution
+# make_crowd_plots:  774 stage 1 veteran users ( 39.0 % of the total) made 93.8 % of the contribution
+# make_crowd_plots: the average stage 1 veteran had skill, contribution, effort =  0.10 26.5 167
+# make_crowd_plots:  1190 new users ( 60.0 % of the total) made 6.2 % of the contribution
 # make_crowd_plots: the average stage 2 newbie had skill, contribution, effort =  0.02 1.1 24
 # make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
+# 
 # make_crowd_plots: all done!
 
+
+
+# ======================================================================
+# 2014-06-01 (Sunday) 08:25 PDT
+
+# Do some tidying up, to reclaim disk space:
+
+mkdir -p $SWAP_DIR/projects/CFHTLS/stage1/results
+
+mv stage1_results/* $SWAP_DIR/projects/CFHTLS/stage1/results/
+\rm -rf stage1_results/
+
+mkdir -p stage2/attic
+mv stage2_phil/* stage2_phil/.swap.cookie stage2/attic/
+\rm -rf stage2_phil
+
+mkdir -p stage1/attic
+mv allfuzzy fuzzy falsenegatives hasty knownlenses production talk stage1/attic/.
+
+cd stage1/attic/
+du -sch */*.pickle
+\rm allfuzzy/CFHTLS_bureau.pickle allfuzzy/CFHTLS_collection.pickle fuzzy/CFHTLS_bureau.pickle fuzzy/CFHTLS_collection.pickle production/CFHTLS_bureau.pickle production/CFHTLS_collection.pickle
+
+# OK - now, put results in projects/CFHTLS/stage?/results as we get them.
+# Restart stage 1 SWAPSHOP...
+
+# OK, do stage 1 candidates match those we actually injected into stage 2 interface?
+
+wc -l CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate*.txt \
+      attic/hasty/CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidate*.txt
+
+# Today's run:      
+#     6591 CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+#     3367 CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+
+# The stage 1 run we actually used:
+#     6310 attic/hasty/CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidate_catalog.txt
+#     3381 attic/hasty/CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidates.txt
+
+# Differences due to random seed? Have to use the old ones, I'm afraid.
+# Crowd analysis has to use new ones though. 
+
+# Add more classifications? By changing end time in update.config?
+
+# For now, rename "hasty" with "actual" and put in the stage1 workspace area
+# for Anu. Check in.
 
 # ======================================================================
 

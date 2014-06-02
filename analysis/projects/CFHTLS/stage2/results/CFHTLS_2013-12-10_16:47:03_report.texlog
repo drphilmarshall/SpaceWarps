@@ -3,7 +3,7 @@ This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011)
 entering extended mode
 
 (/Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
-TLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_report.tex
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_report.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
 rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
@@ -33,7 +33,7 @@ Package mathpple Warning: This package is to be regarded as obsolete.
 (/usr/local/texlive/2011/texmf-dist/tex/latex/pdftex-def/pdftex.def
 (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
 (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ltxcmds.sty))))
-No file CFHTLS_2014-01-08_21:05:53_report.aux.
+No file CFHTLS_2013-12-10_16:47:03_report.aux.
 (/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1phv.fd)
 (/usr/local/texlive/2011/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
@@ -58,37 +58,37 @@ Underfull \hbox (badness 10000) in paragraph at lines 16--44
 []
 
 </Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
-TLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_trajectories.png, id=1, 361.
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_trajectories.png, id=1, 361.
 35pt x 578.16pt>
 <use /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2
-/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_trajectories.png>
+/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_trajectories.png>
 Overfull \hbox (6.42056pt too wide) in paragraph at lines 12--48
 []$[]$ $[]$ 
 
 </Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
-TLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_probabilities.png, id=3, 433
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_probabilities.png, id=3, 433
 .62pt x 433.62pt>
 <use /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2
-/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_probabilities.png>
+/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_probabilities.png>
 </Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
-TLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_histories.png, id=4, 433.62p
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_histories.png, id=4, 433.62p
 t x 361.35pt>
 <use /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2
-/CFHTLS_2014-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_histories.png>
+/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_histories.png>
 Overfull \hbox (17.62482pt too wide) in paragraph at lines 50--58
 []$[]$ 
 [1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map} </User
 s/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_20
-14-01-08_21:05:53/CFHTLS_2014-01-08_21:05:53_trajectories.png> </Users/pjm/publ
-ic_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_2
-1:05:53/CFHTLS_2014-01-08_21:05:53_probabilities.png> </Users/pjm/public_html/S
-paceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2014-01-08_21:05:53/C
-FHTLS_2014-01-08_21:05:53_histories.png>]
-(./CFHTLS_2014-01-08_21:05:53_report.aux) )
+13-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_trajectories.png> </Users/pjm/publ
+ic_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_1
+6:47:03/CFHTLS_2013-12-10_16:47:03_probabilities.png> </Users/pjm/public_html/S
+paceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/C
+FHTLS_2013-12-10_16:47:03_histories.png>]
+(./CFHTLS_2013-12-10_16:47:03_report.aux) )
 (see the transcript file for additional information){/usr/local/texlive/2011/te
 xmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2011/texmf-dist/fonts/
 type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/u
 rw/palatino/uplr8a.pfb>
-Output written on CFHTLS_2014-01-08_21:05:53_report.pdf (1 page, 1950185 bytes)
+Output written on CFHTLS_2013-12-10_16:47:03_report.pdf (1 page, 2063568 bytes)
 .
-Transcript written on CFHTLS_2014-01-08_21:05:53_report.log.
+Transcript written on CFHTLS_2013-12-10_16:47:03_report.log.

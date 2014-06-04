@@ -21,6 +21,8 @@
 #   -d --download     Download images of candidates, false +ves etc
 #   -2 --stage2       Run in Stage 2 mode (NB. no retirement)
 #   --no-analysis     Skip to downloads and animations.
+#   --seed            Set the random number seed, only works with startup, uses
+#                     default seed 7623 if none is provided
 #
 # OUTPUTS:
 #
@@ -45,6 +47,7 @@ set fast = 0
 set stage = 1
 set configfile = 'None'
 set noanalysis = 0
+set seed = 7623
 
 while ( $#argv > 0 )
    switch ($argv[1])
@@ -88,6 +91,11 @@ while ( $#argv > 0 )
    case --{survey}:        
       shift argv
       set survey = $argv[1]
+      shift argv
+      breaksw
+   case --{seed}:        
+      shift argv
+      set seed = $argv[1]
       shift argv
       breaksw
    case -t:        
@@ -162,6 +170,10 @@ if ($startup) then
                                        | sed s/STAGE/$stage/g > $configfile
     endif
     echo "SWAPSHOP: start-up configuration stored in $configfile"
+    # Generate the random state based on the seed 
+    set random_file = `cat $configfile | awk -F':' '{if($1=="random_file")print $2}'`
+    $SWAP_DIR/utils/generate_random_state.py $random_file $seed
+    echo "SWAPSHOP: Random seed state stored in $random_file"
 else
     set configfile = 'update.config'
     if (! -e $configfile) then
@@ -170,6 +182,7 @@ else
     endif
     echo "SWAPSHOP: continuing using configuration stored in $configfile"
 endif
+
 
 # Save time by only reporting at the end:
 if ($fast) then
@@ -232,7 +245,10 @@ while ($more_to_do)
         # That means replacing the new start time in update.config
         # with the actual start time of the latest run:
 
-        set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? | tail -1`
+        set latest = `\ls -dtr ${survey}_????-??-??_??:??:?? |& tail -1`
+        set fail = `echo $latest | grep 'No match' | wc -l`
+        if ($fail) goto FINISH
+        
         set now = `echo $latest | sed s/$survey//g | cut -c2-50`
         
         set tomorrow = `grep 'start:' $configfile | \

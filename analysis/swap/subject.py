@@ -8,7 +8,7 @@ import pylab as plt
 # Every subject starts with the following probability of being a LENS:
 prior = 2e-4
 
-# Every subject starts 50 trajectories. This will slow down the code, 
+# Every subject starts 50 trajectories. This will slow down the code,
 # but its ok, we can always parallelize
 Ntrajectory=50
 # This should really be a user-supplied constant, in the configuration.
@@ -26,46 +26,46 @@ class Subject(object):
     COMMENTS
         Each subject knows whether it is a test or training subject, and
         it knows its truth (which is different according to category).
-        Each subject (regardless of category) has a probability of 
+        Each subject (regardless of category) has a probability of
         being a LENS, and this is tracked along a trajectory.
-        
+
         Subject state:
           * active    Still being classified
           * inactive  No longer being classified
         Training subjects are always active. Retired = inactive.
 
-        Subject status: 
+        Subject status:
           * detected  P > detection_threshold
           * rejected  P < rejection_threshold
           * undecided otherwise
-        
+
         Subject categories:
           * test      A subject from the test (random, survey) set
           * training  A training subject, either a sim or a dud
-        
+
         Subject kinds:
           * test      A subject from the test (random, survey) set
           * sim       A training subject containing a simulated lens
           * dud       A training subject known not to contain any lenses
-        
+
         Subject truths:
           * LENS      It actually is a LENS (sim)
           * NOT       It actually is NOT a LENS (dud)
           * UNKNOWN   It could be either (test)
 
-        
+
     INITIALISATION
         ID
-    
+
     METHODS
-        Subject.described(by=X,as=Y)     Calculate Pr(LENS|d) given 
+        Subject.described(by=X,as=Y)     Calculate Pr(LENS|d) given
                                          classifier X's assessment Y
         Subject.plot_trajectory(axes)
-        
+
     BUGS
 
     AUTHORS
-      This file is part of the Space Warps project, and is distributed 
+      This file is part of the Space Warps project, and is distributed
       under the GPL v2 by the Space Warps Science Team.
       http://spacewarps.org/
 
@@ -89,18 +89,18 @@ class Subject(object):
 
         self.retirement_time = 'not yet'
         self.retirement_age = 0.0
-            
+
         self.probability = np.zeros(Ntrajectory)+prior
         self.mean_probability = prior
         self.median_probability = prior
         self.trajectory = np.zeros(Ntrajectory)+self.probability;
         self.exposure = 0
-        
+
         self.detection_threshold = thresholds['detection']
         self.rejection_threshold = thresholds['rejection']
-        
+
         self.location = location
-                
+
         return None
 
 # ----------------------------------------------------------------------
@@ -110,8 +110,8 @@ class Subject(object):
         mean_logp =sum(np.log(self.probability))/Ntrajectory
         error_logp=sum((np.log(self.probability)-mean_logp)**2/Ntrajectory)
         return 'individual (%s) subject, ID %s, Pr(LENS|d) = %.2f \pm %.2f' % \
-               (self.kind,self.ID,exp(mean_logp),exp(mean_logp)*error_logp)       
-        
+               (self.kind,self.ID,exp(mean_logp),exp(mean_logp)*error_logp)
+
 # ----------------------------------------------------------------------
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
@@ -121,7 +121,7 @@ class Subject(object):
         # Rename some variables:
         a_few_at_the_start = while_ignoring
 
-        # Update agent: 
+        # Update agent:
         by.N += 1
 
         if by==None or as_being==None:
@@ -132,24 +132,24 @@ class Subject(object):
         # should not be being classified:  this can happen if the
         # subject has not been cleanly retired  in the Zooniverse
         # database. However, this leads to a huge  stream of warnings,
-        # so best not do that... Note also that training subjects 
+        # so best not do that... Note also that training subjects
         # cannot go inactive - but we need to ignore classifications of
-        # them after they cross threshold, for the training set to 
-        # be useful in giving us the selection function. What you see in 
+        # them after they cross threshold, for the training set to
+        # be useful in giving us the selection function. What you see in
         # the trajectory plot is the *status* of the training subjects,
         # not their *state*.
-        
+
         elif haste and (     self.state == 'inactive' \
                          or self.status == 'detected' \
                          or self.status == 'rejected' ):
-            
+
                 # print "SWAP: WARNING: subject "+self.ID+" is inactive, but appears to have been just classified"
                 pass
 
         else:
 
-        # Deal with active subjects. Ignore the classifier until they 
-        # have seen NT > a_few_at_the_start (ie they've had a 
+        # Deal with active subjects. Ignore the classifier until they
+        # have seen NT > a_few_at_the_start (ie they've had a
         # certain amount of training):
             
             if by.NT > a_few_at_the_start:
@@ -182,13 +182,13 @@ class Subject(object):
                 # Update median probability
                 self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
                 self.median_probability=np.sort(self.probability)[Ntrajectory/2]
-            
-                # Should we count it as a detection, or a rejection? 
+
+                # Should we count it as a detection, or a rejection?
                 # Only test subjects get de-activated:
 
                 if self.mean_probability < self.rejection_threshold:
                     self.status = 'rejected'
-                    if self.kind == 'test':  
+                    if self.kind == 'test':
                         self.state = 'inactive'
                         self.retirement_time = at_time
                         self.retirement_age = self.exposure
@@ -201,24 +201,29 @@ class Subject(object):
                         #   self.retirement_time = at_time
                         #   self.retirement_age = self.exposure
                         pass
-                        
+
                 else:
                     # Keep the subject alive! This code is only reached if
                     # we are not being hasty.
                     self.status = 'undecided'
-                    if self.kind == 'test':  
+                    if self.kind == 'test':
                         self.state = 'active'
                         self.retirement_time = 'not yet'
                         self.retirement_age = 0.0
 
-                # Update agent - training history is taken care of elsewhere: 
+                # Update agent - training history is taken care of elsewhere:
                 if self.kind == 'test':
-                     by.testhistory['ID'] = self.ID
-                     by.testhistory['I'] = by.contribution
 
+                     by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
+                     # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
+                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
+                     # by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
+                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
+                     by.contribution += by.skill
+                     
             else:
                 # Still advance exposure, even if by.NT <= ignore:
-                # it would be incorrect to calculate mean classns/retirement 
+                # it would be incorrect to calculate mean classns/retirement
                 # different from strict and alt-strict:
                 self.exposure += 1
 
@@ -228,7 +233,7 @@ class Subject(object):
 # Plot subject's trajectory, as an overlay on an existing plot:
 
     def plot_trajectory(self,axes):
-    
+
         plt.sca(axes[0])
         N = np.linspace(0, len(self.trajectory)/Ntrajectory+1, len(self.trajectory)/Ntrajectory, endpoint=True);
         N[0] = 0.5
@@ -242,19 +247,19 @@ class Subject(object):
             mdn_trajectory=np.append(mdn_trajectory,sorted_arr[int(0.50*Ntrajectory)]);
             sigma_trajectory_p=np.append(sigma_trajectory_p,sigma_p);
             sigma_trajectory_m=np.append(sigma_trajectory_m,sigma_m);
-        
+
         if self.kind == 'sim':
             colour = 'blue'
         elif self.kind == 'dud':
             colour = 'red'
         elif self.kind == 'test':
             colour = 'black'
-            
+
         if self.status == 'undecided':
             facecolour = colour
         else:
             facecolour = 'white'
-        
+
         plt.plot(mdn_trajectory,N,color=colour,alpha=0.1,linewidth=1.0, linestyle="-")
 
         NN = N[-1]
@@ -262,7 +267,5 @@ class Subject(object):
         plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
         plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
-                
-        return
 
-# ======================================================================
+        return

@@ -1,0 +1,248 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Space Warps CFHTLS Results Paper
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[useAMS,usenatbib,a4paper]{mn2e}
+%% letterpaper
+%% a4paper
+
+\voffset=-0.6in
+
+% Packages:
+\input psfig.sty
+\usepackage{xspace}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{amsmath}
+
+% Macros:
+\input{macros.tex}
+\input{addresses.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[\sw]
+{\SW: New Lens Candidates from the CFHT Legacy Survey}
+    
+\author[More et al.]{%
+  \input{sw-cfhtls-authors.tex}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+             
+\date{to be submitted to MNRAS}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2014}
+
+\maketitle           
+
+\label{firstpage}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract} 
+
+We present X new strong gravitational lens candidates found in the CFHT Legacy
+survey by the \sw collaboration. 
+
+\end{abstract}
+
+% Full list of options at http://www.journals.uchicago.edu/ApJ/instruct.key.html
+
+\begin{keywords}
+  gravitational lensing   --
+  methods: statistical    --
+  methods: citizen science
+\end{keywords}
+
+\setcounter{footnote}{1}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction}
+\label{sec:intro}
+
+
+In this paper, we ... try to answer the following questions:
+
+\begin{itemize}
+
+\item ...
+
+\item ...
+
+\item ...
+
+\end{itemize}
+
+This paper is organised as follows. In \Sref{sec:sw} we give a brief overview
+of the \sw system, focusing on the aspects most relevant to the interpretation
+of the results of this first lens search. In \Sref{sec:data} we introduce the
+CFHTLS imaging data. ... We discuss the implications of our results for future
+lens searches in \Sref{sec:discuss} and draw conclusions in
+\Sref{sec:conclude}.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\sw Overview}
+\label{sec:sw}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data}
+\label{sec:data}
+
+Definitions: training subjects and test subjects. Sims and duds.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{The CFHT Legacy Survey}
+\label{sec:data:CFHTLS}
+
+Describe survey. Refs. 
+
+Why this one? Good IQ, deep, colorful, homogeneous. Precursor to Stage III and
+IV imaging surveys, DES, KIDS, LSST etc. Already searched by robots: enables
+comparison of techniques. Lenses not yet found by robots, detectable by
+humans? 
+
+Blind search strategy.
+Preparation of data: divide survey into overlapping tiles. 
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Image Presentation}
+\label{sec:data:display}
+
+Presentation of images. Uniform scales, to build intuition and avoid rescales
+due to bright objects. Arcsinh stretch, to bring out low SB features. 
+Approximately optimized, how? Examples of images.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Known Lenses}
+\label{sec:data:knownlenses}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Results}
+\label{sec:results}
+
+Completeness and purity with regard to known lenses.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Stage 1 Classification}
+\label{sec:results:stage1}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Stage 2 Classification}
+\label{sec:results:stage2}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Comparison with ``Expert'' Classification}
+\label{sec:results:experts}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{New Lens Candidates}
+\label{sec:results:newlenses}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Discussion}
+\label{sec:discuss}
+
+Differences with robots: what types of lenses are found at \sw?
+
+Selection function. Missing system.
+
+Further work.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Conclusions}
+\label{sec:conclude}
+
+Summary of CFHTLS project.
+
+Crowd-sourced gravitational lens detection works, in terms of the
+classification of the CFHTLS image dataset as described here, in the following
+specific ways: 
+
+\begin{itemize} 
+
+\item Real (robotically-detected and expert-confirmed) lenses are
+recovered/missed at similar/comparable/different rates to the
+training set. 
+
+\item Completeness, purity of \sw sample to known lenses.
+
+\item Partial test of supervised vs unsupervised learning, comment.
+
+\item Which real lenses were missed? False negatives, what we conclude from
+that.
+
+\item We found a
+sample of new gravitational lens candidates with the following properties: ...
+
+\item An expert-graded sample of size N, divided among several types, compares
+as follows.
+
+\item The SW lenses are different from the robotically (RingFinder and
+ArcFinder) detected lenses, in the following ways.
+
+
+\end{itemize}
+
+Sum up, end.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%  ACKNOWLEDGMENTS
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section*{Acknowledgements}
+ 
+\input{acknowledgments.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  APPENDICES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \appendix
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MNRAS does not use bibtex, input .bbl file instead. 
+% Generate this in the makefile using bubble script in scriptutils:
+
+% bubble -f paper-lcr.tex references.bib 
+% \input{paper-lcr.bbl}
+
+\bibliographystyle{apj}
+\bibliography{references}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\label{lastpage}
+\bsp
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

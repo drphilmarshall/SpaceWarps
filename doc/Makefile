@@ -4,7 +4,11 @@ all: papers
 clean:
 	-rm -f *.aux *.log *.dvi *.blg *.out *.bbl sw-system.pdf
 
-papers: sw-system.pdf
+papers: system cfhtls
+
+system: sw-system.pdf
+
+cfhtls: sw-cfhtls.pdf
 
 # ----------------------------------------------------------------------------
 # Paper I:
@@ -26,5 +30,15 @@ sw-system.pdf: sw-system.tex macros.tex
 # 
 # sw-system.pdf: sw-system.dvi
 # 	\dvipdf -sPAPERSIZE=a4 sw-system.dvi
+
+# ----------------------------------------------------------------------------
+# Paper II:
+
+sw-cfhtls.pdf: sw-cfhtls.tex macros.tex
+	pdflatex sw-cfhtls.tex
+	pdflatex sw-cfhtls.tex
+	bibtex sw-cfhtls
+	pdflatex sw-cfhtls.tex
+	pdflatex sw-cfhtls.tex
 
 # ----------------------------------------------------------------------------

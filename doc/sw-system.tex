@@ -1,8 +1,8 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Space Warps I: Experiment Design
+% Space Warps System Paper
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[useAMS,usenatbib,a4paper]{mn2e}
 %% letterpaper
@@ -21,55 +21,57 @@
 \input{macros.tex}
 \input{addresses.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title[\sw I]
-{\SW: I. Crowd-sourcing the Discovery of Gravitational Lenses}
+\title[\sw]
+{\SW: Crowd-sourcing the Discovery of Gravitational Lenses}
     
 \author[Marshall et al.]{%
   \input{sw-system-authors.tex}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
              
 \date{to be submitted to MNRAS}
-\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2013}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2014}
 
 \maketitle           
 
 \label{firstpage}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract} 
 
 \sw is a web-based service that enables the discovery of strong gravitational
 lenses in wide-field imaging surveys by large numbers of people. Carefully
-produced color composite images are displayed to volunteers via a flexible
-interface, which records their estimates of the positions of candidate lensed
-features. Simulated lenses, and expert-classified non-lenses, are inserted
-into the stream at random intervals; this training set is used to give the
-volunteers feedback on their performance, and to estimate a
+produced color composite images are displayed to volunteers via a
+classification interface which records their estimates of the positions of
+candidate lensed features. Simulated lenses, and expert-classified non-lenses,
+are inserted into the image stream at random intervals; this training set is
+used to give the volunteers feedback on their performance, and to estimate a
 dynamically-updated probability for any given image to contain a lens. Low
-probability systems are retired from the site daily, concentrating the sample
-towards a set of candidates; these are then re-classified by the volunteers in
-a second  refinement stage. Analyzing the classification of the training set,
-we predict that the first stage should yield a sample with C\% completeness
-and P\% purity, while leading to the rejection of R\% of the initial target
-sample. Having divided the 150 square degree CFHTLS imaging survey into 430000
-overlapping 70 by 70 arcminute tiles and displayed them on the site, we were
-joined by 33000 volunteers who contributed X million image classifications
-over the course of N months. The sample was reduced to 3500 stage 1
-candidates; these were then refined to yield a sample of candidates rankable
-by their stage 2 probability. We expect this sample to be X\% complete and Y\%
-pure at a threshold of 95\% classification probability. We estimate the mean
-information contributed per person to be X bits, over a session lasting, on
-average, N classifications per volunteer -- although the distributions of
-these quantities are highly skewed. We comment on the scalability of the \sw
-system, and its potential to operate beyond its design as a supervised
-classification system. 
+probability systems are retired from the site periodically, concentrating the
+sample towards a set of candidates; this ``stage 1'' set is then re-classified
+by the volunteers in a second  refinement stage. Analyzing the classification
+of the training set, we predict that the first stage alone should yield a
+sample that is C\% complete, while leading to the rejection of R\% of the
+initial target sample. Having divided the 150 square degree CFHTLS imaging
+survey into 430000 overlapping 70 by 70 arcminute tiles and displayed them on
+the site, we were joined by 33000 volunteers who contributed X million image
+classifications over the course of N months. The sample was reduced to 3500
+stage 1 candidates; these were then refined to yield a sample of 1400
+candidates rankable by their stage 2 probability. We expect this sample to be
+X\% complete and Y\% pure at a threshold of 95\% classification probability.
+We find that, on average, and given the assumptions we make in our analysis,
+we need 9 classifications per image during the first stage, X in the second.
+We estimate the mean information contributed per person to be X bits, over a
+session lasting, on average, N classifications per volunteer, and present the
+highly skewed distributions of these quantities. We comment on the scalability
+of the \sw system to the wide field survey era, and its potential to operate
+beyond its design as a supervised classification system. 
 
 \end{abstract}
 
@@ -88,25 +90,132 @@ classification system.
 \section{Introduction}
 \label{sec:intro}
 
-Scientific motivation. Applications of lenses: group-scale arcs,
-galaxy-galaxy lenses, lensed quasars. 
+% Scientific motivation. Applications of lenses: group-scale arcs,
+% galaxy-galaxy lenses, lensed quasars. 
 
-Problem of rarity. Imaging surveys. Problem of purity/false positives.
+Strong gravitational lensing -- the formation of multiple, magnified images of
+background objects due to the deflection of light by  massive foreground
+objects -- is a very powerful astrophysical tool, enabling a wide range of
+science projects. The image separations and distortions provide information
+about the mass distribution in the lens \citep[e.g.][]{AugerEtal2010,
+SonnenfeldEtal2012,SonnenfeldEtal2013}, including on sub-galactic scales
+\citep[e.g.][]{Dalal+Kochanek2002,VegettiEtal2010,HezavehEtal2013}. Any
+strong lens can provide magnification of a factor of 10 or more, providing a
+deeper, higher resolution view of the distant universe through these ``cosmic
+telescopes'' \citep[e.g.][]{StarkEtal2008,NewtonEtal2011}. Lensed quasars enable
+cosmography via the time delays between the multiple images' lightcurves
+\citep[e.g.][]{TewesEtal2013,SuyuEtal2013}, and study of the accretion disk itself
+through the microlensing effect \citep[e.g.][]{PoindexterEtal2008}. All of these
+science projects would benefit from being able to draw from a larger sample of
+lenses.
 
-Review of progress to date. Methods in SL2S, SQLS. Contrast with SLACS. 
+In the last decade the numbers of detections of these rare cosmic alignments
+has increased by an order of magnitude, thanks to wide field surveys such as
+CLASS \citep[e.g.]{BrowneEtal2003}, SDSS \citep[e.g.][]
+{BoltonEtal2006,AugerEtal2010b,TreuEtal2011,InadaEtal2012}, CFHTLS
+\citep[e.g.][]{MoreEtal2012,GavazziEtal2014}, Herschel
+\citep[][]{NegrelloEtal2014} and SPT \citep[e.g.][]{VieiraEtal2013}, among
+others.  As the number of known lenses has increased, new types have been
+discovered, leading to entirely new investigations. Compound lenses
+\citep{GavazziEtal2008,CollettEtal2012} and lensed supernovae
+\citep{QuimbyEtal2014} are good examples of this. 
 
-Scaling to wide field era. Automated methods: problems. Need for good
-training sets. Need for quality control: always present.
+% Problem of rarity. Imaging surveys. Problem of purity/false positives.
+% Review of progress to date. Methods in SL2S, SQLS. Contrast with SLACS. 
 
-Novel solution: crowd-sourcing. Brief review of similar problems.
-PlanetHunters. \sw as an experiment.
+Because they are rare, strong lenses are expensive to find. The most efficient
+searches to date have made use of relatively clean signals such as the
+presence of emission or absorption features at two distinct redshifts in the
+same optical spectrum \citep[e.g.][]{BoltonEtal2004}, or the strong
+``magnification bias'' towards detecting strongly-lensed sources in the sub-mm
+waveband \citep[e.g.][]{NegrelloEtal2010}. Such searches have to be efficient,
+because they require expensive high resolution imaging follow-up; consequently
+they have so far produced yields in the tens to hundreds. An alternative approach
+is to search images of sufficiently high resolution and color contrast, and
+confirm the systems as gravitational lenses by modeling the survey data
+themselves \citep[][]{MarshallEtal2009}. Several square degrees of HST images
+have been searched, yielding several tens of galaxy-scale lenses
+\citep[e.g.][]{MoustakasEtal2007,FaureEtal2008,Jackson2008,MoreEtal2012,
+PawaseEtal2014}.
+Similarly, searches of over a hundred square degrees of CFHT Legacy Survey
+ground-based imaging, also with sub-arcsecond image quality, have revealed a
+smaller number of wider image separation group-scale systems
+\citep[e.g.][]{CabanacEtal2007,MoreEtal2012}. Detecting galaxy-scale lenses from
+the ground is hard, but feasible albeit lower efficiency and requiring HST or
+spectroscopic follow-up to confirm the candidates as lenses
+\citep[e.g.][]{GavazziEtal2014}.
 
-In this paper, we describe the \sw website, an online system that enables
-crowd-sourced detection of gravitational lenses.  In a companion paper we will
-present the new gravitational lenses discovered in our first imaging survey
-dataset, and begin to investigate the differences between lens detections made
-in \sw and those made with automated techniques. Here though, we try to answer
-the following questions:
+% Scaling to wide field era. Automated methods: problems. Need for good
+% training sets. Need for quality control: always present.
+
+How can we scale these lens searches up to imaging surveys covering a hundred
+times the sky area, such as the almost-all sky surveys planned with LSST and
+Euclid, while reducing our dependence on expensive follow-up confirmation
+observations? There are two approaches to detecting lenses in imaging surveys.
+The first one is robotic: automated analysis of object catalogs and/or the
+survey images. The candidate samples produced by these methods have, to date,
+not been of high purity  \citep[see
+e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}, with visual inspection by
+teams of humans still required to narrow down the robotically-generated
+samples. In this approach, the image data may or may not be explicitly
+modelled by the robots as if it contained a gravitational lens, but the visual
+inspection can be thought of as a ``mental modeling'' step. Systems classified
+by an inspector to be good lens candidates are deemed as such because the
+features in the image can be explained by a model of what gravitational lenses
+do contained in the inspector's brain. The second approach simply cuts out the
+robot middleman: \citet{FaureEtal2008,Jackson2008} and \citet{PawaseEtal2014}
+all performed entirely visual searches for lenses in HST imaging.
+
+Visual image inspection seems, at present, unavoidable at some level when
+seraching for gravitational lenses. The technique has some drawbacks, however.
+First is that humans are only humans, and they make mistakes. The solution to
+this is to operate in teams, providing multiple classifications of the same
+images in order to catch errors and correct them. Second, and relatedly, is
+that humans get tired. With a well-designed classification interface, a human
+might be able to inspect images at a rate of one astronomical object per
+second (provided the majority are indeed uninteresting). At $10^4$ massive
+galaxies, and 10 lenses, per square degree, visual lens searches in good
+quality imaging data are limited to a few square degrees per inspector per
+day. Scaling to thousands of square degrees therefore means either robotically
+reducing the number of targets for inspection, or increasing the number of
+inspectors, or both. 
+
+For example, a $10^4$ square degree survey containing $10^8$
+photometrically-selected massive galaxies and $10^5$ lenses could only be
+searched by 10 inspectors at a mean rate of 1 galaxy per second and 10
+inspections per galaxy in about 14 years. Reducing the inspection time by a
+factor of 400 to two weeks would require a robot to reduce the target sample
+to 25 per square degree. However, at this point the required purity, 40\%,
+would very likely require the average classification time per object to be
+more like 10 seconds per object. Hiring 10 inspectors to assess complex images
+full time full time for five months may not be the most cost-effective or
+reliable strategy. Alternatively, a team of $10^6$ inspectors could, in
+principle, make the required $10^9$ image classifications, $10^3$ each, in a
+few weeks; robotically reducing the target list would lead to a proportional
+decrease in the required team size.
+
+Systematic detection of rare astronomical objects by such ``crowd-sourced''
+visual inspection has recently been achieved by the online citizen science
+project PlanetHunters \citep{SchwambEtal2012}. PlanetHunters was designed to
+enable the discovery of transiting exoplanets in data taken by the Kepler
+satellite; a community of N inspectors from the general public found, after
+each undergoing a small amount of training, N new exoplanet candidates by
+visual inspection of the Kepler lightcurves that were presented in a custom
+web-based classification interface. The older Galaxy Zoo morphological
+classification project \citep{LintottEtal2008} has also enabled the discovery
+of rare objects, via its flexible inspection interface and discussion forum
+\citep{LintottEtal2009}. Indeed, several of us (AV,EB,CC,TJ,CM,LW) were active
+in an informal Galaxy Zoo gravitational lens search, an experience which led
+to the present hypothesis that a systematic online visual lens search could be
+successful. 
+
+In this paper, we describe the \sw website, an online system that enables 
+crowd-sourced gravitational lens detection by inviting volunteers to classify
+astronomical survey images as containing lens candidates or not.  In a
+companion paper we will present the new gravitational lenses discovered in our
+first experimental lens search, and begin to investigate the differences
+between lens detections made in \sw and those made with automated techniques.
+Here though, we try to answer the following questions:
 
 \begin{itemize}
 
@@ -123,38 +232,202 @@ How many classifications, and so how many volunteers are needed per target?
 
 \end{itemize}
 
-In \Sref{sec:design} we introduce the \sw system, describing and
-explaining its various features. We then briefly...
+This paper is organised as follows.  In \Sref{sec:design} we introduce the \sw
+classification interface and the volunteers who make up the \sw
+collaboration,  explain how we use training images, and describe our two stage
+candidate selection strategy. We then briefly introduce, in \Sref{sec:data}
+the particular dataset used in the first experimental tests of the \sw system,
+and how we prepared the images prior to displaying them in the web interface.
+In \Sref{sec:swap} we describe our methodology for interpreting the
+classifications made by the volunteers, and then present the results of system
+performance tests  made on the training images in \Sref{sec:results}. % In
+this section, we also investigate the properties of the crowd, to % understand
+where the information is coming from. We discuss the implications of our
+results for future lens searches in \Sref{sec:discuss} and draw conclusions in
+\Sref{sec:conclude}.
 
-
+% \section{Introduction}
+% \label{sec:intro}
+% \section{Experiment Design}
+% \label{sec:design}
+% \subsection{Training}
+% \label{sec:design:training}
+% \subsection{Stage 1: Initial Classification}
+% \label{sec:design:stage1}
+% \subsection{Stage 2: Refinement}
+% \label{sec:design:stage2}
+% \section{Data}
+% \label{sec:data}
+% \subsection{The CFHT Legacy Survey}
+% \label{sec:data:CFHTLS}
+% \subsection{Image Presentation}
+% \label{sec:data:display}
+% \section{Classification Analysis}
+% \label{sec:swap}
+% \section{Results}
+% \label{sec:results}
+% \subsection{Crowd Properties}
+% \label{sec:results:crowd}
+% \subsection{Sample completeness and purity}
+% \label{sec:results:sample}
+% \section{Discussion}
+% \label{sec:discuss}
+% \section{Conclusions}
+% \label{sec:conclude}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Experiment Design}
 \label{sec:design}
 
-Unfamiliar objects: need to learn what lenses look like, fast. Rare
-objects: need to be able to reject rapidly, and get through sample.
-Confusion with non-lenses: further filtering after advanced training, and 
-scientific discussion in Talk.
+The basic steps of a visual search for gravitational lenses are: 1) prepare
+images, 2) display them to an inspector, 3) record the inspector's
+classification of each image (as, for example, containing a lens candidate or
+not) and 4) analyzing those classifications (and all others) in order to
+produce a final candidate list. We describe step 1 in \Sref{sec:data} and step
+4 in \Sref{sec:swap}. In this section we take a volunteer's eye view and
+begin by describing the \sw classification interface, the crowd of volunteers,
+and the interactions between the two.
 
-Intro to Classification Interface. Basic description of site. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/sw-screengrab-marker+feedback.png}
+\caption{Screenshot of the \sw classification interface.}
+\label{fig:screenshot}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Classification Interface}
+\label{sec:design:interface}
+
+A screenshot of the \sw classification interface (CI) is shown in
+\Fref{fig:screenshot}. The CI is the centrepiece of the \sw website,
+\texttt{http://spacewarps.org}; the web application is written in
+coffeescript, css and html and follows the general design of others written by
+the Zooniverse team.\footnote{The \sw web application code is open source and
+can be accessed from \texttt{https://github.com/zooniverse/Lens-Zoo}}  The
+focus of the CI is a large display of the current pre-prepared PNG image of
+the ``subject'' being inspected.   When the image is clicked on by the
+volunteer, a marker symbol appears where the pointer was. Several markers can
+be placed.  The next image moves rapidly in from a queue formed at the right
+hand side of the screen when the ``Finished marking'' button is pressed. At
+the same time, the positions of the markers are written out to the
+classification database, in an entry that also stores the ID of the subject,
+the username (or IP address) of the volunteer, a timestamp and some other
+metadata. 
+
+Gravitational lenses are rare: typically, most of the images will not contain
+a lens candidate, and these need to be quickly rejected by the inspector. The
+queue allows several images to be pre-loaded while the volunteer is
+classifying the current subject, and the rapid movement is designed to
+encourage volunteers to classify rapidly.
+
+For the more interesting subjects, the CI offers two features that  enable
+further investigation of the subjects. First is the ``Quick Dashboard'' (QD) a
+more advanced image viewer. This allows the viewer to compare three different
+contrast and color balance settings, to help bring out subtle features, and to
+zoom in on interesting regions of the image to assess small features. Markers
+can be placed in the Quick Dashboard just the same as in the main CI image
+viewer. The second is a link to that subject's page in the project discussion
+forum, \texttt{http://talk.spacewarps.org}. Here, volunteers can discuss the
+features they have seen either before they submit their classification, or
+after, if they ``favorite'' the subject. There is no ``back'' button: each
+volunteer may only classify a given subject once. However, the presence of an
+option to see what others think about any given subject before submitting your
+own classification means that the classifications may not be  strictly
+independent; the advantage of this system is that volunteers can learn from
+others what constitutes a good lens candidate. In practice, we might expect
+this to be a relatively unimportant educational resource, given the explicit
+training we provide for the volunteers, which we describe in the next section.
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{Training}
 \label{sec:design:training}
 
-Learning what lenses do: Spotter's Guide. Learning how
-lenses work (science page, FAQ). 
+Gravitational lenses are unfamiliar objects to volunteers who are new
+to the site. New volunteers need to learn what lenses look like as quickly as
+possible, so that they can contribute informative classifications. They also
+need to learn what lenses do not look like, in order to reduce the false
+positive detection rate. There are three primary mechanisms in the \sw system
+for teaching the volunteers what to look for. These are, in the order in which
+they are encountered, an inline tutorial, instant feedback,
+and a ``Spotter's Guide.''
 
-More on what lenses do: inline tutorial and feedback. 
-Merge into stream. Instant feedback, positive and
-negative. Anecdotal support for this.
+\subsubsection{Inline Tutorial}
 
-Training requires lenses to be more common than is realistic. How to manage
-expectations, avoid high false positive rate? "Lenses are rare" messaging;
-simulation frequency marker.
+New volunteers are welcomed to the site with a very short tutorial, in which
+the task is introduced, a typical image containing a simulated lens is
+displayed, and the marking procedure walked through, using pop-up message
+boxes. Subsequent images gradually introduce the more advanced
+features of the classification interface (the QD and Talk buttons), also using
+pop-up messages. The tutorial was purposely kept as short as possible so as to
+provide the minimal barrier to entry.
+
+\subsubsection{Instant Feedback}
+
+The second image viewed after the initial tutorial image is already a survey
+image, in order to get the volunteers engaged in the real task as quickly as
+possible. Training continues beyond the first image tutorial through
+``training subjects'' inserted randomly into the stream.  These training
+subjects are either simulated lenses (known as ``sims''), or survey images
+that were expert-classified (by AV, AM and PM) and found not to contain any
+lens candidates (these images are known as ``duds''). The tutorial explains
+that the volunteers  will be shown such training images. They are also
+informed that they will receive instant feedback about their performance after
+classifying (blind) any of these training subjects. Indeed, after a volunteer
+finishes marking a training subject and hits ``Finished marking,'' a pop-up
+message is generated, containing either positive feedback for a successful
+classification (for example, ``Well done! You spotted a simulated lens,'' as
+in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
+example, ``There is no gravitational lens in this field!'') 
+
+\question{PJM}{Does the feedback lead to volunteers leaving the site more 
+quickly, or less quickly? Does negative feedback have more impact than
+positive?}
+
+The initial frequency of the training images is set to be two in five;
+subjects are drawn randomly from the pool of training images with this
+frequency. The pool contains equal numbers of sims and duds, and the draw is
+made without replacement (for that volunteer). As the number of
+classifications made by a volunteer increases, this frequency is decreased, to
+$2/(5\times2^{(\textrm{int}(N_c/20)+1)/2})$ ($\approx 0.3$ for the second 20
+subjects, $0.2$ for the third 20 subjects, and so on).
+
+This training regime means that in the first 60 images viewed, each volunteer
+is shown (on average) 9 simulated gravitational lenses, and 9 empty fields. 
+This is a much higher rate than the natural one: to try and avoid this leading
+to over-optimism among the inspectors (and a resulting high false positive
+rate), we display the current ``Simulation Frequency'' on the classification
+interface (``1 in 5'' in \Fref{fig:screenshot}) and maintain the consistent
+theme in the feedback messages that lenses are rare.
+
+
+\subsubsection{Spotter's Guide}
+
+The instant feedback provides real-time educational responses to the
+volunteers as they start classifying; as well as this dynamic system, \sw
+provides a static reference work for volunteers to consult when in doubt about
+how to perform the task. This ``Spotter's Guide'' is a set of webpages showing
+example lenses, both real and simulated, and also some common false positives,
+drawn from the pool of survey images. The non-lenses were identified by three
+of us (AV, AM and PM) while inspecting a small set of survey images in order
+to define the ``dud'' training images. For easy reference, the lenses are
+divided by type (for example, ``lensed galaxies,'' ``lensed quasars'' and
+``cluster lenses''), as are the false positives (for example, ``Rings and
+Spirals,'' ``Mergers,'' ``Artifacts'' and so on). The example images are
+accompanied by explanatory text. The Spotter's Guide is reached via a button
+on the left hand side, or the hyperlinked thumbnail images of the ``Quick
+Reference'' provided on the right hand side, of the classification interface.
+
+Most of the text of the Spotter's Guide focuses on what lenses do or don't do;
+the website ``Science page'' contains a very brief introduction to how
+gravitational lenses work, which is fleshed out a little on the ``FAQ'' page. 
+This also contains answers to frequently asked questions about the interface
+and the task set. 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
@@ -229,63 +502,309 @@ Approximately optimized, how? Examples of images.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Classification Analysis}
-\label{sec:IDanalysis}
+\label{sec:swap}
 
-In this section we outline our methodology for interpreting the
-interactions of the volunteers with the identification interface.  Each
-classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs, a timestamp and the classification results. 
-The {\it kind} of subject -- whether it is a training subject (a 
-simulated lens or a known non-lens) or a test subject (an unseen image
-drawn from the survey) -- is also recorded. For all subjects, the
-positions of all Markers are recorded, in pixel coordinates. For
-training subjects, we also store the ``classification'' of the subject
-as a lens, or a non-lens, and also the type of object present in the
-image. These types are summarized in \Tref{tab:objecttypes}. 
-This classification is used to provide instant feedback, but is also the
-basic measurement used in a probabilistic classification of every
-subject based on all image views to date.
+In this section we outline our methodology for interpreting the interactions
+of the volunteers with the identification interface.  Each classification made
+is logged in a database, storing subject IDs, (anonymous) volunteer IDs, a
+timestamp and the classification results.  The {\it kind} of subject --
+whether it is a training subject (a  simulated lens or a known non-lens) or a
+test subject (an unseen image drawn from the survey) -- is also recorded. For
+all subjects, the positions of all Markers are recorded, in pixel coordinates.
+For training subjects, we also store the ``classification'' of the subject as
+a lens, or a non-lens, and also the type of object present in the image. These
+types are summarized in \Tref{tab:objecttypes}.  This classification is used
+to provide instant feedback, but is also the basic measurement used in a
+probabilistic classification of every subject based on all image views to
+date.
 
-We perform a ``Pseudo-online'' analysis of the classifications, 
-updating a probabilistic model of every (anonymous) volunteer's
-data, and also updating the lens probability of each subject 
-(in both the training and test sets), on a
-daily(??) basis. This allows us to track the speed with which the crowd
-learns about lenses, and also gives us a dynamic estimate of the
-posterior probability for  any given  subject being a lens, given all
-classifications of it. Assigning thresholds in this lens probability
-allows us to make good decisions about whether or not to accept a
-subject into the collection of candidates visible in \Talk, and also
-whether or not to  carry on classifying a subject at all. 
+We perform an online analysis of the classifications,  updating a
+probabilistic model of every (anonymous) volunteer's data, and also updating
+the lens probability of each subject  (in both the training and test sets), on
+a daily basis. This gives us a dynamic estimate of the posterior probability
+for  any given  subject being a lens, given all classifications of it to date.
+Assigning thresholds in this lens probability then allows us to make good
+decisions about whether or not to retire a subject from the system, in order to
+focus attention on new images. 
 
-In this paper we focus on the training data,  investigating  how the 
-crowd's ability to identify gravitational lenses during the course of
-the project, and the completeness and purity of the lens candidate
-sample generated.
+The details of how the lens probabilities are calculated are given in
+\Aref{appendix:swap}. In summary:
+\begin{itemize}
 
-Describe SWAP here. (Move from appendix.)
+\item Each volunteer is assigned a simple software agent, characterised by a
+confusion matrix. The two independent elements of this matrix are the
+probabilities, as estimated by the agent, that the volunteer is going to be 1)
+correct when they report that an image contains a lens when it really does
+contain a lens, $\pr(\saidLENS|\LENS,T)$, and 2) correct when they report that
+an image does not contain a lens when it really doesn't contain a lens,
+$\pr(\saidNOT|\LENS,T)$.
 
+\item Each agent updates its confusion matrix elements based on the number of
+times its volunteer has been right in each way while classifying subjects from
+the training set, accounting for noise early on due to small number
+statistics: $T$ is the set of all training images seen to date.
+
+\item Each agent uses its confusion matrices to update, via Bayes' theorem,
+the probability of an image from the test set containing a lens,
+$\pr(\LENS|C,T)$, when that image is classified by its volunteer. ($C$ is the
+set of all classifications made of this subject.)
+
+\end{itemize}
+
+In the next section we present results in terms of all three of these
+probabilities, as we investigate the performance of the \SW system.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results}
 \label{sec:results}
 
-Understanding crowd, so we can help them learn faster. Understanding
-images given the crowd, so we can find lenses.
+In this section we present our findings about the performance of the  \sw
+system, in terms of the information  contributed by the crowd in
+\Sref{sec:results:crowd}, and the overall classifications of the training set
+that they made. 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{Crowd Properties}
 \label{sec:results:crowd}
 
-Enthusiasm: histogram of classifications, stage 1 vs stage 2. Information
-contributed. Correlation with number of classifications. 
 
-PL and PD as measures of skill. not quite talent, due to possibility of
-learning - but agents assume talent. Performance of crowd re PD and PL.
-Correlations with N classifications.
+% Enthusiasm: histogram of classifications, stage 1 vs stage 2. Information
+% contributed. Correlation with number of classifications. 
+% 
+% PL and PD as measures of skill. not quite talent, due to possibility of
+% learning - but agents assume talent. Performance of crowd re PD and PL.
+% Correlations with N classifications.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/all_skill_contribution_experience_education.png}
+\caption{Key properties and contributions of the \sw crowd. Plotted are the
+1-D and 2-D marginalized distributions for the logarithms of the 
+properties of the agents described in the text. The stage 1 agents are shown
+in blue, the stage 2 agents in orange.}
+\label{fig:crowd:cornerplot}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We define the following properties of the crowd, as characterised by their
+agents, and plot the distributions of their logarithms in
+\Fref{fig:crowd:cornerplot}. 
+%
+\begin{description}
+%
+\item{\noindent\bf ``Effort:''} The number of test images, $\effort$, classified by a
+volunteer. In stage 1, the mean effort per agent was 263; in the shorter stage
+2 it was 81.
+%
+\item{\noindent\bf ``Experience:''} The number of training images, $\experience$,
+classified by a volunteer. In stage 1, the mean experience per agent was 29;
+in stage 2 (where the training image fequency was set higher) it was 34.
+%
+\item{\noindent\bf ``Skill:''} The expectation value of the information gain, $\skill$
+should  the next subject classified have lens probability 0.5
+\Aref{appendix:swap},  in bits. Random classifiers have $\skill = 0.0$,
+perfect classifiers have $\skill = 1.0$. All agents start with $\skill = 0.0$;
+this increases as training subjects are classified, and the agent's estimates
+of its confusion matrix elements improve. In stage 1, the mean skill per agent
+was 0.04 bits; in  stage 2 it was 0.05.
+%
+\item{\noindent\bf ``Contribution:''} The integrated skill over a volunteer's test
+subject classification history, and represents the total  contribution to the
+project that volunteer (see the appendix for more discussion of this
+quantity). In stage 1, the mean contribution per agent was 34.9 bits; in 
+stage 2 it was 33.5.
+%
+\item{\noindent\bf ``Information:''} The total information $\information$ generated by
+the  agent during the volunteer's classification activity. This quantity
+depends on the value of each subject's lens probability when that subject was 
+presented to the volunteer (\Aref{appendix:swap}), and so there is an element
+of luck involved with this quantity: if you never see a high probability
+subject, it's hard to generate a large amount of information. You make your
+own luck by classifying more subjects.
+%
+\end{description}
+
+The leftmost column of \Fref{fig:crowd:cornerplot} shows how the last four of
+these properties depends on the effort expended by the volunteers. We see that
+experience is strongly correlated with effort (as training images are
+presented throughout each stage, albeit at decreasing frequency), and that
+this is also true for skill. In the second row of \Fref{fig:crowd:cornerplot}
+we see that while skills of greater than 0.1 can be attained after just a few
+training images, most agents of such low experience have significantly lower
+skill. The volunteers in question only classify a few subjects before leaving.
+However, at high values of experience and effort, the skill is \emph{always
+high}. There seem to be very few agents logging large numbers of
+classifications at low skill (although there are one or two exceptions): almost
+all high effort ``super-users'' have high skill. These two properties are
+reflected in both the contributions these volunteers make (third row) and the
+information they generate (fourth row).
+
+The distributions for the stage 2 agents (orange) are qualitatively similar to
+those for the stage 1 agents (blue). Differences are: 1) the maximum effort
+possible at stage 2 is smaller, because fewer subjects were available to be
+classifed, but 2) the mean effort expended at stage 2 was higher (perhaps
+because the subjects were higher probability, and more compelling); 3) the
+information generated per agent was higher at stage 2, because the subjects
+had higher probability.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.png}
+\caption{Narrow cumulative distributions of the contributions made by the
+agents: for example, 90\% of the stage 2 contributions were made by the
+highest contributing  7\% of the crowd. The stage 1 agents are shown in blue,
+the stage 2 agents in orange. ``Experienced volunteers'' classified 10 or more
+training subjects.}
+\label{fig:crowd:cumulplot}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Fref{fig:crowd:cornerplot} shows the \sw crowd to have quite broad
+distributions of logarithmic effort, skill, and contribution. To better
+quantify the contributions made by the volunteers, we show their cumulative
+distribution on a linear scale in \Fref{fig:crowd:cumulplot}. This plot shows
+clearly the importance of the hardest-working, most active volunteers: at
+stage 1,  1.0\% of the volunteers -- 375 people -- made 90\% of the
+contribution.  At stage 2, where it was not possible to make as
+many classifications before running out of subjects, 7.2\% of the volunteers
+-- 141 people -- made 90\% of the contribution. 
+
+However, it is not the case that only these small groups were capable of
+making this large contribution: 9118 volunteers were ``experienced'' in that
+they had all classified at least 10 training images; the 375 highest
+contributing volunteers make up just 4\% of this experienced volunteer pool.
+The cumulative distribution of agent skill is shown in
+\Fref{fig:crowd:cumulskillplot}: these distributions are significantly broader
+than the corresponding distributions of agent contribution in 
+\Fref{fig:crowd:cumulplot}. The most skilled 20\% of agents possess only  79\%
+of the skill at stage 1, and 77\% at stage 2. The inexperienced volunteers
+also possess a significant fraction of the skill: the most skillful 20\% of
+experienced volunteers (1824 people)  possess just 43\% of the total skill.
+The level of contribution made at \sw by experienced volunteers is largely a
+matter of choice (or perhaps, availability of time!).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_skill_cumul.png}
+\caption{Broad cumulative distributions of agent skill: 
+the most skilled 20\% of the crowd only possess 79\% of the skill at stage 1.
+The stage 1 agents
+are shown in blue, the stage 2 agents in orange. ``Experienced volunteers''
+classified 10 or more training subjects.}
+\label{fig:crowd:cumulskillplot}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.png}
+\caption{Stage 2 agent properties, separating veterans from stage 1 from new
+volunteers. Point size represents total information generated, dashed lines
+are drawn at the mean values for each sample.}
+\label{fig:crowd:stage1vstage2}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+We now look at the transition between stage 1 and stage 2 in more detail. Of
+the 1964 volunteers who took part in the stage 2 classification round, only
+774 were veterans from stage 1. However, these volunteers showed significantly
+higher skill levels than the new users, and also made more classifications
+(and hence made greater contributions. This is illustrated in  
+\Fref{fig:crowd:stage1vstage2}. In this figure, point size is proportional to
+information generated: the higher skill, higher effort stage 1 veterans
+generated most of the information.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/early_vs_final_skill.png}
+\caption{Predictability of final skill from early skill (after 10 training
+classifications) in stage 1 agents. The dashed lines enclose 649 agents with
+early skill greater than 0.1 
+who retain final skill of greater than 0.05. Point size is proportional to
+contribution (plus a constant).}
+\label{fig:crowd:skillprediction}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Having seen the importance of the high skill volunteers at both stage 1 and
+stage 2, we might ask, can we predict agent skill after, say, the volunteer
+has experienced 10 training subjects? In \Fref{fig:crowd:skillprediction} we
+plot this ``early skill'' against final skill, for all experienced stage 1
+volunteers. The majority of the crowd shows little correlation, but at the
+high early skill end, some predictability appears. The 649 experienced  stage
+1 volunteers who had early skill greater than 0.1 went on to attain a mean
+final skill of 0.22, with 97\% remaining at skill 0.05 or higher. This
+suggests that it might be worth tracking volunteers' skill as a project
+progresses, in order to encourage those showing an aptitude for the task to
+take part in the more difficult activities, such as stage 2 refinement.
+However, this would not have done a very good job at identifying the 
+volunteers who went on to make the largest contributions: the point size in 
+\Fref{fig:crowd:skillprediction} is proportional to contribution (plus a constant):
+many of the highest contributors showed relatively low skill early on.
+
+\Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
+information generated in both stage 1 and 2 of the CFHTLS project, with the
+total numbers of agents and subjects for comparison. These numbers allow us to
+quantify the efficiency of the system. The contribution per classification is
+defined in terms of a hypothetical subject with lens probability of 0.5; one
+bit of information is needed to update such a subject's lens probability to
+either zero or one. This means that a maximally complete classification stage
+would yield a total contribution (summed over all agents) equal to the number
+of subjects. The ratio of this hypthetical optimum to the actual total
+contribution is therefore a measure of the stage's inefficiency. We find our
+inefficiency (by dividing column 2 by column 3) to be 33\% and 17\% in stage 1
+and 2 respectively. In stage 1, this inefficiency is due to the daily
+processing: we were not able to retire subjects fast enough, and so they,
+remained in the system, being over-classified. Only 3705745 classifications
+were needed to retire all the subjects: the ratio of this to the total number
+made is 34\%. (The remaining 1\% is due to not all subjects being classified
+to 1 or 0 probability.) At stage 2, we did not retire any subjects at all; the
+inefficiency in this case was by design, to give everyone a chance to
+appreciate what they had found together! 
+
+The total skill of the crowd, computed by summing the skill of all the agents,
+is, similarly, a measure of the effective crowd size: a crowd of perfect
+classifiers would be this size. The stage 1 crowd was equivalent to a team of
+1469.9 perfect classifiers; the stage 2 crowd was equivalent to a team of
+102.4 perfect classifiers. 
+
+The total information generated during the survey is harder to interpret,
+because it's exactly the high probability candidates that we leave in the
+system that give rise to most of the information generated. What we can do is
+divide the total information generated by the amount of information it takes
+to classify a \sw subject all the way to the detection threshold (lens
+probability 0.95), divide by this number, and then multiply by the survey
+inefficiency to get a very rough estimate for the effective number of
+detections corresponding to the crowd's contribution. With a prior probability
+of $2\times10^{-4}$, it takes 11.6 bits to make a detection; the effective
+number of detections contributed by the stage 1 and stage 2 volunteers is then
+2670 and 24 respectively. These figures are close to the numbers of detections
+given in column 7 of \Tref{tab:crowd:contributions}. 
+The uncertainty in the interpretation of the
+information generated provides further justification for our focus on the
+expected information gain as a measure of volunteer contribution.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table*}
+\begin{center}
+\caption{Total crowd and subject sample properties from the CFHTLS project.}
+\label{tab:crowd:contributions}
+\begin{tabular}{cccccccc}
+  \hline
+  \hline {Stage} & Subjects & Contribution                          & Agents & Skill      & Classifications          & Candidates & Information \\
+                 & $\Ns$    & $\sum_k^{\Nv} \contribution_k$ (bits) & $\Nv$  & $\sum_k^{\Nv} \skill_k$ (bits) & $\sum_k^{\Nv} \thiseffort$ & $\Ncands$  & $\sum_j^{\Ns}\sum_k^{\Nv} \information_{j,k}$ (bits) \\
+  \hline 
+            1    & $427064$ & $1292016.3$ & $36982$ & $1471.9$ & $10802125$ & $3368$ & $91122.6$ \\
+            2    & $3679$   &   $21895.8$ &  $1964$ &  $102.4$ &   $224745$ &   $90$ &  $1640.4$ \\
+  \hline \hline
+\end{tabular}
+\medskip\\
+\end{center}
+\end{table*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
@@ -310,23 +829,36 @@ Challenges for future.
 \section{Conclusions}
 \label{sec:conclude}
 
-We draw the following conclusions:
+Summary of system.
+
+Crowd-sourced gravitational lens detection works, in terms of the
+classification of the training set as described here, in the following
+specific ways: 
 
 \begin{itemize} 
-
-\item Crowd-sourced gravitational lens detection works, as shown on sims and duds:
 
 \item Participation (crowd size, activity rate) enabled project completion
 
 \item Both stages (1 and 2) achieved the required rejection rates
 
-\item Integrated humanpower = X, cf hours taken by small team of experts 
+\item Integrated humanpower = X (stage 1) and y (stage 2), cf hours taken by
+small team of experts 
 
 \item Nightly processing is inefficient: more classifications were made than
 was necessary during peak participation. Need kafka...
 
-\item Completeness and purity were estimated as C\% and P\%, from sim and dud
-recovery/miss rates Which sims were missed? False negatives
+\item Retirement rate. False negatives: which sims were missed?
+
+\item The optimal true positive rate (completeness) and false positive rate in
+the training set were estimated to be TPR\% and FPR\% at Stage 1, assuming a
+detection threshold of xxx.  
+
+\item In the ``refinement'' stage 2, X\% of the stage 1 candidates were
+rejected (with P less than threshold), and the remainder assigned lens
+``probabilities.'' Ranking
+subjects by their Stage 2 lens probability gives an ROC curve for the system
+with X properties. The optimal true positive rate (completeness) and false
+positive rate in the training set were estimated as TPR\% and FPR\%; 
 
 \item The lens-finding crowd shows some interesting properties, with
 consequences for future scalability
@@ -358,13 +890,13 @@ Sum up, end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Probabilistic Classification Data Model}
-\label{appendix:probmodel}
+\section{Probabilistic Classification Analysis}
+\label{appendix:swap}
 
 Our aim is to enable the construction of a sample of good lens candidates.
 Since we aspire to making logical  decisions, we define a  ``good candidate''
 as one which has a high posterior probability of being a lens, given the data:
-$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data
+$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data~$\data$
 in our case are the pixel values of a colour image. However, we can greatly
 compress these complex, noisy sets of data by asking each volunteer what they
 think about them. A complete  classification in \sw consists of a set of
@@ -372,26 +904,29 @@ Marker positions, or none at all. The null set encodes the statement from
 the volunteer that the image in question is $\saidNOT$ a lens, while the
 placement of any  Markers indicates that the volunteer considers this image to
 contain a $\saidLENS$.  We simplify the problem by only using the Marker
-positions to assess whether t
-he volunteer  correctly assigned the
+positions to assess whether the volunteer  correctly assigned the
 classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
 the training set of subjects. 
 
 How should we model these compressed data? The circumstances of each
-classification are quite complex: the volunteers learn more about the problem
-as they go, but also inevitably make occasional mistakes (perhaps because a
-lens is difficult to see, or they became distracted by the television). To
-cope with this uncertainty, we assign a software agent to partner each
-volunteer. The agent's task is to interpret their volunteer's classification
-data as best it can, using a model that makes a number of necessary
-approximations. These interpretations will then include uncertainty arising as
-a result of the volunteer's efforts and also the agent's approximations, but
-they will have two important redeeming features. First, the interpretations
-will be quantitative (where before they were qualititative),  and thus will be
-useful in decision-making. Second, the agent will be able to predict, using
-its model, the probability of a test subject being a $\LENS$, given both its
-volunteer's classification, and its volunteer's experience. We now
-describe how each agent works.
+classification are quite complex, as are the human classifiers in general: the
+volunteers learn more about the problem as they go, but also inevitably make
+occasional mistakes (perhaps because a lens is difficult to see, or they
+became distracted during the task). To cope with this uncertainty, we assign a
+simple software {\it agent} to partner each volunteer. The agent's task is to
+interpret their volunteer's classification data as best it can, using a model
+that makes a number of necessary approximations. These interpretations will
+then include uncertainty arising as a result of the volunteer's efforts and
+also the agent's approximations, but they will have two important redeeming
+features. First, the interpretations will be quantitative (where before they
+were qualititative),  and thus will be useful in decision-making. Second, the
+agent will be able to predict, using its model, the probability of a test
+subject being a $\LENS$, given both its volunteer's classification, and its
+volunteer's experience. In this appendix we describe how these agents work.
+
+
+\subsection{Agents and their Confusion Matrices}
+\label{appendix:swap:probabilities}
 
 Each agent assumes that the probability of a volunteer recognising any given
 simulated lens as a lens is some number, $\pr(\saidLENS|\LENS,T)$, that
@@ -452,7 +987,10 @@ update this prior probability into a posterior one using this new information:
 which can be evaluated numerically using the elements of the confusion
 matrix. 
 
-As an example, suppose we have a volunteer who is always right about the true
+\subsection{Examples}
+\label{appendix:swap:examples}
+
+Suppose we have a volunteer who is always right about the true
 nature of a training subject. 
 Their agent's confusion matrix would be
 \be
@@ -488,10 +1026,15 @@ confusion matrix, their agent would calculate
            {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
    &= 1.0.
 \end{align}
-{\it Obtuse} classifiers are as helpful as {\it perfect} ones!
+{\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones.
 
-Indeed, the information content of each classification can be estimated by an
-agent before the next classification is made, just from its confusion matrix.
+
+\subsection{Information Contribution}
+\label{appendix:swap:examples}
+
+The information likely to be contributed by each agent for a given subject
+can be estimated before the next classification of that subject is made, 
+just from its confusion matrix.
 The Shannon entropy generated by a classifier upon performing a
 classification is
 \be
@@ -520,7 +1063,10 @@ that actually do have previous experience of what gravitational lenses look
 like, but should help prevent large numbers of false positives being assigned
 high probability. Plotting  $\langle I_k \rangle$ as a function of time will,
 to some extent, illustrate the learning process undergone by the $k^{\rm th}$
-volunteer-agent partnership.
+volunteer-agent partnership. 
+
+\subsection{Updating the Subject Probabilities}
+\label{appendix:swap:examples}
 
 Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
 subject just classified by the $k^{\rm th}$ volunteer. We can generalise
@@ -542,32 +1088,39 @@ and by comparing it to a lower or upper thresholds, make decisions about
 whether to retire the subject from the classification interface or
 promote it in \Talk, respectively.
 
+
+\subsection{Uncertainty in the Agent Confusion Matrices}
+\label{appendix:swap:uncertainty}
+
 The confusion matrix obtained from the application of Equation
-(\ref{eq:app:fraction}) has some inherent noise which reduces as the number
-of training subjects classified by the user increases. For simplicity, the
-discussion thus far assumed the case when the confusion matrix is known
-perfectly. Let us first discuss how to characterize the noise in the confusion
-matrix. ** This needs work **
+(\ref{eq:app:fraction}) has some inherent noise which reduces as the number of
+training subjects classified by the agent's volunteer increases. For
+simplicity, the discussion thus far assumed the case when the confusion matrix
+is known perfectly; in practice, we allow for uncertainty in the agent
+confusion matrices by averaging over a small number of samples drawn from
+Binomial distributions characterised by the matrix elements
+$\pr(C_k|\LENS,T_k)$ and  $\pr(C_k|\NOT,T_k)$. The associated standard
+deviation in the estimated subject probability provides an error bar for this
+quantity.
 
-
-For ease of notation, we will denote $\pr(C_k|\LENS,T_k)\equiv p_L$ and
-$\pr(C_k|\NOT,T_k)\equiv p_N$. In reality, there is a probability distribution
-for both $p_L$ and $p_N$. Let $p_0$ be the prior probability of the subject
-being a lens. Then the posterior probability, $p_0'$ of the subject being a
-lens after the classification $C_k$ is
-\be
-  \label{eq:app:sec}
-p_0' = \frac{p_L p_0}{\left[ p_L p_0 + p_N (1- p_0) \right]},
-\ee
-The posterior probability distribution $p_0'$ can be obtained by marginalizing
-over the probability distributions of $p_L$, $p_N$ and the prior probability
-distribution $p_0$ such that,
-\be
-P(p_0') = \int p_0' P(p_L) P(p_N) P(p_0) dp_L dp_N dp_0\,.
-\ee
-This marginalization is not analytically tractable. Therefore, we have
-implemented the following Monte-Carlo solution for this problem.
-
+% For ease of notation, we will denote $\pr(C_k|\LENS,T_k)\equiv p_L$ and
+% $\pr(C_k|\NOT,T_k)\equiv p_N$. In reality, there is a probability distribution
+% for both $p_L$ and $p_N$. Let $p_0$ be the prior probability of the subject
+% being a lens. Then the posterior probability, $p_0'$ of the subject being a
+% lens after the classification $C_k$ is
+% \be
+%   \label{eq:app:sec}
+% p_0' = \frac{p_L p_0}{\left[ p_L p_0 + p_N (1- p_0) \right]},
+% \ee
+% The posterior probability distribution $p_0'$ can be obtained by marginalizing
+% over the probability distributions of $p_L$, $p_N$ and the prior probability
+% distribution $p_0$ such that,
+% \be
+% P(p_0') = \int p_0' P(p_L) P(p_N) P(p_0) dp_L dp_N dp_0\,.
+% \ee
+% This marginalization is not analytically tractable. Therefore, we have
+% implemented the following Monte-Carlo solution for this problem.
+% 
 
 %Finally, we also need to update the confusion matrix of an agent and obtain the
 %variance on each element of the matrix, once a training subject has been
@@ -581,6 +1134,7 @@ implemented the following Monte-Carlo solution for this problem.
 %true strictly speaking given that our agents are learning and the values of the
 %confusion matrix are moving. Modelling the learning curve of our users is yet
 %another complicated extension we could think about.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  REFERENCES

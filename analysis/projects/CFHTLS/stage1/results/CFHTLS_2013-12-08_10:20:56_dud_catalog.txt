@@ -1,0 +1,6 @@
+# zooid     P          Nclass  image
+ASW00064b4  0.0002029  38       http://spacewarps.org/subjects/standard/5183f151e4bb210219045b50.png
+ASW0000fgj  0.9705377  287       http://spacewarps.org/subjects/standard/5183f151e4bb210219004e43.png
+ASW0000fji  0.9518779  145       http://spacewarps.org/subjects/standard/5183f151e4bb210219004eae.png
+ASW0003j2s  0.9657391  28       http://spacewarps.org/subjects/standard/5183f151e4bb210219028354.png
+ASW0002c4t  0.9891231  27       http://spacewarps.org/subjects/standard/5183f151e4bb21021901a9ed.png

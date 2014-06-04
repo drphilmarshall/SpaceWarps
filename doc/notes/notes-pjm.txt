@@ -1,4 +1,7 @@
 # ============================================================================
+# Shortcuts to useful snippets, for reproducing the SW results:
+goto CFHTLS_STAGE1
+# ============================================================================
 # 2013-04-07 (Sunday) 00:58 IST
 #
 # Get beta click database and start writing analysis code for it.
@@ -4681,5 +4684,698 @@ SWAP.py ${expt}_stage1.config
 
 
 # ======================================================================
+# 2014-05-29 (Thursday) 17:45 PDT
+
+# Housekeeping - put all analysis subdirs in workspace, where they are ignored
+# by git...
+
+# ======================================================================
+# 2014-05-28 (Wednesday) 18:07 PDT
+
+# Pull request from Surhud:
+# 
+#     I have added a random number seed to SWAPSHOP so that the results are reproducible.
+# 
+#     Changes are as follows:
+# 
+#     1) Add an extra argument to SWAPSHOP.csh which takes as input a random
+#        seed. However it only works when startup is specified.
+#     2) SWAPSHOP.csh runs the program generate_random_state.py to generate a
+#        random state file from the seed provided by the user.
+#     3) The config files have an extra compulsory option (random_file) which is
+#        the name of the file which stores the pickled random state.
+#     4) SWAP.py stores the random_state in a the random_file at the end of a
+#        run when update.config has to be written.
+
+# Test on VICS82, in stage1 directory (linked to from new test dir):
+
+mkdirf VICS82/random-test
+ln -s ../stage1/mongo .
+ln -s ../stage1/spacewarp_2014-01-15 .
+cp ../stage1/stage1.config VICS82_stage1.config
+
+# Edit config file to include random_state pickle...
+
+# OK, restart mongo:
+
+SWIPE.csh spacewarp_2014-01-15.gz
+
+# OMG, mongorestore takes ages!
+
+# Now try running all of VICS82, with 5 million per batch:
+
+SWAPSHOP.csh -s VICS82 --startup --fast --config VICS82_stage1.config
+
+# Hmm - no classifications found. Something wrong with mongo.
+# Tear it down and start again, might as well run on CFHTLS then, using 
+# latest downloaded db. Keep VICS82_stage1.config in new projects dir.
+
+# OK, re-doing CFHTLS stage 1:
+
+cp workspace/CFHTLS/hasty/startup.config projects/CFHTLS_stage1.config
+
+# Edit to include random file stuff... and also stage = 1(!)
+
+goto CFHTLS_STAGE1
+
+# ...
+
+# Did everything finish correctly, does it run repeatably?
+
+# SWAP: From 438654 subjects classified,
+# SWAP: 7580 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 438654 subjects classified,
+# SWAP: 5529 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 438654 subjects classified,
+# SWAP: 257 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-05-05_20:30:12/CFHTLS_2014-05-05_20:30:12_dud_catalog.txt
+
+# Hmm - 44 candidates, 7580 with P > rejection - this is 
+# different to previous run! Are stage 2 classifications being used?
+# Last date (on trajectory plot) is 2014-05-05_20:30:04, which is strange.
+# Plot shows a spike at P = P0, about 4500 high. What are these subjects?
+
+# Looks like there's some junk in the db, from somewhere... 
+# Need to set an end date for the survey, for now let's say 2014-01-07_23:59:59 
+
+# Test this code, just using December's classifications.
+# First, archive the problem run:
+
+mkdir -p too-many-subjects-44-candidates
+mv CFHTLS* random_state.pickle update.config too-many-subjects-44-candidates/
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# Needed to fix time, strings and datetimes... OK! 
+
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
+# SWAP: From 46736 subjects classified,
+# SWAP: 34374 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3439 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# Final date (on plots) is 2014-01-08_00:00:29
+# Good! 
+
+# Do reproduction test with Anu: do all of CFHTLS stage 1, and compare candidate catalogs.
+# Merge Chris and Mike in first, though - to get the new information stuff.
+
+# Merge into master, push and close Surhud's pull request.
+
+# ======================================================================
+# 2014-05-30 (Friday) 12:40 PDT
+
+# Merging in Chris and Mike's information and plotting code:
+
+git remote add git@github.com:cpadavis/SpaceWarps.git chris
+git checkout -b chris
+git pull chris master
+
+# Did this last week. Now need to merge in Surhud's stuff from master, and resolve conflicts:
+
+git merge master
+
+# OK, fixed conflicts. Compare test outputs with previous test run!
+
+mkdir -p test_old-bureaucracy
+mv CFHTLS* random_state.pickle update.config test_old-bureaucracy/
+
+cp ../../../projects/CFHTLS_stage1.config CFHTLS_stage1_test.config
+# Edit to have same start time as old-bureacracy config, start: 2013-12-01_00:00:01
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
+# SWAP: From 46736 subjects classified,
+# SWAP: 34385 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: From 46736 subjects classified,
+# SWAP: 3434 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# Hmm: small differences in catalogs. Surhud-only had 34374 candidates (with P > rejection)
+# Is this just the random_state? Both were run with no seed (is seed = 7368)
+
+# Run again to test! Made some tweaks to plotting as well.
+
+mkdir -p test_new-bureaucracy_run1
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run1/
+
+cp test_new-bureaucracy_run1/CFHTLS_stage1_test.config .
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: updating all subjects classified between 2013-12-01_00:00:01
+# SWAP: and 2014-01-07_23:59:59
+# SWAP: total no. of classifications processed:  159464
+# SWAP: From 46736 subjects classified,
+# SWAP: 34363 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3437 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# OK, different again. random_state not working!
+# Try NOT over-writing random_state. Should be better? 
+# It doesn't matter if we always use same random state at beginning.
+
+# run3: constant random_state, plus tweaks to plots (skill not contribution in agent probs plot). 
+
+mkdir -p test_new-bureaucracy_run2
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run2/
+
+cp test_new-bureaucracy_run1/CFHTLS_stage1_test.config .
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: From 46736 subjects classified,
+# SWAP: 34372 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3437 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
 
 
+# Now do a run 4 that is identical, to check numbers. Fixed bug in bureau to keep track of agent skills.
+
+mkdir -p test_new-bureaucracy_run3
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run3/
+
+cp test_new-bureaucracy_run1/CFHTLS_stage1_test.config .
+
+SWAPSHOP.csh -s CFHTLS --startup --fast --config CFHTLS_stage1_test.config
+
+# SWAP: From 46736 subjects classified,
+# SWAP: 34361 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 4354 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 46736 subjects classified,
+# SWAP: 3436 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2014-01-08_00:00:29/CFHTLS_2014-01-08_00:00:29_dud_catalog.txt
+
+# Damn. Numbers still inconsistent. Some problem with random_state. Punt to Surhud!
+
+mkdir -p test_new-bureaucracy_run4
+mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run4/
+
+# Check in SWAP code. Changed N_per_batch to 3million to get some rough
+# sense of how crowd, sample changes with time.
+
+# Edited end time in config file, to match start time of stage 2:
+
+# start: the_beginning
+# end: 2013-12-10_16:47:00
+
+# Add this to the CFHTLS_STAGE1 notes block above.
+
+# Merge back in to master branch, and push so that Surhud and Anu can 
+# test / fix bugs in random state setting.
+
+# ======================================================================
+# 2014-05-30 (Friday) 15:38 PDT
+
+# Now need to run all the way through stage 1 and stage 2 to make good
+# bureaus for crowd plots, and to get final samples of candidates. 
+
+# Standard runs, for various projects and their reproducibility.
+
+# ----------------------------------------------------------------------
+CFHTLS_STAGE1:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage1
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage1.config .
+
+# start: the_beginning
+# end: 2013-12-10_13:29:41
+
+# Download the db dump if necessary:
+set datadir = spacewarp_2014-05-29
+if (! -e spacewarp_2014-05-29) then
+  wget -O spacewarp_2014-05-29.tar.gz \
+    "https://zooniverse-code.s3.amazonaws.com/databases/2014-05-29/ouroboros_projects/spacewarp_2014-05-29.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1401968753&Signature=FDzTX4QX1pFjcwZ1tiGD05UDc0s%3D"
+  SWIPE.csh spacewarp_2014-05-29.tar.gz
+endif
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
+
+# ----------------------------------------------------------------------
+
+CFHTLS_STAGE2:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage2
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage2.config .
+
+# start: 2013-12-10_13:29:41
+# end: 2014-01-06_23:59:59
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2.config
+
+# ----------------------------------------------------------------------
+
+# OK, off we go!
+
+goto CFHTLS_STAGE1
+
+# Results:
+
+# Saturday - now including all stage 2 subjects!
+# Also, set stage 1 end time to same as hasty (as used in defining stage 2 sample!)
+# 2013-12-08_10:20:56
+# ... and merged in Surhud's pull request, so results should be reproducible.
+
+
+# SWAP: updating all subjects classified between the_beginning
+# SWAP: and 2013-12-08_10:20:56
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 420474 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3367 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5306 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 4 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 377 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 6590 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5335 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
+
+# Report says:
+#    Number of classifications:    10768759
+#    Number of classns used:       3705704
+#    Number of classifiers:        36929
+#    Number of test subjects:      427064
+#    Number of sims:               5712
+#    Number of duds:               4509
+#    Mean test classns/classifier: 262.8
+#    Mean classns/test subject:    8.4
+#    Test subject retirements:     420474
+#    Mean classns/retirement:      8.2
+#    Test subject rejections:      420474
+#    Test subject identifications: 3367
+#    Lens completeness:            92.9%
+#    Lens purity:                  0.1%
+#    FP contamination:             99.9%
+#    Lenses missed (FN rate):      6.6%
+
+
+
+# And now stage 2. Try running in parallel?!
+
+goto CFHTLS_STAGE2
+
+# Results:
+
+# SWAP: updating all subjects classified between 2013-12-10_13:29:41
+# SWAP: and 2014-01-06_23:59:59
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 2289 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 90 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 119 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 1 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 14 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 1390 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 138 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 18 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt
+
+# Report says:
+#   Number of classifications:    224745
+#   Number of classns used:       224745
+#   Number of classifiers:        1964
+#   Number of test subjects:      3679
+#   Number of sims:               152
+#   Number of duds:               201
+#   Mean test classns/classifier: 81.0
+#   Mean classns/test subject:    43.2
+#   Test subject retirements:     2289
+#   Mean classns/retirement:      47.0
+#   Test subject rejections:      2289
+#   Test subject identifications: 90
+#   Lens completeness:            78.3%
+#   Lens purity:                  10.0%
+#   FP contamination:             91.0%
+#   Lenses missed (FN rate):      9.2%
+
+
+# NB. I Forgot to set report = True in config files, this is now fixed. 
+# I ran SWAPSHOP again, with update.config edited to do reporting:
+
+cd $SWAP_DIR/workspace/CFHTLS/stage1
+SWAPSHOP.csh -s CFHTLS 
+
+cd $SWAP_DIR/workspace/CFHTLS/stage2
+SWAPSHOP.csh -s CFHTLS --stage2 
+
+# 2014-06-01 (Sunday) 23:14 PDT
+
+# Re-running stage 2 so that it agrees with Anu's run - with random state
+# fixed. Number about to change again...
+
+# ======================================================================
+# 2014-05-30 (Friday) 17:50 PDT
+
+# Make crowd plots, using stage 1 and stage 2 bureaus from above.
+
+cd $SWAP_DIR/../doc/sw-system-figs/
+
+set stage1bureau = $SWAP_DIR/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle 
+set stage2bureau = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+
+make_crowd_plots.py $stage1bureau $stage2bureau
+
+# Seem to work OK: tweaked labels etc, now write out numbers 
+# Stage 1 and 2 analysis is now done! Including tweak to make stage 1 end time 
+# equal the stage 2 start time. 
+# Numbers:
+
+# make_crowd_plots: illustrating behaviour captured in bureau files: 
+# make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
+# make_crowd_plots:  /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+# SWAP: read an old bureau of 36982 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
+# SWAP: read an old bureau of 1964 classification agents from /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+# make_crowd_plots: stage 1, 2 agent numbers:  36982 1964
+# make_crowd_plots:  782  volunteers stayed on for Stage 2 from Stage 1
+# 
+# make_crowd_plots: mean stage 1 volunteer effort =  263.2
+# make_crowd_plots: mean stage 1 volunteer experience =  28.9
+# make_crowd_plots: mean stage 1 volunteer contribution =  34.9 bits
+# make_crowd_plots: mean stage 1 volunteer skill =  0.04 bits
+# make_crowd_plots: mean stage 2 volunteer effort =  81.0
+# make_crowd_plots: mean stage 2 volunteer experience =  33.5
+# make_crowd_plots: mean stage 2 volunteer contribution =  11.1 bits
+# make_crowd_plots: mean stage 2 volunteer skill =  0.05 bits
+# 
+# make_crowd_plots:  36982 stage 1 volunteers contributed 1292016.3 bits
+# make_crowd_plots:  1.0 % of the volunteers - 375 people - contributed 90% of the information at Stage 1
+# make_crowd_plots: total amount of information generated at stage 1 =  91122.6 bits
+# make_crowd_plots:  9118 experienced stage 1 volunteers contributed 1290487.4 bits
+# make_crowd_plots:  4.1 % of the experienced volunteers - 375 people - contributed 90% of the information at Stage 1
+# make_crowd_plots:  1964 stage 2 volunteers contributed 21895.8 bits
+# make_crowd_plots:  7.2 % of the volunteers - 141 people - contributed 90% of the information at Stage 2
+# make_crowd_plots: total amount of information generated at stage 2 =  1640.4 bits
+# make_crowd_plots: cumulative contribution plot saved to ./crowd_contrib_cumul.png
+# 
+# make_crowd_plots:  36982 stage 1 volunteers possess 1471.9 bits worth of skill
+# make_crowd_plots:  79.2 % of the skill possessed by the (20%) most skilled 7397 people
+# make_crowd_plots:  9118 experienced stage 1 volunteers possess 1115.5 bits worth of skill
+# make_crowd_plots:  43.1 % of the skill possessed by the (20%) most skilled 1824 people
+# make_crowd_plots:  1964 stage 2 volunteers possess 102.4 bits worth of skill
+# make_crowd_plots:  77.0 % of the skill possessed by the (20%) most skilled 393 people
+# make_crowd_plots: cumulative skill plot saved to ./crowd_skill_cumul.png
+# 
+# make_crowd_plots: the 649 - 7.0 % - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of 0.22
+# make_crowd_plots: with 97.0 % of them remaining at skill 0.05 or higher
+# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
+# 
+# make_crowd_plots: corner plot saved to ./all_skill_contribution_experience_education.png
+# 
+# make_crowd_plots: total contribution in Stage 2 was 21895.8 bits by 1964 volunteers
+# make_crowd_plots:  782 stage 1 veteran users ( 39.0 % of the total) made 94.0 % of the contribution
+# make_crowd_plots: the average stage 1 veteran had skill, contribution, effort =  0.10 26.3 166
+# make_crowd_plots:  1182 new users ( 60.0 % of the total) made 6.0 % of the contribution
+# make_crowd_plots: the average stage 2 newbie had skill, contribution, effort =  0.02 1.1 24
+# make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
+# 
+# make_crowd_plots: all done!
+
+
+# ======================================================================
+# 2014-06-01 (Sunday) 08:25 PDT
+
+# Do some tidying up, to reclaim disk space:
+
+mkdir -p $SWAP_DIR/projects/CFHTLS/stage1/results
+
+mv stage1_results/* $SWAP_DIR/projects/CFHTLS/stage1/results/
+\rm -rf stage1_results/
+
+mkdir -p stage2/attic
+mv stage2_phil/* stage2_phil/.swap.cookie stage2/attic/
+\rm -rf stage2_phil
+
+mkdir -p stage1/attic
+mv allfuzzy fuzzy falsenegatives hasty knownlenses production talk stage1/attic/.
+
+cd stage1/attic/
+du -sch */*.pickle
+\rm allfuzzy/CFHTLS_bureau.pickle allfuzzy/CFHTLS_collection.pickle fuzzy/CFHTLS_bureau.pickle fuzzy/CFHTLS_collection.pickle production/CFHTLS_bureau.pickle production/CFHTLS_collection.pickle
+
+# OK - now, put results in projects/CFHTLS/stage?/results as we get them.
+# Restart stage 1 SWAPSHOP...
+
+# OK, do stage 1 candidates match those we actually injected into stage 2 interface?
+
+wc -l CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate*.txt \
+      attic/hasty/CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidate*.txt
+
+# Today's run:      
+#     6591 CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+#     3367 CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+
+# The stage 1 run we actually used:
+#     6310 attic/hasty/CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidate_catalog.txt
+#     3381 attic/hasty/CFHTLS_2013-12-08_10:20:56/CFHTLS_2013-12-08_10:20:56_candidates.txt
+
+# Differences due to random seed? Have to use the old ones, I'm afraid.
+# Crowd analysis has to use new ones though. 
+
+# Add more classifications? By changing end time in update.config?
+
+# For now, rename "hasty" with "ACTUAL" and put in the stage1 workspace area
+# for Anu. Check in.
+
+# ======================================================================
+# 2014-06-02 (Monday) 08:42 PDT
+
+# Which has more classifications, ACTUAL or current? Check reports:
+
+# ACTUAL/hasty: 10769187
+# current:      10768759
+
+# So current analysis stops short, by a few hundred... 
+# Use a more accurate end date? 
+# How about 2013-12-10_16:47:00 as previously thought?
+# Or        2013-12-10_13:29:41 which is the  current stage 2 start time?
+# Try the latter. Change update.config and run SWAPSHOP:
+
+# Save a copy of the final update.config, ie as if we had done this:
+
+# SWAPSHOP.csh -s CFHTLS --config CFHTLS_stage1_final_update.config
+
+SWAPSHOP.csh -s CFHTLS
+
+# Old report etc in CFHTLS_2013-09-17_18:36:31
+# New report etc in CFHTLS_2013-12-08_10:20:57
+
+# SWAP: total no. of classifications processed:  33366
+# SWAP: saving agents to ./CFHTLS_bureau.pickle
+# SWAP: saving subjects to ./CFHTLS_collection.pickle
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 420475 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3368 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5306 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 4 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 378 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 6589 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5334 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/CFHTLS_2013-12-08_10:20:57/CFHTLS_2013-12-08_10:20:57_dud_catalog.txt
+
+# Report says:                     OLD          NEW ('-' denotes unchanged)
+#    Number of classifications:    10768759		10802125
+#    Number of classns used:       3705704		3705745
+#    Number of classifiers:        36929		36982
+#    Number of test subjects:      427064		-
+#    Number of sims:               5712			-
+#    Number of duds:               4509			4509 (?!)
+#    Mean test classns/classifier: 262.8		263.2
+#    Mean classns/test subject:    8.4			-
+#    Test subject retirements:     420474		420475
+#    Mean classns/retirement:      8.2			-
+#    Test subject rejections:      420474		-
+#    Test subject identifications: 3367			3368
+#    Lens completeness:            92.9%		-
+#    Lens purity:                  0.1%			-
+#    FP contamination:             99.9%		-
+#    Lenses missed (FN rate):      6.6%			-
+
+# Almost no change in number of detections. New numbers are nice because of
+# the stage 1/2 handover. Update config file in projects dir, tell Anu.
+
+# ======================================================================
+# 2014-06-02 (Monday) 08:42 PDT
+
+# Stage1 analysis assumed PD,PL = 0.5 initially, conservatively.
+# What if this had been 0.7 instead? More efficient? How would the FP
+# and FN rates change with this optimism? 
+# Can also try unsupervised system too, more pessimistic.
+
+# GENEROUS:
+
+# Stage 1:
+
+mkdirf $SWAP_DIR/workspace/CFHTLS/stage1/GENEROUS
+cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage1.config CFHTLS_stage1_generous.config
+# Edit to set PD,PL = 0.7
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1_generous.config
+
+# Started 2014-06-02 (Monday) 09:53 PDT.....finished by 5pm.
+
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 417264 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3575 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5273 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 5 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 411 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 9800 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5301 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 6 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
+
+# Report says:                    GENEROUS  STANDARD
+# Number of classifications:      10802125  10802125
+# Number of classns used:         3437025   3705745
+# Number of classifiers:          36982     36982
+# Number of test subjects:        427064    427064
+# Number of sims:                 5712      5712
+# Number of duds:                 4500      4509
+# Mean test classns/classifier:   263.2     263.2
+# Mean classns/test subject:      7.8       8.4
+# Test subject retirements:       417264    420475
+# Mean classns/retirement:        7.6       8.2
+# Test subject rejections:        417264    420474
+# Test subject identifications:   3575      3368
+# Lens completeness:              92.3%     92.9%
+# Lens purity:                    0.2%      0.1%
+# FP contamination:               99.8%     99.9%
+# Lenses missed (FN rate):        7.2%      6.6%
+
+# Not big differences. More candidates, fewer false positives, 
+# higher false negative rate. 7% fewer classifications needed. 
+
+
+# Stage 2 (where candidates were selected by standard stage 1 analysis, of course...)
+
+mkdirf $SWAP_DIR/workspace/CFHTLS/stage2/GENEROUS
+cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage2.config CFHTLS_stage2_generous.config
+# Edit to set PD,PL = 0.7
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2_generous.config
+
+# SWAP: updating all subjects classified between 2013-12-10_13:29:41
+# SWAP: and 2014-01-06_23:59:59
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 2225 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 115 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 116 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 0 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 16 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 1454 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 136 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 27 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt
+
+# Report says:                    GENEROUS  STANDARD
+# Number of classifications:      224745    224745
+# Number of classns used:         224745    224745
+# Number of classifiers:          1964      1964
+# Number of test subjects:        3679      3679
+# Number of sims:                 152       152
+# Number of duds:                 201       201
+# Mean test classns/classifier:   81.0      81.0
+# Mean classns/test subject:      43.2      43.2
+# Test subject retirements:       2225      2289
+# Mean classns/retirement:        46.9      47.0
+# Test subject rejections:        2225      2289
+# Test subject identifications:   115       90
+# Lens completeness:              76.3%     78.3%
+# Lens purity:                    13.4%     10.0%
+# FP contamination:               86.6%     91.0%
+# Lenses missed (FN rate):        10.5%     9.2%
+
+# Again, more candidates, but also more false negatives.
+
+# Make crowd plots?
+
+
+# ----------------------------------------------------------------------
+# 2014-06-03 (Tuesday) 21:56 PDT
+
+# UNSUPERVISED:
+
+# Need to merge into unsupervised branch! Don't change branch until other test
+# is done...
+mkdirf $SWAP_DIR/workspace/CFHTLS/stage1/UNSUPERVISED
+cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage1.config CFHTLS_stage1_unsupervised.config
+# Edit to set unsupervised flag...
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1_unsupervised.config
+
+
+# ======================================================================

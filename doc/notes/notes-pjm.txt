@@ -4855,6 +4855,55 @@ mv CFHTLS* random_state.pickle update.config test_new-bureaucracy_run4/
 # Now need to run all the way through stage 1 and stage 2 to make good
 # bureaus for crowd plots, and to get final samples of candidates. 
 
+# Standard runs, for various projects and their reproducibility.
+
+# ----------------------------------------------------------------------
+CFHTLS_STAGE1:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage1
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage1.config .
+
+# start: the_beginning
+# end: 2013-12-10_13:29:41
+
+# Download the db dump if necessary:
+set datadir = spacewarp_2014-05-29
+if (! -e spacewarp_2014-05-29) then
+  wget -O spacewarp_2014-05-29.tar.gz \
+    "https://zooniverse-code.s3.amazonaws.com/databases/2014-05-29/ouroboros_projects/spacewarp_2014-05-29.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1401968753&Signature=FDzTX4QX1pFjcwZ1tiGD05UDc0s%3D"
+  SWIPE.csh spacewarp_2014-05-29.tar.gz
+endif
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
+
+# ----------------------------------------------------------------------
+
+CFHTLS_STAGE2:
+
+# Set up workspace:
+set workspace = $SWAP_DIR/workspace/CFHTLS/stage2
+mkdir -p $workspace
+cd $workspace
+
+# Get the configuration file for this project:
+cp $SWAP_DIR/projects/CFHTLS_stage2.config .
+
+# start: 2013-12-10_13:29:41
+# end: 2014-01-06_23:59:59
+
+# Run SWAP, save plots:
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2.config
+
+# ----------------------------------------------------------------------
+
+# OK, off we go!
+
 goto CFHTLS_STAGE1
 
 # Results:
@@ -5154,14 +5203,115 @@ SWAPSHOP.csh -s CFHTLS
 # Stage1 analysis assumed PD,PL = 0.5 initially, conservatively.
 # What if this had been 0.7 instead? More efficient? How would the FP
 # and FN rates change with this optimism? 
-# Could also try unsupervised system too, more pessimistic.
+# Can also try unsupervised system too, more pessimistic.
 
 # GENEROUS:
+
+# Stage 1:
 
 mkdirf $SWAP_DIR/workspace/CFHTLS/stage1/GENEROUS
 cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage1.config CFHTLS_stage1_generous.config
 # Edit to set PD,PL = 0.7
 SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1_generous.config
+
+# Started 2014-06-02 (Monday) 09:53 PDT.....finished by 5pm.
+
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 417264 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3575 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5273 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 5 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 411 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 9800 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5301 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 6 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
+
+# Report says:                    GENEROUS  STANDARD
+# Number of classifications:      10802125  10802125
+# Number of classns used:         3437025   3705745
+# Number of classifiers:          36982     36982
+# Number of test subjects:        427064    427064
+# Number of sims:                 5712      5712
+# Number of duds:                 4500      4509
+# Mean test classns/classifier:   263.2     263.2
+# Mean classns/test subject:      7.8       8.4
+# Test subject retirements:       417264    420475
+# Mean classns/retirement:        7.6       8.2
+# Test subject rejections:        417264    420474
+# Test subject identifications:   3575      3368
+# Lens completeness:              92.3%     92.9%
+# Lens purity:                    0.2%      0.1%
+# FP contamination:               99.8%     99.9%
+# Lenses missed (FN rate):        7.2%      6.6%
+
+# Not big differences. More candidates, fewer false positives, 
+# higher false negative rate. 7% fewer classifications needed. 
+
+
+# Stage 2 (where candidates were selected by standard stage 1 analysis, of course...)
+
+mkdirf $SWAP_DIR/workspace/CFHTLS/stage2/GENEROUS
+cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage2.config CFHTLS_stage2_generous.config
+# Edit to set PD,PL = 0.7
+SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2_generous.config
+
+# SWAP: updating all subjects classified between 2013-12-10_13:29:41
+# SWAP: and 2014-01-06_23:59:59
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 2225 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 115 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 116 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 0 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 16 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 1454 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 136 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 4032 subjects classified,
+# SWAP: 27 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt
+
+# Report says:                    GENEROUS  STANDARD
+# Number of classifications:      224745    224745
+# Number of classns used:         224745    224745
+# Number of classifiers:          1964      1964
+# Number of test subjects:        3679      3679
+# Number of sims:                 152       152
+# Number of duds:                 201       201
+# Mean test classns/classifier:   81.0      81.0
+# Mean classns/test subject:      43.2      43.2
+# Test subject retirements:       2225      2289
+# Mean classns/retirement:        46.9      47.0
+# Test subject rejections:        2225      2289
+# Test subject identifications:   115       90
+# Lens completeness:              76.3%     78.3%
+# Lens purity:                    13.4%     10.0%
+# FP contamination:               86.6%     91.0%
+# Lenses missed (FN rate):        10.5%     9.2%
+
+# Again, more candidates, but also more false negatives.
+
+# Make crowd plots?
+
+
+# ----------------------------------------------------------------------
+# 2014-06-03 (Tuesday) 21:56 PDT
 
 # UNSUPERVISED:
 
@@ -5174,50 +5324,3 @@ SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1_unsupervised.config
 
 
 # ======================================================================
-
-# Standard runs, for various projects and their reproducibility.
-
-# ----------------------------------------------------------------------
-CFHTLS_STAGE1:
-
-# Set up workspace:
-set workspace = $SWAP_DIR/workspace/CFHTLS/stage1
-mkdir -p $workspace
-cd $workspace
-
-# Get the configuration file for this project:
-cp $SWAP_DIR/projects/CFHTLS_stage1.config .
-
-# start: the_beginning
-# end: 2013-12-10_13:29:41
-
-# Download the db dump if necessary:
-set datadir = spacewarp_2014-05-29
-if (! -e spacewarp_2014-05-29) then
-  wget -O spacewarp_2014-05-29.tar.gz \
-    "https://zooniverse-code.s3.amazonaws.com/databases/2014-05-29/ouroboros_projects/spacewarp_2014-05-29.tar.gz?AWSAccessKeyId=AKIAJHHZ7KLFECQKTS7A&Expires=1401968753&Signature=FDzTX4QX1pFjcwZ1tiGD05UDc0s%3D"
-  SWIPE.csh spacewarp_2014-05-29.tar.gz
-endif
-
-# Run SWAP, save plots:
-SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1.config
-
-# ----------------------------------------------------------------------
-
-CFHTLS_STAGE2:
-
-# Set up workspace:
-set workspace = $SWAP_DIR/workspace/CFHTLS/stage2
-mkdir -p $workspace
-cd $workspace
-
-# Get the configuration file for this project:
-cp $SWAP_DIR/projects/CFHTLS_stage2.config .
-
-# start: 2013-12-10_13:29:41
-# end: 2014-01-06_23:59:59
-
-# Run SWAP, save plots:
-SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2.config
-
-# ----------------------------------------------------------------------

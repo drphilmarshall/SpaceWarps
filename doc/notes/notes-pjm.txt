@@ -5374,8 +5374,39 @@ SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2_generous.config
 # is done...
 mkdirf $SWAP_DIR/workspace/CFHTLS/stage1/UNSUPERVISED
 cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage1.config CFHTLS_stage1_unsupervised.config
-# Edit to set unsupervised flag...
+# Edit to set unsupervised flag, and initial PD, PL to 0.7
 SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1_unsupervised.config
 
+# Started Tuesday, 22:19 PDT
+# Had to restart Weds morning as supervised keyword was not written out to update.config...
+# Edited update.config:
+SWAPSHOP.csh -s CFHTLS
+
+
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 161621 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3695 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5194 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 4 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 444 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 265443 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5268 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 24 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
+
+
+# Higher FN rate than generous, which is higher than standard. Is this our primary metric?
+# Unsupervised gives more FPs, but theres not much in it. Interesting.
+# This is really "ignore training" because volunteers *have* been trained - still want training images in there!
+# Try using both training and test images - shoudl be more efficient...
 
 # ======================================================================

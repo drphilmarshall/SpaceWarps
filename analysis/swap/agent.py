@@ -171,7 +171,7 @@ class Agent(object):
                         self.PD = np.max([self.PD,swap.PDmin])
                         self.ND += (1.0 - increment)
                     
-                    self.NT += 1
+                    # self.NT += 1 # Don't count test images as training images!
 
                 else:
                     raise Exception("Apparently, the subject was actually a "+str(actually_it_was))

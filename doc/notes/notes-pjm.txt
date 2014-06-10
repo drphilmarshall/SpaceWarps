@@ -5428,4 +5428,7 @@ SWAPSHOP.csh -s CFHTLS
 # Try using both training and test images - shoudl be more efficient...
 # Chris is looking into this.
 
+# Merge in code from unsupervised branch! And make sure all checked in config
+# files have correct flags...
+
 # ======================================================================

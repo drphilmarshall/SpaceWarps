@@ -238,6 +238,7 @@ def write_config(filename, pars):
                  'one_by_one', \
                  'report', \
                  'repickle', \
+                 'supervised', \
                  'initialPL', \
                  'initialPD', \
                  'agents_willing_to_learn', \

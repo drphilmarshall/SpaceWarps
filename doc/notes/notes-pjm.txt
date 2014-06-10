@@ -4609,24 +4609,79 @@ grep -v '#' $master | \
 # directory. Do a three-way comparison with the first 10^6 classifications
 # only. Just run SWAP once, with batch of 10^6.
 
-set test_dir $SWAP_DIR/VICS82/stage1/supervision_tests
+set test_dir = $SWAP_DIR/VICS82/stage1/supervision_tests
 mkdirf $test_dir
 cp $SWAP_DIR/VICS82/stage1/stage1.config template.config
 
-# Edit this, etc.
+# Edit this, to include learning = supervised etc.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 1 - standard operation
+
+# supervised: True        
+# initialPL: 0.5
+# initialPD: 0.5
 
 set expt = 'supervised_random'
-mkdirf ${expt}
-cp ../template.config ${expt}_stage1.config
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
 
-SWAPSHOP.csh -s VICS82 --test 1 --startup --fast --config \
-    ${expt}_stage1.config 
+SWAP.py ${expt}_stage1.config 
+
+# VICS82 terrible data? Seems like a lot of test subjects drifting up...
+# Need to compare with old code.
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 2 - supervised, agents assume astute volunteers
+
+# supervised: True        
+# initialPL: 0.75
+# initialPD: 0.75
 
 set expt = 'supervised_astute'
-set expt = 'unsupervised_random'
-set expt = 'unsupervised_astute'
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
 
-# And so on. OK, switch to unsupervised branch before breaking the code!!
+SWAP.py ${expt}_stage1.config 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 3 - unsupervised, agents assume astute volunteers
+
+# supervised: False        
+# initialPL: 0.75
+# initialPD: 0.75
+
+set expt = 'unsupervised_astute'
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
+
+SWAP.py ${expt}_stage1.config 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+# EXPERIMENT 4 - unsupervised, agents assume random volunteers
+
+# supervised: False        
+# initialPL: 0.5
+# initialPD: 0.5
+
+set expt = 'unsupervised_random'
+mkdirf ${test_dir}/${expt}
+cp ${test_dir}/template.config ${expt}_stage1.config
+
+SWAP.py ${expt}_stage1.config 
+
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+# Switched to unsupervised branch before breaking the code!!
+
+# Interesting! 
+# * Astute, unsupervised agents are quicker to reject subjects, 
+#   as they are continuously reinforced in the "lenses are rare" mantra
+# * These agents' PL values do not change much, because they don't see 
+#   many lenses.
+# * Random, unsupervised agents stay random in PL - and do worst of all
+#   in lens detection?
+
 
 # ======================================================================
 # 2014-05-29 (Thursday) 17:45 PDT
@@ -5319,8 +5374,58 @@ SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2_generous.config
 # is done...
 mkdirf $SWAP_DIR/workspace/CFHTLS/stage1/UNSUPERVISED
 cp $SWAP_DIR/projects/CFHTLS/stage1/CFHTLS_stage1.config CFHTLS_stage1_unsupervised.config
-# Edit to set unsupervised flag...
+# Edit to set unsupervised flag, and initial PD, PL to 0.7
 SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage1_unsupervised.config
 
+# Started Tuesday, 22:19 PDT
+# Had to restart Weds morning as supervised keyword was not written out to update.config...
+# Edited update.config:
+SWAPSHOP.csh -s CFHTLS
+
+
+# SWAP: saving retiree subject Zooniverse IDs...
+# SWAP: 161621 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_retire_these.txt
+# SWAP: saving lens candidates...
+# SWAP: 3695 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidates.txt
+# SWAP: saving true positives...
+# SWAP: 5194 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_true_positives.txt
+# SWAP: saving false positives...
+# SWAP: 4 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_positives.txt
+# SWAP: saving false negatives...
+# SWAP: 444 lines written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_training_false_negatives.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 265443 candidates (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_candidate_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 5268 sim 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_sim_catalog.txt
+# SWAP: saving catalog of high probability subjects...
+# SWAP: From 437276 subjects classified,
+# SWAP: 24 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
+
+# Report says:                  UNSUPERVISED  GENEROUS  STANDARD
+# Number of classifications:      10802125    10802125  10802125
+# Number of classns used:         3657057     3437025   3705745
+# Number of classifiers:          36982       36982     36982
+# Number of test subjects:        427064      427064    427064
+# Number of sims:                 5712        5712      5712
+# Number of duds:                 4500        4500      4509
+# Mean test classns/classifier:   28.9        263.2     263.2
+# Mean classns/test subject:      8.3         7.8       8.4
+# Test subject retirements:       161621      417264    420475
+# Mean classns/retirement:        9.1         7.6       8.2
+# Test subject rejections:        161621      417264    420474
+# Test subject identifications:   3695        3575      3368
+# Lens completeness:              90.9%       92.3%     92.9%
+# Lens purity:                    0.6%        0.2%      0.1%
+# FP contamination:               99.4%       99.8%     99.9%
+# Lenses missed (FN rate):        7.8%        7.2%      6.6%
+
+
+# Higher FN rate than generous, which is higher than standard. Is this our primary metric?
+# Unsupervised gives more FPs, but theres not much in it. Interesting.
+# This is really "ignore training" because volunteers *have* been trained - still want training images in there!
+# Try using both training and test images - shoudl be more efficient...
+# Chris is looking into this.
 
 # ======================================================================

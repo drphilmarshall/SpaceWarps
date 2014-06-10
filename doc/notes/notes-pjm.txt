@@ -5403,10 +5403,29 @@ SWAPSHOP.csh -s CFHTLS
 # SWAP: From 437276 subjects classified,
 # SWAP: 24 dud 'candidates' (with P > rejection) written to /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/UNSUPERVISED/CFHTLS_2013-09-17_18:36:31/CFHTLS_2013-09-17_18:36:31_dud_catalog.txt
 
+# Report says:                  UNSUPERVISED  GENEROUS  STANDARD
+# Number of classifications:      10802125    10802125  10802125
+# Number of classns used:         3657057     3437025   3705745
+# Number of classifiers:          36982       36982     36982
+# Number of test subjects:        427064      427064    427064
+# Number of sims:                 5712        5712      5712
+# Number of duds:                 4500        4500      4509
+# Mean test classns/classifier:   28.9        263.2     263.2
+# Mean classns/test subject:      8.3         7.8       8.4
+# Test subject retirements:       161621      417264    420475
+# Mean classns/retirement:        9.1         7.6       8.2
+# Test subject rejections:        161621      417264    420474
+# Test subject identifications:   3695        3575      3368
+# Lens completeness:              90.9%       92.3%     92.9%
+# Lens purity:                    0.6%        0.2%      0.1%
+# FP contamination:               99.4%       99.8%     99.9%
+# Lenses missed (FN rate):        7.8%        7.2%      6.6%
+
 
 # Higher FN rate than generous, which is higher than standard. Is this our primary metric?
 # Unsupervised gives more FPs, but theres not much in it. Interesting.
 # This is really "ignore training" because volunteers *have* been trained - still want training images in there!
 # Try using both training and test images - shoudl be more efficient...
+# Chris is looking into this.
 
 # ======================================================================

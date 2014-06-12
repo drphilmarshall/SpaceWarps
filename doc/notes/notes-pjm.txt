@@ -21,7 +21,7 @@ ls spacewarps-2013-04-06_20-07-28/ouroboros_staging/
 # Needs pymongo... pip install? Yep - done
 
 # Also need binary installation of mongodb, from mongodb.org
-# Downloaded to software, linked to ~/bin
+# Downloaded to software, copied to usr/local/bin
 
 mongorestore spacewarps-2013-04-06_20-07-28
 # Sun Apr  7 01:23:48.133 kern.sched unavailable
@@ -150,6 +150,13 @@ Safari/537.31'}]}
 # True
 
 # Perfect!
+
+# Note [2014-06-12 (Thursday) 09:07 PDT]
+# - spacewarp* directory can be removed once mongo directory is populated
+#   The data is ingested and reformated as a mongo database, and then the 
+#   source json and bson files are not used. This is important, as 
+#   the spacewarp* directories can run to tens of Gb.
+
 
 # ============================================================================
 # 2013-04-22 (Monday) 23:24 BST
@@ -5430,5 +5437,64 @@ SWAPSHOP.csh -s CFHTLS
 
 # Merge in code from unsupervised branch! And make sure all checked in config
 # files have correct flags...
+
+# ======================================================================
+# 2014-06-10 (Tuesday) 16:54 PDT
+
+# Visual inspection of stage2 candidates. Go fast, no commenting!
+# First some reorganisation. 
+# Make one master images directory, and keep app in visapp1, visapp2 etc
+# folders. Then link to app from dated work directories.
+
+# eg
+
+cd $SWAP_DIR/workspace/CFHTLS/stage2/expert_inspection/2014-06-10/ 
+cp File_list_newstage2 File_list
+ln -s ../visapp2/visapp.jar .
+ln -s ../visapp2/lib .
+ln -s ../images .
+
+# Now run the app:
+
+java -jar visapp.jar &
+
+# Follow progress:
+
+tail -f record_position.txt
+
+# Current state:
+wc -l record_position.txt 
+#       42 record_position.txt
+
+# ======================================================================
+# 2014-06-12 (Thursday) 08:51 PDT
+
+Pickles available on the web, for stage 1 and stage 2 analyses. cp from
+workspace to be sure:
+
+cd $SWAP_DIR/projects/CFHTLS/stage1/results/
+cp /nfs/slac/g/ki/ki19/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/ACTUAL/CFHTLS_bureau.pickle .
+cp /nfs/slac/g/ki/ki19/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/ACTUAL/CFHTLS_collection.pickle .
+
+cd $SWAP_DIR/projects/CFHTLS/stage2/results/
+cp /nfs/slac/g/ki/ki19/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle .
+cp /nfs/slac/g/ki/ki19/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_collection.pickle .
+
+# These directories are not web-visible (in that the listings do not appear)
+# but the files can be obtained by wget:
+
+set baseurl = "http://www.slac.stanford.edu/~pjm"
+
+cd $SWAP_DIR/projects/CFHTLS/stage1/results/
+wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/ACTUAL/CFHTLS_bureau.pickle"
+wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage1/ACTUAL/CFHTLS_collection.pickle"
+
+cd $SWAP_DIR/projects/CFHTLS/stage2/results/
+wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle"
+wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_collection.pickle"
+
+# The -N option turns on timestamping, at which point wget knows not 
+# to bother downloading if the files hasn't changed. The stage 1 pickles have
+# December timestamps.
 
 # ======================================================================

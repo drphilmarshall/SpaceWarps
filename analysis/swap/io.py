@@ -2,7 +2,7 @@
 
 import swap
 
-import os,cPickle,atpy
+import os,cPickle
 
 # ======================================================================
 

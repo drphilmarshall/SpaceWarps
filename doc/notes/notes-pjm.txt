@@ -5369,8 +5369,63 @@ SWAPSHOP.csh -s CFHTLS --startup --config CFHTLS_stage2_generous.config
 
 # Again, more candidates, but also more false negatives.
 
-# Make crowd plots?
 
+# How is crowd different?
+
+cd $SWAP_DIR/workspace/CFHTLS/stage1/GENEROUS
+set stage1bureau = $SWAP_DIR/workspace/CFHTLS/stage1/GENEROUS/CFHTLS_bureau.pickle 
+set stage2bureau = $SWAP_DIR/workspace/CFHTLS/stage2/GENEROUS/CFHTLS_bureau.pickle
+
+make_crowd_plots.py $stage1bureau $stage2bureau
+
+# make_crowd_plots: stage 1, 2 agent numbers:  36982 1964
+# make_crowd_plots:  782  volunteers stayed on for Stage 2 from Stage 1
+# make_crowd_plots: mean stage 1 volunteer effort =  263.2
+# make_crowd_plots: mean stage 1 volunteer experience =  28.9
+# make_crowd_plots: mean stage 1 volunteer contribution =  35.7 bits (cf 34.9 bits)
+# make_crowd_plots: mean stage 1 volunteer skill =  0.10 bits (cf 0.04 bits)
+# make_crowd_plots: mean stage 2 volunteer effort =  81.0
+# make_crowd_plots: mean stage 2 volunteer experience =  33.5
+# make_crowd_plots: mean stage 2 volunteer contribution =  14.4 bits (cf 11.1 bits)
+# make_crowd_plots: mean stage 2 volunteer skill =  0.09 bits (cf 0.05 bits)
+# 
+# make_crowd_plots:  36982 stage 1 volunteers contributed 1319322.0 bits (cf 1292016.3 bits)
+# make_crowd_plots:  1.5 % of the volunteers - 541 people - contributed 90% of the information at Stage 1
+#   (cf make_crowd_plots:  1.0 % of the volunteers - 375 people - contributed 90% of the information at Stage 1)
+# make_crowd_plots: total amount of information generated at stage 1 =  103955.0 bits (cf 91122.6 bits)
+# make_crowd_plots:  9118 experienced stage 1 volunteers contributed 1311399.6 bits
+# make_crowd_plots:  5.9 % of the experienced volunteers - 541 people - contributed 90% of the information at Stage 1
+# make_crowd_plots:  1964 stage 2 volunteers contributed 28371.3 bits (cf 21895.8 bits)
+# make_crowd_plots:  10.8 % of the volunteers - 212 people - contributed 90% of the information at Stage 2
+#   (cf make_crowd_plots:  7.2 % of the volunteers - 141 people - contributed 90% of the information at Stage 2)
+# make_crowd_plots: total amount of information generated at stage 2 =  2269.1 bits (cf 1640.4 bits)
+# make_crowd_plots: cumulative contribution plot saved to ./crowd_contrib_cumul.png
+# 
+# make_crowd_plots:  36982 stage 1 volunteers possess 3786.8 bits worth of skill (cf 1471.9 bits)
+# make_crowd_plots:  47.6 % of the skill possessed by the (20%) most skilled 7397 people
+#   (cf make_crowd_plots:  79.2 % of the skill possessed by the (20%) most skilled 7397 people)
+# make_crowd_plots:  9118 experienced stage 1 volunteers possess 1665.2 bits worth of skill
+# make_crowd_plots:  19.4 % of the skill possessed by the (20%) most skilled 1824 people
+# make_crowd_plots:  1964 stage 2 volunteers possess 181.9 bits worth of skill (cf 102.4 bits)
+# make_crowd_plots:  59.5 % of the skill possessed by the (20%) most skilled 393 people
+#    (cf make_crowd_plots:  77.0 % of the skill possessed by the (20%) most skilled 393 people)
+# make_crowd_plots: cumulative skill plot saved to ./crowd_skill_cumul.png
+# 
+# make_crowd_plots: the 5342 - 58.0 % - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of 0.24
+# make_crowd_plots: with 98.0 % of them remaining at skill 0.05 or higher
+# make_crowd_plots: skill-skill plot saved to ./early_vs_final_skill.png
+# 
+# make_crowd_plots: corner plot saved to ./all_skill_contribution_experience_education.png
+# 
+# make_crowd_plots: total contribution in Stage 2 was 28371.3 bits by 1964 volunteers
+# make_crowd_plots:  782 stage 1 veteran users ( 39.0 % of the total) made 92.7 % of the contribution (cf 94.0%)
+# make_crowd_plots: the average stage 1 veteran had skill, contribution, effort =  0.16 33.6 166 (cf 0.10 26.3 166)
+# make_crowd_plots:  1182 new users ( 60.0 % of the total) made 7.3 % of the contribution (cf 6.0 %)
+# make_crowd_plots: the average stage 2 newbie had skill, contribution, effort =  0.05 1.7 24 (cf 0.02 1.1 24)
+# make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
+
+
+# ie not a big difference. Mean skill higher by fiat, but contribution numbers don't change much.
 
 # ----------------------------------------------------------------------
 # 2014-06-03 (Tuesday) 21:56 PDT

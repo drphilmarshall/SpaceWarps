@@ -2,11 +2,8 @@
 
 """
 TODO:
-    testhistory - annotation history
-    each annotationhistory has:
-        name, itwas,
-        arrays: pl (same length as x's), then list of x's and list of y's
-    save the list of clicks!
+    Figure out how to let there be multiple lenses in a subject...
+
 """
 
 import swap
@@ -62,6 +59,10 @@ class Subject(object):
           * NOT       It actually is NOT a LENS (dud)
           * UNKNOWN   It could be either (test)
 
+        CPD 23 June 2014:
+        Each subject also has an annotationhistory, which keeps track of who
+        clicked, what they said it was, where they clicked, and their ability
+        to tell a lens (PL) and a dud (PD)
 
     INITIALISATION
         ID
@@ -110,8 +111,10 @@ class Subject(object):
 
         self.location = location
 
-        self.testhistory = {'Name': np.array([]),
+        self.annotationhistory = {'Name': np.array([]),
                             'ItWas': np.array([], dtype=int),
+                            'PL': np.array([]),
+                            'PD': np.array([]),
                             'At_X': np.array([]),
                             'At_Y': np.array([])}
 
@@ -130,7 +133,10 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,ignore=0,haste=False,at_x=-1,at_y=-1):
+    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1]):
+
+        # Rename some variables:
+        a_few_at_the_start = while_ignoring
 
         # Update agent:
         by.N += 1
@@ -162,9 +168,9 @@ class Subject(object):
         # Deal with active subjects. Ignore the classifier until they
         # have seen NT > a_few_at_the_start (ie they've had a
         # certain amount of training):
-
-            if by.NT > ignore:
-
+            
+            if by.NT > a_few_at_the_start:
+               
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
                 PL_realization=by.get_PL_realization(Ntrajectory);
                 PD_realization=by.get_PD_realization(Ntrajectory);
@@ -227,22 +233,23 @@ class Subject(object):
                 # Update agent - training history is taken care of elsewhere:
                 if self.kind == 'test':
 
-                     by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
+                     by.testhistory['ID'] = np.append(by.testhistory['ID'],
+                                                      self.ID)
                      # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
-                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(
-                         self.mean_probability, by.PL, by.PD, as_being))
-                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
+                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL,by.PD, as_being))
+                     #by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5, by.PL, by.PD))
+                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
+                     by.contribution += by.skill
+
                      by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
 
-                self.testhistory['Name'] = np.append(self.testhistory['Name'],
-                                                     by.name)
-                self.testhistory['ItWas'] = np.append(self.testhistory['ItWas'],
-                                                      as_being_number)
-                self.testhistory['At_X'] = np.append(self.testhistory['At_X'],
-                                                     (at_x))
-                self.testhistory['At_Y'] = np.append(self.testhistory['At_Y'],
-                                                     (at_y))
-
+                # update the annotation history
+                self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)
+                self.annotationhistory['ItWas'] = np.append(self.annotationhistory['ItWas'], as_being_number)
+                self.annotationhistory['At_X'] = np.append(self.annotationhistory['At_X'], (at_x))
+                self.annotationhistory['At_Y'] = np.append(self.annotationhistory['At_Y'], (at_y))
+                self.annotationhistory['PL'] = np.append(self.annotationhistory['PL'], by.PL)
+                self.annotationhistory['PD'] = np.append(self.annotationhistory['PD'], by.PD)
 
             else:
                 # Still advance exposure, even if by.NT <= ignore:

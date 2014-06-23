@@ -75,9 +75,8 @@ class MongoDB(object):
         try: self.client = MongoClient('localhost', 27017)
         except: 
             print "MongoDB: couldn't connect to the Mongo"
-            print "MongoDB: try doing something like this in a different shell:"
+            print "MongoDB: try doing something like this, in the mongo directory but in a separate shell:"
             print "  mongod --dbpath . &"
-            print "  mongorestore spacewarps-2013-04-06_20-07-28"
             sys.exit()
         
         try: self.db = self.client['ouroboros_staging']
@@ -155,10 +154,10 @@ class MongoDB(object):
         # Pull out the annotations and get the stage the classification was made at:
         annotations = classification['annotations']
         
-        stage = 1
+        classification_stage = 1
         for annotation in annotations:
             if annotation.has_key('stage'):
-                stage = annotation['stage']
+                classification_stage = annotation['stage']
         
         # Also get the survey name!
         project = "CFHTLS"
@@ -169,10 +168,10 @@ class MongoDB(object):
         # Check project: ignore this classification by returning None 
         # if classification is from a different project:
         if project != survey:
-            # print "Fail! A classification from "+project+" ( != "+survey+" ), stage = ",stage
+            # print "Fail! A classification from "+project+" ( != "+survey+" ), stage = ",classification_stage
             return None
         # else:
-            # Success! A classification from "+project+" ( = "+survey+" ), stage = ",stage
+            # Success! A classification from "+project+" ( = "+survey+" ), stage = ",classification_stage
         
         # Now pull the subject itself from the subject table:
         subject = self.subjects.find_one({'_id': ID},timeout=False)
@@ -184,22 +183,26 @@ class MongoDB(object):
             # Subject is tutorial and has no group id:
             return None
         
-        metadata = subject['metadata']        
+        subject_metadata = subject['metadata']        
         
-        # Check stage:
-        if metadata.has_key('stage2'):
-            if stage == 1: 
-                # This happens when the data is uploaded, but the site has
-                # not been taken down... Need to ignore these classifications!
-                # print "WARNING: classification labelled stage 1, while subject is stage 2!"
-                return None
+        # Check subject stage:
+        # if subject_metadata.has_key('stage2'):
+        #     if classification_stage == 1: 
+        #         # This happens when the data is uploaded, but the site has
+        #         # not been taken down... Need to ignore these classifications!
+        #         # print "WARNING: classification labelled stage 1, while subject is stage 2!"
+        #         return None
+        
+        # PJM: The above code causes a bug when SWAP is re-run on stage 1 later on!
+        # Commented out, and moved to using timestamps rigorously to delineate 
+        # stage 1 and stage 2, as well as checking classification stage, that is.
        
         
         # What kind of subject was it? Training or test? A sim or a dud?
         kind = ''
         if str(groupId) == trainingGroup:
             category = 'training'
-            things = metadata['training']
+            things = subject_metadata['training']
             # things is either a list of dictionaries, or in beta, a 
             # single dictionary:
             if type(things) == list:
@@ -238,16 +241,13 @@ class MongoDB(object):
         N_markers = 0
         simFound = False
         # CPD 31.5.14: added annotation values
-        annotation_x = -1
-        annotation_y = -1
+        annotation_x = []
+        annotation_y = []
         for annotation in annotations:
             if annotation.has_key('x'): 
                 N_markers += 1
-                annotation_x = annotation['x']
-                annotation_y = annotation['y']
-                if str(annotation_x) == '':
-                    annotation_x = -1
-                    annotation_y = -1
+                annotation_x.append(annotation['x'])
+                annotation_y.append(annotation['y'])
 
         
         # Detect whether sim was found or not:
@@ -286,8 +286,9 @@ class MongoDB(object):
         # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
         
         # Check we got all 10 items:            
-        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(stage),str(annotation_x),str(annotation_y)
+        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(classification_stage),str(annotation_x),str(annotation_y)
         if len(items) != 12: print "MongoDB: digest failed: ",items[:] 
+
                          
         return items[:]
 

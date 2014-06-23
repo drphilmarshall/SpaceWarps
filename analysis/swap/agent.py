@@ -12,6 +12,8 @@ import pylab as plt
 
 # ======================================================================
 
+actually_it_was_dictionary = {'LENS': 1, 'NOT': 0, 'UNKNOWN': -1}
+
 class Agent(object):
     """
     NAME
@@ -95,15 +97,11 @@ class Agent(object):
         self.NL = 2 + pars['skepticism']
         self.N = 0
         self.NT = 0
-        self.skill = self.update_skill()
         # back-compatibility:
-        self.contribution = self.skill
-        self.traininghistory = {'ID':'tutorial','Skill':np.array([self.skill]),'PL':np.array([self.PL]),'PD':np.array([self.PD]),
-                'ItWas':np.array([], dtype=int),
-                'ActuallyItWas':np.array([], dtype=int)}
-        self.testhistory = {'ID':[],'I':np.array([]),'Skill':np.array([]),
-                            'ItWas':np.array([], dtype=int)}
-        self.actually_it_was_dictionary = {'LENS': 1, 'NOT': 0, 'UNKNOWN': -1}
+        self.contribution = 0.0*self.update_skill() # This call also sets self.skill, internally
+        self.traininghistory = {'ID':'tutorial', 'Skill':np.array([self.skill]), 'PL':np.array([self.PL]), 'PD':np.array([self.PD]), 'ItWas':np.array([], dtype=int), 'ActuallyItWas':np.array([], dtype=int)}
+        self.testhistory = {'ID':[], 'I':np.array([]), 'Skill':np.array([]), 'ItWas':np.array([], dtype=int)}
+
         return None
 
 # ----------------------------------------------------------------------
@@ -116,30 +114,28 @@ class Agent(object):
 # Compute expected information per classification:
 
     def update_skill(self):
+
         ## plogp = np.zeros([2])
         ## plogp[0] = 0.5*(self.PD+self.PL)*np.log2(self.PD+self.PL)
         ## plogp[1] = 0.5*(1.0-self.PD+1.0-self.PL)*np.log2(1.0-self.PD+1.0-self.PL)
         ## self.contribution = np.sum(plogp)
-        ## return self.contribution
 
-        I = swap.expectedInformationGain(0.5, self.PL, self.PD)
+        self.skill = swap.expectedInformationGain(0.5, self.PL, self.PD)
 
-        return I
-
-
-
+        return self.skill
 
 # ----------------------------------------------------------------------
 # Update confusion matrix with latest result:
-#   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT')
+#   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT',with_probability=P,ignore=False)
 
-    def heard(self,it_was=None,actually_it_was=None,ignore=False):
+    def heard(self,it_was=None,actually_it_was=None,with_probability=1.0,ignore=False):
 
         if it_was==None or actually_it_was==None:
             pass
 
         else:
             if not ignore:
+                        
                 if actually_it_was=='LENS':
                     self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
                     self.PL = np.min([self.PL,swap.PLmax])
@@ -153,6 +149,38 @@ class Agent(object):
                     self.PD = np.max([self.PD,swap.PDmin])
                     self.ND += 1
                     self.NT += 1
+
+                # Unsupervised learning! Mad if this actually works.
+                elif actually_it_was=='UNKNOWN':
+                    
+                    increment = with_probability
+
+                    if it_was=='LENS':
+                    
+                        self.PL = (self.PL*self.NL + increment)/(self.NL + increment)
+                        self.PL = np.min([self.PL,swap.PLmax])
+                        self.PL = np.max([self.PL,swap.PLmin])
+                        self.NL += increment
+
+                        self.PD = (self.PD*self.ND +       0.0)/(self.ND + (1.0-increment))
+                        self.PD = np.min([self.PD,swap.PDmax])
+                        self.PD = np.max([self.PD,swap.PDmin])
+                        self.ND += (1.0 - increment)
+                    
+                    elif it_was=='NOT':
+                    
+                        self.PL = (self.PL*self.NL +       0.0)/(self.NL + increment)
+                        self.PL = np.min([self.PL,swap.PLmax])
+                        self.PL = np.max([self.PL,swap.PLmin])
+                        self.NL += increment
+
+                        self.PD = (self.PD*self.ND + (1.0-increment))/(self.ND + (1.0-increment))
+                        self.PD = np.min([self.PD,swap.PDmax])
+                        self.PD = np.max([self.PD,swap.PDmin])
+                        self.ND += (1.0 - increment)
+                    
+                    # self.NT += 1 # Don't count test images as training images!
+
                 else:
                     raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
 
@@ -160,9 +188,9 @@ class Agent(object):
             self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
             self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
             self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
-            self.traininghistory['ItWas'] = np.append(self.traininghistory['ItWas'], self.actually_it_was_dictionary[it_was])
-            self.traininghistory['ActuallyItWas'] = np.append(self.traininghistory['ActuallyItWas'], self.actually_it_was_dictionary[actually_it_was])
 
+            self.traininghistory['ItWas'] = np.append(self.traininghistory['ItWas'], actually_it_was_dictionary[it_was])
+            self.traininghistory['ActuallyItWas'] = np.append(self.traininghistory['ActuallyItWas'], actually_it_was_dictionary[actually_it_was])
 
         return
 

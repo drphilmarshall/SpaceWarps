@@ -1,0 +1,94 @@
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011)
+ restricted \write18 enabled.
+entering extended mode
+
+(/Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_report.tex
+LaTeX2e <2009/09/24>
+Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
+rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
+c, armenian, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danis
+h, dutch, ukenglish, usenglishmax, esperanto, estonian, ethiopic, farsi, finnis
+h, french, galician, german, ngerman, swissgerman, monogreek, greek, hungarian,
+ icelandic, assamese, bengali, gujarati, hindi, kannada, malayalam, marathi, or
+iya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, kurmanji,
+ lao, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, pol
+ish, portuguese, romanian, russian, sanskrit, serbian, serbianc, slovak, sloven
+ian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, welsh, loaded
+.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2011/texmf-dist/tex/latex/base/size12.clo))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/helvet.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/keyval.sty))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/mathpple.sty
+
+Package mathpple Warning: This package is to be regarded as obsolete.
+(mathpple)                See the PSNFSS documentation.
+
+) (/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphicx.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/graphics.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/graphics/trig.sty)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/latexconfig/graphics.cfg)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/pdftex-def/pdftex.def
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/infwarerr.sty)
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ltxcmds.sty))))
+No file CFHTLS_2013-12-10_16:47:03_report.aux.
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1phv.fd)
+(/usr/local/texlive/2011/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+) (/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifluatex.sty)
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/ifpdf.sty))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/grfext.sty
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+(/usr/local/texlive/2011/texmf-dist/tex/generic/oberdiek/etexcmds.sty)))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg))
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/ot1zpple.fd)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omlzpple.fd)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omszpple.fd)
+(/usr/local/texlive/2011/texmf-dist/tex/latex/psnfss/omxzpple.fd)
+Underfull \hbox (badness 10000) in paragraph at lines 16--44
+[][]
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--44
+[]
+
+</Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_trajectories.png, id=1, 361.
+35pt x 578.16pt>
+<use /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2
+/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_trajectories.png>
+Overfull \hbox (6.42056pt too wide) in paragraph at lines 12--48
+[]$[]$ $[]$ 
+
+</Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_probabilities.png, id=3, 433
+.62pt x 433.62pt>
+<use /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2
+/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_probabilities.png>
+</Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFH
+TLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_histories.png, id=4, 433.62p
+t x 361.35pt>
+<use /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2
+/CFHTLS_2013-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_histories.png>
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 50--58
+[]$[]$ 
+[1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map} </User
+s/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_20
+13-12-10_16:47:03/CFHTLS_2013-12-10_16:47:03_trajectories.png> </Users/pjm/publ
+ic_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_1
+6:47:03/CFHTLS_2013-12-10_16:47:03_probabilities.png> </Users/pjm/public_html/S
+paceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_2013-12-10_16:47:03/C
+FHTLS_2013-12-10_16:47:03_histories.png>]
+(./CFHTLS_2013-12-10_16:47:03_report.aux) )
+(see the transcript file for additional information){/usr/local/texlive/2011/te
+xmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/texlive/2011/texmf-dist/fonts/
+type1/urw/helvetic/uhvr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/type1/u
+rw/palatino/uplr8a.pfb>
+Output written on CFHTLS_2013-12-10_16:47:03_report.pdf (1 page, 2063568 bytes)
+.
+Transcript written on CFHTLS_2013-12-10_16:47:03_report.log.

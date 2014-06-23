@@ -10,6 +10,7 @@ import swap
 
 import sys,getopt,datetime,os,subprocess
 import numpy as np
+import cPickle
 
 # ======================================================================
 
@@ -110,6 +111,12 @@ def SWAP(argv):
 
     tonights = swap.Configuration(configfile)
 
+    # Read the pickled random state file
+    random_file = open(tonights.parameters['random_file'],"r");
+    random_state = cPickle.load(random_file);
+    random_file.close();
+    np.random.set_state(random_state);
+
     practise = (tonights.parameters['dbspecies'] == 'Toy')
     if practise:
         print "SWAP: doing a dry run using a Toy database"
@@ -120,20 +127,29 @@ def SWAP(argv):
     survey = tonights.parameters['survey']
     print "SWAP: looks like we are on Stage "+stage+" of the ",survey," survey project"
 
+
     agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
     if agents_willing_to_learn:
+
+        supervised = tonights.parameters['supervised']
+        if supervised:
+            print "SWAP: agents will use training data to update their confusion matrices"
+        else:
+            print "SWAP: agents will only use test data to update their confusion matrices"
+
         a_few_at_the_start = tonights.parameters['a_few_at_the_start']
-        print "SWAP: agents will update their confusion matrices as new data arrives"
-        if a_few_at_the_start > 0:
-            print "SWAP: but at first they'll ignore the classifier until "
-            print "SWAP: they've done ",int(a_few_at_the_start)," training images"
+        if a_few_at_the_start > 0: 
+            print "SWAP: but at first they'll ignore their volunteer until "
+            print "SWAP: they've done ",int(a_few_at_the_start)," images"
+
     else:
         a_few_at_the_start = 0
         print "SWAP: agents will use fixed confusion matrices without updating them"
 
+
     waste = tonights.parameters['hasty']
     if waste:
-        print "SWAP: agents will ignore classifications of rejected subjects"
+        print "SWAP: agents will ignore the classifications of rejected subjects"
     else:
         print "SWAP: agents will use all classifications, even of rejected subjects"
 
@@ -159,7 +175,14 @@ def SWAP(argv):
         return
     else:
         t1 = datetime.datetime.strptime(tonights.parameters['start'], '%Y-%m-%d_%H:%M:%S')
-    print "SWAP: updating all subjects with classifications made since "+tonights.parameters['start']
+    print "SWAP: updating all subjects classified between "+tonights.parameters['start']
+
+    # When will we stop considering classifications?
+    if tonights.parameters['end'] == 'the_end_of_time':
+        t2 = datetime.datetime(2100, 1, 1, 12, 0, 0, 0)
+    else:
+        t2 = datetime.datetime.strptime(tonights.parameters['end'], '%Y-%m-%d_%H:%M:%S')
+    print "SWAP: and "+tonights.parameters['end']
 
     # How many classifications do we look at per batch?
     try: N_per_batch = tonights.parameters['N_per_batch']
@@ -221,7 +244,6 @@ def SWAP(argv):
     # ------------------------------------------------------------------
 
     count_max = N_per_batch
-
     print "SWAP: interpreting up to",count_max," classifications..."
     if one_by_one: print "SWAP: ...one by one - hit return for the next one..."
 
@@ -238,22 +260,29 @@ def SWAP(argv):
         # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
         # X, Y: result,truth (LENS,NOT,UNKNOWN)
         # cpd 31.5.14: added annotation_x, annotation_y : locations of clicks
-        t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,at_x,at_y = items
+        tstring,Name,ID,ZooID,category,kind,X,Y,location,classification_stage,at_x,at_y = items
 
-        at_x = np.float(at_x)
-        at_y = np.float(at_y)
+        # this is probably bad form:
+        at_x = eval(at_x)
+        at_y = eval(at_y)
+
+        t = datetime.datetime.strptime(tstring, '%Y-%m-%d_%H:%M:%S')
 
         # If the stage of this classification does not match the stage we are
         # on, skip to the next one!
-        if thisstage != stage:
+        if classification_stage != stage:
             if vb:
-                print "Found classification from different stage: ",thisstage," cf. ",stage,", items = ",items
+                print "Found classification from different stage: ",classification_stage," cf. ",stage,", items = ",items
                 print " "
             continue
         else:
             if vb:
                 print "Found classification from this stage: ",items
                 print " "
+
+        # Break out if we've reached the time limit:
+        if t > t2:
+            break
 
         # Register new volunteers, and create an agent for each one:
         # Old, slow code: if Name not in bureau.list():
@@ -268,37 +297,34 @@ def SWAP(argv):
         # Update the subject's lens probability using input from the
         # classifier. We send that classifier's agent to the subject
         # to do this.
-        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=t,ignore=a_few_at_the_start,haste=waste,at_x=at_x,at_y=at_y)
+        sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=tstring,while_ignoring=a_few_at_the_start,haste=waste,at_x=at_x,at_y=at_y)
 
         # Update the agent's confusion matrix, based on what it heard:
-        # if learning == 'supervised':
+        
+        P = sample.member[ID].mean_probability
+        
+        if supervised:
+            # Only use training images!                
+            if category == 'training' and agents_willing_to_learn:
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+            elif category == 'training':
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
 
-        if category == 'training' and agents_willing_to_learn:
-            bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=False)
-        elif category == 'training':
-            bureau.member[Name].heard(it_was=X,actually_it_was=Y,ignore=True)
-
-        # else:
-
-           # bureau.member[Name].heard(it_was=X,but_it_might_be=P,ignore=False)
-
-        # Notes:
-        #  * Assuming unsupervised learning will work means that the
-        #      initial values of PD and PL have to be greater than 0.5, ie that
-        #      the volunteers are not random classifiers...
-        #  * Will we get away without iterating these steps?
-
-        # If the bureau and the sample were being stored as Mongo databases,
-        # we would want to update those DBs here, with bureau.save or
-        # agent.save...
-
+        else:
+            # Unsupervised: ignore all the training images...                
+            if category == 'test' and agents_willing_to_learn:
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+            elif category == 'test':
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
+        
+        # TODO: use training AND test images...
 
         # Brag about it:
         count += 1
         if vb:
             print swap.dashedline
             print "SWAP: Subject "+ID+" was classified by "+Name+" during Stage ",stage
-            print "SWAP: he/she said "+X+" when it was actually "+Y
+            print "SWAP: he/she said "+X+" when it was actually "+Y+", with Pr(LENS) = "+str(P)
             print "SWAP: their agent reckons their contribution (in bits) = ",bureau.member[Name].contribution
             print "SWAP: while estimating their PL,PD as ",bureau.member[Name].PL,bureau.member[Name].PD
             print "SWAP: and the subject's new probability as ",sample.member[ID].probability
@@ -325,11 +351,11 @@ def SWAP(argv):
 
     # All good things come to an end:
     if count == 0:
-        print "SWAP: something went wrong? 0 classifications found..."
-        t1 = t1.strftime('%Y-%m-%d_%H:%M:%S')
+        print "SWAP: if we're not plotting, something might be wrong: 0 classifications found."
+        t = t1
         more_to_do = False
         # return
-    elif count < count_max: # ie we didn't make it to 10,000 this time!
+    elif count < count_max: # ie we didn't make it through the whole batch  this time!
         more_to_do = False
     else:
         more_to_do = True
@@ -341,10 +367,10 @@ def SWAP(argv):
 
     # And what will we call the new files we make? Use the first
     # classification timestamp!
-    tonights.parameters['finish'] = t1
+    tonights.parameters['finish'] = t1.strftime('%Y-%m-%d_%H:%M:%S')
 
     # Let's also update the start parameter, ready for next time:
-    tonights.parameters['start'] = t
+    tonights.parameters['start'] = tstring
 
     # Use the following directory for output lists and plots:
     tonights.parameters['trunk'] = \
@@ -442,11 +468,19 @@ def SWAP(argv):
     # already updated! :-)
 
     if not more_to_do:
-        tonights.parameters['start'] = t
+        tonights.parameters['start'] = tstring
         swap.set_cookie(False)
     # SWAPSHOP will read this cookie and act accordingly.
 
     configfile = 'update.config'
+
+    # Random_file needs updating, else we always start from the same random
+    # state when update.config is reread!
+    random_file = open(tonights.parameters['random_file'],"w");
+    random_state = np.random.get_state();
+    cPickle.dump(random_state,random_file);
+    random_file.close();
+
     swap.write_config(configfile, tonights.parameters)
 
 

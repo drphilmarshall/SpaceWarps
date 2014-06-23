@@ -115,8 +115,8 @@ class Subject(object):
                             'ItWas': np.array([], dtype=int),
                             'PL': np.array([]),
                             'PD': np.array([]),
-                            'At_X': np.array([]),
-                            'At_Y': np.array([])}
+                            'At_X': [],
+                            'At_Y': []}
 
         return None
 
@@ -246,8 +246,8 @@ class Subject(object):
                 # update the annotation history
                 self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)
                 self.annotationhistory['ItWas'] = np.append(self.annotationhistory['ItWas'], as_being_number)
-                self.annotationhistory['At_X'] = np.append(self.annotationhistory['At_X'], (at_x))
-                self.annotationhistory['At_Y'] = np.append(self.annotationhistory['At_Y'], (at_y))
+                self.annotationhistory['At_X'].append(at_x)
+                self.annotationhistory['At_Y'].append(at_y)
                 self.annotationhistory['PL'] = np.append(self.annotationhistory['PL'], by.PL)
                 self.annotationhistory['PD'] = np.append(self.annotationhistory['PD'], by.PD)
 

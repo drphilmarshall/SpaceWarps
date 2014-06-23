@@ -1,5 +1,14 @@
 # ======================================================================
 
+"""
+TODO:
+    testhistory - annotation history
+    each annotationhistory has:
+        name, itwas,
+        arrays: pl (same length as x's), then list of x's and list of y's
+    save the list of clicks!
+"""
+
 import swap
 
 import numpy as np

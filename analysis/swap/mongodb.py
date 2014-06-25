@@ -328,7 +328,7 @@ if __name__ == '__main__':
     # Make sure we catch them all!
     t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
 
-    batch = db.find('since',t1,timeout=False)
+    batch = db.find('since',t1)
 
     # How many did we get?
     total = db.classifications.count()

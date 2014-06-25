@@ -5553,3 +5553,54 @@ wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_c
 # December timestamps.
 
 # ======================================================================
+# 2014-06-25 (Wednesday) 12:17 BST
+
+# Experiments with information gain for paper:
+# 
+# 1) New subject, p0 = prior. Random classifier contributes zero information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.5, 0.5, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.0
+# 
+# 2) New subject, p0 = prior. Low skill classifier contributes some information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.7, 0.7, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.000185630326368
+# 
+# 2) New subject, p0 = prior. High skill classifier contributes information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.99, 0.99, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.100734717876
+# 
+# 3) New subject, p0 = prior. Very high skill classifier contributes information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.999, 0.999, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 1.39706253249
+# 
+# 4) New subject, p0 = prior. Perfect classifier contributes maximal information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 1, 1, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 12.2877123795
+# 
+# 5) New subject, p0 = prior. Perfect classifier contributes some information
+# going the other way (towards p=0):
+# >>> p0,M_LL, M_NN, C = 2e-4, 1, 1, False
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.000288567865926
+# 
+# 6) 50-50 subject, p0 = 0.5. Perfect classifier always contributes 1 bit:
+# >>> p0,M_LL, M_NN, C = 0.5, 1, 1, False
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 1.0
+# >>> p0,M_LL, M_NN, C = 0.5, 1, 1, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 1.0
+# 
+# 7) New subject, p0 = prior. Obtuse classifier contributes same information
+# once they are interpreted inversely:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0, 0, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.000288567865926
+# >>> p0,M_LL, M_NN, C = 2e-4, 0, 0, False
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 12.2877123795

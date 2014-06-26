@@ -57,16 +57,22 @@ LICENCE
 from numpy import log2, ndarray
 
 # ----------------------------------------------------------------------------
-# The Shannon entropy, S
+# The Shannon function:
 
 def shannon(x):
+
     if isinstance(x, ndarray) == False:
+
         if x>0:
-            return x*log2(x)
+            res = x*log2(x)
         else:
-            return 0.0
-    x[x == 0] = 1.0
-    return x*log2(x)
+            res = 0.0
+    
+    else:
+        x[x == 0] = 1.0
+        res = x*log2(x)
+
+    return res
 
 # ----------------------------------------------------------------------------
 # Expectation value of the information that would be contributed by an 
@@ -78,10 +84,10 @@ def expectedInformationGain(p0, M_ll, M_nn):
 
     p1 = 1-p0
 
-    I = p0 * (shannon(M_ll) + shannon(1-M_ll)) + \
-        p1 * (shannon(M_nn) + shannon(1-M_nn)) - \
-        shannon(M_ll*p0 + (1-M_nn)*p1) - \
-        shannon((1-M_ll)*p0 + M_nn*p1)
+    I =   p0 * (shannon(M_ll) + shannon(1-M_ll)) \
+        + p1 * (shannon(M_nn) + shannon(1-M_nn)) \
+        - shannon(M_ll*p0 + (1-M_nn)*p1) \
+        - shannon((1-M_ll)*p0 + M_nn*p1)
 
     return I
 
@@ -90,11 +96,11 @@ def expectedInformationGain(p0, M_ll, M_nn):
 # having classified a subject, that arrived having probability 'p0', 
 # as being 'c' (true/false):
 
-def informationGain(p0, M_ll, M_nn, c):
+def informationGain(p0, M_ll, M_nn, lens):
 
     p1 = 1-p0
 
-    if c:
+    if lens:
         M_cl = M_ll
         M_cn = 1-M_nn
     else:

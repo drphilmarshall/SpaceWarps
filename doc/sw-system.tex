@@ -1100,8 +1100,8 @@ posterior probabilities given the submitted classification $C$:
 \information =& H(T) - H(T;C) \notag \\ 
              =& -\pr(\LENS) \log_2 \pr(\LENS) \notag \\
               & -\pr(\NOT) \log_2 \pr(\NOT) \notag \\
-              & -\pr(\LENS|C) \log_2 \pr(\LENS|C) \notag \\
-              & -\pr(\NOT|C) \log_2 \pr(\NOT|C),
+              & +\pr(\LENS|C) \log_2 \pr(\LENS|C) \notag \\
+              & +\pr(\NOT|C) \log_2 \pr(\NOT|C),
 \end{align}
 where, as above, $C$ can take the values $\saidLENS$ or $\saidNOT$. 
 ($H$ is the Shannon [cross] entropy function.) 
@@ -1111,7 +1111,7 @@ confusion matrix $\CM$ and the pre-classification subject lens
 probability $\pr(\LENS) = p$:
 \begin{align}
 \information =    & -    p \log_2 p - (1-p) \log_2 (1-p) \notag \\
-                  & - \log_2 \left[ \CM_{CL} p + \CM_{CN} (1-p) \right] \notag \\
+                  & - \log_2 \left[ p \CM_{CL} + (1-p) \CM_{CN} \right] \notag \\
                   & + \frac{1}{p \CM_{CL} + (1-p) \CM_{CN}} \notag \\ 
      \cdot [  p   & \CM_{CL} \left(\log_2 \CM_{CL} + \log_2 p\right) \notag \\
          + (1-p)  & \CM_{CN} \left(\log_2 \CM_{CN} + \log_2 (1-p)\right) ].
@@ -1156,9 +1156,11 @@ amount of information we expect to  gain when a classifier is presented
 with a 50-50 subject, is a reasonable quantification of 
 \emph{normalised skill}. A consequence of this choice is that the
 integrated skill (over all agents' histories) should come out to be
+approximately 
 equal to the number of subjects in the survey, when the search is
 ``complete'' (and all subjects are fully classified). Therefore, a
-particular agent's integrated skill is a measure of that classifier's
+particular agent's integrated skill is a reasonable 
+measure of that classifier's
 \emph{contribution} to the lens search.
 
 We conservatively initialize both elements of each  agent's confusion

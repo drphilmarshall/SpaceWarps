@@ -57,7 +57,7 @@ LICENCE
 from numpy import log2, ndarray
 
 # ----------------------------------------------------------------------------
-# The Shannon information, I
+# The Shannon entropy, S
 
 def shannon(x):
     if isinstance(x, ndarray) == False:
@@ -75,6 +75,7 @@ def shannon(x):
 # possible classifications:
 
 def expectedInformationGain(p0, M_ll, M_nn):
+
     p1 = 1-p0
 
     I = p0 * (shannon(M_ll) + shannon(1-M_ll)) + \
@@ -90,6 +91,7 @@ def expectedInformationGain(p0, M_ll, M_nn):
 # as being 'c' (true/false):
 
 def informationGain(p0, M_ll, M_nn, c):
+
     p1 = 1-p0
 
     if c:

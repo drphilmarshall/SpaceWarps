@@ -7,4 +7,5 @@ from collection import *
 from subject import *
 from toydb import *
 from mongodb import *
-from shannon import *
+#from shannon import *
+from shannonnew import *

@@ -53,7 +53,7 @@ LICENCE
 """
 #============================================================================
 
-from numpy import log2, ndarray
+from numpy import log2, ndarray, where
 
 # ----------------------------------------------------------------------------
 # The Shannon information, I
@@ -95,16 +95,43 @@ def expectedInformationGain(p0, M_ll, M_nn):
     p1=update(p0,M_ll,M_nn,0);
     info2=informationGain(p0,p1);
 
-    return p0*info1+(1-p0)*info2;
+    probL=p0*M_ll+(1-p0)*(1-M_nn);
+    probD=(1-p0)*M_nn+p0*(1-M_ll);
+
+    return probL*info1+probD*info2;
+ 
 
 # ----------------------------------------------------------------------------
 # Bayesian update of the probability of a subject p0 by an agent whose
 # confusion matrix is defined by M
 def update(p0,M_ll,M_nn,lens):
-    if(lens):
-        return p0*M_ll/(p0*M_ll+(1.-M_nn)*(1.-p0));
-    else:
-        return p0*(1-M_ll)/(p0*(1-M_ll)+M_nn*(1.-p0));
+    if isinstance(M_ll, ndarray) == False:
+        if(lens):
+            denom=(p0*M_ll+(1.-M_nn)*(1.-p0));
+            if(denom==0):
+                return p0;
+            else:
+                return p0*M_ll/denom;
+        else:
+            denom=(p0*(1-M_ll)+M_nn*(1.-p0));
+            if(denom==0):
+                return p0;
+            else:
+                return p0*(1-M_ll)/denom;
+    else: 
+        if(lens):
+            denom=(p0*M_ll+(1.-M_nn)*(1.-p0));
+            idx=where(denom==0);
+            denom[idx]=1.0;
+            postp0=p0*M_ll/denom;
+            postp0[idx]=p0[idx];
+            return postp0;
+        else:
+            idx=where(denom==0);
+            denom[idx]=1.0;
+            postp0=p0*(1-M_ll)/denom;
+            postp0[idx]=p0[idx];
+            return postp0;
 
 # ----------------------------------------------------------------------------
 if ( __name__ == "__main__"):

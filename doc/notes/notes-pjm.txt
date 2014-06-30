@@ -5521,9 +5521,33 @@ tail -f record_position.txt
 wc -l record_position.txt 
 #       42 record_position.txt
 
-# Restarted 
+# Restarted, after install of java developer kit...
+# 2014-06-27 (Friday) 15:35 BST
 
+# Getting some "image not available" errors...
+# - images did not contain all the needed pngs!
+# - which ones were missed? Compare File_list with record_position.txt
 
+sdiff -w 80 File_list_newstage2 junk | more
+
+# Here are the ones I skipped...
+# CFHTLS_023_2178_gri.png
+# CFHTLS_120_0377_gri.png
+# CFHTLS_071_1156_gri.png
+# CFHTLS_024_2358_gri.png
+# CFHTLS_146_1032_gri.png
+# CFHTLS_157_1352_gri.png
+# CFHTLS_221_2364_gri.png
+# CFHTLS_139_1381_gri.png
+
+# Paste them onto the bottom of the File_list!
+# And make a copy.
+
+wc -l File_list*
+#      608 File_list
+#      600 File_list_newstage2
+#      608 File_list_with_skipped_ones_at_end
+     
 # ======================================================================
 # 2014-06-12 (Thursday) 08:51 PDT
 
@@ -5736,4 +5760,14 @@ wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_c
 
 # This was followed by up by some debugging, of both shannon.py and
 # shannonnew.py. Looks like Edwin changed the informationgain function
-# in some way, not sure why! Need to ask him.
+# in some way, not sure why! Need to ask him. ExpectedInformationGain()
+# looks OK though.
+
+# 2014-06-30 (Monday) 16:14 BST
+
+# OK: my notes, and the OldI in informationgain.py, and Surhud and Anu's
+# code, had informationGain = entropyChange, not cross entropy (KL
+# divergence). This is the right one to use, and is indeed what Edwin
+# had coded (just hadnt explained to me). Change latex to match!
+
+# ======================================================================

@@ -13,8 +13,11 @@ COMMENTS
 
 METHODS
     shannonEntropy(x)
-    informationGain(p0, p1)
+    entropyChange(p0, M_ll, M_nn, c)
+    mutualInformation(p0, p1)
+    informationGain(p0, M_ll, M_nn, c)
     expectedInformationGain(p0, M_ll, M_nn)
+    update(p0,M_ll,M_nn,c)
 
 BUGS
 
@@ -96,10 +99,11 @@ def shannonEntropy(x):
     return res
 
 # ----------------------------------------------------------------------------
-# The information contributed by an agent having classified a subject, that
-# arrived having probability 'p0' and has new probability 'p1'
+# The change in subject entropy transmitted by an agent, having classified a 
+# subject, that arrived having probability 'p0' and has new 
+# probability 'p1'
 
-def informationGain(p0, M_ll, M_nn, c):
+def entropyChange(p0, M_ll, M_nn, c):
 
     p1 = update(p0,M_ll,M_nn,c)
 
@@ -144,6 +148,31 @@ def expectedInformationGain(p0, M_ll, M_nn):
         + p1 * (shannon(M_nn) + shannon(1-M_nn)) \
         - shannon(M_ll*p0 + (1-M_nn)*p1) \
         - shannon((1-M_ll)*p0 + M_nn*p1)
+
+    return I
+
+# ----------------------------------------------------------------------------
+# The information (relative entropy) contributed by an agent, defined by 
+# confusion matrix M, having classified a subject, that arrived having 
+# probability 'p0', as being 'c' (true/false):
+
+def informationGain(p0, M_ll, M_nn, lens):
+
+    p1 = 1-p0
+
+    if lens:
+        M_cl = M_ll
+        M_cn = 1-M_nn
+    else:
+        M_cl = 1-M_ll
+        M_cn = M_nn
+
+    pc = M_cl*p0 + M_cn*p1
+
+    p0_c = M_cl/pc
+    p1_c = M_cn/pc
+
+    I = p0*shannon(p0_c) + p1*shannon(p1_c)
 
     return I
 

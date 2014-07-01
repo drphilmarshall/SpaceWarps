@@ -5521,6 +5521,33 @@ tail -f record_position.txt
 wc -l record_position.txt 
 #       42 record_position.txt
 
+# Restarted, after install of java developer kit...
+# 2014-06-27 (Friday) 15:35 BST
+
+# Getting some "image not available" errors...
+# - images did not contain all the needed pngs!
+# - which ones were missed? Compare File_list with record_position.txt
+
+sdiff -w 80 File_list_newstage2 junk | more
+
+# Here are the ones I skipped...
+# CFHTLS_023_2178_gri.png
+# CFHTLS_120_0377_gri.png
+# CFHTLS_071_1156_gri.png
+# CFHTLS_024_2358_gri.png
+# CFHTLS_146_1032_gri.png
+# CFHTLS_157_1352_gri.png
+# CFHTLS_221_2364_gri.png
+# CFHTLS_139_1381_gri.png
+
+# Paste them onto the bottom of the File_list!
+# And make a copy.
+
+wc -l File_list*
+#      608 File_list
+#      600 File_list_newstage2
+#      608 File_list_with_skipped_ones_at_end
+     
 # ======================================================================
 # 2014-06-12 (Thursday) 08:51 PDT
 
@@ -5551,5 +5578,196 @@ wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_c
 # The -N option turns on timestamping, at which point wget knows not 
 # to bother downloading if the files hasn't changed. The stage 1 pickles have
 # December timestamps.
+
+# ======================================================================
+# 2014-06-25 (Wednesday) 12:17 BST
+
+# Experiments with information gain for paper:
+# 
+# 1) New subject, p0 = prior. Random classifier contributes zero information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.5, 0.5, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.0
+# 
+# 2) New subject, p0 = prior. Low skill classifier contributes some information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.7, 0.7, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.000185630326368
+# 
+# 2) New subject, p0 = prior. High skill classifier contributes information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.99, 0.99, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.100734717876
+# 
+# 3) New subject, p0 = prior. Very high skill classifier contributes information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0.999, 0.999, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 1.39706253249
+# 
+# 4) New subject, p0 = prior. Perfect classifier contributes maximal information:
+# >>> p0,M_LL, M_NN, C = 2e-4, 1, 1, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 12.2877123795
+# 
+# 5) New subject, p0 = prior. Perfect classifier contributes some information
+# going the other way (towards p=0):
+# >>> p0,M_LL, M_NN, C = 2e-4, 1, 1, False
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.000288567865926
+# 
+# 6) 50-50 subject, p0 = 0.5. Perfect classifier always contributes 1 bit:
+# >>> p0,M_LL, M_NN, C = 0.5, 1, 1, False
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 1.0
+# >>> p0,M_LL, M_NN, C = 0.5, 1, 1, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 1.0
+# 
+# 7) New subject, p0 = prior. Obtuse classifier contributes same information
+# once they are interpreted inversely:
+# >>> p0,M_LL, M_NN, C = 2e-4, 0, 0, True
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 0.000288567865926
+# >>> p0,M_LL, M_NN, C = 2e-4, 0, 0, False
+# >>> print swap.informationGain(p0,M_LL,M_NN,C)
+# 12.2877123795
+
+
+# 2014-06-26 (Thursday) 07:38 BST
+
+# Response from Surhud & Anu, formulate a reply:
+# 
+# Hi Phil,
+# 
+# Thanks for sending the new draft with comments. We were about to write
+# to you because finally Anu and I had the chance last week to think more
+# about the information contribution issue in SWAP. We started drafting
+# this email before your email arrived, so forgive us if there is
+# repetition between what you have written and what we say below.
+# 
+# We must confess we are very new to information theory, so just looking
+# at the code it was difficult to follow what you are doing exactly and
+# where the equations you currently use come from. But looking at the
+# plots and the descriptions in the text something seemed off...
+# 
+# To start with we checked the plots made on the original github repo from
+# which you imported the code in to spacewarps. We saw plots which were
+# useful there but did not make sense. Let me share an example, according
+# to your plots the information gained from an astute classifier
+# classifying a low p0 candidate as lens is high and classifying something
+# as a dud is small. For p0~2e-4, the information gained by an astute
+# classifier classifying it as a lens is a whopping 12.x bits. And this
+# keeps increasing at lower values of p0. While a dud classification for a
+# subject from this classifier gives a very low information content 3e-4
+# bits.
+# 
+#   * The mutual information between the posterior and prior states is a
+#   measure of information gain as a result of a classification. The more
+#   different the posterior from the prior, ie the more surprising the
+#   outcome, the bigger the information gain. So, regarding the
+#   classification of low p0 subjects: it makes sense that the
+#   classification of a low p0 subject as a lens should carry a larger
+#   information gain than if it were classified as a dud.  For example, we
+#   are already fairly sure that a subject with p0 = 2e-4 is NOT a lens,
+#   and so a new classification that it's "NOT" brings very little
+#   information. In contrast, the surprising classification that it's a
+#   "LENS" carries a lot of information, provided the classifier is very
+#   astute. This is the main reason why I wanted to investigate using the
+#   mutual information to describe information flow in our system. It
+#   seemed to me (and Edwin, in Taipei) to be the right quantity for
+#   assessing the information transmitted by the agents.
+# 
+# 
+# Consider two subjects, one was classified by an astute observer to be a
+# lens, which implies a gain of ~12 bits. The second one was classified to
+# be not a lens by another classifier who is not astute, thereby moving
+# the value of p to smaller values. Subsequently this second subject was
+# seen by an astute agent and classified as a lens. The total information
+# gained from this lens could be much larger than ~12 bits... This is
+# strange... The information gained should not depend upon the trajectory
+# you take, but just on the final and initial conditions.
+# 
+#   * I'm not sure that last sentence is correct. The mutual information I
+#   am calculating is a property of a classification, not a subject. (I
+#   think my own text could be confused on this point, though! I'll try
+#   and fix this.) I suppose some subjects that oscillate around p~0.5
+#   could be the cause of a total of more than 12 bits of information gain
+#   as they are classified, as different low astuteness classifiers nudge
+#   them around - but I'm not sure this is a fundamental problem, is it?
+# 
+# 
+# We fundamentally disagree  with the notion that an astute classifier
+# judging a subject as a lens on its first view gives 12 bits: this value
+# should just be ~0.0003 bits. Here is why:
+# 
+# The Shannon entropy of the subject tells us the uncertainty associated
+# with it. This Shannon entropy is given by negative of the sum pi log pi,
+# where pi is the probability of all possible states: in our case lens or
+# not a lens. This value is about 3e-4 bits. When an astute observer
+# classifies any subject to be a lens or not, this entropy vanishes,
+# because the new p value for the subject becomes either 0 or 1, i.e., no
+# uncertainty associated with the subject now. This loss of entropy is a
+# result of gain of information about the true classification of the
+# subject: and should be exactly equal to 3e-4 bits. 
+# 
+#   * It could be that quantifying the uncertainty of a given subject via
+#   "its" entropy is just different from quantifying the information
+#   transmitted by the agents. I'm interested to see what your plots show!
+#   
+# 
+# I believe the reason why you claim a gain of information of ~12 bits for
+# an astute classifier classifying a subject with p=2e-4 comes from the
+# naive application of -log p, as the gain in information. This would have
+# been correct if we knew there were datasets of subjects say of 5000
+# images, and each of the datasets was known to contain exactly one lens.
+# In this case, as soon as you find the lens in one of the
+# classifications, you know the state of the rest of the images, and thus
+# it is reasonable that you gain ~12 bits of information. But this clearly
+# does not correspond to our case.
+# 
+#   * I'm not sure I buy this argument. One can compute the mutual
+#   information between posterior and prior states for a project
+#   containing a single subject, and the formulae would be just the same:
+#   they apply to each classification independently (as you pointed out in
+#   one of your other objections above). I agree that the 12 bits number
+#   looks slightly strange at first, but the same formula gives the very
+#   intuitive result that the information generated by a perfectly astute
+#   classifier when classifying a p0=0.5 subject is 1 bit. Given this,
+#   it's clear that the more surprising classification of a p0=2e-4
+#   subject has to carry more than 1 bit of information.
+# 
+# 
+# So last week, we coded up what we believe is the right information
+# gain/loss (yes information is lost when a classifier moves the
+# probability of a subject from 2e-4 to anywhere less than 0.5). We think
+# these new routines should be used in place of the current shannon.py.
+# Have a look at the fork here:
+# 
+# https://github.com/anupreeta27/SpaceWarps
+# 
+# We are in the process of rerunning the Stage 1 and Stage 2 analyses, and
+# making the plots again. We will report back on this tomorrow during the
+# hangout.
+# 
+#   * OK! I will try and get hold of Edwin and figure out the meaning of
+#   what you have coded. I see you haven't latexed the derivation of this
+#   from first principles - do you have this, by any chance? I know this
+#   request is a bit rich coming from me! (Although Edwin and I did write
+#   a wiki page on our workings in March.)
+# 
+# Cheers, Surhud
+
+
+# This was followed by up by some debugging, of both shannon.py and
+# shannonnew.py. Looks like Edwin changed the informationgain function
+# in some way, not sure why! Need to ask him. ExpectedInformationGain()
+# looks OK though.
+
+# 2014-06-30 (Monday) 16:14 BST
+
+# OK: my notes, and the OldI in informationgain.py, and Surhud and Anu's
+# code, had informationGain = entropyChange, not cross entropy (KL
+# divergence). This is the right one to use, and is indeed what Edwin
+# had coded (just hadnt explained to me). Change latex to match!
 
 # ======================================================================

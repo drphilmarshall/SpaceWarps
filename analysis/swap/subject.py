@@ -174,6 +174,7 @@ class Subject(object):
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
                 PL_realization=by.get_PL_realization(Ntrajectory);
                 PD_realization=by.get_PD_realization(Ntrajectory);
+                prior_probability=self.probability*1.0;
 
                 if as_being == 'LENS':
                     likelihood = PL_realization
@@ -193,6 +194,7 @@ class Subject(object):
                 idx=np.where(self.probability < swap.pmin)
                 self.probability[idx]=swap.pmin
                 #if self.probability < swap.pmin: self.probability = swap.pmin
+                posterior_probability=self.probability*1.0;
 
                 self.trajectory = np.append(self.trajectory,self.probability)
 
@@ -236,8 +238,10 @@ class Subject(object):
                      by.testhistory['ID'] = np.append(by.testhistory['ID'],
                                                       self.ID)
                      # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
-                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL,by.PD, as_being))
-                     #by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5, by.PL, by.PD))
+                     #by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
+                     informationGain=swap.informationGain(prior_probability,posterior_probability);
+                     by.testhistory['I'] = np.append(by.testhistory['I'], np.mean(informationGain));
+                     # by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
                      by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
                      by.contribution += by.skill
 

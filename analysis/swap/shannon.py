@@ -57,16 +57,44 @@ LICENCE
 from numpy import log2, ndarray
 
 # ----------------------------------------------------------------------------
-# The Shannon information, I
+# The Shannon function:
 
 def shannon(x):
+
     if isinstance(x, ndarray) == False:
+
         if x>0:
-            return x*log2(x)
+            res = x*log2(x)
         else:
-            return 0.0
-    x[x == 0] = 1.0
-    return x*log2(x)
+            res = 0.0
+    
+    else:
+        x[x == 0] = 1.0
+        res = x*log2(x)
+
+    return res
+
+# ----------------------------------------------------------------------------
+# The Shannon entropy, S
+
+def shannonEntropy(x):
+
+    if isinstance(x, np.ndarray) == False:
+
+        if x>0 and (1.-x)>0:
+            res = -x*np.log2(x) - (1.-x)*np.log2(1.-x)
+        else:
+            res = 0.0
+    
+    else:
+    
+        x[x == 0] = 1.0
+        res = -x*np.log2(x)
+
+        x[x == 1] = 0.0
+        res = res - (1.-x)*np.log2(1.-x)
+       
+    return res
 
 # ----------------------------------------------------------------------------
 # Expectation value of the information that would be contributed by an 
@@ -75,24 +103,26 @@ def shannon(x):
 # possible classifications:
 
 def expectedInformationGain(p0, M_ll, M_nn):
+
     p1 = 1-p0
 
-    I = p0 * (shannon(M_ll) + shannon(1-M_ll)) + \
-        p1 * (shannon(M_nn) + shannon(1-M_nn)) - \
-        shannon(M_ll*p0 + (1-M_nn)*p1) - \
-        shannon((1-M_ll)*p0 + M_nn*p1)
+    I =   p0 * (shannon(M_ll) + shannon(1-M_ll)) \
+        + p1 * (shannon(M_nn) + shannon(1-M_nn)) \
+        - shannon(M_ll*p0 + (1-M_nn)*p1) \
+        - shannon((1-M_ll)*p0 + M_nn*p1)
 
     return I
 
 # ----------------------------------------------------------------------------
-# The information contributed by an agent, defined by confusion matrix M,
-# having classified a subject, that arrived having probability 'p0', 
-# as being 'c' (true/false):
+# The information gain (relative entropy) contributed by an agent, defined by 
+# confusion matrix M, having classified a subject, that arrived having 
+# probability 'p0', as being 'c' (lens/not = true/false):
 
-def informationGain(p0, M_ll, M_nn, c):
+def informationGain(p0, M_ll, M_nn, lens):
+
     p1 = 1-p0
 
-    if c:
+    if lens:
         M_cl = M_ll
         M_cn = 1-M_nn
     else:
@@ -105,6 +135,46 @@ def informationGain(p0, M_ll, M_nn, c):
     p1_c = M_cn/pc
 
     I = p0*shannon(p0_c) + p1*shannon(p1_c)
+
+    return I
+
+# ----------------------------------------------------------------------------
+# Bayesian update of the probability of a subject by an agent whose
+# confusion matrix is defined by M
+
+def update(p0,M_ll,M_nn,lens):
+
+    if(lens):
+        M_cl = M_ll
+        M_cn = 1.0 - M_nn
+    else:
+        M_cl = 1.0 - M_ll
+        M_cn = M_nn
+    
+    return p0*M_cl/(p0*M_cl+(1.0-p0)*M_cn)
+    
+# PJM: I re-factored this so that the update eqn was in terms of 
+#      M_cl and M_cn (to match my notes). 
+
+# ----------------------------------------------------------------------------
+# The change in subject entropy transmitted by an agent, having classified a 
+# subject, that arrived having probability 'p0' and has new 
+# probability 'p1'
+
+def entropyChange(p0, M_ll, M_nn, c):
+
+    p1 = update(p0,M_ll,M_nn,c)
+
+    I = mutualInformation(p0,p1)
+
+    return I
+
+# ----------------------------------------------------------------------------
+# The mutual information between states with probability 'p0' and 'p1'
+
+def mutualInformation(p0,p1):
+
+    I = shannonEntropy(p0) - shannonEntropy(p1)
 
     return I
 

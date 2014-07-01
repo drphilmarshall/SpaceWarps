@@ -246,8 +246,9 @@ class MongoDB(object):
         for annotation in annotations:
             if annotation.has_key('x'): 
                 N_markers += 1
-                annotation_x.append(float(annotation['x']))
-                annotation_y.append(float(annotation['y']))
+                if len(annotation['x']) > 0:
+                    annotation_x.append(float(annotation['x']))
+                    annotation_y.append(float(annotation['y']))
 
         
         # Detect whether sim was found or not:

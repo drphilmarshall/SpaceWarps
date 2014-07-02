@@ -52,7 +52,7 @@ def make_roc_curves(argv):
         stage2_collection.pickle
 
     OUTPUTS
-        an roc png plot
+        roc png plot
 
     EXAMPLE
 
@@ -71,7 +71,7 @@ def make_roc_curves(argv):
     # ------------------------------------------------------------------
 
     try:
-       opts, args = getopt.getopt(argv,"ho",["help","offline"])
+        opts, args = getopt.getopt(argv,"ho:",["help","offline="])
     except getopt.GetoptError, err:
        print str(err) # will print something like "option -a not recognized"
        print make_roc_curves.__doc__  # will print the big comment above.
@@ -81,13 +81,18 @@ def make_roc_curves(argv):
     resurrect = False
 
     for o,a in opts:
-       if o in ("-h", "--help"):
-          print make_roc_curves.__doc__
-          return
-       elif o in ("-o", "--offline"):
-          offline = int(a)
-       else:
-          assert False, "unhandled option"
+        print o,a
+        if o in ("-h", "--help"):
+            print make_roc_curves.__doc__
+            return
+        elif o in ("-o", "--offline"):
+            print a
+            print type(a)
+            offline = int(a)
+        else:
+            assert False, "unhandled option"
+    print "make_roc_curves: offline is",offline
+
 
     # Check for pickles in array args:
     if len(args) == 4:
@@ -208,7 +213,7 @@ def make_roc_curves(argv):
         training_IDs = {}  # which entries in collection are training
         set_aside = {}  # which entries do we set aside? Here we set aside none
         n_min = 1  # minimum number of assessments required to be considered
-
+        pi = 0.04
 
         collection = collection2
         bureau = bureau2
@@ -252,7 +257,9 @@ def make_roc_curves(argv):
             # evaluate change in probability
             epsilon_taus = 0
             for ID in taus:
-                epsilon_taus += np.square(taus[ID] - taus_prime[ID])
+                # I am having some nan problems?!
+                if (taus[ID] == taus[ID]) * (taus_prime[ID] == taus_prime[ID]):
+                    epsilon_taus += np.square(taus[ID] - taus_prime[ID])
             taus = taus_prime
 
             # M step
@@ -275,7 +282,7 @@ def make_roc_curves(argv):
     fprs = []
     tprs = []
     thresholds = []
-    collections = [collection_1, collection_2]
+    collections = [collection1, collection2]
 
     # create the online fpr and tpr
     for collection in collections:
@@ -284,7 +291,7 @@ def make_roc_curves(argv):
         for ID in collection.list():
             subject = collection.member[ID]
             if (subject.category == 'training'):
-            n_assessment = len(subject.annotationhistory['ItWas'])
+                n_assessment = len(subject.annotationhistory['ItWas'])
                 if (n_assessment > n_min):
                         truth = {'LENS': 1, 'NOT': 0}[subject.truth]
                         y_true = np.append(y_true, truth)

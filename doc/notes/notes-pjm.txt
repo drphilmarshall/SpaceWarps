@@ -5425,7 +5425,8 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
 
 
-# ie not a big difference. Mean skill higher by fiat, but contribution numbers don't change much.
+# ie not a big difference. Mean skill higher by fiat, but 
+# contribution numbers don't change much.
 
 # ----------------------------------------------------------------------
 # 2014-06-03 (Tuesday) 21:56 PDT
@@ -5547,7 +5548,11 @@ wc -l File_list*
 #      608 File_list
 #      600 File_list_newstage2
 #      608 File_list_with_skipped_ones_at_end
-     
+
+# 2014-07-10 (Thursday) 10:06 BST
+
+# Carrying on - deadline day today!
+
 # ======================================================================
 # 2014-06-12 (Thursday) 08:51 PDT
 

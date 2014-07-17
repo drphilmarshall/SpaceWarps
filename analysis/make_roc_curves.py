@@ -54,7 +54,7 @@ def make_roc_curves(argv):
         stage2_collection.pickle
 
     OUTPUTS
-        an roc png plot
+        roc png plot
 
     EXAMPLE
 
@@ -73,29 +73,31 @@ def make_roc_curves(argv):
     # ------------------------------------------------------------------
 
     try:
-       opts, args = getopt.getopt(argv,"h",
-               ["help", "offline_stage1", "offline_stage2"])
+        opts, args = getopt.getopt(argv,"h",
+                ["help", "offline_stage1", "offline_stage2"])
     except getopt.GetoptError, err:
-       print str(err) # will print something like "option -a not recognized"
-       print make_roc_curves.__doc__  # will print the big comment above.
-       return
+        print str(err) # will print something like "option -a not recognized"
+        print make_roc_curves.__doc__  # will print the big comment above.
+        return
 
     offline_stage1 = 0
     offline_stage2 = 0
     save_offline = 0
 
     for o,a in opts:
-       if o in ("-h", "--help"):
-          print make_roc_curves.__doc__
-          return
-       elif o in ("--offline_stage1"):
-          offline_stage1 = int(a)
-       elif o in ("--offline_stage2"):
-          offline_stage2 = int(a)
-       elif o in ("--save_offline"):
-          save_offline = int(a)
-       else:
-          assert False, "unhandled option"
+        print o,a
+        if o in ("-h", "--help"):
+            print make_roc_curves.__doc__
+            return
+        elif o in ("--offline_stage1"):
+            offline_stage1 = int(a)
+        elif o in ("--offline_stage2"):
+            offline_stage2 = int(a)
+        elif o in ("--save_offline"):
+            save_offline = int(a)
+        else:
+            assert False, "unhandled option"
+    print "make_roc_curves: offline is",offline_stage1, offline_stage2
 
     # Check for pickles in array args:
     if len(args) == 4:
@@ -163,7 +165,7 @@ def make_roc_curves(argv):
         # Set up data for EM algorithm
 
         bureau_offline = {}
-        pi = 2e-4
+        pi = 0.04
         taus = {}
         online_taus = {}
         training_IDs = {}  # which entries in collection are training
@@ -242,7 +244,7 @@ def make_roc_curves(argv):
         # Set up data for EM algorithm
 
         bureau_offline = {}
-        pi = 2e-4
+        pi = 0.04
         taus = {}
         online_taus = {}
         training_IDs = {}  # which entries in collection are training
@@ -259,6 +261,7 @@ def make_roc_curves(argv):
                 collection.update({ID: collection2.member[ID]})
         # TODO: maybe repeat the same process for bureau?
         bureau = bureau2
+
 
         for ID in collection.list():
             subject = collection.member[ID]
@@ -284,6 +287,7 @@ def make_roc_curves(argv):
                             'Subjects': {ID: xij}}})
                     else:
                         bureau_offline[name]['Subjects'].update({ID: xij})
+
 
         # Run EM Algorithm
 

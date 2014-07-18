@@ -74,7 +74,7 @@ def make_roc_curves(argv):
 
     try:
         opts, args = getopt.getopt(argv,"h",
-                ["help", "offline_stage1", "offline_stage2"])
+                ["help", "offline_stage1", "offline_stage2", "offline_save"])
     except getopt.GetoptError, err:
         print str(err) # will print something like "option -a not recognized"
         print make_roc_curves.__doc__  # will print the big comment above.
@@ -90,11 +90,11 @@ def make_roc_curves(argv):
             print make_roc_curves.__doc__
             return
         elif o in ("--offline_stage1"):
-            offline_stage1 = int(a)
+            offline_stage1 = 1
         elif o in ("--offline_stage2"):
-            offline_stage2 = int(a)
-        elif o in ("--save_offline"):
-            save_offline = int(a)
+            offline_stage2 = 1
+        elif o in ("--offline_save"):
+            save_offline = 1
         else:
             assert False, "unhandled option"
     print "make_roc_curves: offline is",offline_stage1, offline_stage2
@@ -110,7 +110,7 @@ def make_roc_curves(argv):
         print "make_roc_curves: ",bureau2_path
         print "make_roc_curves: ",collection1_path
         print "make_roc_curves: ",collection2_path
-    else:b
+    else:
         print make_roc_curves.__doc__
         return
 
@@ -137,7 +137,7 @@ def make_roc_curves(argv):
     fprs = []
     tprs = []
     thresholds = []
-    collections = [collection_1, collection_2]
+    collections = [collection1, collection2]
 
     # create the online fpr and tpr
     for collection in collections:
@@ -146,7 +146,7 @@ def make_roc_curves(argv):
         for ID in collection.list():
             subject = collection.member[ID]
             if (subject.category == 'training'):
-            n_assessment = len(subject.annotationhistory['ItWas'])
+                n_assessment = len(subject.annotationhistory['ItWas'])
                 if (n_assessment > n_min):
                         truth = {'LENS': 1, 'NOT': 0}[subject.truth]
                         y_true = np.append(y_true, truth)
@@ -183,8 +183,8 @@ def make_roc_curves(argv):
         # TODO: maybe repeat the same process for bureau?
         bureau = bureau1
 
-        for ID in collection.list():
-            subject = collection.member[ID]
+        for ID in collection.keys():
+            subject = collection[ID]
             n_assessment = len(subject.annotationhistory['ItWas'])
             if (n_assessment > n_min):
                 if (subject.category == 'training'):
@@ -217,7 +217,7 @@ def make_roc_curves(argv):
         if save_offline:
             tup = (bureau_offline, pi, taus, information_dict)
             offlinefile = output_directory + 'offline_stage1.pickle'
-            swap.io.write_pickle(tup, out_path)
+            swap.io.write_pickle(tup, offlinefile)
             print "make_roc_curves: offline_stage1 saved to ", offlinefile
 
         epsilon_taus = information_dict['epsilon_taus']
@@ -230,7 +230,7 @@ def make_roc_curves(argv):
         for ID in training_IDs:
             # sometimes I get nans?!
             if taus[ID] == taus[ID]:
-                subject = collection.member[ID]
+                subject = collection[ID]
                 truth = {'LENS': 1, 'NOT': 0}[subject.truth]
                 y_true = np.append(y_true, truth)
                 y_score = np.append(y_score, taus[ID])
@@ -263,8 +263,8 @@ def make_roc_curves(argv):
         bureau = bureau2
 
 
-        for ID in collection.list():
-            subject = collection.member[ID]
+        for ID in collection.keys():
+            subject = collection[ID]
             n_assessment = len(subject.annotationhistory['ItWas'])
             if (n_assessment > n_min):
                 if (subject.category == 'training'):
@@ -298,7 +298,7 @@ def make_roc_curves(argv):
         if save_offline:
             tup = (bureau_offline, pi, taus, information_dict)
             offlinefile = output_directory + 'offline_stage2.pickle'
-            swap.io.write_pickle(tup, out_path)
+            swap.io.write_pickle(tup, offlinefile)
             print "make_roc_curves: offline_stage1 saved to ", offlinefile
 
 
@@ -312,7 +312,7 @@ def make_roc_curves(argv):
         for ID in training_IDs:
             # sometimes I get nans?!
             if taus[ID] == taus[ID]:
-                subject = collection.member[ID]
+                subject = collection[ID]
                 truth = {'LENS': 1, 'NOT': 0}[subject.truth]
                 y_true = np.append(y_true, truth)
                 y_score = np.append(y_score, taus[ID])

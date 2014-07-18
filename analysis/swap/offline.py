@@ -130,7 +130,7 @@ from numpy import square, sqrt
 # ----------------------------------------------------------------------------
 # Expectation Step
 
-def Estep_old(bureau_offline, pi, collection, taus, training_IDs={}}):
+def Estep_old(bureau_offline, pi, collection, taus, training_IDs={}):
     # evaluate taus given collection of collection and current evaluation of
     # bureau_offline
     taus_prime = taus.copy()
@@ -166,7 +166,7 @@ def Estep_old(bureau_offline, pi, collection, taus, training_IDs={}}):
         taus_prime.update({ID: tau_j})
     return taus_prime
 
-def Estep(bureau_offline, pi, taus, training_IDs={}}):
+def Estep(bureau_offline, pi, taus, training_IDs={}):
     # evaluate taus given collection of collection and current evaluation of
     # bureau_offline
     taus_prime = taus.copy()

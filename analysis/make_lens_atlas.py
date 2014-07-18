@@ -26,6 +26,7 @@ import swap
 from scipy import ndimage
 from os import path
 from urllib import FancyURLopener
+from matplotlib.mlab import csv2rec
 
 # ======================================================================
 
@@ -208,9 +209,6 @@ def make_lens_atlas(argv):
     stamp_size = 50
     xbins = np.arange(stamp_size * 2)
     ybins = np.arange(stamp_size * 2)
-    dtype_catalog = {'names': ('ID', 'kind', 'x', 'y', 'P', 'N0', 'S'),
-                   'formats': (np.str, np.str, np.float, np.float,
-                               np.float, np.float, np.float)}
 
     smooth_click = 3
     figsize_stamp = (5, 5)
@@ -276,7 +274,7 @@ def make_lens_atlas(argv):
 
     #bureau = swap.read_pickle(bureau_path, 'bureau')  # TODO: needed?
     collection = swap.read_pickle(collection_path, 'collection')
-    catalog = np.loadtxt(catalog_path, dtype=dtype_catalog)
+    catalog = csv2rec(catalog_path)
 
     #print "make_lens_atlas: bureau numbers ", len(bureau.list())
     print "make_lens_atlas: collection numbers ", len(collection.list())
@@ -290,9 +288,9 @@ def make_lens_atlas(argv):
     if flags['stamp']:
         print "make_lens_atlas: running stamps"
         for lens_i in range(len(catalog)):
-            ID = catalog[lens_i, 0]
-            x = catalog[lens_i, 2]
-            y = catalog[lens_i, 3]
+            ID = catalog[lens_i][0]
+            x = catalog[lens_i][2]
+            y = catalog[lens_i][3]
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
 
@@ -466,7 +464,7 @@ def make_lens_atlas(argv):
         # done
         unique_IDs = np.unique(catalog[:, 0])
         for ID in unique_IDs:
-            mini_catalog = catalog[catalog[:, 0] == ID]
+            mini_catalog = catalog[catalog['id'] == ID]
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
 
@@ -494,9 +492,9 @@ def make_lens_atlas(argv):
             max_y = im.shape[1]
 
             # plot cluster centers
-            x_centers = mini_catalog[:, 2]
-            y_centers = mini_catalog[:, 3]
-            skill_centers = mini_catalog[:, 6]
+            x_centers = mini_catalog['x']
+            y_centers = mini_catalog['y']
+            skill_centers = mini_catalog['s']
             colors_centers = [(0, 1.0, 0) for i in x_centers]
 
             if flags['skill']:

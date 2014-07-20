@@ -5553,6 +5553,27 @@ wc -l File_list*
 
 # Carrying on - deadline day today!
 
+# OK, all done! Made a copy of record_position.txt. 
+# Here's the breakdown:
+
+# No of objects spotted:
+cat  record_position_pjm_2014-07-10.txt | wc -l
+     336
+# No of images containing them:     
+cat record_position_pjm_2014-07-10.txt | awk '{print $1}' | sort | uniq | wc -l
+     309
+# No of grade 3 candidates:     
+cat record_position_pjm_2014-07-10.txt | awk '{if ($4 == 3) print $0}' | wc -l
+      88
+# No of grade 2 candidates:     
+cat record_position_pjm_2014-07-10.txt | awk '{if ($4 == 2) print $0}' | wc -l
+      95
+# No of grade 1 candidates:     
+cat record_position_pjm_2014-07-10.txt | awk '{if ($4 == 1) print $0}' | wc -l
+     149
+
+# Recall - all of this was done in /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/expert_inspection/2014-06-10
+
 # ======================================================================
 # 2014-06-12 (Thursday) 08:51 PDT
 

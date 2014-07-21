@@ -74,7 +74,8 @@ def make_roc_curves(argv):
 
     try:
         opts, args = getopt.getopt(argv,"h",
-                ["help", "offline_stage1", "offline_stage2", "offline_save"])
+                ["help", "offline_stage1", "offline_stage2", "offline_save",
+                 "offline_no_training"])
     except getopt.GetoptError, err:
         print str(err) # will print something like "option -a not recognized"
         print make_roc_curves.__doc__  # will print the big comment above.
@@ -82,6 +83,7 @@ def make_roc_curves(argv):
 
     offline_stage1 = 0
     offline_stage2 = 0
+    use_training_info = 1
     save_offline = 0
 
     for o,a in opts:
@@ -95,6 +97,8 @@ def make_roc_curves(argv):
             offline_stage2 = 1
         elif o in ("--offline_save"):
             save_offline = 1
+        elif o in ("--offline_no_training"):
+            use_training_info = 0
         else:
             assert False, "unhandled option"
     print "make_roc_curves: offline is",offline_stage1, offline_stage2
@@ -165,11 +169,10 @@ def make_roc_curves(argv):
         # Set up data for EM algorithm
 
         bureau_offline = {}
-        pi = 0.04
+        pi = 4e-2
         taus = {}
         online_taus = {}
         training_IDs = {}  # which entries in collection are training
-        training_IDs_blank = {}  # we don't train on training_IDs
         set_aside_subject = {}  # which subjects do we set aside? Here we set aside none
         set_aside_agent = {}  # which agents do we set aside? Here we set aside none
         n_min = 1  # minimum number of assessments required to be considered
@@ -210,8 +213,11 @@ def make_roc_curves(argv):
 
         # Run EM Algorithm
 
+        if not use_training_info:
+            training_IDs = {}
+
         bureau_offline, pi, taus, information_dict = EM_algorithm(
-                bureau_offline, pi, taus, training_IDs_blank,
+                bureau_offline, pi, taus, training_IDs,
                 return_information=True)
 
         if save_offline:
@@ -244,11 +250,10 @@ def make_roc_curves(argv):
         # Set up data for EM algorithm
 
         bureau_offline = {}
-        pi = 0.04
+        pi = 4e-2
         taus = {}
         online_taus = {}
         training_IDs = {}  # which entries in collection are training
-        training_IDs_blank = {}  # we don't train on training_IDs
         set_aside_subject = {}  # which subjects do we set aside? Here we set aside none
         set_aside_agent = {}  # which agents do we set aside? Here we set aside none
         n_min = 1  # minimum number of assessments required to be considered
@@ -291,8 +296,11 @@ def make_roc_curves(argv):
 
         # Run EM Algorithm
 
+        if not use_training_info:
+            training_IDs = {}
+
         bureau_offline, pi, taus, information_dict = EM_algorithm(
-                bureau_offline, pi, taus, training_IDs_blank,
+                bureau_offline, pi, taus, training_IDs,
                 return_information=True)
 
         if save_offline:

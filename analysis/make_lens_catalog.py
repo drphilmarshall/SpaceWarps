@@ -31,118 +31,54 @@ from matplotlib.mlab import rec2csv
 
 # ======================================================================
 
-memory = joblib.Memory(cachedir='.')
-
-def outlier_clusters(x, y, skill=None):
+def outlier_clusters(x, y, skill=None, memory=None):
+    # TODO: incorporate skill
     data = np.vstack((x, y)).T
 
-    dist_within = 100
-    dist_max = 30
-    n_clusters = 0
+    if len(data) == 0:
+        # uh.
+        print 'clustering: NO cluster members!'
+        cluster_centers = np.array([[-1, -1]])
+        cluster_labels = []
+        labels = []
+        n_clusters = 0
 
-    clusterer = AgglomerativeClustering(n_clusters=n_clusters,
-            memory=memory, compute_full_tree=True)
+    elif len(data) == 1:
+        print 'clustering: only 1 data point!'
+        cluster_centers = data
+        cluster_labels = [0]
+        labels = np.array([0])
+        n_clusters = 1
 
-    # while dist_within > dist_max, keep adding clusters
-    while dist_within > dist_max:
-        # iterate n_clusters
-        n_clusters += 1
-        clusterer.set_params(n_clusters=n_clusters)
+    else:
+        dist_within = 100
+        dist_max = 30
+        n_clusters = 0
+        n_clusters_max = 20
 
-        # cluster
-        labels = clusterer.fit_predict(data)
+        clusterer = AgglomerativeClustering(n_clusters=n_clusters,
+                memory=memory)
 
-        # get cluster_centers
-        cluster_labels = range(n_clusters)
-        cluster_centers = np.array([np.mean(data[labels == i], axis=1)
-                                    for i in cluster_labels])
+        # while dist_within > dist_max, keep adding clusters
+        while (dist_within > dist_max) * (n_clusters < n_clusters_max):
+            # iterate n_clusters
+            n_clusters += 1
+            clusterer.set_params(n_clusters=n_clusters)
 
-        # find dist_within: the maximum pairwise distance inside a cluster
-        dist_within = np.max([pairwise_distances(data[labels == i]
-                              for i in cluster_labels], axis=1)
+            # cluster
+            labels = clusterer.fit_predict(data)
 
+            # get cluster_centers
+            cluster_labels = range(n_clusters)
+            cluster_centers = np.array([np.mean(data[labels == i], axis=0)
+                                        for i in cluster_labels])
 
-    # clear memory
-    memory.clear()
+            # find dist_within: the maximum pairwise distance inside a cluster
+            dist_within = np.max([np.max(pairwise_distances(
+                                  data[labels == i]))
+                                  for i in cluster_labels])
 
     return cluster_centers, cluster_labels, labels, n_clusters
-
-## def outlier_clusters_old(x, y, skill=None, linkage_type='single'):
-##     # TODO: incorporate skill
-##     data = np.vstack((x, y)).T
-##     cluster_labels = np.arange(len(data))
-##     cluster_centers = data.copy()
-##     cluster_center_labels = np.arange(len(data))
-##     dist_min = 0  # escape clause
-##     dist_max = 30  # maximum distance we care about for agglomerative clustering
-##     # now agglomeratively cluster the clusters
-##     while dist_min < dist_max:
-##         dist_list = []
-##         for cluster_i in range(len(cluster_centers)):
-##             for cluster_j in range(cluster_i + 1, len(cluster_centers)):
-## 
-##                 cluster_label_i = cluster_center_labels[cluster_i]
-##                 members_i = (cluster_labels == cluster_label_i)
-##                 data_i = data[members_i]
-##                 cluster_label_j = cluster_center_labels[cluster_j]
-##                 members_j = (cluster_labels == cluster_label_j)
-##                 data_j = data[members_j]
-##                 dists = np.array(
-##                         [[pdist([data_im, data_jn]) for data_im in data_i]
-##                         for data_jn in data_j])
-## 
-##                 if linkage_type == 'complete':
-##                     # do cluster distance from the biggest difference;
-##                     # complete linkage clustering
-##                     dist = np.max(dists)
-##                 elif linkage_type == 'single':
-##                     # do cluster distance from the smallest difference;
-##                     # single linkage clustering
-##                     dist = np.min(dists)
-## 
-##                 if dist < dist_max:
-##                     dist_list.append([cluster_i, cluster_j, dist])
-##         dist_list = np.array(dist_list)
-## 
-##         # the min length requirement is because we could have
-##         # no clusters < dist_max
-##         if len(dist_list) > 0:
-##             # now take the smallest distance pair and merge them
-##             cluster_i, cluster_j, dist_min = dist_list[
-##                     np.argmin(dist_list[:, -1])]
-##             cluster_i = np.int(cluster_i)
-##             cluster_j = np.int(cluster_j)
-##             cluster_centers_indx = np.arange(len(cluster_centers))
-## 
-##             new_clusters = cluster_centers[
-##                     (cluster_centers_indx != cluster_i) *
-##                     (cluster_centers_indx != cluster_j)]
-##             new_cluster_center_labels = cluster_center_labels[
-##                     (cluster_centers_indx != cluster_i) *
-##                     (cluster_centers_indx != cluster_j)]
-## 
-##             merged_cluster = np.mean(
-##                     [cluster_centers[cluster_i], cluster_centers[cluster_j]],
-##                     axis=0)
-##             merged_cluster_label = cluster_center_labels[
-##                     (cluster_centers_indx == cluster_i)]
-## 
-##             cluster_labels = np.where(
-##                     cluster_labels == cluster_center_labels[
-##                         (cluster_centers_indx == cluster_j)],
-##                     cluster_center_labels[(cluster_centers_indx == cluster_i)],
-##                     cluster_labels)
-## 
-##             cluster_centers = np.vstack((new_clusters, merged_cluster))
-##             cluster_center_labels = np.hstack(
-##                     (new_cluster_center_labels, merged_cluster_label))
-## 
-##         else:
-##             # escape clause
-##             dist_min = dist_max
-## 
-##     n_clusters = len(cluster_centers)
-##     return cluster_centers, cluster_center_labels, cluster_labels, n_clusters
 
 
 # ======================================================================
@@ -229,6 +165,9 @@ def make_lens_catalog(argv):
 
     output_directory = './'
 
+    memory = joblib.Memory(cachedir=output_directory)
+    memory.clear()
+
     dtype_catalog = np.dtype({'names':
         ('id', 'kind', 'x', 'y', 'p', 'n0', 's'),
         'formats': ('|S24', '|S15', np.float, np.float,
@@ -268,38 +207,59 @@ def make_lens_catalog(argv):
 
         # filter out the empty clicks
         PL_list = []
+        PL_nots = []
         for i, xj in enumerate(x_all):
+            # len(xj) of empty = 0
             PL_list.append([PL_all[i]] * len(xj))
+            if len(xj) == 0:
+                PL_nots.append(PL_all[i])
         PL = np.array([PLi for PLj in PL_list for PLi in PLj])
+        PL_nots = np.array(PL_nots)
 
         # filter out the empty clicks
         PD_list = []
+        PD_nots = []
         for i, xj in enumerate(x_all):
             PD_list.append([PD_all[i]] * len(xj))
+            if len(xj) == 0:
+                PD_nots.append(PD_all[i])
         PD = np.array([PDi for PDj in PD_list for PDi in PDj])
+        PD_nots = np.array(PD_nots)
 
         skill = swap.expectedInformationGain(0.5, PL, PD)  # skill
 
+        # it is only fair to write out the NOTs, too
+        # do the empty guys
+        skill_nots = swap.expectedInformationGain(0.5, PL_nots, PD_nots)  # skill
+
+        x, y = -1, -1
+        N0 = len(x_all) - len(x_markers)
+        S = np.sum(skill_nots)
+
+        catalog.append((ID, kind, x, y, P, N0, S))
+        if len(catalog)%500 == 0:
+            print len(catalog)
+        F.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(
+            ID, kind, x, y, P, N0, S))
+
+        if len(x_markers) == 0:
+            # apparently everyone was a not...
+            continue
 
         # ------------------------------------------------------------------
         # cluster
+        print 'make_lens_catalog: subject ID = ', ID
         if flags['skill']:
             cluster_centers, cluster_center_labels, cluster_labels, \
-                    n_clusters = outlier_clusters(x_markers, y_markers, skill)
+                    n_clusters = outlier_clusters(x_markers, y_markers, skill, memory=memory)
         else:
             cluster_centers, cluster_center_labels, cluster_labels, \
-                    n_clusters = outlier_clusters(x_markers, y_markers, None)
+                    n_clusters = outlier_clusters(x_markers, y_markers, None, memory=memory)
         # need to get: x, y, N0, S
 
-        # bit of a hack since I don't want to sit through and work this out on
-        # my internet-less laptop...
-        multiple_clicks = [list(cluster_center_labels).index(ij)
-                           for ij in cluster_center_labels
-                           if list(cluster_labels).count(ij) > 1]
-        for cluster_ij in multiple_clicks:#range(n_clusters):
-            cluster_center = cluster_centers[cluster_ij]
-            cluster_label = cluster_center_labels[cluster_ij]
-            members = (cluster_labels == cluster_label)
+        for cluster_center_label in cluster_center_labels:
+            cluster_center = cluster_centers[cluster_center_label]
+            members = (cluster_labels == cluster_center_label)
 
             x, y = cluster_center
             N0 = np.sum(members)
@@ -310,13 +270,24 @@ def make_lens_catalog(argv):
                 print len(catalog)
             F.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(
                 ID, kind, x, y, P, N0, S))
+
+
+    print 'make_lens_catalog: Clearing memory'
+    # clear memory
+    memory.clear()
+
+    print 'make_lens_catalog: closing file!'
     F.close()
 
-    # convert into array
-    catalog = np.array(catalog, dtype=dtype_catalog)
-    # save catalog!
-    rec2csv(catalog, catalog_path)
+    ## print 'make_lens_catalog: converting catalog to array'
+    ## # convert into array
+    ## catalog = np.array(catalog, dtype=dtype_catalog)
+    ## print 'make_lens_catalog: saving catalog'
+    ## # save catalog!
+    ## rec2csv(catalog, catalog_path)
 
+
+    print 'make_lens_catalog: All done!'
 # ======================================================================
 
 if __name__ == '__main__':

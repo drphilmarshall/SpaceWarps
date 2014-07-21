@@ -48,7 +48,7 @@ def get_online_png(url, outname=None):
         F = myopener.retrieve(url, outname)
     else:
         F = [outname]
-    I = ndimage.imread(F[0]) / 255.
+    I = ndimage.imread(F[0]) * 1. / 255.
     return I
 
 def pdf2d(ax, ay, xbins=51, ybins=51,
@@ -84,9 +84,9 @@ def pdf2d(ax, ay, xbins=51, ybins=51,
 
     if 'hist' in style:
         if axis != None:
-            axis.imshow(H.T, extent=extent)
+            axis.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'))
         else:
-            plt.imshow(H.T, extent=extent)
+            plt.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'))
 
     return
 
@@ -99,10 +99,10 @@ def contour_hist(H, extent=None,
     if smooth > 0:
         H = ndimage.gaussian_filter(H, smooth)
 
-    norm = numpy.sum(H.flatten())
+    norm = np.sum(H.flatten())
     H = H * (norm > 0.0) / (norm + (norm == 0.0))
 
-    sortH = numpy.sort(H.flatten())
+    sortH = np.sort(H.flatten())
     cumH = sortH.cumsum()
     # 1, 2, 3-sigma, for the old school:
     lvl00 = 2*sortH.max()
@@ -206,10 +206,12 @@ def make_lens_atlas(argv):
     # Some constants:
 
     output_directory = './'
+    output_format = 'png'
     stamp_size = 50
     xbins = np.arange(stamp_size * 2)
     ybins = np.arange(stamp_size * 2)
 
+    stamp_min = 10
     smooth_click = 3
     figsize_stamp = (5, 5)
     figsize_field = (15, 15)
@@ -227,12 +229,12 @@ def make_lens_atlas(argv):
         return
 
     flags = {'points': 30,
-             'heatmap': True,
-             'contour': True,
-             'field': True,
-             'stamp': True,
-             'alpha': True,
-             'skill': True,
+             'heatmap': False,
+             'contour': False,
+             'field': False,
+             'stamp': False,
+             'alpha': False,
+             'skill': False,
             }
 
     for o,a in opts:
@@ -291,6 +293,10 @@ def make_lens_atlas(argv):
             ID = catalog[lens_i][0]
             x = catalog[lens_i][2]
             y = catalog[lens_i][3]
+            N0 = catalog[lens_i][5]
+            if ((x < 0) * (y < 0)) + (N0 < stamp_min):
+                # this is one of the 'non points'; skip
+                continue
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
 
@@ -332,12 +338,11 @@ def make_lens_atlas(argv):
                 conds = ((x_markers_all >= min_x) * (x_markers_all <= max_x) *
                          (y_markers_all >= min_y) * (y_markers_all <= max_y))
                 agents = agents_numbers[conds]
-
                 x_markers = x_markers_all[agents]
                 y_markers = y_markers_all[agents]
 
                 # filter markers
-                n_catalog = len(annotationhistory['Name'])
+                n_catalog = len(agents)
                 if (flags['points'] >= 0) * \
                         (flags['points'] < n_catalog):
                     agents_points = np.random.choice(
@@ -365,13 +370,16 @@ def make_lens_atlas(argv):
                     PD = np.array([PDi for PDj in PD_list for PDi in PDj])
 
                     skill_all = swap.expectedInformationGain(0.5, PL, PD)
-                    skill = skill[agents]
+                    skill = skill_all[agents]
 
                     smax = 100
                     smin = 5
-                    sizes_all = (skill_all - np.min(skill)) * (smax - smin) / \
-                            (np.max(skill) - np.min(skill))
-                    sizes_filtered = sizes_all[agents_points]
+                    if np.max(skill) != np.min(skill):
+                        sizes_all = (skill_all - np.min(skill)) * (smax - smin) / \
+                                (np.max(skill) - np.min(skill))
+                        sizes_filtered = sizes_all[agents_points]
+                    else:
+                        sizes_filtered = 50
                     colors = [(0, 1.0, 0) for i in x_markers_filtered]
                 else:
                     skill = None
@@ -390,6 +398,11 @@ def make_lens_atlas(argv):
                         ax.scatter(x_markers_filtered - min_x,
                                    y_markers_filtered - min_y,
                                    c=colors, s=sizes_filtered,
+                                   alpha=0.25)
+                        ax.scatter(x - min_x,
+                                   y - min_y,
+                                   marker='d',
+                                   c=(0, 1.0, 0), s=50,
                                    alpha=0.25)
 
                     # now do the lens locations
@@ -417,10 +430,14 @@ def make_lens_atlas(argv):
                         labelleft='off',
                         labelbottom='off') # labels along the bottom edge are off
 
-                    fig.savefig(output_directory +
-                                '{0}_cluster_{1}_contour.pdf'.format(
-                                    ID, lens_i))
-
+                    try:
+                        fig.savefig(output_directory +
+                                    '{0}_cluster_{1}_contour.{2}'.format(
+                                        ID, lens_i, output_format))
+                    except:
+                        print 'make_lens_catalog: problem with ', ID, lens_i
+                        # import ipdb; ipdb.set_trace()
+                    plt.close('all')
                 # ----------------------------------------------------------
                 # heatmaps
                 if flags['heatmap']:
@@ -452,9 +469,14 @@ def make_lens_atlas(argv):
                         labelleft='off',
                         labelbottom='off') # labels along the bottom edge are off
 
-                    fig.savefig(output_directory +
-                                '{0}_cluster_{1}_heatmap.pdf'.format(
-                                    ID, lens_i))
+                    try:
+                        fig.savefig(output_directory +
+                                    '{0}_cluster_{1}_heatmap.{2}'.format(
+                                        ID, lens_i, output_format))
+                    except:
+                        print 'make_lens_catalog: problem with ', ID, lens_i
+                        # import ipdb; ipdb.set_trace()
+                    plt.close('all')
 
     # ------------------------------------------------------------------
     # Fields
@@ -462,11 +484,27 @@ def make_lens_atlas(argv):
         print "make_lens_atlas: running fields"
         # find the unique IDs. mark centers and also centrals if clustering is
         # done
-        unique_IDs = np.unique(catalog[:, 0])
+        #import ipdb; ipdb.set_trace()
+        unique_IDs = np.unique(catalog['id'])
         for ID in unique_IDs:
             mini_catalog = catalog[catalog['id'] == ID]
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
+
+            # plot cluster centers
+            x_centers = mini_catalog['x']
+            y_centers = mini_catalog['y']
+            skill_centers = mini_catalog['s']
+            # filter out the -1 entry
+            center_cond = (x_centers > 0) * (y_centers > 0)
+            skill_centers = skill_centers[center_cond]
+            x_centers = x_centers[center_cond]
+            y_centers = y_centers[center_cond]
+            colors_centers = [(0, 1.0, 0) for i in x_centers]
+
+            if len(colors_centers) == 0:
+                #welp, nothing here
+                continue
 
             # ------------------------------------------------------------------
             # download png
@@ -491,13 +529,7 @@ def make_lens_atlas(argv):
             max_x = im.shape[0]
             max_y = im.shape[1]
 
-            # plot cluster centers
-            x_centers = mini_catalog['x']
-            y_centers = mini_catalog['y']
-            skill_centers = mini_catalog['s']
-            colors_centers = [(0, 1.0, 0) for i in x_centers]
-
-            if flags['skill']:
+            if (flags['skill']) * (np.max(skill_centers) != np.min(skill_centers)):
                 sizes_centers = (
                         (skill_centers - np.min(skill_centers)) *
                         (200 - 10) /
@@ -527,7 +559,7 @@ def make_lens_atlas(argv):
             y_markers = y_markers_all[agents]
 
             # filter markers
-            n_catalog = len(annotationhistory['Name'])
+            n_catalog = len(agents)
             if (flags['points'] >= 0) * \
                     (flags['points'] < n_catalog):
                 agents_points = np.random.choice(
@@ -555,13 +587,16 @@ def make_lens_atlas(argv):
                 PD = np.array([PDi for PDj in PD_list for PDi in PDj])
 
                 skill_all = swap.expectedInformationGain(0.5, PL, PD)
-                skill = skill[agents]
+                skill = skill_all[agents]
 
                 smax = 100
                 smin = 5
-                sizes_all = (skill_all - np.min(skill)) * (smax - smin) / \
-                        (np.max(skill) - np.min(skill))
-                sizes_filtered = sizes_all[agents_points]
+                if np.max(skill) != np.min(skill):
+                    sizes_all = (skill_all - np.min(skill)) * (smax - smin) / \
+                            (np.max(skill) - np.min(skill))
+                    sizes_filtered = sizes_all[agents_points]
+                else:
+                    sizes_filtered = 50
                 colors = [(0, 1.0, 0) for i in x_markers_filtered]
             else:
                 skill = None
@@ -570,7 +605,7 @@ def make_lens_atlas(argv):
 
             # ----------------------------------------------------------
             # contours
-            if flags['contour']:
+            if flags['contour'] * (len(x_markers) >= stamp_min):
 
                 # now do the lens locations
                 # don't need to filter the x's since that is filtered by
@@ -608,7 +643,11 @@ def make_lens_atlas(argv):
                 labelleft='off',
                 labelbottom='off') # labels along the bottom edge are off
 
-            fig.savefig(output_directory + '{0}_field.pdf'.format(ID))
+            try:
+                fig.savefig(output_directory + '{0}_field_output.{1}'.format(ID, output_format))
+            except:
+                print 'make_lens_catalog: problem with field ', ID
+            plt.close('all')
 
 # ======================================================================
 

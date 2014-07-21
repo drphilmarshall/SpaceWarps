@@ -157,11 +157,11 @@ def Estep_old(bureau_offline, pi, collection, taus, training_IDs={}):
             # xij = 1 term
             pos = thetai1 ** xij * (1 - thetai1) ** (1 - xij) * pi_ij
             neg = thetai0 ** (1 - xij) * (1 - thetai0) ** xij * (1 - pi_ij)
-            tau_j += pos / (pos + neg)
+            tau_j += pos * 1. / (pos + neg)
 
             # xij = 0 term
             N_j += 1
-        tau_j /= N_j
+        tau_j = tau_j * 1. / N_j
 
         taus_prime.update({ID: tau_j})
     return taus_prime
@@ -200,7 +200,7 @@ def Estep(bureau_offline, pi, taus, training_IDs={}):
 
             pos = thetai1 ** xij * (1 - thetai1) ** (1 - xij) * pi_ij
             neg = thetai0 ** (1 - xij) * (1 - thetai0) ** xij * (1 - pi_ij)
-            tau_j += pos / (pos + neg)
+            tau_j += pos * 1. / (pos + neg)
 
             N_j += 1
 
@@ -210,7 +210,7 @@ def Estep(bureau_offline, pi, taus, training_IDs={}):
     # now do taus_calculation and put it into taus_prime
     for ID in taus_calculation:
         taus_prime.update({ID:
-            taus_calculation[ID][0] / taus_calculation[ID][1]})
+            taus_calculation[ID][0] * 1. / taus_calculation[ID][1]})
     return taus_prime
 
 # ----------------------------------------------------------------------------
@@ -251,13 +251,13 @@ def Mstep(bureau_offline, pi, taus, training_IDs={}):
         if thetai1_den == 0:
             thetai1_den = 1
 
-        agent_prime.update({'Theta0': thetai0_num / thetai0_den,
-                            'Theta1': thetai1_num / thetai1_den,
-                            'Pi': thetai1_den / pii_den,})
+        agent_prime.update({'Theta0': thetai0_num * 1. / thetai0_den,
+                            'Theta1': thetai1_num * 1. / thetai1_den,
+                            'Pi': thetai1_den * 1. / pii_den,})
         bureau_offline_prime.update({name: agent_prime})
         pi_num += thetai1_den
         pi_den += pii_den
-    pi = pi_num / pi_den
+    pi = pi_num * 1. / pi_den
     return bureau_offline_prime, pi
 
 # ----------------------------------------------------------------------------
@@ -290,7 +290,7 @@ def EM_algorithm(bureau_offline, pi, taus, training_IDs={},
         pi = pi_prime
 
         # divide epsilon_taus by the number of taus
-        epsilon_taus = sqrt(epsilon_taus) / len(taus.keys())
+        epsilon_taus = sqrt(epsilon_taus) * 1. / len(taus.keys())
         epsilon_list.append(epsilon_taus)
         N_try += 1
 

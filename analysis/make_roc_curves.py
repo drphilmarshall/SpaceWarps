@@ -214,11 +214,14 @@ def make_roc_curves(argv):
         # Run EM Algorithm
 
         if not use_training_info:
-            training_IDs = {}
+            bureau_offline, pi, taus, information_dict = EM_algorithm(
+                    bureau_offline, pi, taus, {},
+                    return_information=True)
 
-        bureau_offline, pi, taus, information_dict = EM_algorithm(
-                bureau_offline, pi, taus, training_IDs,
-                return_information=True)
+        else:
+            bureau_offline, pi, taus, information_dict = EM_algorithm(
+                    bureau_offline, pi, taus, training_IDs,
+                    return_information=True)
 
         if save_offline:
             tup = (bureau_offline, pi, taus, information_dict)
@@ -297,11 +300,14 @@ def make_roc_curves(argv):
         # Run EM Algorithm
 
         if not use_training_info:
-            training_IDs = {}
+            bureau_offline, pi, taus, information_dict = EM_algorithm(
+                    bureau_offline, pi, taus, {},
+                    return_information=True)
 
-        bureau_offline, pi, taus, information_dict = EM_algorithm(
-                bureau_offline, pi, taus, training_IDs,
-                return_information=True)
+        else:
+            bureau_offline, pi, taus, information_dict = EM_algorithm(
+                    bureau_offline, pi, taus, training_IDs,
+                    return_information=True)
 
         if save_offline:
             tup = (bureau_offline, pi, taus, information_dict)

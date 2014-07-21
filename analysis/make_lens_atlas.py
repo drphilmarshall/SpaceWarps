@@ -146,7 +146,7 @@ def contour_hist(H, extent=None,
 
 # ======================================================================
 
-def make_lens_atlas(argv):
+def make_lens_atlas(args):
     """
     NAME
         make_lens_atlas
@@ -173,9 +173,8 @@ def make_lens_atlas(argv):
         --skill         Weight agent markers by skill
 
     INPUTS
-        bureau.pickle
-        collection.pickle
-        catalog.dat
+        collection collection.pickle
+        catalog catalog.dat
             Assumed format:
             ID   kind   x   y    P     N0   S
 
@@ -192,6 +191,7 @@ def make_lens_atlas(argv):
     EXAMPLE
 
     BUGS
+        TODO: incorporate some of these defaults into the flags dictionary
 
     AUTHORS
         This file is part of the Space Warps project, and is distributed
@@ -203,30 +203,7 @@ def make_lens_atlas(argv):
     """
 
     # ------------------------------------------------------------------
-    # Some constants:
-
-    output_directory = './'
-    output_format = 'png'
-    stamp_size = 50
-    xbins = np.arange(stamp_size * 2)
-    ybins = np.arange(stamp_size * 2)
-
-    stamp_min = 10
-    smooth_click = 3
-    figsize_stamp = (5, 5)
-    figsize_field = (15, 15)
-
-    # ------------------------------------------------------------------
-    # Read in options:
-
-    try:
-        opts, args = getopt.getopt(argv,"h",
-                ["help", "heatmap", "contour", "field", "stamp", "alpha",
-                 "points", "skill"])
-    except getopt.GetoptError, err:
-        print str(err) # will print something like "option -a not recognized"
-        print make_lens_atlas.__doc__  # will print the big comment above.
-        return
+    # Some defaults:
 
     flags = {'points': 30,
              'heatmap': False,
@@ -235,41 +212,80 @@ def make_lens_atlas(argv):
              'stamp': False,
              'alpha': False,
              'skill': False,
+             'output_directory': './',
+             'output_format': 'png',
+             'stamp_size': 50,
+             'stamp_min': 10,
+             'smooth_click': 3,
+             'figsize_stamp': 5,
+             'figsize_field': 15,
             }
 
-    for o,a in opts:
-        if o in ("-h", "--help"):
-            print make_lens_atlas.__doc__
-            return
-        elif o in ("--heatmap"):
-            flags['heatmap'] = True
-        elif o in ("--contour"):
-            flags['contour'] = True
-        elif o in ("--field"):
-            flags['field'] = True
-        elif o in ("--stamp"):
-            flags['stamp'] = True
-        elif o in ("--alpha"):
-            flags['alpha'] = True
-        elif o in ("--skill"):
-            flags['skill'] = True
-        elif o in ("--points"):
-            flags['points'] = int(a)
-        else:
-            assert False, "unhandled option"
+    # ------------------------------------------------------------------
+    # Read in options:
 
-    # Check for pickles in array args:
-    if len(args) == 2:
-        #bureau_path = args[0]
-        collection_path = args[0]
-        catalog_path = args[1]
-        print "make_lens_atlas: illustrating behaviour captured in bureau, collection, and lens files: "
-        #print "make_lens_atlas: ", bureau_path
-        print "make_lens_atlas: ", collection_path
-        print "make_lens_atlas: ", catalog_path
-    else:
-        print make_lens_atlas.__doc__
-        return
+    # this has to be easier to do...
+    for arg in args:
+        if arg in flags:
+            flags[arg] = args[arg]
+        elif arg == 'collection':
+            collection_path = args[arg]
+        elif arg == 'catalog':
+            catalog_path = args[arg]
+        else:
+            print "make_lens_atlas: unrecognized flag ",arg
+    xbins = np.arange(flags['stamp_size'] * 2)
+    ybins = np.arange(flags['stamp_size'] * 2)
+    figsize_stamp = (flags['figsize_stamp'], flags['figsize_stamp'])
+    figsize_field = (flags['figsize_field'], flags['figsize_field'])
+
+    print "make_lens_atlas: illustrating behaviour captured in collection, and lens files: "
+    print "make_lens_atlas: ", collection_path
+    print "make_lens_atlas: ", catalog_path
+
+    ## try:
+    ##     opts, args = getopt.getopt(argv,"h",
+    ##             ["help", "heatmap=", "contour=", "field=", "stamp=",
+    ##              "alpha=", "points=", "skill="])
+    ## except getopt.GetoptError, err:
+    ##     print str(err) # will print something like "option -a not recognized"
+    ##     print make_lens_atlas.__doc__  # will print the big comment above.
+    ##     return
+
+
+    ## for o,a in opts:
+    ##     if o in ("-h", "--help"):
+    ##         print make_lens_atlas.__doc__
+    ##         return
+    ##     elif o in ("--heatmap"):
+    ##         flags['heatmap'] = True
+    ##     elif o in ("--contour"):
+    ##         flags['contour'] = True
+    ##     elif o in ("--field"):
+    ##         flags['field'] = True
+    ##     elif o in ("--stamp"):
+    ##         flags['stamp'] = True
+    ##     elif o in ("--alpha"):
+    ##         flags['alpha'] = True
+    ##     elif o in ("--skill"):
+    ##         flags['skill'] = True
+    ##     elif o in ("--points"):
+    ##         flags['points'] = int(a)
+    ##     else:
+    ##         assert False, "unhandled option"
+
+    ## # Check for pickles in array args:
+    ## if len(args) == 2:
+    ##     #bureau_path = args[0]
+    ##     collection_path = args[0]
+    ##     catalog_path = args[1]
+    ##     print "make_lens_atlas: illustrating behaviour captured in bureau, collection, and lens files: "
+    ##     #print "make_lens_atlas: ", bureau_path
+    ##     print "make_lens_atlas: ", collection_path
+    ##     print "make_lens_atlas: ", catalog_path
+    ## else:
+    ##     print make_lens_atlas.__doc__
+    ##     return
 
     # ------------------------------------------------------------------
     # Read in files:
@@ -294,7 +310,7 @@ def make_lens_atlas(argv):
             x = catalog[lens_i][2]
             y = catalog[lens_i][3]
             N0 = catalog[lens_i][5]
-            if ((x < 0) * (y < 0)) + (N0 < stamp_min):
+            if ((x < 0) * (y < 0)) + (N0 < flags['stamp_min']):
                 # this is one of the 'non points'; skip
                 continue
             subject = collection.member[ID]
@@ -303,12 +319,12 @@ def make_lens_atlas(argv):
             # ------------------------------------------------------------------
             # download png
             url = subject.location
-            outname = output_directory + '{0}_field.png'.format(ID)
+            outname = flags['output_directory'] + '{0}_field.png'.format(ID)
             im = get_online_png(url, outname)
-            min_x = np.int(np.max((x - stamp_size, 0)))
-            max_x = np.int(np.min((x + stamp_size, im.shape[0])))
-            min_y = np.int(np.max((y - stamp_size, 0)))
-            max_y = np.int(np.min((y + stamp_size, im.shape[1])))
+            min_x = np.int(np.max((x - flags['stamp_size'], 0)))
+            max_x = np.int(np.min((x + flags['stamp_size'], im.shape[0])))
+            min_y = np.int(np.max((y - flags['stamp_size'], 0)))
+            max_y = np.int(np.min((y + flags['stamp_size'], im.shape[1])))
 
             if (min_x >= max_x) + (min_y >= max_y):
                 print "make_lens_atlas: misshapen lens for ID ", ID
@@ -410,7 +426,7 @@ def make_lens_atlas(argv):
                     # xbins and ybins anyways
                     pdf2d(x_markers - min_x, y_markers - min_y,
                           xbins=xbins, ybins=ybins,
-                          weights=skill, smooth=smooth_click,
+                          weights=skill, smooth=flags['smooth_click'],
                           color=(0, 1.0, 0),
                           style='contour',
                           axis=ax)
@@ -431,9 +447,9 @@ def make_lens_atlas(argv):
                         labelbottom='off') # labels along the bottom edge are off
 
                     try:
-                        fig.savefig(output_directory +
+                        fig.savefig(flags['output_directory'] +
                                     '{0}_cluster_{1}_contour.{2}'.format(
-                                        ID, lens_i, output_format))
+                                        ID, lens_i, flags['output_format']))
                     except:
                         print 'make_lens_catalog: problem with ', ID, lens_i
                         # import ipdb; ipdb.set_trace()
@@ -449,7 +465,7 @@ def make_lens_atlas(argv):
                     # xbins and ybins anyways
                     pdf2d(x_markers - min_x, y_markers - min_y,
                           xbins=xbins, ybins=ybins,
-                          weights=skill, smooth=smooth_click,
+                          weights=skill, smooth=flags['smooth_click'],
                           color=(0, 1.0, 0),
                           style='hist',
                           axis=ax)
@@ -470,9 +486,9 @@ def make_lens_atlas(argv):
                         labelbottom='off') # labels along the bottom edge are off
 
                     try:
-                        fig.savefig(output_directory +
+                        fig.savefig(flags['output_directory'] +
                                     '{0}_cluster_{1}_heatmap.{2}'.format(
-                                        ID, lens_i, output_format))
+                                        ID, lens_i, flags['output_format']))
                     except:
                         print 'make_lens_catalog: problem with ', ID, lens_i
                         # import ipdb; ipdb.set_trace()
@@ -509,7 +525,7 @@ def make_lens_atlas(argv):
             # ------------------------------------------------------------------
             # download png
             url = subject.location
-            outname = output_directory + '{0}_field.png'.format(ID)
+            outname = flags['output_directory'] + '{0}_field.png'.format(ID)
             im = get_online_png(url, outname)
 
             # if it is a training image, claim the alpha parameter
@@ -605,14 +621,14 @@ def make_lens_atlas(argv):
 
             # ----------------------------------------------------------
             # contours
-            if flags['contour'] * (len(x_markers) >= stamp_min):
+            if flags['contour'] * (len(x_markers) >= flags['stamp_min']):
 
                 # now do the lens locations
                 # don't need to filter the x's since that is filtered by
                 # xbins and ybins anyways
                 pdf2d(x_markers - min_x, y_markers - min_y,
                       xbins=xbins, ybins=ybins,
-                      weights=skill, smooth=smooth_click,
+                      weights=skill, smooth=flags['smooth_click'],
                       color=(0, 1.0, 0),
                       style='contour',
                       axis=ax)
@@ -644,14 +660,74 @@ def make_lens_atlas(argv):
                 labelbottom='off') # labels along the bottom edge are off
 
             try:
-                fig.savefig(output_directory + '{0}_field_output.{1}'.format(ID, output_format))
+                fig.savefig(flags['output_directory'] + '{0}_field_output.{1}'.format(ID, flags['output_format']))
             except:
                 print 'make_lens_catalog: problem with field ', ID
             plt.close('all')
 
+    print 'make_lens_catalog: All done!'
+
 # ======================================================================
 
 if __name__ == '__main__':
-    make_lens_atlas(sys.argv[1:])
+    # do argparse style; I find this /much/ easier than getopt (sorry Phil!)
+    import argparse
+    parser = argparse.ArgumentParser(description=make_lens_atlas.__doc__)
+    # Options we can configure
+    parser.add_argument("--output_directory",
+                        action="store",
+                        dest="output_directory",
+                        default="./",
+                        help="Output directory for images.")
+    parser.add_argument("--output_format",
+                        action="store",
+                        dest="output_format",
+                        default="png",
+                        help="Format of output images.")
+    parser.add_argument("--points",
+                        action="store",
+                        dest="points",
+                        type=int,
+                        default=30,
+                        help="Number of points to plot. If < 0, do all points.")
+    # Actions we can specify
+    parser.add_argument("--heatmap",
+                        action="store_true",
+                        dest="heatmap",
+                        default=False,
+                        help="Create heatmaps.")
+    parser.add_argument("--contour",
+                        action="store_true",
+                        dest="contour",
+                        default=False,
+                        help="Create contour maps.")
+    parser.add_argument("--alpha",
+                        action="store_true",
+                        dest="alpha",
+                        default=False,
+                        help="If true value is in the alpha coordinate, plot it.")
+    parser.add_argument("--skill",
+                        action="store_true",
+                        dest="skill",
+                        default=False,
+                        help="Weight contours and heatmaps by skill.")
+    parser.add_argument("--field",
+                        action="store_true",
+                        dest="field",
+                        default=False,
+                        help="Do atlas of whole field.")
+    parser.add_argument("--stamp",
+                        action="store_true",
+                        dest="stamp",
+                        default=False,
+                        help="Do atlas of individual clusters.")
+    # Required arguments
+    parser.add_argument("collection",
+                        help="Path to collection pickle.")
+    parser.add_argument("catalog",
+                        help="Path to catalog data file.")
+    options = parser.parse_args()
+    args = vars(options)
+    make_lens_atlas(args)
 
 # ======================================================================

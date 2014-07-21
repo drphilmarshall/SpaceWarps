@@ -83,7 +83,7 @@ def outlier_clusters(x, y, skill=None, memory=None):
 
 # ======================================================================
 
-def make_lens_catalog(argv):
+def make_lens_catalog(args):
     """
     NAME
         make_lens_catalog
@@ -133,39 +133,60 @@ def make_lens_catalog(argv):
         2013-07-16  started Davis (KIPAC)
     """
 
-    try:
-        opts, args = getopt.getopt(argv,"h",
-                ["help", "heatmap", "contour", "field", "stamp", "alpha",
-                 "points", "skill"])
-    except getopt.GetoptError, err:
-        print str(err) # will print something like "option -a not recognized"
-        print make_lens_catalog.__doc__  # will print the big comment above.
-        return
+    # ------------------------------------------------------------------
+    # Some defaults:
 
-    flags = {'skill': False}
+    flags = {'skill': False,
+             'output_directory': './'}
 
-    for o,a in opts:
-        if o in ("-h", "--help"):
-            print make_lens_catalog.__doc__
-            return
-        elif o in ("--skill"):
-            flags['skill'] = True
+    # ------------------------------------------------------------------
+    # Read in options:
+
+    # this has to be easier to do...
+    for arg in args:
+        if arg in flags:
+            flags[arg] = args[arg]
+        elif arg == 'collection':
+            collection_path = args[arg]
         else:
-            assert False, "unhandled option"
+            print "make_lens_atlas: unrecognized flag ",arg
 
-    # Check for pickles in array args:
-    if len(args) == 1:
-        collection_path = args[0]
-        print "make_lens_catalog: illustrating behaviour captured in collection file: "
-        print "make_lens_catalog: ",collection_path
+    ## try:
+    ##     opts, args = getopt.getopt(argv,"h",
+    ##             ["help", "heatmap", "contour", "field", "stamp", "alpha",
+    ##              "points", "skill"])
+    ## except getopt.GetoptError, err:
+    ##     print str(err) # will print something like "option -a not recognized"
+    ##     print make_lens_catalog.__doc__  # will print the big comment above.
+    ##     return
 
-    else:
-        print make_lens_catalog.__doc__
-        return
+    ## flags = {'skill': False}
 
-    output_directory = './'
+    ## for o,a in opts:
+    ##     if o in ("-h", "--help"):
+    ##         print make_lens_catalog.__doc__
+    ##         return
+    ##     elif o in ("--skill"):
+    ##         flags['skill'] = True
+    ##     else:
+    ##         assert False, "unhandled option"
 
-    memory = joblib.Memory(cachedir=output_directory)
+    ## # Check for pickles in array args:
+    ## if len(args) == 1:
+    ##     collection_path = args[0]
+    ##     print "make_lens_catalog: illustrating behaviour captured in collection file: "
+    ##     print "make_lens_catalog: ",collection_path
+
+    ## else:
+    ##     print make_lens_catalog.__doc__
+    ##     return
+
+    ## output_directory = './'
+
+    print "make_lens_catalog: illustrating behaviour captured in collection file: "
+    print "make_lens_catalog: ",collection_path
+
+    memory = joblib.Memory(cachedir=flags['output_directory'])
     memory.clear()
 
     dtype_catalog = np.dtype({'names':
@@ -173,7 +194,7 @@ def make_lens_catalog(argv):
         'formats': ('|S24', '|S15', np.float, np.float,
                     np.float, np.int, np.float)})
 
-    catalog_path = output_directory + 'catalog.dat'
+    catalog_path = flags['output_directory'] + 'catalog.dat'
     F = open(catalog_path, 'w')
     F.write('id,kind,x,y,p,n0,s\n')
 
@@ -288,9 +309,30 @@ def make_lens_catalog(argv):
 
 
     print 'make_lens_catalog: All done!'
+
 # ======================================================================
 
 if __name__ == '__main__':
-    make_lens_catalog(sys.argv[1:])
+    # do argparse style; I find this /much/ easier than getopt (sorry Phil!)
+    import argparse
+    parser = argparse.ArgumentParser(description=make_lens_atlas.__doc__)
+    # Options we can configure
+    parser.add_argument("--output_directory",
+                        action="store",
+                        dest="output_directory",
+                        default="./",
+                        help="Output directory for images.")
+    parser.add_argument("--skill",
+                        action="store_true",
+                        dest="skill",
+                        default=False,
+                        help="Weight by skill. Currently not implimented (but in the future!)")
+    # Required args
+    parser.add_argument("catalog",
+                        help="Path to catalog data file.")
+    options = parser.parse_args()
+    args = vars(options)
+    make_lens_catalog(args)
+    #make_lens_catalog(sys.argv[1:])
 
 # ======================================================================

@@ -811,13 +811,21 @@ expected information gain as a measure of volunteer contribution.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Sample completeness and purity}
+\subsection{Sample Properties}
 \label{sec:results:sample}
 
-Rejection rate. Completeness and purity at P > retirement, P > 95\%, and 
-as function of probability P. Compare stage 1 and stage 2. 
+We now quantify the performance of the \sw system in terms of the recovery of
+the training set images. \Fref{fig:results:sample:roc} shows receiver
+operating characteristic (ROC) curves for CFHTLS stage 1 and stage 2. 
 
-Summarize performance at some fiducial threshold: eg P = 95\%.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/roc.png}
+\caption{Receiver operating characteristic curves for the \sw system, using
+the CFHTLS training set.}
+\label{fig:results:sample:roc}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -877,9 +885,9 @@ size, showing how the crowd changed over time...
 
 Sum up, end.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  ACKNOWLEDGMENTS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Acknowledgements}
  

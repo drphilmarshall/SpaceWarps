@@ -466,6 +466,7 @@ Reconfigured website: more detailed SG, more detailed feedback. Orange
 background to make it obvious stage 2 is different. Slower image presentation.
 Higher, constant training rate.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Data}
@@ -501,22 +502,25 @@ Approximately optimized, how? Examples of images.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Classification Analysis}
+\section{Classification Stages and Analysis}
 \label{sec:swap}
 
 In this section we outline our methodology for interpreting the interactions
-of the volunteers with the identification interface.  Each classification made
-is logged in a database, storing subject IDs, (anonymous) volunteer IDs, a
-timestamp and the classification results.  The {\it kind} of subject --
-whether it is a training subject (a  simulated lens or a known non-lens) or a
-test subject (an unseen image drawn from the survey) -- is also recorded. For
-all subjects, the positions of all Markers are recorded, in pixel coordinates.
-For training subjects, we also store the ``classification'' of the subject as
-a lens, or a non-lens, and also the type of object present in the image. These
-types are summarized in \Tref{tab:objecttypes}.  This classification is used
-to provide instant feedback, but is also the basic measurement used in a
-probabilistic classification of every subject based on all image views to
-date.
+of the volunteers with the identification interface, and then describe how we
+applied this methodology in the two classification stages in the CFHTLS
+project.
+
+Each classification made is logged in a database, storing subject IDs,
+(anonymous) volunteer IDs, a timestamp and the classification results.  The
+{\it kind} of subject -- whether it is a training subject (a  simulated lens
+or a known non-lens) or a test subject (an unseen image drawn from the survey)
+-- is also recorded. For all subjects, the positions of all Markers are
+recorded, in pixel coordinates. For training subjects, we also store the
+``classification'' of the subject as a lens, or a non-lens, and also the type
+of object present in the image. These types are summarized in
+\Tref{tab:objecttypes}.  This classification is used to provide instant
+feedback, but is also the basic measurement used in a probabilistic
+classification of every subject based on all image views to date.
 
 We perform an online analysis of the classifications,  updating a
 probabilistic model of every (anonymous) volunteer's data, and also updating
@@ -551,8 +555,38 @@ set of all classifications made of this subject.)
 
 \end{itemize}
 
-In the next section we present results in terms of all three of these
-probabilities, as we investigate the performance of the \SW system.
+In \Sref{sec:results} below, we define several quantities based on the 
+probabilities listed above that serve to quantify the performance of the crowd
+in terms of the information they provide via their classifications, and report
+on the performance of the system in returning a sample of lens candidates
+as a function of $\pr(\LENS|C,T)$ threshold.
+
+
+During stage 1 classification of the CFHTLS images, we assigned a prior
+probability for each image to contain a lens of $2\times10^{-4}$, based on a
+rough estimate of the number of expected lenses in the survey. We then
+assigned two values of the images' posterior probability, $\pr(\LENS|C,T)$, to
+define ``detection'' and ``rejection'' thresholds. These were set to be 0.95
+and (approximately symmetrically in the logarithm of probability), $10^{-7}$.
+Subjects that attained probability of less than the rejection threshold were
+scheduled for retirement and subsequently ignored by the analysis code.
+Subjects crossing the detection threshold were not retired from the website,
+but instead left in the system so that more volunteers could see them.
+The analysis code was run every night during the project, and subjects retired
+in batches after its completion. This introduced some inefficiency, because
+some classifications were accumulated in the time between them crossing the
+rejection threshold and the subject actually being retired from the website.
+As subjects were retired from the site, more subjects were activated. In this
+way, the volunteers who down-voted images for not containing any lensed
+features enabled new images to be shown to other members of the community.
+
+When all the subjects had either been retired, or classified around 10 times
+or more, the web app was paused and reconfigured for stage 2. The sample of
+subjects classified during stage 2 was selected to be all those that passed
+the detection threshold ($\pr(\LENS|C,T) > 0.95$) at stage 1. These were
+classified for one week, with no retirement but a maximum classification
+number of 50 each. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -569,13 +603,6 @@ that they made.
 \subsection{Crowd Properties}
 \label{sec:results:crowd}
 
-
-% Enthusiasm: histogram of classifications, stage 1 vs stage 2. Information
-% contributed. Correlation with number of classifications. 
-% 
-% PL and PD as measures of skill. not quite talent, due to possibility of
-% learning - but agents assume talent. Performance of crowd re PD and PL.
-% Correlations with N classifications.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}

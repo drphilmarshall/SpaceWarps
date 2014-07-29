@@ -1,0 +1,971 @@
+# ============================================================================
+# 2013-07-16 (Tuesday) 09:42 PDT
+# 
+# Reconfiguring SW website for CFHTLS stage 2. Need to run the site locally, to
+# check appearance, performance etc. 
+# 
+# Follow Amit's instructions:
+#
+#     The readme should get you going. You need to install Node. 
+#     Then from the project root directory, run
+# 
+#     npm install
+#     hem server --includeCss
+
+# Here's the contents of the README.md:
+
+#     ## Setting up
+# 
+#         git clone git@github.com:zooniverse/Lens-Zoo.git
+#         npm install .
+# 
+#     ## Starting local server
+# 
+#         hem server --includeCss
+# 
+#     ## Building subjects
+# 
+#         cd /path/to/ouroboros
+#         rails r /path/to/spacewarps/data-import/builder.rb
+# 
+#     or to build against staging server
+# 
+#         RAILS_ENV=staging rails r /path/to/spacewarps/data-import/builder.rb
+#         ssh ubuntu@dev.zooniverse.org
+#         cd /rails/apps/ouroboros_staging/current
+#         sudo -u www-data bundle exec rails c staging
+# 
+#         # Clear the redis cache
+#         SpacewarpSubject.redis_set.destroy
+# 
+#         # Activate subjects
+#         SpacewarpGroup.activate
+# 
+#     ## Building and deploying project
+# 
+#         ./build.rb
+
+
+# OK, first need to make sure Node is installed and up to date. This package
+# comes with homebrew, so it was enough to do:
+
+#   brew update
+
+# to get the latest version of node and npm. [I got homebrew some time ago,
+# with:  ruby ~/software/homebrew.rb after downloading homebrew.rb from the 
+# homebrew website.]
+
+# Now run the node install command:
+
+npm install .
+
+# npm http GET https://registry.npmjs.org/spine/1.0.8
+# npm http GET https://registry.npmjs.org/nib
+# ...
+# npm http 200 https://registry.npmjs.org/options/-/options-0.0.5.tgz
+# npm http 200 https://registry.npmjs.org/commander/-/commander-0.6.1.tgz
+# > ws@0.4.27 install /Users/pjm/public_html/SpaceWarps/Dev/node_modules/hem/node_modules/testacular/node_modules/socket.io/node_modules/socket.io-client/node_modules/ws
+# > (node-gyp rebuild 2> builderror.log) || (exit 0)
+#   CXX(target) Release/obj.target/bufferutil/src/bufferutil.o
+#   SOLINK_MODULE(target) Release/bufferutil.node
+#   ...
+# hem@0.2.9 node_modules/hem
+# ├── watch@0.5.1
+# ├── coffee-script@1.6.3
+# ├── optimist@0.3.7 (wordwrap@0.0.2)
+# ├── eco@1.1.0-rc-3 (strscan@1.0.1)
+# ├── uglify-js@1.3.5
+# ├── stylus@0.34.1 (debug@0.7.2, mkdirp@0.3.5, cssom@0.2.5)
+# ├── http-proxy@0.8.7 (colors@0.6.0-1, pkginfo@0.2.3)
+# ├── fast-detective@0.0.2 (burrito@0.2.12)
+# ├── strata@0.20.1 (strftime@0.4.6, bufferedstream@1.6.0, mime@1.2.3, markdown@0.3.1)
+# ├── jade@0.33.0 (character-parser@1.0.2, mkdirp@0.3.5, commander@1.2.0, monocle@0.1.48, with@1.1.0, constantinople@1.0.1, transformers@2.0.1)
+# └── testacular@0.4.0 (xmlbuilder@0.4.2, chokidar@0.6.2, glob@3.2.3, minimatch@0.2.12, socket.io@0.9.16)
+
+# Done. This makes a directory called "node_modules". To do a hard reinstall, 
+# \rm -rf this directory and redo the npm install .
+
+
+# Now for the hem server - needs to be the right version!
+
+sudo npm install hem@0.2.9 -g
+
+# Start it up! The Css flag is important. This command needs to be executed in
+# the Lens-Zoo directory, and will serve the site that is in the current
+# branch (obviously?).
+
+hem server --includeCss &
+
+# path.existsSync is now called `fs.existsSync`.
+# >> Strata web server version 0.15.1 running on node 0.8.2
+# >> Listening on 0.0.0.0:9294, CTRL+C to stop
+
+# OK good! This terminal is now unusable, as the server is there listening in the
+# background. Probably we could bg it, but its OK to just use a different term.
+
+   # # Now - do we need to do the ouruboros stuff? Or can we just build?
+   # # Try it:
+   # 
+   # ./build.rb
+
+   # ./build.rb:5: syntax error, unexpected ':', expecting $end
+   # AWS.config access_key_id: ENV['S3_ACCESS_ID'], secret_a...
+
+   # Looks like ruby script is expecting some Amazon passwords or something.
+   # Do we need this? Or can we run even more locally somehow, just for 
+   # site testing?
+
+# Actually the build is not needed. All we need to do is point a browser at
+# the following development server url:
+
+open http://0.0.0.0:9294/
+
+# This works (with some help from Amit, fixing bugs at his end!)
+
+
+# ============================================================================
+# 2013-07-16 (Tuesday) 10:57 PDT
+#
+# How to handle website reconfigurations?
+# One branch per survey and stage? Or files stored per survey and stage?
+# Or, one branch per survey, and keep separate files for stages?
+#   This latter one has nice features: lots of PNG files needed for website
+#   could be kept in separate branches. Stage 2 edits are minor, in principle
+#   - so could be handled by 
+# 
+# Plan:
+#
+# * Fork Lens-Zoo repo to drphilmarshall              DONE
+# * Make Aprajita and Anupreeta collaborators         DONE
+
+# ---------------------------------------------------------------
+# A) Phil: over-write index.html (and other files) as needed:
+#
+# * Create dev branch to work in                      DONE
+# * Keep copies of stage 1 html, eco files:           DONE
+#     * public/index_CFHTLS_stage1.html               DONE
+#     * app/views/classifier_CFHTLS_stage1.eco        DONE
+#     * app/views/profile_subjects_CFHTLS_stage1.eco  DONE
+# * Reconfigure the following files:
+#     * public/index_CFHTLS_stage2.html               IN PROGRESS
+#     * app/views/classifier_CFHTLS_stage2.eco        IN PROGRESS
+#     * app/views/profile_subjects_CFHTLS_stage2.eco  IN PROGRESS
+#     * others...
+# * Write simple shell script to reconfigure website  DONE
+# * Test local dev branch site using hem server       DONE
+# * Merge in Zooniverse changes to master branch      ONGOING
+# * When ready:
+#     * Merge dev branch into master branch
+#     * Submit pull request
+#
+# ---------------------------------------------------------------
+# B) Amit: since Sci Team changes are purely content, just change switches 
+#    in index.coffee to point at different content!
+# 
+#    https://github.com/zooniverse/Lens-Zoo/blob/master/app/index.coffee
+#
+#    Need to learn how to do this...
+#
+# ---------------------------------------------------------------
+# 
+# Required differences between Stage 1 and Stage 2:
+#
+# stage1.html, stage2.html with different spotters guides, labels etc.
+# Different instant feedback... Different tutorial? Single pop-up? Doesn't
+# have to be on particular image, can just come up on first visit to Stage 2.
+# 
+# Needs discussion.
+#
+# ---------------------------------------------------------------
+# 
+# What about different projects in different branches?
+#
+# Potentially dangerous, if merging is not handled well... 
+# Better to just flick switch in index.coffee in Amit's scheme. 
+# 
+# ie instead of having index.html, use CFHTLS.html, DES.html etc for content,
+# and put images in
+# 
+# images/CFHTLS/guide, images/CFHTLS/tutorial
+# 
+# instead of images/guide/images/tutorial, etc.
+#
+# ---------------------------------------------------------------
+# Notes on git:
+# 
+# - Local master branch is to be kept a clean copy of the remote Zooniverse 
+#   Lens-Zoo repo. Pull in Amit's edits using:
+#   
+# 
+#   git checkout master   
+#    (to move to the master branch of drphilmarshall/Lens-Zoo)
+# 
+#   git remote add upstream https://github.com/zooniverse/Lens-Zoo.git
+#    (to connect yourself to the zooniverse version of the repo)
+# 
+#   git fetch upstream
+#    (to get any new changes that Amit made, from zooniverse/Lens-Zoo)
+# 
+#   git merge upstream/master
+#    (to merge in these new changes)
+# 
+# 
+#   git checkout dev
+#        (to return to your local dev branch)
+#
+#   git merge master
+#        (to merge in changes from the master branch)
+# 
+#   git push origin dev
+#        (to push committed changes in your local dev branch to the dev branch at https://github.com/drphilmarshall/Lens-Zoo)
+# 
+#
+# - Learn more about branches here:    
+#     http://git-scm.com/book/en/Git-Branching-Remote-Branches
+#   
+# ============================================================================
+# 2013-07-18 (Thursday) 13:43 PDT
+
+# It would be nice to split the Spotter's Guide into a separate file? Hmm. 
+# Not sure how to do this yet, For now, just add a gallery.
+
+# Copied images into gallery directory, and wrote shell script to write html
+# snippet, which can then be pasted into the stage2 index.html file. Script 
+# lives in bin. First go: all lens images go in one single gallery, can change
+# this later. Same for false positive gallery? Might as well. 
+
+# ============================================================================
+# 2013-08-16 (Friday) 18:06 PDT
+
+# OK, Amit did the splitting, for translatability. Updated reconfigure.csh
+# to make copies of the stage 1 and stage 2 files we need:
+# 
+# set files = ( \
+# app/translations/en_us.coffee \
+# app/views/home.eco \
+# app/views/guide.eco \
+# app/views/faq.eco \
+# app/views/about.eco \
+# app/lib/feedback.coffee \
+# app/lib/create_feedback.coffee \
+# )
+
+# We'll keep them all in projects/CFHTLS and copy them back and forth as
+# we reconfigure.
+
+# To get started:
+
+bin/reconfigure.csh --update CFHTLS
+
+# OK, this worked - including copying current files to _stage1 etc files.
+# Now, reconfigure to Stage 1:
+
+bin/reconfigure.csh CFHTLS 1
+
+# Good. Check projects directory:
+
+ls -1 projects/CFHTLS/
+# about_CFHTLS_stage1.eco
+# create_feedback_CFHTLS_stage1.coffee
+# en_us_CFHTLS_stage1.coffee
+# faq_CFHTLS_stage1.eco
+# feedback_CFHTLS_stage1.coffee
+# guide_CFHTLS_stage1.eco
+# home_CFHTLS_stage1.eco
+
+# OK, good! Can now reconfigure to stage 2 and make all those files too:
+
+bin/reconfigure.csh CFHTLS 1
+
+# about_CFHTLS_stage1.eco
+# about_CFHTLS_stage2.eco
+# create_feedback_CFHTLS_stage1.coffee
+# create_feedback_CFHTLS_stage2.coffee
+# en_us_CFHTLS.coffee
+# faq_CFHTLS_stage1.eco
+# faq_CFHTLS_stage2.eco
+# feedback_CFHTLS_stage1.coffee
+# feedback_CFHTLS_stage2.coffee
+# guide_CFHTLS_stage1.eco
+# guide_CFHTLS_stage2.eco
+# home_CFHTLS_stage1.eco
+# home_CFHTLS_stage2.eco
+
+# Good. Check in. Now need to start porting changes from old
+# index files to these new ones, esp the en_us.coffee file with all the text
+# in it. Alert the others!
+
+# First edits - to the about page. Added the following to
+# about_CFHTLS_stage2.eco:
+# 
+#     <%- translate 'h2', 'about.searching' %>
+#     <%- translate 'p', 'about.searching_text' %>
+    
+# ============================================================================
+# 2013-10-28 (Monday) 11:36 PDT
+
+# Visiting Zooniverse, working on reconfiguring for stage 2 following
+# Aprajita's orange push :-) 
+
+# Starting server...
+
+npm install .
+hem server --includeCss &
+
+# Good - needed Brian's help to get zootorial updates cleanly, by editing
+# package.json to read:
+# 
+#     "zootorial": "~0.3.0",
+
+# OK, orange looks cool. Heath (designer) suggested going a little darker, and
+# changing other instances of blue into *white*.
+# Try to do this!
+
+# Orange = rgb(225, 85, 0) = #E155000
+# Orange shadow = #9A3B01
+
+# Looks good! :-)
+
+
+# 2013-11-01 (Friday) 22:15 PDT
+
+# Finished off color changes - now all colors are defined in css/index.styl,
+# and other styl files refer to these variables.
+
+# ============================================================================
+# 2013-11-01 (Friday) 22:16 PDT
+
+# Chris is about to do a bunch of editing to make the site translatable - 
+# several scripts will change. Try an alternative way of reconfiguring: 
+# one branch per configuration.
+
+# Cloned a fresh repo in to Lens-Zoo:
+
+git clone git@github.com:drphilmarshall/Lens-Zoo.git
+
+# Now make a CFHTLS_Stage1 branch, and copy the relevant files from my Dev
+# area...
+
+set files = ( \
+app/translations/en_us.coffee \
+app/views/home.eco \
+app/views/guide.eco \
+app/views/faq.eco \
+app/views/about.eco \
+app/views/navigation.eco \
+app/lib/feedback.coffee \
+app/lib/create_feedback.coffee \
+css/index.styl \
+css/quick_guide.styl \
+)
+
+cd Lens-Zoo
+
+set k = 1
+git branch CFHTLS_stage$k
+git checkout CFHTLS_stage$k
+
+foreach file ( $files )
+  set stem = $file:t:r
+  set ext = $file:e
+  set target = ../Dev/projects/CFHTLS/${stem}_CFHTLS_stage$k.${ext}
+  echo "cp $target $file"
+end  
+  
+# Also need other new styl files:  
+
+set stylfiles = (\
+css/common.styl \
+css/counters.styl \
+css/pages.styl \
+css/profile.styl \
+)
+
+foreach file ( $stylfiles )
+  set target = ../Dev/$file
+  echo "cp $target $file"
+end  
+
+# OK, this branch is now the same as master except for the styl files have
+# changed to handle color better. Could merge into master at this point and
+# submit a pull request, just to get color s handled better...
+
+# Branch stage 2 from stage 1, and copy files across:
+
+set k = 2
+git branch CFHTLS_stage$k
+git checkout CFHTLS_stage$k
+
+foreach file ( $files )
+  set stem = $file:t:r
+  set ext = $file:e
+  set target = ../Dev/projects/CFHTLS/${stem}_CFHTLS_stage$k.${ext}
+  echo "cp $target $file"
+end  
+
+git status
+# On branch CFHTLS_stage2
+# Changes not staged for commit:
+#   (use "git add <file>..." to update what will be committed)
+#   (use "git checkout -- <file>..." to discard changes in working directory)
+#
+#       modified:   app/views/about.eco
+#       modified:   app/views/home.eco
+#       modified:   app/views/navigation.eco
+#       modified:   css/index.styl
+#       modified:   css/quick_guide.styl
+
+# OK, this looks right - oh, except translation file! Needs to be done
+# separetly, because its not stage-dependent.
+  
+# Done. This system should allow for an easy merge of Chris's edits.
+# The danger is that we might merge the wrong way at some point, and 
+# end up over-writing some of the historical CFHTLS_stage1 record, for 
+# example. Maybe the reconfigure script could be used to do the merging
+# safely? In the branch method, we reconfigure the site using git checkout.
+# And we bring in changes from Adler with a looped merge, going through 
+# all the configurations' branches. 
+
+# 2013-11-05 (Tuesday) 22:08 PST
+ 
+# OK, merged in changes from translations branch. Here's what I did:
+
+
+git remote add upstream git@github.com:zooniverse/Lens-Zoo.git
+git remote -v
+git branch
+
+git checkout master
+git branch translations
+git pull upstream translations
+
+git checkout CFHTLS_stage1
+git merge translations
+
+git checkout CFHTLS_stage2
+git merge translations
+# At this point I had to fix some conflicts:
+nedit app/translations/en_us.coffee
+git add app/translations/en_us.coffee
+git commit -am "Merged in translations"
+
+# OK! Now I pulled in the dev branch again, to start thinking about how to 
+# do the archiving of teh various files - this is for convenience, so we can
+# look at the various different versions without changing branch...
+
+git checkout master
+git pull origin dev
+# This was a mistake - I should have made a dev branch first, and then pulled
+# into *that*. Here's how to recover, and make the master branch match the 
+# remote version:
+git reset --hard origin/master
+# Carry on:
+git branch dev
+git checkout dev
+git pull origin dev
+
+# At this point dev does not have the translations merged in...
+
+# Push the stage branches to the remote, so all can see them:
+
+git checkout CFHTLS_stage1
+git push origin CFHTLS_stage1
+git checkout CFHTLS_stage2
+git push origin CFHTLS_stage2
+git checkout translations
+git push origin translations
+
+
+# Notes:
+# * If we use branches like this to reconfigure the site, we may still want a 
+#   reconfigure script to repeat the above sequence or something like it.
+# * Have to remember to create branches and then pull into them!
+# * Script might have a role in propagating edits across all stages?
+# * Currently, dev branch contains old-style files not consistent with
+#   translations... Need to work in CFHTLS_stage2 branch now, and archive
+#   into projects folder later...
+# * New app does not run, throwing error:
+# 
+# { [Error: ENOENT, no such file or directory './app/lib/jquery.js']
+#   errno: 34,
+#   code: 'ENOENT',
+#   path: './app/lib/jquery.js',
+#   syscall: 'open' }
+# 
+#   Need to use new run script?
+#   
+# Error on starting app:
+
+npm install .
+
+# No problems.
+
+npm run-script start
+
+# > spacewarps@0.0.1 start /Users/pjm/public_html/SpaceWarps/Dev
+# > hem server --includeCss
+# 
+# events.js:66
+#         throw arguments[1]; // Unhandled 'error' event
+#                        ^
+# Error: listen EADDRINUSE
+#     at errnoException (net.js:776:11)
+#     at Server._listen2._connectionKey (net.js:917:26)
+#     at process.startup.processNextTick.process._tickCallback (node.js:244:9)
+# npm ERR! spacewarps@0.0.1 start: `hem server --includeCss`
+# npm ERR! `sh "-c" "hem server --includeCss"` failed with 1
+# npm ERR! 
+# npm ERR! Failed at the spacewarps@0.0.1 start script.
+# npm ERR! This is most likely a problem with the spacewarps package,
+# npm ERR! not with npm itself.
+# npm ERR! Tell the author that this fails on your system:
+# npm ERR!     hem server --includeCss
+# npm ERR! You can get their info via:
+# npm ERR!     npm owner ls spacewarps
+# npm ERR! There is likely additional logging output above.
+# 
+# npm ERR! System Darwin 10.8.0
+# npm ERR! command "node" "/usr/local/bin/npm" "run-script" "start"
+# npm ERR! cwd /Users/pjm/public_html/SpaceWarps/Dev
+# npm ERR! node -v v0.8.2
+# npm ERR! npm -v 1.1.36
+# npm ERR! code ELIFECYCLE
+# npm ERR! message spacewarps@0.0.1 start: `hem server --includeCss`
+# npm ERR! message `sh "-c" "hem server --includeCss"` failed with 1
+# npm ERR! 
+# npm ERR! Additional logging details can be found in:
+# npm ERR!     /Users/pjm/public_html/SpaceWarps/Dev/npm-debug.log
+# npm ERR! not ok code 0
+
+# Ask Chris to see if he can run the CFHTLS_stage2 branch.
+
+# 2013-11-06 (Wednesday) 10:07 PST
+
+# He can! Apparently the issue is I am running another server... Need to 
+# kill that one first.
+
+ps -e | grep hem
+# 50410 ttys024    0:01.70 grep hem
+# 73908 ttys024    1:27.51 node /usr/local/bin/hem server --includeCss
+kill -9 73908
+
+# OK, now try:
+
+git checkout CFHTLS_stage2
+npm run-script start
+
+# Missing zooniverse language library - console error is:
+#
+#     Uncaught module 'zooniverse/lib/language-manager' not found 
+
+# Talk to Chris....
+
+
+
+# Adding in new stage 2 feedback messages, from google spreadsheet 
+# "stage2_fp_detailed_feedback" at:
+#
+# https://docs.google.com/spreadsheet/ccc?key=0AgJSOgFpShAsdHlfbVlvTE1SdVFYSWkwQXlVRGQ5NFE&usp=drive_web#gid=0
+
+# Exported to csv, and reformat to coffeescript variables:
+
+git checkout CFHTLS_stage2
+cd app/translations/
+
+set input = app/translations/stage2_fp_detailed_feedback.csv
+set output = $input:r.coffee
+
+echo "      CFHTLS_stage2_fps:" > $output
+set QUOTES = '"'
+
+set nlines = `cat $input | wc -l`
+set n = 0
+while ($n < $nlines)
+  @ n = $n + 1
+  set line = `tail -n +$n $input | head -1 | sed s/',%'/'%'/g | cut -d'%' -f1`
+  set name = `echo "$line" | cut -d',' -f2`
+  set message = `echo "$line" | cut -d',' -f3- | sed s/'""'/"'"/g | sed s/'"'//g`
+  echo "        ${name}: ${QUOTES}$message${QUOTES}" | sed s/',,,'//g >> $output
+end
+
+# Note the usefulness of the '%' signs in the column, for helping in slicing
+# up the messages from teh comments etc. The issue is that the messages
+# can contain commas, so need quotes (sometimes), and that we can't then cut
+# on commas. 
+
+head $output
+#       CFHTLS_stage2_fps:
+#         stars: "Yellow-red (or white-blue or white-green) stars can look like lens galaxies, but are smaller, very close to circular, and in CFHTLS images often have 'spikes' coming out of them at 12, 3, 6 and 9 o clock."
+#         stars_1: "A bright blue star, that has two red compact sources neighbouring it i.e. there is no lensing galaxy in this image. Also, if the two red compact sources were lensed background galaxies, they would be symmetrically arranged either side of the lens to be a lensing feature."
+#         stars_2: "The red object is not a galaxy but a single red star (that cannot act as a lens). Stars are more defined than fuzzy galaxies (see the yellow galaxies in this field). The neighbouring blue 'arc' is also too thick and not curved enought around the 'lens' to be a plausible lensed arc."
+#         stars_3: "Two blue objects flank a yellow object, however this is not a gravitational lens. The objects have the shapes of stars, not extended or compact galaxies that are seen in the same image. This is just a chance alignment of two blue stars and a red star in between."
+#         stars_4: "The yellow object that has two blue objects around it is a star, so it cannot act as a lens. The blue objects either side of the star are a little fuzzy and slightly different colours, and could be background galaxies. The red pair of objects close by are likely to be foreground red stars. This is just a chance alignment."
+#         stars_5: "This bright blue star has a neighbouring yellow galaxy close to it. The apparently curved shape of the yellow galaxy makes this look a bit like a gravitational lens, but a star cannot act as a lens (it doesn't have enough mass) do this is just a chance alignment of a galaxy and a star."
+#         stars_6: "This field contains several bright stars that cause lots of unusual effects on the images. The object to the lower middle is such a star, not a gravitational lens. The pink and blue colours arise from different effects on the images seen in different filters. So the blue ring you see is because the light from the star caused a larger area of the CCD to be affected than in the green or red bands. The neighbouring blue blobs either side are just aligned by chance."
+#         stars_7: "This field contains a red object flanked by two blue objects. The shape of the red object and the blue object to the left suggest that these are stars. The blue object to the right is a galaxy. This is not a lens but a chance alignment of these three unrelated objects."
+#         stars_8: "This is a bright yellow star, with two beighbouring blue stars. While the blue sources have very similar colours and are compact, if they were really lensed background galaxies/QSOs they would appear on opposing sides of the lensing mass. Therefore this is not a lens but a chance alignment of these unrelated objects."
+
+# etc
+
+# OK, pasted the messages into the en_us.coffee file, in the feedback section!
+
+# Now trying to add new feedback generators for false positives, in 
+#   app/lib/create_feedback.coffee
+# called from:
+#   app/lib/controllers/classifier.coffee
+# and using content from:
+#   app/translations/en_us.coffee
+
+# App fails to run, with console error:
+# 
+# SyntaxError: unexpected TERMINATOR application.js:1
+# Uncaught ReferenceError: require is not defined (index):51
+# (anonymous function)
+# 
+# I guess the second line is a consequence of the first... So we have a
+# syntax error. How to trace this sort of thing?!
+
+  
+# Meanwhile, reconfigure is working again. 
+# For Aprajita to work on the guide, she should:
+
+git checkout dev
+bin/reconfigure.csh CFHTLS 1
+
+git pull origin dev
+bin/reconfigure.csh --update CFHTLS
+
+git checkout CFHTLS_stage2
+
+# and then edit the translation file in app/translations/en_us.coffee
+
+# ============================================================================
+# 2013-11-09 (Saturday) 13:26 PST
+
+# Debugging TERMINATOR error...
+
+# package.json was screwed up... Need to get it from zooniverse again.
+
+git checkout translations
+git pull upstream translations
+
+git checkout CFHTLS_stage2
+git merge translations
+
+# Hmm - says its already merged, becaus of its recursive strategy...
+
+# Still get require error. Try pulling in Chris' own version:
+
+git checkout master
+
+git remote add chrissnyder git@github.com:chrissnyder/Lens-Zoo.git
+git branch chrissnyder
+git pull chrissnyder master
+
+npm install .
+npm run-script start
+
+# That doesn't work either! Still failing to require index...
+
+# Go back to translations branch. What are the packages it needs?
+more package.json 
+# {
+#   "name": "spacewarps",
+#   "version": "0.0.1",
+#   "dependencies": {
+#     "hem": "~0.2.7",
+#     "t7e": "~0.2.1",
+#     "es5-shimify": "~0.0.1",
+#     "json2ify": "~0.0.1",
+#     "spine": "1.0.8",
+#     "underscore": "~1.4.2",
+#     "zootorial": "~0.3.4",
+#     "nib": "~0.9.1",
+#     "zooniverse": "git://github.com/zooniverse/Zooniverse#language-menu",
+#     "publisssh": "~0.2.1",
+#     "coffee-script": "~1.6.3"
+#   },
+#   "scripts": {
+#     "start": "hem server --includeCss",
+#     "deploy-to-demo": "ruby build.rb && publisssh build zooniverse-demo/spacewarps-z8e && trash ./build"
+#   }
+# }
+
+# npm install . fails on this:
+# 
+# npm ERR! git checkout language-menu error: pathspec 'language-menu' did not match any file(s) known to git.
+# npm ERR! Error: `git "checkout" "language-menu"` failed with 1
+# npm ERR!     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/exec.js:56:20)
+
+# Can we even run the master branch app?
+
+git checkout master
+git pull upstream master
+# From github.com:zooniverse/Lens-Zoo
+#  * branch            master     -> FETCH_HEAD
+# Already up-to-date.
+
+npm install .
+# npm http GET https://registry.npmjs.org/jqueryify
+# npm http 304 https://registry.npmjs.org/jqueryify
+# npm ERR! git checkout new-features error: pathspec 'new-features' did not match any file(s) known to git.
+# npm ERR! Error: `git "checkout" "new-features"` failed with 1
+# npm ERR!     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/exec.js:56:20)
+
+# What?
+
+# Trash npm directory and start afresh, to make sure...
+# Same error.
+
+# Try translations branch afresh?
+
+npm install .
+# npm ERR! git checkout language-menu error: pathspec 'language-menu' did not match any file(s) known to git.
+# npm ERR! Error: `git "checkout" "language-menu"` failed with 1
+# npm ERR!     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/exec.js:56:20) 
+
+# Hmm - no working package.json files at all?!
+
+# Nope - language-menu and new-features both seem to be broken :-( 
+# Issue this. New features more of a problem perhaps? Try reverting to 0.3.4
+
+# OK, app runs with 
+# 
+#     "zootorial": "~0.3.4",
+#     "zooniverse": "git://github.com/zooniverse/Zooniverse#no-deps",
+
+# But I still get the console error, 
+
+# SynTax Error: unexpected TERMINATOR   application.js:1
+# Uncaught ReferenceError: require is not defined (index:51)
+# event.returnValue is deprecated. Please use the standard event.preventDefault() instead  jquery.js:55
+
+# ============================================================================
+# 2013-11-11 (Monday) 09:35 PST
+
+# OK, Chris provided new package.json via zooniverse translations branch.
+# Does this app run?
+
+git checkout translations
+git pull upstream translations
+
+\rm -rf node_modules
+npm install .
+
+set pid = `ps -e | grep hem | grep -v grep | head -1 | awk '{print $1}'`
+if ($#pid > 0) kill -9 $pid
+
+npm run-script start &
+
+# -> shift refresh browser.
+
+# No - still getting require error. When I do all this in a fresh clone of
+# the Lens-Zoo repo though, I get a working app. So, something has gotten 
+# screwed up in merging the Lens-Zoo repo with ours.
+
+# Look for differences between files in drphilmarshall/translations and 
+# zooniverse/translations...
+
+set files = ( *.* public/index.html css/*.* app/*.* app/*/*.* )
+foreach file ( $files )
+  if (-e ../Lens-Zoo/$file) then 
+    sdiff -w 80 -s ../Lens-Zoo/$file $file > junk
+    set fail = `cat junk | head -1 | wc -l`
+    if ($fail) then
+      echo " "
+      echo "AHA! $file is different:"
+      cat junk
+    endif  
+  endif
+end
+
+# Nothing! drphilmarshall/translations is *identical* to
+# zooniverse/translations! So why doesnt app run properly?
+
+# Chris suggests running from fresh clone of drphilmarshall/Lens-Zoo. Trying
+# that. Still get require error - fix this by 
+
+npm uninstall hem -g
+
+# [11/11/13 11:28:08 AM] Chris Snyder: npm by default uses globally installed modules over local modules
+# [11/11/13 11:28:29 AM] Chris Snyder: You had a global version of hem that was overriding the locally installed version
+
+# OK! Right, now to make CFHTLS_stage2 work...
+
+git checkout CFHTLS_stage2
+git pull origin CFHTLS_stage2
+
+# Already up to date? Good.
+
+# Argh! require error is back again :-(
+# And hem is local:
+
+npm uninstall hem -g
+# npm WARN uninstall not installed in /usr/local/lib/node_modules: "hem"
+
+# Send back to Chris...
+
+# OK, seems to work - at least in a fresh clone of the repo!
+
+# ============================================================================
+# 2013-11-20 (Wednesday) 14:52 PST
+
+# Making gallery of known lenses for the Spotters Guide:
+
+cd public/images/guide/lenses
+git checkout CFHTLS_stage2
+git checkout dev gallery
+
+# OK, got pngs. Now write coffee script:
+
+set pngs = gallery/*png
+
+set k = 0
+while ($k < 97)
+  @ k ++
+  set png = "images/guide/lenses/$pngs[$k]"
+  set line = "<img class='lazy' src='' data-original='$png' width='154' height='154'>"
+  echo $line
+end  
+
+# Then copied and pasted from terminal into app/views/guide.eco.
+
+# ============================================================================
+# 2013-11-20 (Wednesday) 15:26 PST
+
+# Hmm - marker placement is wrong (circle appears wiith bottom edge of orange
+# circle on cursor tip). Whats different between live app and our repo?
+# Its not just CFHTLS_stage2 branch - translations branch has it too. 
+# What about zooniverse version of translations branch?
+
+# Cloned as Lens-Zoo_zooniverse. Run app...
+
+# Fixed by Chris- English sign had thrown things off a little. marking works
+# OK, double checked.
+
+# ============================================================================
+# 2014-02-06 (Thursday) 18:21 PST
+
+# OK, make a stage1.1 branch for reingestion of subjects, with explanation 
+# that this is a top-up run.
+
+# Starting server...
+
+npm install .
+# FAILS! Untrusted certificate?
+
+npm update
+# works, does too much?!
+
+hem server --includeCss &
+
+# Now hem no longer works! What the hell?
+
+# Some untrusted certificate problem caused by npm changing things...
+
+# Suggested solution on stack overflow:
+
+npm config set ca null
+
+# Still no hem - try reinstalling:
+
+sudo npm install hem@0.2.9 -g
+
+# Errors from lock files, tried this:
+
+\rm ~/.npm/*.lock
+
+# Still nothings. Trash the whole .npm directory and start over?
+
+# OK, now get new error:
+
+# ../nodefsevents.cc: In static member function 'static void* node_fsevents::NodeFSEvents::Run(void*)':
+# ../nodefsevents.cc:117: error: 'kFSEventStreamCreateFlagFileEvents' was not declared in this scope
+# make: *** [Release/obj.target/fswatch/nodefsevents.o] Error 1
+# gyp ERR! rebuild error Error: `make` failed with exit code: 2
+# gyp ERR! rebuild error     at ChildProcess.onExit (/usr/local/lib/node_modules/npm/node_modules/node-gyp/lib/build.js:214:23)
+# gyp ERR! rebuild error     at ChildProcess.EventEmitter.emit (events.js:91:17)
+# gyp ERR! rebuild error     at Process._handle.onexit (child_process.js:674:10)
+# gyp ERR! not ok 
+# npm ERR! fsevents@0.1.6 install: `node-gyp rebuild`
+# npm ERR! `sh "-c" "node-gyp rebuild"` failed with 1
+# npm ERR! 
+# npm ERR! Failed at the fsevents@0.1.6 install script.
+# npm ERR! This is most likely a problem with the fsevents package,
+# npm ERR! not with npm itself.
+# npm ERR! Tell the author that this fails on your system:
+# npm ERR!     node-gyp rebuild
+# npm ERR! You can get their info via:
+# npm ERR!     npm owner ls fsevents
+
+# ============================================================================
+# 2014-02-13 (Thursday) 19:30 PST
+# 
+# Chris Snyder
+# 11:21 am (1 day ago)
+# 
+# to me 
+# I think your version of node is out of date. Try running these commands:
+
+sudo npm install -g n
+rehash
+n stable
+
+# Seems to have worked...
+
+hem server --includeCss &
+
+# >> Strata web server version 0.20.1 running on node 0.10.25
+# >> Listening on 127.0.0.1:9294, CTRL+C to stop
+
+# Great! Back up again.
+
+# Ok, some problems with the code now:
+
+# /usr/local/lib/node_modules/hem/lib/compilers.js:97
+#           throw err;
+#                 ^
+# Error: stylus:1
+#  > 1| @import "../node_modules/nib/lib/nib/"
+#    2| 
+#    3| $white       = #FFFFFF
+#    4| $black       = #404040
+# 
+# failed to locate @import file ../node_modules/nib/lib/nib/.styl
+
+
+# ============================================================================
+# 2014-07-10 (Thursday) 11:36 BST
+
+# Reconfiguring site for live SWAPR analysis testing:
+
+git checkout CFHTLS_stage2
+git pull upstream upstream stage-two
+
+# Good - now we are consistent with the Zooniverse.
+
+# Small diversion into setting up npm etc.
+brew install node
+
+# Clashes:
+sudo \rm -rf /usr/local/lib/node_modules
+sudo \rm -f /usr/local/bin/node /usr/local/share/man/man1/node.1 /usr/local/lib/dtrace/node.d
+sudo chmod a+w /usr/local/lib/dtrace
+
+brew install node
+
+# Simple way to start hem server etc:
+npm install
+npm start &
+
+# Make our fork up to date on github
+git push origin CFHTLS_stage2
+
+# Now make a new branch to work with Chris S on site:
+git branch live-testing
+git checkout live-testing
+git pull upstream live-testing
+
+# Good!
+
+# ============================================================================

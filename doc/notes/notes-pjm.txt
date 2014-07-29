@@ -5425,7 +5425,8 @@ make_crowd_plots.py $stage1bureau $stage2bureau
 # make_crowd_plots: newbies vs veterans plot saved to ./stage2_veteran_contribution.png
 
 
-# ie not a big difference. Mean skill higher by fiat, but contribution numbers don't change much.
+# ie not a big difference. Mean skill higher by fiat, but 
+# contribution numbers don't change much.
 
 # ----------------------------------------------------------------------
 # 2014-06-03 (Tuesday) 21:56 PDT
@@ -5547,7 +5548,32 @@ wc -l File_list*
 #      608 File_list
 #      600 File_list_newstage2
 #      608 File_list_with_skipped_ones_at_end
-     
+
+# 2014-07-10 (Thursday) 10:06 BST
+
+# Carrying on - deadline day today!
+
+# OK, all done! Made a copy of record_position.txt. 
+# Here's the breakdown:
+
+# No of objects spotted:
+cat  record_position_pjm_2014-07-10.txt | wc -l
+     336
+# No of images containing them:     
+cat record_position_pjm_2014-07-10.txt | awk '{print $1}' | sort | uniq | wc -l
+     309
+# No of grade 3 candidates:     
+cat record_position_pjm_2014-07-10.txt | awk '{if ($4 == 3) print $0}' | wc -l
+      88
+# No of grade 2 candidates:     
+cat record_position_pjm_2014-07-10.txt | awk '{if ($4 == 2) print $0}' | wc -l
+      95
+# No of grade 1 candidates:     
+cat record_position_pjm_2014-07-10.txt | awk '{if ($4 == 1) print $0}' | wc -l
+     149
+
+# Recall - all of this was done in /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/expert_inspection/2014-06-10
+
 # ======================================================================
 # 2014-06-12 (Thursday) 08:51 PDT
 
@@ -5770,4 +5796,82 @@ wget -N "${baseurl}/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/CFHTLS_c
 # divergence). This is the right one to use, and is indeed what Edwin
 # had coded (just hadnt explained to me). Change latex to match!
 
+# ======================================================================
+# 2014-07-22 (Tuesday) 12:06 BST
+
+# Query from Anu about some expert inspections:
+# 
+#     My rank 3 which received rank 1 from either or both of u:
+#     CFHTLS_055_1537
+#     CFHTLS_106_0865
+#     CFHTLS_213_1078
+#     CFHTLS_108_1088
+#     Some are difficult to note doubles but I was biased to rank them higher because I knew these systems already (these are known sl2s lenses). Would you like to update your ranks ?
+# 
+#     Your rank 3 and mine rank 1:
+#     For all of the below, I gave less weight because of the low curvature of the arcs (some of these could be easily rank 2 from my perspective, so i can switch to that)
+#     CFHTLS_126_0352 
+#     CFHTLS_142_1003 
+#     CFHTLS_338_1728 
+
+# Anu's grade 3:
+open \
+images/CFHTLS_055_1537_gri.png \
+images/CFHTLS_106_0865_gri.png \
+images/CFHTLS_213_1078_gri.png \
+images/CFHTLS_108_1088_gri.png
+
+CFHTLS_055_1537 - tangential alignment, counter not obvious, image sep high: 2
+CFHTLS_106_0865 - bright arc, good curvature, just no visible counter: 2
+CFHTLS_213_1078 - no obvious multiple imaging, but clearly a lot of mass: 2
+CFHTLS_108_1088 - seems high image separation? could be group, maybe: 2
+
+
+# Anu's grade 1:
+open \
+images/CFHTLS_126_0352_gri.png \
+images/CFHTLS_142_1003_gri.png \
+images/CFHTLS_338_1728_gri.png
+
+CFHTLS_126_0352 - long faint arc, some curvature, counter obscured by stars? 2
+CFHTLS_142_1003 - long brght arc, some curvature, but wide im sep: 1
+CFHTLS_338_1728 - faint long arc, but straight. No visible counter: 2
+
+
+
+# Check my own good candidates, all have P > 0.95:
+http://talk.spacewarps.org/#/subjects/ASW0007xrs   # Commenters disagree
+http://talk.spacewarps.org/#/subjects/ASW0007h27   # 2 possible lenses
+http://talk.spacewarps.org/#/subjects/ASW0005o38   # Nice galaxy-scale arc
+http://talk.spacewarps.org/#/subjects/ASW0004pbz   # Tiny binary lens
+http://talk.spacewarps.org/#/subjects/ASW0004nan   # Bright UV arc under LRG
+http://talk.spacewarps.org/#/subjects/ASW00008a0   # Thin arcs, multiple imaging
+http://talk.spacewarps.org/#/subjects/ASW0009bbq   # Faint cluster arc
+http://talk.spacewarps.org/#/subjects/ASW00096rm   # Nice tiny quad
+http://talk.spacewarps.org/#/subjects/ASW000993q   # Cluster lens, plus galaxy pertuber
+http://talk.spacewarps.org/#/subjects/ASW0006i2r   # Nice arc next to LRG
+http://talk.spacewarps.org/#/subjects/ASW0004106   # Sheared arc! 3-plane lens :-)
+http://talk.spacewarps.org/#/subjects/ASW0005vog   # Binary lens, faint arc with knot
+
+set candidates = ( \
+ASW0007xrs \
+ASW0007h27 \
+ASW0005o38 \
+ASW0004pbz \
+ASW0004nan \
+ASW00008a0 \
+ASW0009bbq \
+ASW00096rm \
+ASW000993q \
+ASW0006i2r \
+ASW0004106 \
+ASW0005vog \
+)
+set cat =  projects/CFHTLS/stage2/results/CFHTLS_2013-12-10_16:47:03_candidate_catalog.txt
+
+foreach candidate ( $candidates )
+  grep $candidate $cat
+end
+
+# All are high P, well classified. Don't have CFHTLS ids.
 # ======================================================================

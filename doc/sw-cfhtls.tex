@@ -1,8 +1,8 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Space Warps CFHTLS Results Paper
+% Space Warps II: CFHTLS 
 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[useAMS,usenatbib,a4paper]{mn2e}
 %% letterpaper
@@ -16,37 +16,39 @@
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{longtable}
 
 % Macros:
 \input{macros.tex}
 \input{addresses.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\title[\sw]
-{\SW: New Lens Candidates from the CFHT Legacy Survey}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\title[\sw II]
+{\SW: II. Did we beat the lens finding robots in CFHTLS?}
     
 \author[More et al.]{%
-  \input{sw-cfhtls-authors.tex}
+ \input{sw-cfhtls-authors.tex}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
              
 \date{to be submitted to MNRAS}
-\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2014}
+\pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2013}
 
 \maketitle           
 
 \label{firstpage}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract} 
-
-We present X new strong gravitational lens candidates found in the CFHT Legacy
-survey by the \sw collaboration. 
+We present X new strong gravitational lens candidates found in the CFHT
+Legacy
+survey by the \sw collaboration.
 
 \end{abstract}
 
@@ -65,82 +67,560 @@ survey by the \sw collaboration.
 \section{Introduction}
 \label{sec:intro}
 
+{\it Describe various lens finding algorithms and the motivation for this
+particular project with \cfhtls. Already searched by robots: enables comparison of techniques. Lenses not
+yet found by robots, detectable by humans? }
 
-In this paper, we ... try to answer the following questions:
+In Paper I, we describe the \sw website, an online system that enables
+crowd-sourced detection of gravitational lenses. In this paper, we
+describe our first lens search with \sw in the \cfhtls data which we
+refer to as Paper II.  
 
-\begin{itemize}
-
-\item ...
-
-\item ...
-
-\item ...
-
-\end{itemize}
-
-This paper is organised as follows. In \Sref{sec:sw} we give a brief overview
-of the \sw system, focusing on the aspects most relevant to the interpretation
-of the results of this first lens search. In \Sref{sec:data} we introduce the
-CFHTLS imaging data. ... We discuss the implications of our results for future
-lens searches in \Sref{sec:discuss} and draw conclusions in
-\Sref{sec:conclude}.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\section{\sw Overview}
-\label{sec:sw}
+This paper is organised as follows. In \Sref{sec:sw} we give a brief
+overview of the \sw system, focusing on the aspects most relevant to the
+interpretation of the results of this first lens search. In
+\Sref{sec:data} we introduce the \cfhtls imaging data and the known lens
+samples from the \cfhtls. In \Sref{sec:}, we explain the training sample
+generated to aid the \sw users in the lens search. In
+\Sref{sec:results}, we present the new lens candidates and our findings.
+We discuss the implications of our results for future lens searches in
+\Sref{sec:discuss} and draw conclusions in \Sref{sec:conclude}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Data}
 \label{sec:data}
-
-Definitions: training subjects and test subjects. Sims and duds.
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
 \subsection{The CFHT Legacy Survey}
-\label{sec:data:CFHTLS}
+\label{sec:data:cfhtls}
 
-Describe survey. Refs. 
+The Canada-France-Hawaii Telescope Legacy Survey (CFHTLS) is a
+photometric survey in five optical bands ($u^*g'r'i'z'$) carried out
+with the wide-field imager MegaPrime which has a 1~deg$^2$ field-of-view
+and a pixel size of 0.186\arcsec. The \cfhtls WIDE covers a total area
+of 171~deg$^2$ on the sky and it consists of four fields W1, W2, W3 and
+W4. The field W1 has the largest sky coverage of 63.65~deg$^2$. The
+fields W2 and W4 have similar sky coverages of 20.32~deg$^2$ and
+20.02~deg$^2$, respectively\footnote{These numbers are estimated from http://terapix.iap.fr/cplt/table\_syn\_T0006.html}.
+The field W3 has a sky coverage of 42.87~deg$^2$ and is more than twice
+as large as W2 and W4. 
 
-Why this one? Good IQ, deep, colorful, homogeneous. Precursor to Stage III and
-IV imaging surveys, DES, KIDS, LSST etc. Already searched by robots: enables
-comparison of techniques. Lenses not yet found by robots, detectable by
-humans? 
+The \cfhtls imaging is very homogeneous and has great image quality. Most of
+the lensed arcs are much brighter in the $g$ band thus, deep imaging in
+this band is desirable. The limiting magnitude is 25.47 for the $g$ band
+which goes the deepest among all of the five bands. The mean seeing in
+the $g$ band is 0.78\arcsec. The zero point to convert flux to AB
+magnitude for all bands is 30. These characteristics make \cfhtls ideal
+to do visual inspection for finding lenses.  We use the data from the
+final T0007 release taken from the Terapix
+website\footnote{{http://terapix.iap.fr/cplt/T0006-doc.pdf}}
+for this work.
 
-Blind search strategy.
-Preparation of data: divide survey into overlapping tiles. 
+We note that the \cfhtls is a niche survey with a unique combination of
+wide imaging with deep sensitivity. It is a precursor to the ongoing
+wide imaging surveys such as the DES, KIDS and HSC and planned surveys
+such as the LSST. Searching for lenses with \sw in the \cfhtls will
+teach us important lessons and help prepare us for these larger imaging
+surveys.
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Known \cfhtls lens samples}
+\label{sec:data:kls}
+
+
+The \cfhtls data has been searched for lenses using semi-automated
+algorithms, primarily, in the $g$ band which is optimal for finding
+lenses. Here, we briefly mention the lens samples which were known to
+the authors prior to the lens search with \sw.
+The work
+by \citet{Gavazzi2013} looks for bluish features around bright XXX
+galaxies and has found XXX lens candidates at galaxy-scales.  The arc
+finding lens search \citet{More2012} has found 127 lens candidates by
+looking for arcs in $g$ band alone. This sample has both galaxy and
+groups scale lens candidates. The \citet{Sygnet2009} is a search for
+edge-on disk lenses done by selecting the galaxy's profile from the
+Sextractor's output in the $i$~band and has 18 lens candidates.
+
+For the purpose of transparency, the volunteers participating in
+\sw-\cfhtls lens search were made aware of these known lens samples. Images
+containing the lenses from these lens samples were labelled so in the
+forum Talk where volunteers have the opportunity to discuss their
+findings with other volunteers and the science team. XXX some references
+to Paper I ?
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \subsection{Image Presentation}
-\label{sec:data:display}
+\label{sec:data:impres}
+{\it Preparation of data: divide survey into overlapping tiles. 
 
 Presentation of images. Uniform scales, to build intuition and avoid rescales
 due to bright objects. Arcsinh stretch, to bring out low SB features. 
-Approximately optimized, how? Examples of images.
+Approximately optimized, how? Examples of images.}
+
+We carry out a blind search over the \cfhtls fields where we, mainly, use
+the g-r-i color information to look for signs of lensing. We extract
+contiguous cutouts of size 81.84\arcsec\ (440 pixels). The neighbouring
+cutouts have an overlapping region of 10\arcsec (54 pixels). If a
+possible lens candidate is too close to the edge of a cutout, this
+overlap allows the inspector to get a clearer view of the same candidate
+in a neighbouring cutout. We note that since the images are shown
+randomly, a given inspector may not necessarily come across the
+neighbouring cutout unless the inspector classifies a lot of images.
+However, this is not a problem since we our user base is extremely large
+and we get multiple classifications of the same image.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Training sample: Simulated lenses}
+\label{sec:ts}
+
+{\it State the importance}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=1.0]{sw-cfhtls-figs/sim_cgq.pdf}
+\caption{ \label{fig:sim}
+Examples of the three types of simulated lenses.
+}
+\end{center}
+\end{figure*}
+
+
+\subsection{Methodology}
+\label{sec:simmethod}
+
+We create two main types of simulated lens sample a) galaxy-scale lenses and b)
+group or cluster-scale lenses. The galaxy-scale lenses are further divided into two
+types based on the nature of the background sources, namely, galaxies and
+quasars. Below, we describe how each type of the lens sample was generated.
+
+
+\subsubsection{Galaxy-scale lenses} 
+\label{sect:gallens}
+
+The $N_{\rm src}$ behind a lens is then calculated by doing the
+following integral, 
+
+\be
+\label{eqn:nsrc}
+N_{\rm src} = N_{\rm src}(>L_s,z_s) \int_{z_l}^\infty \sigma_{\rm lens}(\sigma,z_l,z_s,q) D_s^2 (1+z_s)^2 \frac{\rm d\chi}{{\rm d}z_s}
+{\rm d}z_s 
+\ee
+
+\be
+\label{eqn:nlum}
+ N_{\rm src}(>L_s,z_s)= \int_{L_{min}}^\infty \Phi(L_s,z_s) {\rm d}L_s
+\ee
+
+where $\Phi(L_s,z_s)$ is the source luminosity function per unit comoving
+volume, $q$ is the projected axis ratio of the lens ellipticity, $\chi$ and
+$D_s$ are the comoving and angular diameter distances to the source,
+
+We use the elliptical galaxy (LRG) catalog from the \cfhtls XXX to select
+all the foreground galaxies (e.g. $z<1$) that are potential lenses for the
+simulated sample. We exclude all those galaxies whose positions match with the
+lensing galaxies from the known \cfhtls~SL2S lens samples \cite{More2012}
+within 2~arcsec (XXX check). 
+
+First, we calculate the luminosity and velocity dispersion of each potential
+lensing galaxy using the CFHT Megacam $g$ and $r$ band magnitudes along with the
+photometric redshift ($z_l$) from the LRG catalog.  The Megacam magnitudes are
+converted to SDSS magnitudes\footnote{
+    http://www3.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/megapipe/docs/filters.html} and
+are further k-corrected to redshift $z=0.1$ \citep{Frei1994}. We assume that the
+evolution of galaxy luminosities is similar to that determined by
+\citep{Faber2007}, that is, a decline of $1.5$ in the $m_{r*}$ from redshift $z=1$
+to $z=0$ (see Eq.~\ref{magstar}). 
+
+\be
+\frac{L}{L_{*}}=10.0^{-0.4~(m_{r \rm SDSS}-m_{r*})} 
+\ee
+
+where $m_{r*}$ is
+\be
+\label{magstar}
+m_{r*}=-20.44+ 1.5~(z_{l}-0.1) \,.
+\ee
+
+We use the $L-\sigma$ relation from
+\citep{Parker2007} to get the velocity dispersion as given in Eq.~\ref{magstar2}.
+
+\be
+\label{magstar2}
+\sigma=142 \left(\frac{L}{L_{*}}\right)^{1/3} 
+\ee
+
+Next, in order to decide whether a galaxy is likely to act as a strong lens, we
+calculate the lens cross-section ($\sigma_{\rm lens}$) and the number of sources
+($N_{\rm src}$) that are in the background. Following \citep{Keeton2000a}, the lens
+cross-section is calculated analytically for an isothermal model and is given by 
+
+\be
+\sigma_{\rm lens}=b_I^2 \, \int_0^{2\pi} 0.5 r^2(\theta) d\theta
+\ee
+
+where $b_I$ is 
+\be
+b_I = b_{\rm SIS} \epsilon_3/sin^{-1}(\epsilon_3) \,,
+\ee
+
+the eccentricity ($\epsilon_3$) is 
+\be
+\epsilon_3=(1-q_3^2)^{1/2}
+\ee
+
+and the projected axis ratio is given by
+\be
+q_k=\sqrt{q_3^2 {\rm sin}^2i_e+{\rm cos}^2i_e} \,.
+\ee
+
+In the above equations, $q_3$ is the 3d axis ratio of the ellipsoid and $i_e$ is
+the inclination angle. Also, $b_{\rm SIS}= 4\pi
+\frac{c^2}{\sigma^2}\frac{D_{s}}{D_{ls}D_l}$ and is referred to as the
+Einstein radius where $D_s$,$D_l$ and $D_{ls}$ are angular diameter distances to
+the source, the lens and between the lens and source, respectively.
+
+%Comparing \citep{keeton00a} with \citep{kormann94} suggests that $b_I = sqrt(q)*b_{SIS}$ 
+
+Next, if the foreground galaxy can act as a lens and has at least one source in the
+background, then we determine a redshift ($z_s$) and $i$-band magnitude of the
+background source(s). We assume two types of background sources namely, galaxies
+and quasars. For each source, the redshift and magnitude are generated by drawing randomly from
+the following redshift and luminosity distributions. For
+galaxies, we assume the redshift distribution is 
+
+\be
+\label{eqn:ps}
+p_s=\frac{\beta z_s^2 {\rm exp}({\frac{z_s}{z_0(m_{\rm lim})}})^\beta}{\Gamma(3/\beta)z_0^3(m_{\rm lim})}
+\ee
+
+where $\beta=3/2$ and $z_0(m_{\rm lim})=0.13m_{\rm lim} - 2.2$ and the
+luminosity function is
+
+\be
+\label{eqn:ns}
+n_s=\int^{m_{\rm lim}}_{-\infty} \frac{n_0 {\rm d}m}{\sqrt{10^{2a(m_1-m)}+10^{2b(m_1-m)}}}
+\ee
+
+with parameters $a=0.30$, $b=0.56$, $m_1=20$ and $n_0=3\times10^3~deg^{-2}$ as
+given in \citep{Faure2009} and references therein. For quasars, we calculate
+the luminosity function by following the prescription of \citep{Ogur2010} and
+use k-corrections by \citep{Richards2006}. 
+
+%alp=-0.5;
+%kcorr=-2.5*(1 + alp)*log10(1+zz);
+%Dlum=cc.Dlofz(zz)/p.hval;
+%DM=5*log10(Dlum);
+%Mabs=mag-kcorr-DM-25.0;
+The luminosity function is expressed as
+\be
+\frac{{\rm d}\Phi}{{\rm d}M}=\frac{\Phi_{*}}{10^{0.4(\alpha+1)(M_{\rm abs}-M_{*})} + 10^{0.4(\beta+1)(M_{\rm abs}-M_{*})} }
+\ee
+
+where the normalization, $\phi_{*}=5.34\times10^{-6} h^3$ Mpc$^{-3}$ and break
+magnitude, $M_*=-20.90 + 5 {\rm log} h - 2.5 {\rm log} f(z)$. The redshift
+dependent factor in $M_*$ is given by
+
+\be
+f(z)=\frac{e^{\zeta z_s}(1+e^{\xi z_*})}{(\sqrt{e^{\xi z_s}}+\sqrt{e^{\xi z_*}})^2} \,.
+\ee
+We adopt the best-fit values $\zeta=2.98$, $\xi=4.05$, $z_{*}=1.60$
+\citep{Oguri2010}. For the faint end slope, we use $\beta=-1.45$ whereas for
+the bright end slope, we use $\alpha=-3.31$ when $z_s<3$ and $\alpha=-2.58$ at
+higher redshifts, as prescribed by \citep{Oguri2010}. 
+respectively. We note that when calculating $N_{\rm src}$, the source
+number density is artificially boosted by a factor (see Table~\ref{tab:thresh})
+to increase the occurrence of simulated lenses. This helps in creating a large
+enough sample to carry out various performance tests.
+
+Next, we determine properties of the background source for every lens. We follow
+similar procedures for both background galaxies and quasars. For simplicity, we
+simulate a single background source behind every lens. In order to select one
+background source from the $N_{\rm src}$ per lens, we do ray-tracing for all of the
+$N_{\rm src}$ sources with {\sc gravlens} \citep{Keeton2000} and choose sources that
+satisfy criteria as given below. We determine fluxes of the lensed images
+and the total magnification of each of the lensed source. We draw a random
+source for which the flux of the second brightest lensed image and the total
+magnification of all lensed images are above the thresholds given in
+Table~\ref{tab:thresh}.
+
+Since we want to produce realistic looking lens systems, we simulate lenses in
+each of the five \cfhtls~filters. The colors of the background galaxies are drawn
+randomly from the photometric CFHTLenS catalog
+\citep{Hildebrandt2012,Erben2013}.  Similarly, we use a quasar catalog from the
+SDSS Data Release 9 \citep{Paris2012} from which colors are drawn to simulate
+quasar lenses. Next, we assume deVaucoleur's profile to account for the size
+and shape of the galaxies. The ellipticity and the position angle are drawn
+randomly between the range given in Table~\ref{tab:thresh}. The effective
+radius of the galaxy is estimated from the Luminosity$-$size relation
+\citep{Bernardi2003} given by 
+\be
+R_{\rm eff}= 10^{0.52} \frac{L_r^{2/3}}{{(1+z_s)}^2}
+\ee
+where $L_r=L_s/10^{10.2}$. On the other hand, quasars are assumed to follow a
+Gaussian profile where the $\sigma$ is equated to that of the median seeing for
+every filter. The median seeing values are taken from Table 4 of the official
+Terapix T0007 release explanatory document \footnote{
+    http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}.  
+
+Once all the parameters are determined for the lens and source models, {\sc
+gravlens} is used to simulate lensed images.  After accounting for the shot
+noise in the lensed images and convolving them with the median seeing in each of
+the filters, the simulated image is added to the real \cfhtls~image centered
+on the lensing galaxy. Note that we ensure that the lensed galaxies and
+lensed quasars do not have the same lensing galaxy in the foreground. Similarly,
+the lensing galaxies from the galaxy-scale lenses are distinct from the central
+galaxies of groups-scale lenses which are described in the following section.
+
+
+\subsubsection{Groups-scale lenses} 
+
+At group or cluster-scales, the brightest group galaxy (BGG) at the center alone
+does not cause strong lensing. We need to account for the extra convergence
+arising from the dark matter component as well as satellite galaxies, at least,
+in the inner regions which are typically responsible for the multiple lensed
+images \citep{Oguri2005,Oguri2006}. Owing to the lack of an appropriate group
+catalog for our purposes, we create a basic group catalog based on the
+magnitudes and photometric redshifts available for the \cfhtls. We select all
+galaxies with 10$^{10.8} M_\odot$ as the BGGs. We select the member galaxies
+such that their photometric redshifts are within $\delta z = 0.01$ of the BGG
+and within an aperture of $250$~Kpc. 
+
+We adopt an isothermal ellipsoid for the BGG and members whenever the
+ellipticities are available else we use an isothermal sphere. On the other hand, we
+adopt an NFW profile for the underlying dark matter halo. Assuming a constant
+mass-to-light ratio of $3 \times 0.7$~h~$M_{*}/L_{*}$, we use the BGG luminosity
+to estimate the stellar mass. The stellar mass$-$halo mass relation
+\citep{behroozi13}, including random scatter, is then used to calculate the halo
+mass for the lens. Given the halo mass, other key parameters such as the scale
+radius ($r_s$) and the density at the scale radius ($\rho_s$) can be determined for an
+NFW profile. 
+
+As described in Section~\ref{sect:gallens}, we calculate the luminosity and
+velocity dispersion for the BGG and each of the member galaxies. Next, we
+calculate the lens cross-section for each potential lensing group. The
+complexity in the lens models makes it analytically intractable to calculate the
+size of the caustics\footnote{The lens mass distribution determines size and
+shape of the caustics. Any source located within the caustics will form multiple
+lensed images which is the criteria for strong lensing. To further
+understand caustics, see XXX.}.  Hence, we use {\sc
+gravlens} to determine the area covered by the caustics. We consider only
+galaxies as our background source population since group or cluster-scale quasar
+lenses are not expected to be found in the \cfhtls (check XXX).  Following the same
+procedure as described in Section~\ref{sect:gallens}, we calculate the number of
+galaxies expected to lie behind every potential lensing group (see
+Eq.~\ref{eqn:nsrc}). As before, for each background galaxy within the lens cross-section, a
+redshift and an $i$-band magnitude is determined by drawing galaxies randomly
+from the respective distributions (see Eqs.~\ref{eqn:ps}-\ref{eqn:ns}). 
+
+All those groups that are found to have no background galaxies within the
+cross-sectional area are rejected and the rest are included as potential lenses.
+As mentioned earlier, we artificially boost the total number of sources behind
+every lens but ensure that (check XXX) the statistical properties such as the profile of the
+image separation distribution are not affected (see \Fref{fig:remudist}). We
+follow the same procedure and apply the same thresholds to determine properties
+of the lensed galaxies for every lens as are described for galaxy-galaxy lenses
+in the previous section. The simulated images are added to the real \cfhtls~images
+with the BGGs as the center.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Known Lenses}
-\label{sec:data:knownlenses}
+\subsection{Simulated Lens Sample and Catalog Description}
+
+\begin{table}
+\begin{center}
+\caption{ \label{tab:thresh} 
+Thresholds used in the selection of the simulated lenses. }
+\begin{tabular}{l l l l l}
+\hline
+Name  &  \multicolumn{2}{c} {gal}  & \multicolumn{2}{c}{qso} \\ 
+      & min  &  max  & min & max \\
+\hline
+\hline
+Source Redshift  & 1.0 & 4.0  & 1.0  & 5.9 \\
+Source Magnitude & 21.0 & 25.5 & 21.0 & 25.5 \\
+
+boost factor & 100 (40$\dagger$)  &  & 1200 & \\
+
+Second brightest image & 23  & & 23 & \\
+Total magnification & 19 & & 20 & \\
+
+Lens shear strength &  0.001 & 0.02 &  0.001 & 0.02 \\
+Lens shear pa &  0 & 180 & 0 & 180  \\
+Source ellipticity & 0.1 & 0.6 & & \\
+Source PA & 0 & 180 & & \\
+\hline
+\end{tabular}
+{ $\dagger$} -- corresponds to the factor used for Groups scale lenses. 
+\end{center}
+\end{table}
+
+In this section, we describe some of the properties of our simulated sample for
+each of the three types of lens samples.
+
+The \Fref{fig:remudist} shows Einstein radius distribution for the
+galaxy-scale (dashed for background quasars and dotted for background galaxies)
+and groups-scale simulated lenses. For comparison, we show the expected
+distributions (blue dashed-dotted curves) for an SIS-like density profile at
+galaxy-scales and an NFW+Hernquist profile at groups-scales. The 
+theoretical curves are taken from \citep{More2012} wherein the models are
+explained in detail. We note that the model we adopt at groups-scale also
+includes SIS or SIE components for the group members unlike the theoretical
+prediction. The theoretical curves have arbitrary normalizations.
+
+We show the redshift and magnitude distributions of the lensing galaxies in the
+left and right panels of \Fref{fig:lensprop}
+respectively. Furthermore, we overplot the distributions of respective
+properties of the SARCS lenses from \citep{More2012} for comparison with arbitrary
+normalizations. We note qualitative similarities between the simulated and the
+real lens samples.
+
+Similarly, we show the ellipticity and the position angle of the simulated lens
+galaxy population extracted from the T0007 release of the \cfhtls~catalogs in the
+left and right panels of \Fref{fig:lensprop}, respectively. As before, the
+dashed-dotted (blue) curves show the same distribution for the SARCS lens
+population with arbitrary normalization \citep{More2012}.
+
+%We show the source redshift and magnitude distributions for each of the three
+%lens samples in the left and right panels of \Fref{fig:szmdist},
+%respectively. The peak of the source redshift distribution both for the galaxies
+%and quasars is known to be between $2<z<3$ from various lens samples (add
+%references XXX). This consistent with our simulated sample as expected. The
+%magnitude distribution of the simulated sample, on the other hand, is
+%specifically tailored to the requirements of \sw.  The goal was to generate a
+%lens sample that has a fair balance of both bright and faint lensed images since
+%the training sample should neither be too easy nor too difficult for the citizen
+%scientists.  
+
+We produce catalogs with lens and source properties for each of the three types
+of lenses. These catalogs are available XXX. The catalogs typically have lens
+position, redshift, magnitudes, Einstein radius, ellipticity (whenever
+available) and shear (for galaxy-scale lenses only). For the background
+sources, we provide the offset from the lens center, redshift, magnitudes,
+total magnification, number of lensed images. Additionally, ellipticity and
+effective radius when the background sources are galaxies.
+
+%magdiff=5*0.1;
+%zdiffq=0.1;
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=0.85]{sw-cfhtls-figs/distrib_remu.pdf}
+\caption{ \label{fig:remudist}
+Einstein radius distribution for all types of lenses. The dashed-dotted (blue)
+curves show the theoretical prediction assuming an SIS model at galaxy-scales
+and a total (NFW+Hernquist) model at groups-scales taken from \citep{More2012}.
+}
+\end{center}
+\end{figure*}
+
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=1.3]{sw-cfhtls-figs/lensprop.pdf}
+\caption{ \label{fig:lensprop}
+Distributions of properties of the lensing galaxies of the simulated
+sample compared to the known lens sample SARCS XXXX check? 
+}
+\end{center}
+\end{figure*}
 
 
+%\begin{figure*}
+%\begin{center}
+%\includegraphics[scale=0.95]{sw-cfhtls-figs/distrib_srczmag.eps}
+%\caption{ \label{fig:szmdist}
+%Redshift distribution on the left and magnitude distribution on the right of the
+%simulated sample for the background sources. The different types of lines show the
+%distribution correspond to the three types of simulated lenses galaxy-quasar,
+%galaxy-galaxy and group-galaxy. 
+%}
+%\end{center}
+%\end{figure*}
+%
+%
+%\begin{figure}
+%\begin{center}
+%\includegraphics[scale=0.95]{sw-cfhtls-figs/distrib_reff.eps}
+%\caption{ \label{fig:reffdist}
+%Distributions of magnification (left) and source effective radius in units of
+%pixel (right).
+%}
+%\end{center}
+%\end{figure}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\section{Training sample: Duds and False positives}
+\label{sec:dfp}
+
+A good training sample consists of a representative set of objects that
+one wants to find and another set of objects which appear to be from the
+former set but are of different origin in reality and which one can
+learn to discard efficiently. Indeed, we wanted to have a good training
+sample for the \sw users so that they can correctly identify the true
+lens candidates. Hence, in addition to the simulated lenses, we
+added a sample of duds and false positives to the training sample. Duds
+are images which have been visually inspected by experts and confirmed
+to contain no lenses.  False positives are systems which look like
+lenses but are not, for example, spiral galaxies, starforming galaxies,
+chance alignments of features arranged in a lensing configuration and
+stars. 
+
+We selected a sample of 450 duds for the Stage I classification in \sw
+(see XXX) and a sample of XXX false positives for the Stage II
+inspection (see XXX). The sample of false positives was selected from
+the candidates which passed the Stage I of \sw. We note that this is the
+first time, we have a systematically compiled sample of visually
+inspected false positives by the \sw users and categorized by the
+science team. Such a sample is tremendously helpful for training and
+understanding performances of various lens finding algorithms (refer
+james, sherry's paper ? XXX)
+{\bf TBA data products; make the FP sample available}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results}
 \label{sec:results}
 
-Completeness and purity with regard to known lenses.
-
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\subsection{Recovery of lenses}
+\label{sec:results:reco}
 
+{\it Describe which lenses were recovered and explain any cases missed by
+citizen scientists}
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+%
+%\begin{longtable*}{l c c c c c c c l}
+%\caption{ \label{tab:all} 
+%Characteristics of lens candidates from the \SA sample. }\\
+%ID & RA & Dec &  $i$ & $z_{\rm phot}$ & $R_{\rm A}$ & Rank & Type & previous ID  \\
+%    & (hms) & (dms) &  (mag) &   & (arcsec) &  &  & \\ [1.5ex] \hline \\ 
+%\endfirsthead
+%
+%ID & RA & Dec &  $i$ & $z_{\rm phot}$ & $R_{\rm A}$ & Rank & Type & previous ID  \\
+%    & (hms) & (dms) &  (mag) &   & (arcsec) &  &  & \\ [1.5ex] \hline \\ 
+%\endhead
+%
+%\hline  
+%\multicolumn{11}{p{15cm}}{
+%{\bfseries
+%{\bf m:} This galaxy falls within the masked region as per the catalog from
+%which the magnitudes and the redshift are extracted.  {\bf z:} The magnitudes
+%and/or redshift are not from the catalog instead are measured by the author.
+%}  }\\
+%
+%\endlastfoot
+%   SW1  & 02:01:21.89 & $-$09:15:15.09 & 19.90 &  0.46 &  2.2 &   2.0 & A &  SA18 \\ 
+%   SW2  & 02:02:10.50 & $-$11:09:11.68 & 17.80 &  0.48 &  5.0 &   3.7 & A &  SA87 \\ 
+%\end{longtable*}
+%
 \subsection{Stage 1 Classification}
 \label{sec:results:stage1}
-
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
@@ -154,10 +634,26 @@ Completeness and purity with regard to known lenses.
 \label{sec:results:experts}
 
 
+
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{New Lens Candidates}
-\label{sec:results:newlenses}
+\subsection{Discovery of lenses}
+\label{sec:results:disc}
+
+
+{\it Describe the newly found lenses and explain for a few
+cases why they were missed }
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{\cfhtls completeness and purity}
+\label{sec:results:sample}
+
+{\it Rejection rate. Completeness and purity at P > retirement, P > 95\%, and 
+as function of probability P. 
+
+Summarize performance at some fiducial threshold: eg P = 95\%.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -165,49 +661,106 @@ Completeness and purity with regard to known lenses.
 \section{Discussion}
 \label{sec:discuss}
 
-Differences with robots: what types of lenses are found at \sw?
+{\it Differences with robots: what types of lenses are found at \sw?
 
 Selection function. Missing system.
 
 Further work.
 
+Describe the importance of this kind of study 
+- being able to quantify the completeness of the lens samples
+- state how this will be used in a future \sw paper }
+
+We looked at the locations of simulated and real lenses from our data
+those were missed by \sw compared to the locations of the lenses that
+got detected. We do not find any obvious dependency in the rate of
+detections as a function of the position of a given lens for both
+simulated and real lens sample. Thus, the completeness of the lens
+sample is not affected by whether a lens is located close to the border
+or well within the center (see  Figure~\ref{fig:comppos}).  {\bf TBD: redo the completeness vs posn
+figure using the final real lens sample}
+
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=0.95]{sw-cfhtls-figs/completeness_pos.pdf}
+\caption{ \label{fig:comppos}
+Completeness as a function of location of lenses. Simulated (left) and
+real lens (right) samples are shown. {\bf: TBD - Add a third color for
+P$>$ Pthresh which will be defn of "accepted"} Irrespective of whether the
+lenses are detected or rejected and whether they are simulated or real,
+there is no obvious dependency on where the lenses are located. 
+}
+\end{center}
+\end{figure*}
+
+\subsection{Limitations and Caveats of the training sample}
+The simulated sample has certain limitations due to lack of our understanding of
+various phenonmena in the Universe and due to uncertainties in various
+parameters of our model. Here, we describe some of the cases or aspects in which the
+simulations are known to have failed or seem unrealistic. 
+
+The parameters required by various scaling relations and the models primarily
+depend on the photometry of the galaxies, groups and quasars detected in the
+survey. For galaxy-scale lenses, the lensing galaxies at higher redshifts or
+which are fainter have poor photometric measurements. This causes relatively
+larger uncertainties in its luminosity and velocity dispersion and leads to
+simulated lenses which look implausible. For example, due to a larger
+uncertainty in the velocity dispersion of the lensing galaxy, the lensed images
+may have larger image separation than what is expected given the visual priors
+from the galaxy.
+
+At group-scales, the photometric and redshift estimates are used when
+defining the group membership. Therefore, errors in redshift estimates generate
+galaxy groups with BGG or member galaxies with dissimilar properties. In some
+cases, low redshift spiral galaxies are incorrectly assigned high redshift.
+Spiral galaxies are typically less massive and low redshift spiral galaxies are
+unlikely to act as gravitational lenses. Hence, the resulting simulated lenses
+are not convincing.
+
+We use single Sersic component to describe the light profiles of background
+galaxies. This is clearly not the most accurate description for galaxies,
+especially, star-forming galaxies which form a significant fraction of the
+lensed galaxy population. Star-forming galaxies have complex structures such as
+star forming knots, spiral arms, bars and disks. 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Conclusions}
+\section{Summary and Conclusions}
 \label{sec:conclude}
+In this paper, we describe the framework and procedure used to generate
+simulated lens sample for the blind lens search in the \cfhtls survey in
+collaboration with \sw. The aim of this lens search is to find lenses that have
+been missed by lens finding algorithms. The simulated lens sample is used for
+training the citizen scientists, calibrating their performance and rejecting
+unlikely lenses from the sample based on the classifications of citizen
+scientists. As a result, the simulated lenses need to consist of realistic
+looking lenses.
 
-Summary of CFHTLS project.
+We use the photometric and redshift catalogues for the foreground galaxies and
+additionally, color catalogues for background galaxies and quasars. We
+use scaling relations to relate light properties to properties such as mass and
+size to generate lens models. We further account for the
+instrumental effects such as seeing and noise before creating the final lensed
+images of model background sources. We add the lensed images on top of the real
+galaxies and groups in the \cfhtls data in all filters.
 
-Crowd-sourced gravitational lens detection works, in terms of the
-classification of the CFHTLS image dataset as described here, in the following
-specific ways: 
+We draw the following conclusions:
 
 \begin{itemize} 
 
-\item Real (robotically-detected and expert-confirmed) lenses are
-recovered/missed at similar/comparable/different rates to the
-training set. 
+\item Crowd-sourced gravitational lens detection works, as shown in by comparing with real lenses in CFHTLS:
+Real (robotically-detected and expert-confirmed) lenses are
+recovered/missed at similar/comparable/different rates C’\% and P’\% - this is a partial test of supervised vs unsupervised learning
 
-\item Completeness, purity of \sw sample to known lenses.
+%Which real lenses were missed? False negatives
 
-\item Partial test of supervised vs unsupervised learning, comment.
+\item We found a sample of new gravitational lens candidates. An expert-graded sample of size N, divided among several types.
+The SW lenses are different from the robotically (RingFinder and ArcFinder) detected lenses, in the following ways.
 
-\item Which real lenses were missed? False negatives, what we conclude from
-that.
-
-\item We found a
-sample of new gravitational lens candidates with the following properties: ...
-
-\item An expert-graded sample of size N, divided among several types, compares
-as follows.
-
-\item The SW lenses are different from the robotically (RingFinder and
-ArcFinder) detected lenses, in the following ways.
-
+% An expert-graded sample of size N, divided among several types.
 
 \end{itemize}
 
-Sum up, end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%  ACKNOWLEDGMENTS
@@ -216,12 +769,23 @@ Sum up, end.
 \section*{Acknowledgements}
  
 \input{acknowledgments.tex}
+This work is based on observations obtained with MegaPrime/MegaCam, a joint
+project of CFHT and CEA/IRFU, at the Canada-France-Hawaii Telescope (CFHT) which
+is operated by the National Research Council (NRC) of Canada, the Institut
+National des Sciences de l'Univers of the Centre National de la Recherche
+Scientifique (CNRS) of France, and the University of Hawaii. This research used
+the facilities of the Canadian Astronomy Data Centre operated by the National
+Research Council of Canada with the support of the Canadian Space Agency.
+CFHTLenS data processing was made possible thanks to significant computing
+support from the NSERC Research Tools and Instruments grant program.
+This work was supported by World Premier International Research Center
+Initiative (WPI Initiative), MEXT, Japan.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  APPENDICES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% \appendix
+\appendix
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -235,7 +799,8 @@ Sum up, end.
 % \input{paper-lcr.bbl}
 
 \bibliographystyle{apj}
-\bibliography{references}
+\bibliography{references_cfhtls}
+%\bibliography{references}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

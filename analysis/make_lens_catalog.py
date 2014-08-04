@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # ======================================================================
 
-import sys,getopt,numpy as np
+import numpy as np
 
 import matplotlib
 # Force matplotlib to not use any Xwindows backend:
@@ -22,14 +22,13 @@ params = { 'axes.labelsize': bfs,
 plt.rcParams.update(params)
 
 import swap
-from scipy import ndimage
 #from scipy.spatial.distance import pdist
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import pairwise_distances
 from sklearn.externals import joblib
-from matplotlib.mlab import rec2csv
 
 # ======================================================================
+
 
 def outlier_clusters(x, y, skill=None, memory=None):
     # TODO: incorporate skill
@@ -114,7 +113,7 @@ def make_lens_catalog(args):
 
             Here:
             ID = Space Warps subject ID
-            kind = Space Warps subject type (sim, dud, test) 
+            kind = Space Warps subject type (sim, dud, test)
             x,y = object (cluster) centroid, in pixels
             P = Space Warps subject probability
             N0 = number of markers in the cluster
@@ -137,7 +136,8 @@ def make_lens_catalog(args):
     # Some defaults:
 
     flags = {'skill': False,
-             'output_directory': './'}
+             'output_directory': './',
+             'image_size_y': 440}
 
     # ------------------------------------------------------------------
     # Read in options:
@@ -189,10 +189,10 @@ def make_lens_catalog(args):
     memory = joblib.Memory(cachedir=flags['output_directory'])
     memory.clear()
 
-    dtype_catalog = np.dtype({'names':
-        ('id', 'kind', 'x', 'y', 'p', 'n0', 's'),
-        'formats': ('|S24', '|S15', np.float, np.float,
-                    np.float, np.int, np.float)})
+    ## dtype_catalog = np.dtype({'names':
+    ##     ('id', 'kind', 'x', 'y', 'p', 'n0', 's'),
+    ##     'formats': ('|S24', '|S15', np.float, np.float,
+    ##                 np.float, np.int, np.float)})
 
     catalog_path = flags['output_directory'] + 'catalog.dat'
     F = open(catalog_path, 'w')
@@ -283,10 +283,12 @@ def make_lens_catalog(args):
             members = (cluster_labels == cluster_center_label)
 
             x, y = cluster_center
+            # convert y to catalog convention
+            y = flags['image_size_y'] - y
             N0 = np.sum(members)
             S = np.sum(skill[members])
 
-            catalog.append((ID, kind, x, y, P, N0, S))
+            ## catalog.append((ID, kind, x, y, P, N0, S))
             if len(catalog)%500 == 0:
                 print len(catalog)
             F.write('{0},{1},{2},{3},{4},{5},{6}\n'.format(
@@ -315,8 +317,14 @@ def make_lens_catalog(args):
 if __name__ == '__main__':
     # do argparse style; I find this /much/ easier than getopt (sorry Phil!)
     import argparse
-    parser = argparse.ArgumentParser(description=make_lens_atlas.__doc__)
+    parser = argparse.ArgumentParser(description=make_lens_catalog.__doc__)
     # Options we can configure
+    parser.add_argument("--image_y_size",
+                        action="store",
+                        dest="image_y_size",
+                        type=int,
+                        default=440,
+                        help="Specify the y coordinate size of the image. Used for converting between database and catalog coordinate conventions.")
     parser.add_argument("--output_directory",
                         action="store",
                         dest="output_directory",

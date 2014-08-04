@@ -24,9 +24,11 @@ params = { 'axes.labelsize': bfs,
           'ytick.labelsize': sfs}
 plt.rcParams.update(params)
 
+origin = 'lower'
+
 import swap
 
-from scipy import ndimage
+from scipy.ndimage import gaussian_filter, imread
 from os import path
 from urllib import FancyURLopener
 from matplotlib.mlab import csv2rec
@@ -51,7 +53,7 @@ def get_online_png(url, outname=None):
         F = myopener.retrieve(url, outname)
     else:
         F = [outname]
-    I = ndimage.imread(F[0]) * 1. / 255.
+    I = imread(F[0]) * 1. / 255
     return I
 
 def pdf2d(ax, ay, xbins=51, ybins=51,
@@ -87,9 +89,11 @@ def pdf2d(ax, ay, xbins=51, ybins=51,
 
     if 'hist' in style:
         if axis != None:
-            axis.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'))
+            axis.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'),
+                        origin=origin)
         else:
-            plt.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'))
+            plt.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'),
+                       origin=origin)
 
     return
 
@@ -100,7 +104,7 @@ def contour_hist(H, extent=None,
 
     # Smooth the histogram into a PDF:
     if smooth > 0:
-        H = ndimage.gaussian_filter(H, smooth)
+        H = gaussian_filter(H, smooth)
 
     norm = np.sum(H.flatten())
     H = H * (norm > 0.0) / (norm + (norm == 0.0))
@@ -222,7 +226,8 @@ def make_lens_atlas(args):
              'stamp_min': 10,
              'smooth_click': 3,
              'figsize_stamp': 5,
-             'figsize_field': 15,
+             'figsize_field': 10,
+             'image_y_size': 440,
             }
 
     # ------------------------------------------------------------------
@@ -242,6 +247,7 @@ def make_lens_atlas(args):
     ybins = np.arange(flags['stamp_size'] * 2)
     figsize_stamp = (flags['figsize_stamp'], flags['figsize_stamp'])
     figsize_field = (flags['figsize_field'], flags['figsize_field'])
+    image_y_size = flags['image_y_size']
 
     print "make_lens_atlas: illustrating behaviour captured in collection, and lens files: "
     print "make_lens_atlas: ", collection_path
@@ -310,11 +316,12 @@ def make_lens_atlas(args):
     if flags['stamp']:
         print "make_lens_atlas: running stamps"
         for lens_i in range(len(catalog)):
-            ID = catalog[lens_i][0]
-            kind = catalog[lens_i][1]
-            x = catalog[lens_i][2]
-            y = catalog[lens_i][3]
-            N0 = catalog[lens_i][5]
+            ID = catalog[lens_i]['id']
+            kind = catalog[lens_i]['kind']
+            x = catalog[lens_i]['x']
+            # flip y axis
+            y = image_y_size - catalog[lens_i]['y']
+            N0 = catalog[lens_i]['n0']
             if ((x < 0) * (y < 0)) + (N0 < flags['stamp_min']):
                 # this is one of the 'non points'; skip
                 continue
@@ -349,7 +356,7 @@ def make_lens_atlas(args):
 
             fig = plt.figure(figsize=figsize_stamp)
             ax = fig.add_subplot(111)
-            ax.imshow(im)
+            ax.imshow(im, origin=origin)
 
             ax.scatter(x - min_x,
                        y - min_y,
@@ -457,10 +464,15 @@ def make_lens_atlas(args):
                         labelleft='off',
                         labelbottom='off') # labels along the bottom edge are off
 
+                    # CPD 04.08.14: Flip axis to old conventions
+                    ax_heatmap.invert_yaxis()
                     try:
-                        fig_heatmap.savefig(flags['output_directory'] +
+                        outfile = flags['output_directory'] + \
                                     '{0}_cluster_{1}_heatmap.{2}'.format(
-                                        ID, lens_i, flags['output_format']))
+                                        ID, lens_i, flags['output_format'])
+                        # fig_heatmap.savefig(outfile)
+                        #fig_heatmap.canvas.print_png(outfile)
+                        fig_heatmap.savefig(outfile, bbox_inches='tight', pad_inches=0)
                     except:
                         print 'make_lens_catalog: heatmap problem with ', ID, lens_i
                         # import ipdb; ipdb.set_trace()
@@ -504,11 +516,15 @@ def make_lens_atlas(args):
                 labelleft='off',
                 labelbottom='off') # labels along the bottom edge are off
 
-            ax.set_title('{0}'.format(ID) + '\n' + '{0}'.format(kind))
+            ax.invert_yaxis()
             try:
-                fig.savefig(flags['output_directory'] +
+                outfile = flags['output_directory'] + \
                             '{0}_cluster_{1}_contour.{2}'.format(
-                                ID, lens_i, flags['output_format']))
+                                ID, lens_i, flags['output_format']
+                                )
+                # fig.savefig(outfile)
+                fig.savefig(outfile, bbox_inches='tight', pad_inches=0)
+                # fig.canvas.print_png(outfile)
             except:
                 print 'make_lens_catalog: contour problem with ', ID, lens_i
                 # import ipdb; ipdb.set_trace()
@@ -530,7 +546,8 @@ def make_lens_atlas(args):
             # plot cluster centers
             kind = mini_catalog['kind']
             x_centers = mini_catalog['x']
-            y_centers = mini_catalog['y']
+            # flip y from catalog
+            y_centers = image_y_size - mini_catalog['y']
             skill_centers = mini_catalog['s']
             # filter out the -1 entry
             center_cond = (x_centers > 0) * (y_centers > 0)
@@ -558,7 +575,7 @@ def make_lens_atlas(args):
 
             fig = plt.figure(figsize=figsize_field)
             ax = fig.add_subplot(111)
-            ax.imshow(im)
+            ax.imshow(im, origin=origin)
             xbins = np.arange(im.shape[0])
             ybins = np.arange(im.shape[1])
             min_x = 0
@@ -680,10 +697,12 @@ def make_lens_atlas(args):
                 labelleft='off',
                 labelbottom='off') # labels along the bottom edge are off
 
-            # title!
-            ax.set_title('{0}'.format(ID) + '\n' + '{0}'.format(kind))
+            ax.invert_yaxis()
             try:
-                fig.savefig(flags['output_directory'] + '{0}_field_output.{1}'.format(ID, flags['output_format']))
+                outfile = flags['output_directory'] + '{0}_field_output.{1}'.format(ID, flags['output_format'])
+                # fig.savefig(outfile)
+                fig.savefig(outfile, bbox_inches='tight', pad_inches=0)
+                #fig.canvas.print_png(outfile)
             except:
                 print 'make_lens_catalog: field problem with field ', ID
             plt.close('all')
@@ -713,6 +732,12 @@ if __name__ == '__main__':
                         type=int,
                         default=30,
                         help="Number of points to plot. If < 0, do all points.")
+    parser.add_argument("--image_y_size",
+                        action="store",
+                        dest="image_y_size",
+                        type=int,
+                        default=440,
+                        help="Specify the y coordinate size of the image. Used for converting between database and catalog coordinate conventions.")
     # Actions we can specify
     parser.add_argument("--heatmap",
                         action="store_true",

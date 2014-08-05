@@ -22,7 +22,7 @@ params = { 'axes.labelsize': bfs,
 plt.rcParams.update(params)
 
 import swap
-#from scipy.spatial.distance import pdist
+from matplotlib.mlab import csv2rec
 from sklearn.cluster import AgglomerativeClustering
 from sklearn.metrics import pairwise_distances
 from sklearn.externals import joblib
@@ -137,7 +137,9 @@ def make_lens_catalog(args):
 
     flags = {'skill': False,
              'output_directory': './',
-             'image_size_y': 440}
+             'output_name': 'catalog.dat',
+             'image_size_y': 440,
+             'catalog_path': ''}
 
     # ------------------------------------------------------------------
     # Read in options:
@@ -194,7 +196,7 @@ def make_lens_catalog(args):
     ##     'formats': ('|S24', '|S15', np.float, np.float,
     ##                 np.float, np.int, np.float)})
 
-    catalog_path = flags['output_directory'] + 'catalog.dat'
+    catalog_path = flags['output_directory'] + flags['output_name']
     F = open(catalog_path, 'w')
     F.write('id,kind,x,y,p,n0,s\n')
 
@@ -202,14 +204,19 @@ def make_lens_catalog(args):
     # Read in files:
 
     collection = swap.read_pickle(collection_path, 'collection')
+    ID_list = collection.list()
+    print "make_lens_catalog: collection numbers ", len(ID_list)
 
-    print "make_lens_catalog: collection numbers ", len(collection.list())
+    if flags['catalog_path'] != '':
+        print "make_lens_catalog: filtering from catalog ",flags['catalog_path']
+        catalog_in = csv2rec(flags['catalog_path'])
+        ID_list = np.unique(catalog_in['id'])
 
     # ------------------------------------------------------------------
     # Run through data:
 
     catalog = []
-    for ID in collection.list():
+    for ID in ID_list:
 
         subject = collection.member[ID]
         kind = subject.kind
@@ -254,7 +261,7 @@ def make_lens_catalog(args):
         skill_nots = swap.expectedInformationGain(0.5, PL_nots, PD_nots)  # skill
 
         x, y = -1, -1
-        N0 = len(x_all) - len(x_markers)
+        N0 = len(skill_nots)
         S = np.sum(skill_nots)
 
         catalog.append((ID, kind, x, y, P, N0, S))
@@ -329,15 +336,25 @@ if __name__ == '__main__':
                         action="store",
                         dest="output_directory",
                         default="./",
-                        help="Output directory for images.")
+                        help="Output directory for catalogs.")
+    parser.add_argument("--output_name",
+                        action="store",
+                        dest="output_name",
+                        default="catalog.dat",
+                        help="Output name for catalogs.")
     parser.add_argument("--skill",
                         action="store_true",
                         dest="skill",
                         default=False,
                         help="Weight by skill. Currently not implimented (but in the future!)")
+    parser.add_argument("--catalog",
+                        action="store",
+                        dest="catalog_path",
+                        default="",
+                        help="Path to catalog data file we start from.")
     # Required args
-    parser.add_argument("catalog",
-                        help="Path to catalog data file.")
+    parser.add_argument("collection",
+                        help="Path to collection data file.")
     options = parser.parse_args()
     args = vars(options)
     make_lens_catalog(args)

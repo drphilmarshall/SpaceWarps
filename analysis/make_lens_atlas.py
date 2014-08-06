@@ -183,7 +183,7 @@ def make_lens_atlas(args):
         collection collection.pickle
         catalog catalog.dat
             Assumed format:
-            ID   kind   x   y    P     N0   S
+            ID   kind   x   y    Prob     N0   Skill   Dist
 
             Here:
             ID = Space Warps subject ID
@@ -192,6 +192,7 @@ def make_lens_atlas(args):
             P = Space Warps subject probability
             N0 = number of markers in the cluster
             S = total skill per cluster, summed over markers
+            D = biggest distance within cluster
 
     OUTPUTS
 
@@ -223,11 +224,12 @@ def make_lens_atlas(args):
              'output_format': 'png',
              'stamp_size': 50,
              'dist_max': 30,
-             'stamp_min': 10,
+             'stamp_min': 1,
              'smooth_click': 3,
              'figsize_stamp': 5,
              'figsize_field': 10,
              'image_y_size': 440,
+             'diagnostics': False,
             }
 
     # ------------------------------------------------------------------
@@ -253,49 +255,6 @@ def make_lens_atlas(args):
     print "make_lens_atlas: ", collection_path
     print "make_lens_atlas: ", catalog_path
 
-    ## try:
-    ##     opts, args = getopt.getopt(argv,"h",
-    ##             ["help", "heatmap=", "contour=", "field=", "stamp=",
-    ##              "alpha=", "points=", "skill="])
-    ## except getopt.GetoptError, err:
-    ##     print str(err) # will print something like "option -a not recognized"
-    ##     print make_lens_atlas.__doc__  # will print the big comment above.
-    ##     return
-
-
-    ## for o,a in opts:
-    ##     if o in ("-h", "--help"):
-    ##         print make_lens_atlas.__doc__
-    ##         return
-    ##     elif o in ("--heatmap"):
-    ##         flags['heatmap'] = True
-    ##     elif o in ("--contour"):
-    ##         flags['contour'] = True
-    ##     elif o in ("--field"):
-    ##         flags['field'] = True
-    ##     elif o in ("--stamp"):
-    ##         flags['stamp'] = True
-    ##     elif o in ("--alpha"):
-    ##         flags['alpha'] = True
-    ##     elif o in ("--skill"):
-    ##         flags['skill'] = True
-    ##     elif o in ("--points"):
-    ##         flags['points'] = int(a)
-    ##     else:
-    ##         assert False, "unhandled option"
-
-    ## # Check for pickles in array args:
-    ## if len(args) == 2:
-    ##     #bureau_path = args[0]
-    ##     collection_path = args[0]
-    ##     catalog_path = args[1]
-    ##     print "make_lens_atlas: illustrating behaviour captured in bureau, collection, and lens files: "
-    ##     #print "make_lens_atlas: ", bureau_path
-    ##     print "make_lens_atlas: ", collection_path
-    ##     print "make_lens_atlas: ", catalog_path
-    ## else:
-    ##     print make_lens_atlas.__doc__
-    ##     return
 
     # ------------------------------------------------------------------
     # Read in files:
@@ -322,8 +281,15 @@ def make_lens_atlas(args):
             # flip y axis
             y = image_y_size - catalog[lens_i]['y']
             N0 = catalog[lens_i]['n0']
-            if ((x < 0) * (y < 0)) + (N0 < flags['stamp_min']):
+            if 'dist' in catalog.dtype.names:
+                if catalog[lens_i]['dist'] == 0:
+                    continue
+
+            if ((x < 0)):
                 # this is one of the 'non points'; skip
+                continue
+            if (N0 < flags['stamp_min']):
+                # not enough points!
                 continue
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
@@ -375,15 +341,27 @@ def make_lens_atlas(args):
                 x_markers_all = np.array([xi for xj in x_all for xi in xj])
                 y_markers_all = np.array([yi for yj in y_all for yi in yj])
 
-                # now filter markers by those that are within
-                # dist_max of the center (since I don't record cluster
-                # members...)
                 agents_numbers = np.arange(
                         x_markers_all.size)
-                conds = ((x_markers_all >= min_member_x) *
-                         (x_markers_all <= max_member_x) *
-                         (y_markers_all >= min_member_y) *
-                         (y_markers_all <= max_member_y))
+                if 'labels' in annotationhistory:
+                    # find which label is closest to your folks
+                    labels_all = annotationhistory['labels']
+                    labels = np.array([xi for xj in labels_all for xi in xj])
+                    cluster_labels = list(set(labels))
+                    data = np.vstack((x_markers_all, y_markers_all)).T
+                    cluster_centers = np.array([np.mean(data[labels == i], axis=0)
+                                                for i in cluster_labels])
+                    # find which label is closest to the (x,y)
+                    label_center = cluster_labels[np.argmin(np.sum(np.square(cluster_centers - np.vstack((x, y)).T), axis=1))]
+                    conds = (labels == label_center)
+                else:
+                    # now filter markers by those that are within
+                    # dist_max of the center (since I don't record cluster
+                    # members...)
+                    conds = ((x_markers_all >= min_member_x) *
+                             (x_markers_all <= max_member_x) *
+                             (y_markers_all >= min_member_y) *
+                             (y_markers_all <= max_member_y))
                 agents = agents_numbers[conds]
                 x_markers = x_markers_all[agents]
                 y_markers = y_markers_all[agents]
@@ -427,11 +405,10 @@ def make_lens_atlas(args):
                         sizes_filtered = sizes_all[agents_points]
                     else:
                         sizes_filtered = 50
-                    colors = [(0, 1.0, 0) for i in x_markers_filtered]
                 else:
                     skill = None
                     sizes_filtered = 50
-                    colors = (0, 1.0, 0)
+                colors = (0, 1.0, 0)
 
                 # ----------------------------------------------------------
                 # heatmaps
@@ -548,9 +525,12 @@ def make_lens_atlas(args):
             x_centers = mini_catalog['x']
             # flip y from catalog
             y_centers = image_y_size - mini_catalog['y']
-            skill_centers = mini_catalog['s']
+            skill_centers = mini_catalog['skill']
             # filter out the -1 entry
             center_cond = (x_centers > 0) * (y_centers > 0)
+            # filter outliers if possible
+            if 'dist' in mini_catalog.dtype.names:
+                center_cond *= mini_catalog['dist'] > 0
             skill_centers = skill_centers[center_cond]
             x_centers = x_centers[center_cond]
             y_centers = y_centers[center_cond]
@@ -590,9 +570,30 @@ def make_lens_atlas(args):
                         (np.max(skill_centers) - np.min(skill_centers)))
             else:
                 sizes_centers = [100 for i in x_centers]
+            sizes_centers = [100 for i in x_centers]
             ax.scatter(x_centers, y_centers,
                        marker='d', c=colors_centers,
                        s=sizes_centers, alpha=0.75)
+
+            if flags['diagnostics']:
+                r = flags['dist_max']
+                b = flags['stamp_size']
+                b_ones = np.ones(100) * b
+                b_arr = np.linspace(-b, b, 100)
+                def xy(x0, y0, r, phi):
+                    return x0 + r * np.cos(phi), y0 + r * np.sin(phi)
+                phis = np.arange(0, 6.28, 0.01)
+                for i in xrange(len(x_centers)):
+                    x_center = x_centers[i]
+                    y_center = y_centers[i]
+
+                    ax.plot( *xy(x_center, y_center, r, phis), c='w', ls='-', linewidth=4)
+
+                    # plot box
+                    ax.plot(x_center + b_ones, y_center + b_arr, c='r', ls='--', linewidth=4)
+                    ax.plot(x_center - b_ones, y_center + b_arr, c='r', ls='--', linewidth=4)
+                    ax.plot(x_center + b_arr, y_center + b_ones, c='r', ls='--', linewidth=4)
+                    ax.plot(x_center + b_arr, y_center - b_ones, c='r', ls='--', linewidth=4)
 
             itwas = annotationhistory['ItWas']
             x_all = annotationhistory['At_X']
@@ -603,6 +604,8 @@ def make_lens_atlas(args):
 
             # now filter markers by those that are within
             # stamp_size of the stamp
+            # I'm pretty sure this step is redundant when going over the full
+            # image?
             agents_numbers = np.arange(
                     x_markers_all.size)
             conds = ((x_markers_all >= min_x) * (x_markers_all <= max_x) *
@@ -651,11 +654,25 @@ def make_lens_atlas(args):
                     sizes_filtered = sizes_all[agents_points]
                 else:
                     sizes_filtered = 50
-                colors = [(0, 1.0, 0) for i in x_markers_filtered]
             else:
                 skill = None
                 sizes_filtered = 50
+
+            if 'labels' in annotationhistory:
+                # find which label is closest to your folks
+                labels_all = annotationhistory['labels']
+                labels = np.array([xi for xj in labels_all for xi in xj])
+                labels_filtered = labels[agents_points]
+                colors = []
+                alpha = 0.75
+                for label in labels_filtered:
+                    if label == -1:
+                        colors.append((1.0, 0.0, 0))
+                    else:
+                        colors.append((0, 1.0, 0))
+            else:
                 colors = (0, 1.0, 0)
+                alpha = 0.25
 
             # ----------------------------------------------------------
             # contours
@@ -677,7 +694,7 @@ def make_lens_atlas(args):
                 ax.scatter(x_markers_filtered - min_x,
                            y_markers_filtered - min_y,
                            c=colors, s=sizes_filtered,
-                           alpha=0.25)
+                           alpha=alpha)
 
             # ----------------------------------------------------------
             # do alpha
@@ -732,6 +749,18 @@ if __name__ == '__main__':
                         type=int,
                         default=30,
                         help="Number of points to plot. If < 0, do all points.")
+    parser.add_argument("--stamp_size",
+                        action="store",
+                        dest="stamp_size",
+                        type=int,
+                        default=50,
+                        help="Size of stamps we can make.")
+    parser.add_argument("--dist_max",
+                        action="store",
+                        dest="dist_max",
+                        type=int,
+                        default=30,
+                        help="Size over which we filter points.")
     parser.add_argument("--image_y_size",
                         action="store",
                         dest="image_y_size",

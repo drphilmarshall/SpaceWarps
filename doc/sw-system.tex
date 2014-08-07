@@ -555,6 +555,34 @@ set of all classifications made of this subject.)
 
 \end{itemize}
 
+\Fref{fig:agent-probabilities} shows random selection of Agents' confusion
+matrix elements, as they were on a particular day towards the end of the
+CFHTLS project. Many volunteers classify  only a small number of images, and
+so their Agents' confusion matrix elements remain close to their initial
+values of (0.5,0.5). As more images are classified (shown by the yellow point
+size), the Agents' matrix elements tend to move towards higher values, as the
+volunteers attain greater skill levels (green point sizes, see
+\Sref{sec:results} below) and the Agent learns more about them. In this
+quadrant, the Agents perceive their volunteers to be ``astute.''
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_probabilities.png}
+\caption{Typical \SW Agent confusion matrix elements. At a particular
+snapshot, 200 random Agents are shown distributed over the unit plane, with a
+tendency to move towards the ``astute'' region in the upper right hand
+quadrant as the Agents' volunteers view more images. Yellow point size is
+proprtional to the number of images classified; green point size shows
+Agent-perceived ``skill.''}
+\label{fig:swap:agent-probabilities}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\todo{Phil}{Include agent histories plot, discuss}
+
+\todo{Phil}{Include subject trajectories plot, discuss}
+
+
 In \Sref{sec:results} below, we define several quantities based on the 
 probabilities listed above that serve to quantify the performance of the crowd
 in terms of the information they provide via their classifications, and report

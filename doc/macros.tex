@@ -96,8 +96,10 @@
 
 % COMMENTING
 \usepackage[usenames]{color}
-\newcommand{\question}[2]{\textcolor{red}{\bf Question from #1: #2}}
+\definecolor{purple}{RGB}{150,0,200}
+\newcommand{\question}[2]{\textcolor{purple}{\bf Question from #1: #2}}
 \newcommand{\flag}[2]{\textcolor{blue}{\bf Comment from #1: #2}}
+\newcommand{\todo}[2]{\textcolor{red}{\bf To Do (#1): #2}}
 \newcommand{\new}[1]{{\bf #1}}
 
 % RESULTS

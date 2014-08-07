@@ -555,15 +555,19 @@ set of all classifications made of this subject.)
 
 \end{itemize}
 
-\Fref{fig:agent-probabilities} shows random selection of Agents' confusion
-matrix elements, as they were on a particular day towards the end of the
-CFHTLS project. Many volunteers classify  only a small number of images, and
-so their Agents' confusion matrix elements remain close to their initial
+\Fref{fig:swap:agent-probabilities} shows a random selection of Agents'
+confusion matrix elements, as they were on a particular day towards the end of
+the CFHTLS project. Many volunteers classify  only a small number of images,
+and so their Agents' confusion matrix elements remain close to their initial
 values of (0.5,0.5). As more images are classified (shown by the yellow point
 size), the Agents' matrix elements tend to move towards higher values, as the
 volunteers attain greater skill levels (green point sizes, see
 \Sref{sec:results} below) and the Agent learns more about them. In this
-quadrant, the Agents perceive their volunteers to be ``astute.''
+quadrant, the Agents perceive their volunteers to be ``astute.'' This trend is
+more clearly seen in \Fref{fig:swap:agent-histories}, which shows the skill of
+the same sample of Agents as the number of images classified increases. The
+histogram shows the distribution of classification number: a long tail to very
+high ``effort'' can be seen. 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -578,7 +582,16 @@ Agent-perceived ``skill.''}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\todo{Phil}{Include agent histories plot, discuss}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
+\caption{Typical \SW Agent histories. The ``skill'' of the  same 200 random
+Agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
+of the number  of subjects classified (``effort''). The yellow histogram in
+the background shows the distribution of effort.}
+\label{fig:swap:agent-histories}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \todo{Phil}{Include subject trajectories plot, discuss}
 

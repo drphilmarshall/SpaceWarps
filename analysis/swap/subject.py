@@ -167,7 +167,7 @@ class Subject(object):
 
         # Deal with active subjects. Ignore the classifier until they
         # have seen NT > a_few_at_the_start (ie they've had a
-        # certain amount of training):
+        # certain amount of training - at least one training image, for example):
             
             if by.NT > a_few_at_the_start:
                

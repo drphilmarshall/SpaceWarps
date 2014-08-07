@@ -195,6 +195,7 @@ class Agent(object):
 
             # Always log progress, even if not learning:
             self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
+            # NB. self.skill is now up to date.
             self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
             self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
 

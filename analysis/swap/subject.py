@@ -232,20 +232,15 @@ class Subject(object):
                         self.retirement_time = 'not yet'
                         self.retirement_age = 0.0
 
-                # Update agent - training history is taken care of elsewhere:
+                # Update agent - training history is taken care of in agent.heard(), 
+                # which also keeps agent.skill up to date.
                 if self.kind == 'test':
 
-                     by.testhistory['ID'] = np.append(by.testhistory['ID'],
-                                                      self.ID)
-                     # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
-                     #by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
-                     informationGain=swap.informationGain(prior_probability,posterior_probability);
-                     by.testhistory['I'] = np.append(by.testhistory['I'], np.mean(informationGain));
-                     # by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
+                     by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
+                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
                      by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
-                     by.contribution += by.skill
-
                      by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
+                     by.contribution += by.skill
 
                 # update the annotation history
                 self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)

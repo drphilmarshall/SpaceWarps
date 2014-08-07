@@ -10,9 +10,9 @@ import swap
 import numpy as np
 import pylab as plt
 
-# ======================================================================
-
 actually_it_was_dictionary = {'LENS': 1, 'NOT': 0, 'UNKNOWN': -1}
+
+# ======================================================================
 
 class Agent(object):
     """
@@ -134,55 +134,64 @@ class Agent(object):
             pass
 
         else:
-            if not ignore:
                         
-                if actually_it_was=='LENS':
+            if actually_it_was=='LENS':
+                if not ignore:
                     self.PL = (self.PL*self.NL + (it_was==actually_it_was))/(1+self.NL)
                     self.PL = np.min([self.PL,swap.PLmax])
                     self.PL = np.max([self.PL,swap.PLmin])
-                    self.NL += 1
-                    self.NT += 1
+                # Always update experience, even if Agents are not willing to learn. PJM 8/7/14
+                self.NL += 1
+                self.NT += 1
 
-                elif actually_it_was=='NOT':
+            elif actually_it_was=='NOT':
+                if not ignore:
                     self.PD = (self.PD*self.ND + (it_was==actually_it_was))/(1+self.ND)
                     self.PD = np.min([self.PD,swap.PDmax])
                     self.PD = np.max([self.PD,swap.PDmin])
-                    self.ND += 1
-                    self.NT += 1
+                self.ND += 1
+                self.NT += 1
 
-                # Unsupervised learning! Mad if this actually works.
-                elif actually_it_was=='UNKNOWN':
-                    
-                    increment = with_probability
+            # Unsupervised learning!
+            elif actually_it_was=='UNKNOWN':
 
-                    if it_was=='LENS':
-                    
+                increment = with_probability
+
+                if it_was=='LENS':
+
+                    if not ignore:
                         self.PL = (self.PL*self.NL + increment)/(self.NL + increment)
                         self.PL = np.min([self.PL,swap.PLmax])
                         self.PL = np.max([self.PL,swap.PLmin])
-                        self.NL += increment
+                    self.NL += increment
 
+                    if not ignore:
                         self.PD = (self.PD*self.ND +       0.0)/(self.ND + (1.0-increment))
                         self.PD = np.min([self.PD,swap.PDmax])
                         self.PD = np.max([self.PD,swap.PDmin])
-                        self.ND += (1.0 - increment)
-                    
-                    elif it_was=='NOT':
-                    
+                    self.ND += (1.0 - increment)
+
+                elif it_was=='NOT':
+
+                    if not ignore:
                         self.PL = (self.PL*self.NL +       0.0)/(self.NL + increment)
                         self.PL = np.min([self.PL,swap.PLmax])
                         self.PL = np.max([self.PL,swap.PLmin])
-                        self.NL += increment
+                    self.NL += increment
 
+                    if not ignore:
                         self.PD = (self.PD*self.ND + (1.0-increment))/(self.ND + (1.0-increment))
                         self.PD = np.min([self.PD,swap.PDmax])
                         self.PD = np.max([self.PD,swap.PDmin])
-                        self.ND += (1.0 - increment)
-                    
-                    # self.NT += 1 # Don't count test images as training images!
+                    self.ND += (1.0 - increment)
 
-                else:
-                    raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
+                # self.NT += 1 # Don't count test images as training images?! 
+                # self.NT == 0 if unsupervised? Not sure. Maybe better to count every image 
+                # as training when unsupervised... Bit odd though.
+                self.NT += 1
+
+            else:
+                raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
 
             # Always log progress, even if not learning:
             self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())

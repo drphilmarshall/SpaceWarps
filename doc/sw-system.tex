@@ -555,12 +555,61 @@ set of all classifications made of this subject.)
 
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_probabilities.png}
+\caption{Typical \SW Agent confusion matrix elements. At a particular
+snapshot, 200 random Agents are shown distributed over the unit plane, with a
+tendency to move towards the ``astute'' region in the upper right hand
+quadrant as the Agents' volunteers view more images. Yellow point size is
+proprtional to the number of images classified; green point size shows
+Agent-perceived ``skill.''}
+\label{fig:swap:agent-probabilities}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
+\caption{Typical \SW Agent histories. The ``skill'' of the  same 200 random
+Agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
+of the number  of subjects classified (``effort''). The yellow histogram in
+the background shows the distribution of effort.}
+\label{fig:swap:agent-histories}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Fref{fig:swap:agent-probabilities} shows a random selection of Agents'
+confusion matrix elements, as they were on a particular day towards the end of
+the CFHTLS project. Many volunteers classify  only a small number of images,
+and so their Agents' confusion matrix elements remain close to their initial
+values of (0.5,0.5). As more images are classified (shown by the yellow point
+size), the Agents' matrix elements tend to move towards higher values, as the
+volunteers attain greater skill levels (green point sizes, see
+\Sref{sec:results} below) and the Agent learns more about them. In this
+quadrant, the Agents perceive their volunteers to be ``astute.'' This trend is
+more clearly seen in \Fref{fig:swap:agent-histories}, which shows the skill of
+the same sample of Agents as the number of images classified increases. The
+histogram shows the distribution of classification number: a long tail to very
+high ``effort'' can be seen. 
+
 In \Sref{sec:results} below, we define several quantities based on the 
 probabilities listed above that serve to quantify the performance of the crowd
 in terms of the information they provide via their classifications, and report
 on the performance of the system in returning a sample of lens candidates
 as a function of $\pr(\LENS|C,T)$ threshold.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_trajectories.png}
+\caption{Typical \SW stage 1 subject trajectories. Subjects drift downwards in
+the top panel as they are classified, while being nudged left and right by the
+Agents as they interpret the volunteers input. The dotted vertical lines show
+(left to right) the retirement threshold, prior probability, and the detection
+threshold.}
+\label{fig:swap:subject-trajectories}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 During stage 1 classification of the CFHTLS images, we assigned a prior
 probability for each image to contain a lens of $2\times10^{-4}$, based on a
@@ -571,7 +620,18 @@ and (approximately symmetrically in the logarithm of probability), $10^{-7}$.
 Subjects that attained probability of less than the rejection threshold were
 scheduled for retirement and subsequently ignored by the analysis code.
 Subjects crossing the detection threshold were not retired from the website,
-but instead left in the system so that more volunteers could see them.
+but instead left in the system so that more volunteers could see them. The
+progress of the subjects is illustrated in \Fref{fig:swap:subject-trajectories}.
+Subjects appear on this plot at the tip of the arrow, at zero classifications
+and prior probability; they then drift downwards as they are classified by the
+crowd, with each Agent applying the appropriate kick in probability based on
+what it hears its volunteer say. Encouragingly, sims (blue) tend to end up
+with high probability, while duds (red) pile up at low probability; test
+subjects (black) mostly drift to low probability, but some go the other way.
+The latter will help make up the candidate sample. As this plot shows, around
+10 classifications are required for a subject to reach the retirement
+threshold.
+
 The analysis code was run every night during the project, and subjects retired
 in batches after its completion. This introduced some inefficiency, because
 some classifications were accumulated in the time between them crossing the

@@ -16,7 +16,7 @@ COMMENTS
 
     Brief description of the inputs needed:
       bureau_offline : dictionary of bureau_offline from collection. Has
-        properties Theta0, Theta1, PL, PD, Pi, and collection (a dictionary of
+        properties PD, PL, PL, PD, Pi, and collection (a dictionary of
         all evaluations).
         I call it 'bureau' because it is a collection of agents, but '_offline'
         to distinguish it from the online bureaus, which have different keys.
@@ -68,7 +68,7 @@ EXAMPLE
                         continue
                     xij = subject.annotationhistory['ItWas'][agent_i]
                     if name not in bureau_offline:
-                        bureau_offline.update({name: {'Theta0': 0.75, 'Theta1': 0.75,
+                        bureau_offline.update({name: {'PD': 0.75, 'PL': 0.75,
                                               'PL': bureau.member[name].PL,
                                               'PD': bureau.member[name].PD,
                                               'Pi': pi,
@@ -151,12 +151,12 @@ def Estep_old(bureau_offline, pi, collection, taus, training_IDs={}):
             name = subject.annotationhistory['Name'][agent_i]
             agent = bureau_offline[name]
             xij = agent['Subjects'][ID]
-            thetai0 = agent['Theta0']
-            thetai1 = agent['Theta1']
+            PDi = agent['PD']
+            PLi = agent['PL']
 
             # xij = 1 term
-            pos = thetai1 ** xij * (1 - thetai1) ** (1 - xij) * pi_ij
-            neg = thetai0 ** (1 - xij) * (1 - thetai0) ** xij * (1 - pi_ij)
+            pos = PLi ** xij * (1 - PLi) ** (1 - xij) * pi_ij
+            neg = PDi ** (1 - xij) * (1 - PDi) ** xij * (1 - pi_ij)
             tau_j += pos * 1. / (pos + neg)
 
             # xij = 0 term
@@ -176,8 +176,8 @@ def Estep(bureau_offline, pi, taus, training_IDs={}):
     for name in bureau_offline:
 
         agent = bureau_offline[name]
-        thetai0 = agent['Theta0']
-        thetai1 = agent['Theta1']
+        PDi = agent['PD']
+        PLi = agent['PL']
 
         for ID in agent['Subjects']:
             if ID in taus_skip:
@@ -198,8 +198,8 @@ def Estep(bureau_offline, pi, taus, training_IDs={}):
             N_j = taus_calculation[ID][1]
             pi_ij = taus_calculation[ID][2]
 
-            pos = thetai1 ** xij * (1 - thetai1) ** (1 - xij) * pi_ij
-            neg = thetai0 ** (1 - xij) * (1 - thetai0) ** xij * (1 - pi_ij)
+            pos = PLi ** xij * (1 - PLi) ** (1 - xij) * pi_ij
+            neg = PDi ** (1 - xij) * (1 - PDi) ** xij * (1 - pi_ij)
             tau_j += pos * 1. / (pos + neg)
 
             N_j += 1
@@ -223,11 +223,11 @@ def Mstep(bureau_offline, pi, taus, training_IDs={}):
     for name in bureau_offline:
         agent = bureau_offline[name]
         agent_prime = agent.copy()  # so that it has PL, PD, Subjects
-        thetai1_num = 0
-        thetai1_den = 0
-        thetai0_num = 0
-        thetai0_den = 0
-        # pii_num = thetai1_den
+        PLi_num = 0
+        PLi_den = 0
+        PDi_num = 0
+        PDi_den = 0
+        # pii_num = PLi_den
         pii_den = 0
         for ID in agent['Subjects']:
             if ID in taus:
@@ -238,24 +238,31 @@ def Mstep(bureau_offline, pi, taus, training_IDs={}):
                 else:
                     tauj = taus[ID]
 
+                # quick hack: if tauj < 0, skip it!
+                if tauj < 0:
+                    #print 'offline: tauj is < 0! ', ID
+                    continue
+
                 xij = agent['Subjects'][ID]
 
-                thetai0_num += (1 - xij) * (1 - tauj)
-                thetai0_den += 1 - tauj
-                thetai1_num += xij * tauj
-                thetai1_den += tauj
+                PDi_num += (1 - xij) * (1 - tauj)
+                PDi_den += 1 - tauj
+                PLi_num += xij * tauj
+                PLi_den += tauj
                 pii_den += 1
         # I think this is OK?
-        if thetai0_den == 0:
-            thetai0_den = 1
-        if thetai1_den == 0:
-            thetai1_den = 1
+        if PDi_den == 0:
+            PDi_den = 1
+        if PLi_den == 0:
+            PLi_den = 1
+        if pii_den == 0:
+            pii_den = 1
 
-        agent_prime.update({'Theta0': thetai0_num * 1. / thetai0_den,
-                            'Theta1': thetai1_num * 1. / thetai1_den,
-                            'Pi': thetai1_den * 1. / pii_den,})
+        agent_prime.update({'PD': PDi_num * 1. / PDi_den,
+                            'PL': PLi_num * 1. / PLi_den,
+                            'Pi': PLi_den * 1. / pii_den,})
         bureau_offline_prime.update({name: agent_prime})
-        pi_num += thetai1_den
+        pi_num += PLi_den
         pi_den += pii_den
     pi = pi_num * 1. / pi_den
     return bureau_offline_prime, pi

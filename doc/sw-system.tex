@@ -367,7 +367,7 @@ features of the classification interface (the QD and Talk buttons), also using
 pop-up messages. The tutorial was purposely kept as short as possible so as to
 provide the minimal barrier to entry.
 
-\subsubsection{Instant Feedback}
+\subsubsection{Training Subjects and Instant Feedback}
 
 The second image viewed after the initial tutorial image is already a survey
 image, in order to get the volunteers engaged in the real task as quickly as
@@ -384,6 +384,7 @@ message is generated, containing either positive feedback for a successful
 classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'') 
+
 
 The initial frequency of the training images is set to be two in five;
 subjects are drawn randomly from the pool of training images with this
@@ -427,40 +428,54 @@ and the task set.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Stage 1: Initial Classification}
-\label{sec:design:stage1}
+\subsection{Staged Classification}
+\label{sec:design:stages}
 
-Interface fast due to pre-loading of images, and minimizing interaction.
-Trade-off between speed and accuracy. Decreasing training rate.
+We now describe briefly the two-stage strategy that was employed in the CFHTLS
+project, initial classification (involving the rejection of very large numbers
+of non-lenses), and refinement (to further narrow down the sample). The web
+application was reconfigured between the two stages, to assist in their
+functioning.
 
-Quick dashboard provides simple ways to explore further: zoom, contrast
-controls.
+\subsubsection{Stage 1: Initial Classification}
 
-Spotting lenses: Markers to be placed. Two reasons: first, to give good
-feedback. Second, to focus attention.
+The goal of a stage 1 classification is to achieve a high rejection rate,
+while maintaining high completeness.  In this mode, therefore, the pre-loading
+of images was used to make the sliding in of new subjects happen quickly, to
+provide a sense of urgency: initial classification must be done fairly
+quickly for the search to be completed within a reasonable time period.  We
+expect some trade-off between speed and accuracy, which we return to in the
+results section below. Completion of the search requires subjects to be
+``retired'' over time, as a result of their being classified. We do this by
+analyzing the classifications on a daily basis, as described in
+\Sref{sec:swap} below. As subjects are retired, new ones are ingested into
+the web app for classification. This means that the discovery of lens
+candidates in stage 1 is truly a community effort: to detect a lens candidate,
+many non-lenses must first be rejected.
 
-Non-lenses marked? Favourite button instead, enabling serendipitous
-discovery of other interesting things, separate from lenses.
+The stage 1 training set was chosen to be quite clear cut, in order to err on
+the side of inclusivity, and so ensure high completeness. For the training
+duds we selected several hundred images at random, and three of us (AV, AM,
+PM) inspected them and discarded anything that could be a lens candidate. The
+remainder were ingested into the site.
 
-Retirement of low probability systems. Concentrates sample, provides more
-``bacon'' (while slightly skewing "sim frequency"). Note that this feature
-means that everyone contributes to detection of lenses: luck is made for the
-few that happen to see the new lenses, by the masses that did the rejection.
-Group effort.
 
-Sims vs duds leads to inclusive search -- click on anything you think etc...
+\subsubsection{Stage 2: Refinement}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+At stage 2, the goal is to define a final sample that has both high
+completeness and high purity. To this end, a more demanding training set was
+defined, where the duds all contain an object identified by one of us (AV, AM
+and PM) as a potential false positive. \Fref{fig:training:gallery} shows some
+example images from the CFHTLS stage 2 training set. 
 
-\subsection{Stage 2: Refinement}
-\label{sec:design:stage2}
+\todo{Phil}{Show some example sims and duds...}
 
-Goal: assess candidates, reject false positives by comparing with training set
-of non-obvious non-lenses. Produce a sample rankable by probability.
-
-Reconfigured website: more detailed SG, more detailed feedback. Orange
-background to make it obvious stage 2 is different. Slower image presentation.
-Higher, constant training rate.
+We also attempted to encourage discernment by changing the look and feel of
+the app, slowing down the arrival of new images, and switching the background
+color to bright orange to make it clear that a different task was being set.
+The frequency with which training images were shown was fixed at 1 in 3.
+Finally, the Spotter's Guide was upgraded to include more detailed discussion
+of various possible false positives.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

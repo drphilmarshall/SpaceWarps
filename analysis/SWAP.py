@@ -128,10 +128,10 @@ def SWAP(argv):
     print "SWAP: looks like we are on Stage "+stage+" of the ",survey," survey project"
 
 
+    supervised = tonights.parameters['supervised']
     agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
     if agents_willing_to_learn:
 
-        supervised = tonights.parameters['supervised']
         if supervised:
             print "SWAP: agents will use training data to update their confusion matrices"
         else:

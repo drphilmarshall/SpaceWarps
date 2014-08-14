@@ -916,17 +916,65 @@ expected information gain as a measure of volunteer contribution.
 
 We now quantify the performance of the \sw system in terms of the recovery of
 the training set images. \Fref{fig:results:sample:roc} shows receiver
-operating characteristic (ROC) curves for CFHTLS stage 1 and stage 2. 
+operating characteristic (ROC) curves for CFHTLS stage 1 and stage 2. These
+plots show the true positive rate (TPR), the number of sims correctly detected
+divided by the total number of sims in the training set, and the false
+positive rate (FPR), the number of duds incorrectly detected  divided by total
+number of duds in the training set, both for a given sample of detections defined by
+a particular probability threshold, which varies along the curves.  In both
+stages, these curves show that true positive rates of  around 90\% were
+achieved, at very low false positive rates. For comparison we show the results
+of an analysis where the classifications of  training images were ignored, and
+none of the agents allowed to learn: they were instead assigned initial values
+of their confusion matrices of 0.75 for each element, which then remained
+constant. This emulates a very simple unweighted voting scheme, where all
+classifications are treated equally. In this case, the TPR remains under 80\%
+in stage 1 and 60\% in stage 2, showing the benefit of including training
+images and allowing the agents to learn. The choice of initial confusion
+matrix is not very important: the same 0.75 initial values applied to normal,
+learning agents results in a slightly lower TPR than the default case,
+indicating that initializing the system less conservatively results in
+slightly worse performance.
+
+The dot-dashed curves show the impact of the offline analysis. At stage 1 the
+results are very similar to the online version that was actually run (solid
+line), at stage 2 there seems to be some benefit to doing the analysis in this
+way. Remarkably, over 85\% TPR is achieved at zero FPR. Alternatively, if one
+is willing to accept a false positive rate of 5\%, the true positive rate
+rises to over 95\%, showing that some of the sims that were missed in the
+online analysis can be recovered by doing the analysis offline. The same is
+true at stage 1, but to a much lower degree.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/roc.png}
+\begin{figure*}
+\begin{minipage}{0.45\linewidth}
+  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage1_ROC.png}
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
+\end{minipage}
 \caption{Receiver operating characteristic curves for the \sw system, using
-the CFHTLS training set.}
+the CFHTLS training set. Left: stage 1, right: stage 2.}
 \label{fig:results:sample:roc}
-\end{figure}
+\end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+Adopting the online stage 1 analysis, and the offline stage 2 analysis, we
+show in \Fref{fig:results:sample:CP} a plot of completeness versus purity in
+the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
+varies along the curves. Completeness is defined as the number of correctly 
+detected sims divided by the total number of sims in the training set, while
+purity is the number of the number of correctly detected sims divided by the
+number of detections that would be claimed in a realistic sample. The purity
+can only be calculated approximately. First we compute the expected number of
+false positives by multiplying the FPR by the expected number of non-lenses in
+the survey. Then we multiply the TPR by the expected number of lenses in the
+survey, to get the expected number of true positives. The sum of the true
+positives and the false positives gives the expected sample size; dividing the
+expected number of true positives by this sample size gives the purity.
+
+
+\todo{Chris}{Make completeness vs purity plot and add it here, please!}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

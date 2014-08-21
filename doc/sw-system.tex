@@ -519,11 +519,13 @@ Approximately optimized, how? Examples of images.
 In this section we outline our methodology for interpreting the interactions
 of the volunteers with the identification interface, and then describe how we
 applied this methodology in the two classification stages in the CFHTLS
-project.
+project in the \sw Analysis Pipeline (SWAP) code.\footnote{The open source 
+SWAP code is available from 
+\texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
 Each classification made is logged in a database, storing subject IDs,
 (anonymous) volunteer IDs, a timestamp and the classification results.  The
-{\it kind} of subject -- whether it is a training subject (a  simulated lens
+{\it kind} of subject -- whether it is a training subject (a simulated lens
 or a known non-lens) or a test subject (an unseen image drawn from the survey)
 -- is also recorded. For all subjects, the positions of all Markers are
 recorded, in pixel coordinates. For training subjects, we also store the
@@ -533,7 +535,8 @@ of object present in the image. These types are summarized in
 feedback, but is also the basic measurement used in a probabilistic
 classification of every subject based on all image views to date.
 
-We perform an online analysis of the classifications,  updating a
+While the \sw web app is live, and classifications are being made, we 
+perform an online analysis of the classifications,  updating a
 probabilistic model of every (anonymous) volunteer's data, and also updating
 the lens probability of each subject  (in both the training and test sets), on
 a daily basis. This gives us a dynamic estimate of the posterior probability
@@ -656,9 +659,16 @@ or more, the web app was paused and reconfigured for stage 2. The sample of
 subjects classified during stage 2 was selected to be all those that passed
 the detection threshold ($\pr(\LENS|C,T) > 0.95$) at stage 1. These were
 classified for one week, with no retirement but a maximum classification
-number of 50 each. 
+number of 50 each. {\bf The number of subjects at stage 2 was small enough that we
+did not need to retire any: instead, we simply collected classifications for a
+fixed period of time (about 4 weeks). Without the time pressure motivating the
+online analysis, we implemented an ``offline'' version of the analysis that
+performs a joint inference of all Agent confusion matrix elements and subject
+probabilities simultaneously, for comparison. We describe how this differs
+from the online analysis in the appendix. }
 
-\todo{Phil,Chris}{Write about offline analysis here (issue \#40)}
+\todo{Chris}{Please check and edit the offline analysis description (in bold)
+above -- and then the text in the appendix! (issue \#40)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -959,25 +969,26 @@ the CFHTLS training set. Left: stage 1, right: stage 2.}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Adopting the online stage 1 analysis, and the offline stage 2 analysis, we show
-in \Fref{fig:results:sample:CP} a plot of completeness versus purity in the two
-stages. As in \Fref{fig:results:sample:roc}, the detection threshold varies
-along the curves. Completeness is defined as the number of correctly detected
-sims divided by the total number of sims in the training set, while purity is
-the number of correct detections divided by the total number of detections.
-\footnote{The completeness is equivalent to the TPR and is also known elsewhere
-as the `recall'. The purity is also known as the `precision'.} If the training
-set samples from the same systems as the test set, then the completeness of the
-training set will be equivalent to the completeness of the test set. The purity
-depends on the proportion of sims to duds, and so the purity of the test set
-must be approximated by rescaling the training set to the expected proportion
-of lens systems to not-lens systems in the survey.  First we compute the
-expected number of false positives by multiplying the FPR by the expected
-number of non-lenses in the survey. Then we multiply the TPR by the expected
-number of lenses in the survey, to get the expected number of true positives.
-The sum of the true positives and the false positives gives the expected sample
-size; dividing the expected number of true positives by this sample size gives
-the purity. Note that the completeness is invariant to this transformation.
+Adopting the online stage 1 analysis, and the offline stage 2 analysis, we
+show in \Fref{fig:results:sample:CP} a plot of completeness versus purity in
+the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
+varies along the curves. Completeness is defined as the number of correctly
+detected sims divided by the total number of sims in the training set, while
+purity is the number of correct detections divided by the total number of
+detections. \footnote{The completeness is equivalent to the TPR and is also
+known elsewhere as the `recall'. The purity is also known as the `precision'.}
+If the training set samples from the same systems as the test set, then the
+completeness of the training set will be equivalent to the completeness of the
+test set. The purity depends on the proportion of sims to duds, and so the
+purity of the test set must be approximated by rescaling the training set to
+the expected proportion of lens systems to not-lens systems in the survey. 
+First we compute the expected number of false positives by multiplying the FPR
+by the expected number of non-lenses in the survey. Then we multiply the TPR
+by the expected number of lenses in the survey, to get the expected number of
+true positives. The sum of the true positives and the false positives gives
+the expected sample size; dividing the expected number of true positives by
+this sample size gives the purity. Note that the completeness is invariant to
+this transformation.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
@@ -1094,7 +1105,8 @@ features. First, the interpretations will be quantitative (where before they
 were qualititative),  and thus will be useful in decision-making. Second, the
 agent will be able to predict, using its model, the probability of a test
 subject being a $\LENS$, given both its volunteer's classification, and its
-volunteer's experience. In this appendix we describe how these agents work.
+volunteer's experience. In this appendix we describe how these agents work,
+and other aspects of the \sw analysis pipeline (SWAP).
 
 
 \subsection{Agents and their Confusion Matrices}
@@ -1207,7 +1219,7 @@ confusion matrix, their agent would calculate
 {\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones.
 
 
-\subsection{Updating the Subject Probabilities}
+\subsection{Online SWAP: Updating the Subject Probabilities}
 \label{appendix:swap:examples}
 
 Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
@@ -1364,7 +1376,34 @@ provides an error bar for this quantity.
 %another complicated extension we could think about.
 
 
-\todo{Phil,Chris}{Write about offline analysis here (issue \#40)}
+\subsection{Offline SWAP}
+\label{appendix:swap:offline}
+
+The probabilistic model described above does not need to be implemented as an
+online inference. Indeed, it might be more appropriate to perform the inference
+of all Agent confusion matrix elements and Subject probabilities
+simultaneously, so that the early classifications are not effectively
+downweighted as a result of the Agent's ignorance. It might also be that this
+ignorance builds in some conservatism to the system, reducing the noise due
+the early classifications if they are unreliable. In the joint analysis, the
+basic assumption that is built into the Agents, that their volunteers
+have innate and unchanging talent for lens spotting parameterised by two 
+constant confusion matrix elements which simply need to be inferred given the
+data, is implemented in full. The effect is that of applying the time-averaged
+confusion matrices, rather than one that evolves as the Agents (and in the
+real world, the volunteers) learn. 
+
+The mathematics of the offline inference are presented elsewhere (in
+preparation). Here we briefly note that we maximize the joint 
+posterior probability distribution for all the model parameters (some 66,000
+confusion matrix elements and 430,000 subject probabilities) with a simple
+expectation-maximisation algorithm. This procedure takes [approximately the
+same | somewhat less | somewhat more] CPU time as the online analysis, because
+[insert reason]. Other comments about the relative performance]. The plots in
+\Sref{sec:results:sample} show the difference in performance between the
+online and offline analyses. 
+
+\todo{Chris}{Please check this text and edit appropriately (issue \#40)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

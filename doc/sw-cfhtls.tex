@@ -46,9 +46,23 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract} 
-We present X new strong gravitational lens candidates found in the CFHT
-Legacy
-survey by the \sw collaboration.
+
+The CFHT Legacy Survey has been searched for strong lenses with
+semi-automated algorithms both at galaxy and groups scales. With the aim
+of improving these lens finding robots, we carry out a blind lens search
+in the complete \cfhtls WIDE survey with \sw. We describe the training
+sample used for both training the citizen scientists that participated
+in \sw and calibrating their performance. We generate realistic looking
+simulated samples of lenses both at galaxy and group-scales as part of
+this training sample. We present 74 new strong gravitational lens
+candidates discovered from the \sw-\cfhtls search. Furthermore, we
+compile a sample of false positives which can be used for robot testing,
+first of its kind for the lensing community. The simulated sample is
+also used to make a comparison between human performance against the
+robots. We find that the XX per cent of the known lens sample is
+recovered and the new lens sample has XX completeness with respect to
+the simulated sample. We make available the following data products:
+simulated sample, simulation code and the false positives sample at XXX.
 
 \end{abstract}
 
@@ -67,14 +81,38 @@ survey by the \sw collaboration.
 \section{Introduction}
 \label{sec:intro}
 
-{\it Describe various lens finding algorithms and the motivation for this
-particular project with \cfhtls. Already searched by robots: enables comparison of techniques. Lenses not
-yet found by robots, detectable by humans? }
+%{\it Describe various lens finding algorithms and the motivation for this particular project with \cfhtls. Already searched by robots: enables comparison of techniques. Lenses not yet found by robots, detectable by humans? }
 
-In Paper I, we describe the \sw website, an online system that enables
-crowd-sourced detection of gravitational lenses. In this paper, we
-describe our first lens search with \sw in the \cfhtls data which we
-refer to as Paper II.  
+The last few decades have seen a rise in the discoveries of strong
+gravitational lenses owing to the plethora of interesting applications
+they have in astrophysics and cosmology. Strong lenses are routinely
+used to probe the dark matter distribution from galaxy (ref) to cluster
+scales (ref), to  study distant young galaxies by using the lensing
+magnification as a natural telescope (ref), to test the cosmological
+model by constraining cosmological parameters such as the Hubble
+constant (ref) and dark energy (ref) and many more. Even though strong
+lenses are rare, since a foreground massive object needs to be
+sufficiently aligned with a distant background source to produce
+multiple images, systematic lens searches have led to discovery of over
+500 lenses till date (XXX add mld url). 
+
+Rarity of lenses implies searching for them is a painstaking task.
+Efficient automated methods are thus imperative to finding a reasonably
+complete and pure sample of strong lenses.   
+
+
+
+Since the inception of the first citizen science project, Galaxy Zoo, to
+classify galaxy morphologies \citep{LintottEtal2008}, several astronomy
+and non-astronomy projects have been launched by the Zooniverse leading
+to many interesting project. For example, PlanetHunters
+has discovered XXX transiting exoplanets \citep{SchwambEtal2012},
+Supernova XXX add ref and XXX add ref
+
+
+In Paper I, we describe \sw, an online system that enables crowd-sourced
+detection of gravitational lenses. In this paper (referred to as Paper
+II), we describe our first lens search with \sw in the \cfhtls data.
 
 This paper is organised as follows. In \Sref{sec:sw} we give a brief
 overview of the \sw system, focusing on the aspects most relevant to the
@@ -129,26 +167,46 @@ surveys.
 \subsection{Known \cfhtls lens samples}
 \label{sec:data:kls}
 
-
 The \cfhtls data has been searched for lenses using semi-automated
 algorithms, primarily, in the $g$ band which is optimal for finding
 lenses. Here, we briefly mention the lens samples which were known to
 the authors prior to the lens search with \sw.
-The work
-by \citet{Gavazzi2013} looks for bluish features around bright XXX
-galaxies and has found XXX lens candidates at galaxy-scales.  The arc
-finding lens search \citet{More2012} has found 127 lens candidates by
-looking for arcs in $g$ band alone. This sample has both galaxy and
-groups scale lens candidates. The \citet{Sygnet2009} is a search for
-edge-on disk lenses done by selecting the galaxy's profile from the
-Sextractor's output in the $i$~band and has 18 lens candidates.
+
+At galaxy-scales, there are two main types of lens searches. The
+RingFinder \citet{Gavazzi2014} was used for finding compact rings or arcs
+around centers of isolated and massive early-type galaxies. By
+subtracting the PSF-matched i-band images from the g-band, the
+algorithm looks for excess flux in the bluer g-band which is typical of
+the distant lensed star forming galaxies. An object detector measures
+the properties of these residual blue features and candidates meeting a
+length-width ratio and tangential alignment criteria are then visually
+inspected to form the final sample. This rings sample consists of 39
+confirmed lenses and 17 promising candidates. 
+
+The second galaxy-scale lens search was to find edge-on galaxy lenses in
+the \cfhtls \citep{Sygnet2010} by selecting the galaxy's profile from the
+output of {\sc Sextractor} in the $i$~band and with low inclination
+angle. This sample has about 3 promising and a total of 18 lens
+candidates.
+ 
+On the other hand, the {\sc arcfinder} \citet{More2012} was used for
+finding blue arc-like features in the complete \cfhtls data withouth any
+pre-selection on the type of the lensing object. The search was carried
+out in the g-band which is the most efficient wavelength to find typical
+lensing galaxies. This sample, called the SARCS, has 55 promising and a
+total of 127 lens candidates and consists of both galaxy and
+groups/cluster scale lens candidates. Arc finding is better suited for
+lensed images or arcs with larger image separations i.e. more massive
+systems like groups and clusters. Thus, the SARCS sample has mostly
+groups/cluster-scale lenses and a few galaxy-scale lenses.
 
 For the purpose of transparency, the volunteers participating in
 \sw-\cfhtls lens search were made aware of these known lens samples. Images
 containing the lenses from these lens samples were labelled so in the
 forum Talk where volunteers have the opportunity to discuss their
-findings with other volunteers and the science team. XXX some references
-to Paper I ?
+findings with other volunteers and the science team. 
+
+XXX refer Paper I ?
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -586,14 +644,16 @@ james, sherry's paper ? XXX)
 
 \section{Results}
 \label{sec:results}
-
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-\subsection{Recovery of lenses}
-\label{sec:results:reco}
 
-{\it Describe which lenses were recovered and explain any cases missed by
-citizen scientists}
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\subsection{Discovery of new lenses from \sw}
+\label{sec:results:disc}
+
+
+{\it Describe the newly found lenses and explain for a few
+cases why they were missed }
+
+
 %
 %\begin{longtable*}{l c c c c c c c l}
 %\caption{ \label{tab:all} 
@@ -619,6 +679,51 @@ citizen scientists}
 %   SW2  & 02:02:10.50 & $-$11:09:11.68 & 17.80 &  0.48 &  5.0 &   3.7 & A &  SA87 \\ 
 %\end{longtable*}
 %
+
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_2p0_3p0.pdf}
+\caption{ \label{fig:lch1}
+Sample of promising lens candidates ($R_{avg}>=2.0$)
+}
+\end{center}
+\end{figure*}
+
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_2p0_3p0_1.pdf}
+\caption{ \label{fig:lch2}
+contd. - Sample of promising lens candidates ($R_{avg}>=2.0$)
+}
+\end{center}
+\end{figure*}
+
+\begin{figure*}
+\begin{center}
+\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_1p3_1p7.pdf}
+\caption{ \label{fig:lcl}
+Sample of low probability lens candidates ($1.0<R_{avg}<2.0$)
+}
+\end{center}
+\end{figure*}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\subsection{Recovery of known \cfhtls lenses from \sw}
+\label{sec:results:reco}
+
+{\it Describe which lenses were recovered and explain any cases missed by
+citizen scientists}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+\subsection{\cfhtls completeness and purity}
+\label{sec:results:sample}
+
+{\it Rejection rate. Completeness and purity at P > retirement, P > 95\%, and 
+as function of probability P. 
+
+Summarize performance at some fiducial threshold: eg P = 95\%.}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 \subsection{Stage 1 Classification}
 \label{sec:results:stage1}
 
@@ -635,25 +740,6 @@ citizen scientists}
 
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
-\subsection{Discovery of lenses}
-\label{sec:results:disc}
-
-
-{\it Describe the newly found lenses and explain for a few
-cases why they were missed }
-
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
-\subsection{\cfhtls completeness and purity}
-\label{sec:results:sample}
-
-{\it Rejection rate. Completeness and purity at P > retirement, P > 95\%, and 
-as function of probability P. 
-
-Summarize performance at some fiducial threshold: eg P = 95\%.}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -671,21 +757,32 @@ Describe the importance of this kind of study
 - being able to quantify the completeness of the lens samples
 - state how this will be used in a future \sw paper }
 
+{\bf TBD: 
+add section on offline analysis - extra lenses found etc;  
+expand FP section;  
+mention EGS moustakas and other lens samples; 
+comment on any lensed quasars, on any exotic lenses;
+check if some candidates were detected because they were hidden
+underneath the sims ie. from the D11;
+
+}
+
 We looked at the locations of simulated and real lenses from our data
 those were missed by \sw compared to the locations of the lenses that
-got detected. We do not find any obvious dependency in the rate of
-detections as a function of the position of a given lens for both
-simulated and real lens sample. Thus, the completeness of the lens
-sample is not affected by whether a lens is located close to the border
-or well within the center (see  Figure~\ref{fig:comppos}).  {\bf TBD: redo the completeness vs posn
-figure using the final real lens sample}
+got detected. The real lens sample consists of a total of 383 candidates
+which have $P_l>2.e-5$ and received a rank of $R_{avg}>0$ from the
+expert. We do not find any obvious dependency in the rate of detections
+as a function of the position of a given lens for both simulated and
+real lens sample. Thus, the completeness of the lens sample is not
+affected by whether a lens is located close to the border or well within
+the center (see  Figure~\ref{fig:comppos}).
 
 \begin{figure*}
 \begin{center}
 \includegraphics[scale=0.95]{sw-cfhtls-figs/completeness_pos.pdf}
 \caption{ \label{fig:comppos}
-Completeness as a function of location of lenses. Simulated (left) and
-real lens (right) samples are shown. {\bf: TBD - Add a third color for
+Completeness as a function of location of lenses. Simulated lenses (left) and
+real lens candidate (right) are shown. {\bf: TBD - Add a third color for
 P$>$ Pthresh which will be defn of "accepted"} Irrespective of whether the
 lenses are detected or rejected and whether they are simulated or real,
 there is no obvious dependency on where the lenses are located. 
@@ -754,10 +851,13 @@ recovered/missed at similar/comparable/different rates C’\% and P’\% - this 
 
 %Which real lenses were missed? False negatives
 
-\item We found a sample of new gravitational lens candidates. An expert-graded sample of size N, divided among several types.
-The SW lenses are different from the robotically (RingFinder and ArcFinder) detected lenses, in the following ways.
+\item We found a sample of new gravitational lens candidates. An
+expert-graded sample of 74 with 44 promising and 30 low probability
+candiates.
 
-% An expert-graded sample of size N, divided among several types.
+The SW lenses are different from the robotically (RingFinder and ArcFinder) detected lenses, in the following ways.
+XXXXX
+
 
 \end{itemize}
 

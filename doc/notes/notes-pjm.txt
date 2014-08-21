@@ -1,6 +1,7 @@
 # ============================================================================
 # Shortcuts to useful snippets, for reproducing the SW results:
-goto CFHTLS_STAGE1
+# goto CFHTLS_STAGE1
+goto SPREADCHECK
 # ============================================================================
 # 2013-04-07 (Sunday) 00:58 IST
 #
@@ -5875,3 +5876,300 @@ end
 
 # All are high P, well classified. Don't have CFHTLS ids.
 # ======================================================================
+# 2014-07-30 (Wednesday) 18:22 PDT
+
+# Further query from Anu re expert classifications:
+# 
+#      R>2.5: 47 subjects (coln 5); might change a bit after revised ranks; Also, NB:
+#      these are subjects not lenses, again subject to change.
+# 
+#      systems where expert gave R>2.5 but SW gave P<0.02
+#      CFHTLS_102_0883 - Galaxy scale system, with counter-image! 25
+#                        classifications, P = 0.012
+#      CFHTLS_308_0224 - Faint arc around bright pair of BGGs. Disappointing!
+#                        After 49 classifications, P = 0.005
+#      CFHTLS_100_2061 - Arc in top right hand corner. Was it picked up at
+#                        higher P in the other three images it's in?
+#                        21 classifications, P = 0.003
+
+# PJM annotations added. 
+
+#      Please revise ranks for:
+#      ================
+#      CFHTLS_165_1602 - phil ??
+#      CFHTLS_040_0534 - phil ?? double classf
+#      CFHTLS_131_0568 - av ? 
+#      CFHTLS_109_1055/56 - av different grades ?
+#      CFHTLS_120_0377 -- phil?  humvi artefact ? (see fits below)
+#      http://www2.cadc-ccda.hia-iha.nrc-cnrc.gc.ca/cadcbin/megapipe/imc.pl?lang=en&object=&ra=215.04267&dec=52.674838&size=128
+# 
+# CFHTLS_165_1602 Nice bright blue arc, counter-image too - but it's a merger of
+#                 two fairly isolated galaxies, so a) it could be merger-induced
+#                 star formation or satellite disruption, and b) the image 
+#                 separation seems high for a still relatively low mass
+#                 environment, no? So I gave it a "possibly". I guess I could be
+#                 persuaded to give it a "probably" given its quite a massive
+#                 galaxy: 2
+#                 
+# CFHTLS_040_0534 I initially thought 1, then changed my mind: I think this
+#                 purple arc is probably a lensed feature. 2
+# 
+# CFHTLS_120_0377 Oops yes - looks like a spiral in the Megapipe images. HumVI
+#                 artifact, perhaps due to variable seeing? 1
+# 
+# ======================================================================
+# 2014-08-05 (Tuesday) 09:25 PDT
+
+# Checking more expert grades, via spreadsheet online.
+
+SPREADCHECK:
+
+cd ~/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/expert_inspection/images/
+
+set IDs = (\
+CFHTLS_204_0633 \
+CFHTLS_073_2191 \
+CFHTLS_153_1112 \
+CFHTLS_146_1032 \
+CFHTLS_139_1381 \
+CFHTLS_139_1380 \
+CFHTLS_119_2273 \
+CFHTLS_171_1278 \
+CFHTLS_142_0979 \
+CFHTLS_262_1714 \
+CFHTLS_204_0843 \
+CFHTLS_165_1602 \
+CFHTLS_109_2391 \
+CFHTLS_304_0397 \
+CFHTLS_060_0352 \
+CFHTLS_130_1154 \
+CFHTLS_074_2382 \
+CFHTLS_058_1933 \
+CFHTLS_159_0285 \
+CFHTLS_130_2180 \
+CFHTLS_147_1730 \
+CFHTLS_138_1245 \
+CFHTLS_041_1919 \
+CFHTLS_057_0809 \
+CFHTLS_060_1970 \
+CFHTLS_164_0190 \
+CFHTLS_017_0018 \
+CFHTLS_074_2146 \
+CFHTLS_105_1198 \
+CFHTLS_138_2240 \
+CFHTLS_077_1207 \
+CFHTLS_006_0783 \
+CFHTLS_114_1679 \
+CFHTLS_112_2019 \
+CFHTLS_337_0790 \
+CFHTLS_306_1184 \
+CFHTLS_049_0030 \
+CFHTLS_238_1046 \
+CFHTLS_285_1089 \
+CFHTLS_025_0088 \
+CFHTLS_028_2334 \
+CFHTLS_019_2462 \
+CFHTLS_067_1823 \
+CFHTLS_076_1510 \
+CFHTLS_160_1516 \
+CFHTLS_085_1826 \
+CFHTLS_136_1881 \
+CFHTLS_110_2454 \
+CFHTLS_073_1229 \
+CFHTLS_030_1392 \
+CFHTLS_050_1186 \
+CFHTLS_304_1590 \
+CFHTLS_082_2096 \
+CFHTLS_033_1965 \
+CFHTLS_248_1415 \
+CFHTLS_137_1492 \
+CFHTLS_046_0355 \
+CFHTLS_137_1332 \
+CFHTLS_113_2034 \
+CFHTLS_062_2308 \
+CFHTLS_118_0948 \
+CFHTLS_112_0072 \
+CFHTLS_139_1906 \
+CFHTLS_016_0396 \
+CFHTLS_003_2056 \
+CFHTLS_041_2241 \
+CFHTLS_058_1846 \
+CFHTLS_070_1087 \
+CFHTLS_212_2176 \
+CFHTLS_025_2368 \
+CFHTLS_086_1132 \
+CFHTLS_089_0310 \
+CFHTLS_018_0755 \
+CFHTLS_073_1571 \
+CFHTLS_142_1003 \
+CFHTLS_046_2010 \
+CFHTLS_020_1912 \
+CFHTLS_092_2321 \
+CFHTLS_056_1368 \
+CFHTLS_102_0541 \
+CFHTLS_028_0574 \
+CFHTLS_153_1857 \
+CFHTLS_069_1132 \
+CFHTLS_148_2344 \
+CFHTLS_092_1080 \
+CFHTLS_062_0845 \
+CFHTLS_291_1246 \
+CFHTLS_092_0241 \
+CFHTLS_298_1770 \
+CFHTLS_070_2218 \
+CFHTLS_334_0482 \
+CFHTLS_291_1719 \
+CFHTLS_092_1080 \
+CFHTLS_066_0290 \
+CFHTLS_168_1027 \
+CFHTLS_213_1078 \
+CFHTLS_082_0469 \
+CFHTLS_063_0807 \
+CFHTLS_101_2282 \
+CFHTLS_005_1296 \
+)
+
+set pngs = ()
+foreach ID ( $IDs )
+    set pngs = ( $pngs ${ID}_gri.png )
+end
+
+open $pngs
+
+goto FINISH
+
+# ======================================================================
+# 2014-08-05 (Tuesday) 16:40 PDT
+
+# PNG cutouts from Chris. Hi simages are super-sampled!
+# No wonder they're big. Maybe he needed them big to make the contours look
+# nice?
+
+# gallery up:
+
+cd /Users/pjm/public_html/SpaceWarps/Science/analysis/workspace/CFHTLS/stage2/atlas
+
+set IDs = `ls *png | cut -d'_' -f1-3 | sort -n | uniq`
+set pngs = ()
+foreach ID ( $IDs )
+    set pngs = ( $pngs ${ID}_field.png ${ID}_field_output.png ${ID}_cluster*png )
+end
+
+gallery.pl -x 3 -y 3 -pdf -o atlas.pdf $pngs
+
+# Hmm - new version has multiple clusters in it! How to display? With
+# one row per image, and blanks in some columns if there are few clusters...
+
+# ======================================================================
+# 2014-08-08 (Friday) 05:52 PDT
+
+# From Anupreeta:
+# 
+# 
+#     Here are some notes/to-do items before our telcon this Friday.
+# 
+#     1. Discuss these along with the remaining spread=2
+#     =========================
+#     CFHTLS_017_0018 - same as CFHTLS_025_2368
+#     CFHTLS_106_1051 - same as CFHTLS_105_1198 
+#     CFHTLS_109_2391 
+#     CFHTLS_073_1571  upgrade further? blue arc+counter ??
+#     CFHTLS_092_1080 (see attached png and fits files) -- none are interesting acc. to me
+#     CFHTLS_062_0845 (see attached fits) near the center at 2'o clock - looks unlikely
+#     CFHTLS_092_0546 (upgraded upon inspection)
+# 
+#     If possible, please do not sort the google doc until Friday's discussion.
+# 
+#     2. I have attached a tar with catalogs of candidates with R_avg =
+#     2.3,2.0,1.7,1.3,1.0. You could load them in the applet one by one or use
+#     your fav. viewer to have a quick look at them with the aim of answering
+#     the following question:
+# 
+#     ** What subset should be shown in the figs and what subset should be presented
+#     in the Table (cutoff at 1.0 or 2.0 or in between )? **
+# 
+#     Please note these numbers (ie., no. of subjects; will change after removing
+#     duplicates):
+# 
+#       Category      N_each   N_cum
+#     ==================================
+#         R_avg>2.5     50        50    N_unique~35  Known~30
+#         R_avg_2.3     30        80
+#         R_avg_2.0     30       110
+#         R_avg_1.7     39       149
+#         R_avg_1.3     25       174
+#         R_avg_1.0     23       197
+# 
+# 
+#     My assessment after doing the above inspection is that R_avg>=1.3 look good
+#     enough for reporting in the Table format. I believe that after removing the
+#     known ones and repeats, R_avg>=1.3 might be good enough to even show in the
+#     figs. Otherwise, we could go to 1.7 but certainly not below 2.0.
+# 
+#     3. How to compare and present Pvalues with the expert grades ?
+# 
+# 
+
+open \
+CFHTLS_017_0018_gri.png \  nearby galaxy with stars? very white "lens": 1
+CFHTLS_106_1051_gri.png \  nice candidate, though fluffy: 2/3
+CFHTLS_109_2391_gri.png \  wide sep but arc/counter: 3
+CFHTLS_073_1571_gri.png \  merging galaxy, but arc/counter: 2
+CFHTLS_092_1080_gri.png \  which object? lots of mass. 2?
+CFHTLS_062_0845_gri.png \  no counter but nice blue arc. 3 
+CFHTLS_092_0546_gri.png    which object? lots of mass. 2?
+
+# Aprajita said:
+# 
+# CFHTLS_017_0018 - same as CFHTLS_025_2368
+# looks like satellites to me but can upgrade if you 2 are confident
+# 
+# CFHTLS_106_1051 - same as CFHTLS_105_1198 
+# spread=1 but OK, please make mine consistent with 105_1198 (upgrade 2)
+# 
+# CFHTLS_109_2391 
+# now has spread=1, v faint arc, blue blobs too far out?
+# 
+# CFHTLS_073_1571  upgrade further? blue arc+counter ??
+# spread=1 possible - too hard to tell, can upgrade to 2 if u 2  re confident
+# 
+# CFHTLS_092_1080 (see attached png and fits files) -- none are interesting acc. to me
+# possible arc but bit far, but thick and funny orientation
+# 
+# CFHTLS_062_0845 (see attached fits) near the center at 2'o clock - looks unlikely
+# v thin arc? downgrade to 1
+#  what about the blue thing not he green trail? 232 so ok
+# 
+# CFHTLS_092_0546 (upgraded upon inspection)
+# spread=0, all good?
+
+
+# Anu says there are 88 +/- few subjects contining 
+# known lenses in the 600 we inspected. About 100 didn't make it to stage 2. 
+
+# Post-telecon:
+# 
+#     We went through the rest of the 1.7, we upgraded a couple of yours from 1->2
+#     to the ones we were most confident on, there were a few that we debated that
+#     you might like to look at
+
+open \
+      CFHTLS_147_1730_gri.png \ 
+      CFHTLS_138_1245_gri.png \
+      CFHTLS_057_0809_gri.png
+
+# ======================================================================
+
+FINISH:
+
+
+
+
+
+
+
+
+
+
+
+

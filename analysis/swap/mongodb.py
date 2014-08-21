@@ -199,6 +199,7 @@ class MongoDB(object):
        
         
         # What kind of subject was it? Training or test? A sim or a dud?
+        # PJM 2014-08-21 And what flavor of sim is it?
         kind = ''
         if str(groupId) == trainingGroup:
             category = 'training'
@@ -209,17 +210,19 @@ class MongoDB(object):
                 thing = things[0]
             else:
                 thing = things
-            word = thing['type']
-            if (word == 'lensing cluster' \
-               or word == 'lensed galaxy' \
-               or word == 'lensed quasar'):
+            flavor = thing['type']
+            if (flavor == 'lensing cluster' \
+               or flavor == 'lensed galaxy' \
+               or flavor == 'lensed quasar'):
                 kind = 'sim'
             else:
                 kind = 'dud'
+                flavor = 'dud'
         else: # It's a test subject:
             category = 'test'
             kind = 'test'
-        
+            flavor = 'test'
+                
         # What's the URL of this image?
         if subject.has_key('location'):
             things = subject['location']
@@ -287,8 +290,8 @@ class MongoDB(object):
         # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
         
         # Check we got all 10 items:            
-        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,result,truth,str(location),str(classification_stage),str(annotation_x),str(annotation_y)
-        if len(items) != 12: print "MongoDB: digest failed: ",items[:] 
+        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,flavor,result,truth,str(location),str(classification_stage),str(annotation_x),str(annotation_y)
+        if len(items) != 13: print "MongoDB: digest failed: ",items[:] 
 
                          
         return items[:]

@@ -86,12 +86,13 @@ class Subject(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,ID,ZooID,category,kind,truth,thresholds,location):
+    def __init__(self,ID,ZooID,category,kind,flavor,truth,thresholds,location):
 
         self.ID = ID
         self.ZooID = ZooID
         self.category = category
         self.kind = kind
+        self.flavor = flavor
         self.truth = truth
 
         self.state = 'active'

@@ -271,6 +271,7 @@ def Mstep(bureau_offline, pi, taus, training_IDs={}):
 # Expectation Maximization algorithm.
 
 def EM_algorithm(bureau_offline, pi, taus, training_IDs={},
+                 N_min=10, N_max=50, epsilon_min=1e-5,
                  return_information=False):
     epsilon_taus = 10
     N_max = 50

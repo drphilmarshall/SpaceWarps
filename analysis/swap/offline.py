@@ -274,10 +274,9 @@ def EM_algorithm(bureau_offline, pi, taus, training_IDs={},
                  N_min=10, N_max=50, epsilon_min=1e-5,
                  return_information=False):
     epsilon_taus = 10
-    N_max = 50
-    N_min = 10
+
     N_try = 0
-    epsilon_min = 1e-5
+
     epsilon_list = []
 
     while (epsilon_taus > epsilon_min) * (N_try < N_max) + (N_try < N_min):

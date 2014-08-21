@@ -259,8 +259,9 @@ def SWAP(argv):
             continue # Tutorial subjects fail, as do stage/project mismatches!
         # t,Name,ID,ZooID,category,kind,X,Y,location,thisstage,P = items
         # X, Y: result,truth (LENS,NOT,UNKNOWN)
-        # cpd 31.5.14: added annotation_x, annotation_y : locations of clicks
-        tstring,Name,ID,ZooID,category,kind,X,Y,location,classification_stage,at_x,at_y = items
+        # CPD 31.5.14: added annotation_x, annotation_y : locations of clicks
+        # PJM 20014-08-21: added "flavor" of subject, 'lensing cluster', len
+        tstring,Name,ID,ZooID,category,kind,flavor,X,Y,location,classification_stage,at_x,at_y = items
 
         # this is probably bad form:
         at_x = eval(at_x)
@@ -292,7 +293,7 @@ def SWAP(argv):
         # Register newly-classified subjects:
         # Old, slow code: if ID not in sample.list():
         try: test = sample.member[ID]
-        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,Y,thresholds,location)
+        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,flavor,Y,thresholds,location)
 
         # Update the subject's lens probability using input from the
         # classifier. We send that classifier's agent to the subject

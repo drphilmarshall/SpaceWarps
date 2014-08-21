@@ -969,22 +969,35 @@ the CFHTLS training set. Left: stage 1, right: stage 2.}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Adopting the online stage 1 analysis, and the offline stage 2 analysis, we
-show in \Fref{fig:results:sample:CP} a plot of completeness versus purity in
-the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
-varies along the curves. Completeness is defined as the number of correctly 
-detected sims divided by the total number of sims in the training set, while
-purity is the number of the number of correctly detected sims divided by the
-number of detections that would be claimed in a realistic sample. The purity
-can only be calculated approximately. First we compute the expected number of
-false positives by multiplying the FPR by the expected number of non-lenses in
-the survey. Then we multiply the TPR by the expected number of lenses in the
-survey, to get the expected number of true positives. The sum of the true
-positives and the false positives gives the expected sample size; dividing the
-expected number of true positives by this sample size gives the purity.
+Adopting the online stage 1 analysis, and the offline stage 2 analysis, we show
+in \Fref{fig:results:sample:CP} a plot of completeness versus purity in the two
+stages. As in \Fref{fig:results:sample:roc}, the detection threshold varies
+along the curves. Completeness is defined as the number of correctly detected
+sims divided by the total number of sims in the training set, while purity is
+the number of correct detections divided by the total number of detections.
+\footnote{The completeness is equivalent to the TPR and is also known elsewhere
+as the `recall'. The purity is also known as the `precision'.} If the training
+set samples from the same systems as the test set, then the completeness of the
+training set will be equivalent to the completeness of the test set. The purity
+depends on the proportion of sims to duds, and so the purity of the test set
+must be approximated by rescaling the training set to the expected proportion
+of lens systems to not-lens systems in the survey.  First we compute the
+expected number of false positives by multiplying the FPR by the expected
+number of non-lenses in the survey. Then we multiply the TPR by the expected
+number of lenses in the survey, to get the expected number of true positives.
+The sum of the true positives and the false positives gives the expected sample
+size; dividing the expected number of true positives by this sample size gives
+the purity. Note that the completeness is invariant to this transformation.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity.png}
+\caption{Completeness-estimated purity curves for the \sw system, using
+the CFHTLS training set.}
+\label{fig:results:sample:CP}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\todo{Chris}{Make completeness vs purity plot and add it here, please!}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

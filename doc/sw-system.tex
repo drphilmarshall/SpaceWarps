@@ -367,7 +367,7 @@ features of the classification interface (the QD and Talk buttons), also using
 pop-up messages. The tutorial was purposely kept as short as possible so as to
 provide the minimal barrier to entry.
 
-\subsubsection{Instant Feedback}
+\subsubsection{Training Subjects and Instant Feedback}
 
 The second image viewed after the initial tutorial image is already a survey
 image, in order to get the volunteers engaged in the real task as quickly as
@@ -385,9 +385,6 @@ classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'') 
 
-\question{PJM}{Does the feedback lead to volunteers leaving the site more 
-quickly, or less quickly? Does negative feedback have more impact than
-positive?}
 
 The initial frequency of the training images is set to be two in five;
 subjects are drawn randomly from the pool of training images with this
@@ -431,40 +428,54 @@ and the task set.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Stage 1: Initial Classification}
-\label{sec:design:stage1}
+\subsection{Staged Classification}
+\label{sec:design:stages}
 
-Interface fast due to pre-loading of images, and minimizing interaction.
-Trade-off between speed and accuracy. Decreasing training rate.
+We now describe briefly the two-stage strategy that was employed in the CFHTLS
+project, initial classification (involving the rejection of very large numbers
+of non-lenses), and refinement (to further narrow down the sample). The web
+application was reconfigured between the two stages, to assist in their
+functioning.
 
-Quick dashboard provides simple ways to explore further: zoom, contrast
-controls.
+\subsubsection{Stage 1: Initial Classification}
 
-Spotting lenses: Markers to be placed. Two reasons: first, to give good
-feedback. Second, to focus attention.
+The goal of a stage 1 classification is to achieve a high rejection rate,
+while maintaining high completeness.  In this mode, therefore, the pre-loading
+of images was used to make the sliding in of new subjects happen quickly, to
+provide a sense of urgency: initial classification must be done fairly
+quickly for the search to be completed within a reasonable time period.  We
+expect some trade-off between speed and accuracy, which we return to in the
+results section below. Completion of the search requires subjects to be
+``retired'' over time, as a result of their being classified. We do this by
+analyzing the classifications on a daily basis, as described in
+\Sref{sec:swap} below. As subjects are retired, new ones are ingested into
+the web app for classification. This means that the discovery of lens
+candidates in stage 1 is truly a community effort: to detect a lens candidate,
+many non-lenses must first be rejected.
 
-Non-lenses marked? Favourite button instead, enabling serendipitous
-discovery of other interesting things, separate from lenses.
+The stage 1 training set was chosen to be quite clear cut, in order to err on
+the side of inclusivity, and so ensure high completeness. For the training
+duds we selected several hundred images at random, and three of us (AV, AM,
+PM) inspected them and discarded anything that could be a lens candidate. The
+remainder were ingested into the site.
 
-Retirement of low probability systems. Concentrates sample, provides more
-``bacon'' (while slightly skewing "sim frequency"). Note that this feature
-means that everyone contributes to detection of lenses: luck is made for the
-few that happen to see the new lenses, by the masses that did the rejection.
-Group effort.
 
-Sims vs duds leads to inclusive search -- click on anything you think etc...
+\subsubsection{Stage 2: Refinement}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+At stage 2, the goal is to define a final sample that has both high
+completeness and high purity. To this end, a more demanding training set was
+defined, where the duds all contain an object identified by one of us (AV, AM
+and PM) as a potential false positive. \Fref{fig:training:gallery} shows some
+example images from the CFHTLS stage 2 training set. 
 
-\subsection{Stage 2: Refinement}
-\label{sec:design:stage2}
+\todo{Phil}{Show some example sims and duds...}
 
-Goal: assess candidates, reject false positives by comparing with training set
-of non-obvious non-lenses. Produce a sample rankable by probability.
-
-Reconfigured website: more detailed SG, more detailed feedback. Orange
-background to make it obvious stage 2 is different. Slower image presentation.
-Higher, constant training rate.
+We also attempted to encourage discernment by changing the look and feel of
+the app, slowing down the arrival of new images, and switching the background
+color to bright orange to make it clear that a different task was being set.
+The frequency with which training images were shown was fixed at 1 in 3.
+Finally, the Spotter's Guide was upgraded to include more detailed discussion
+of various possible false positives.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -508,11 +519,13 @@ Approximately optimized, how? Examples of images.
 In this section we outline our methodology for interpreting the interactions
 of the volunteers with the identification interface, and then describe how we
 applied this methodology in the two classification stages in the CFHTLS
-project.
+project in the \sw Analysis Pipeline (SWAP) code.\footnote{The open source 
+SWAP code is available from 
+\texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
 Each classification made is logged in a database, storing subject IDs,
 (anonymous) volunteer IDs, a timestamp and the classification results.  The
-{\it kind} of subject -- whether it is a training subject (a  simulated lens
+{\it kind} of subject -- whether it is a training subject (a simulated lens
 or a known non-lens) or a test subject (an unseen image drawn from the survey)
 -- is also recorded. For all subjects, the positions of all Markers are
 recorded, in pixel coordinates. For training subjects, we also store the
@@ -522,7 +535,8 @@ of object present in the image. These types are summarized in
 feedback, but is also the basic measurement used in a probabilistic
 classification of every subject based on all image views to date.
 
-We perform an online analysis of the classifications,  updating a
+While the \sw web app is live, and classifications are being made, we 
+perform an online analysis of the classifications,  updating a
 probabilistic model of every (anonymous) volunteer's data, and also updating
 the lens probability of each subject  (in both the training and test sets), on
 a daily basis. This gives us a dynamic estimate of the posterior probability
@@ -555,12 +569,61 @@ set of all classifications made of this subject.)
 
 \end{itemize}
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_probabilities.png}
+\caption{Typical \SW Agent confusion matrix elements. At a particular
+snapshot, 200 random Agents are shown distributed over the unit plane, with a
+tendency to move towards the ``astute'' region in the upper right hand
+quadrant as the Agents' volunteers view more images. Yellow point size is
+proprtional to the number of images classified; green point size shows
+Agent-perceived ``skill.''}
+\label{fig:swap:agent-probabilities}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
+\caption{Typical \SW Agent histories. The ``skill'' of the  same 200 random
+Agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
+of the number  of subjects classified (``effort''). The yellow histogram in
+the background shows the distribution of effort.}
+\label{fig:swap:agent-histories}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\Fref{fig:swap:agent-probabilities} shows a random selection of Agents'
+confusion matrix elements, as they were on a particular day towards the end of
+the CFHTLS project. Many volunteers classify  only a small number of images,
+and so their Agents' confusion matrix elements remain close to their initial
+values of (0.5,0.5). As more images are classified (shown by the yellow point
+size), the Agents' matrix elements tend to move towards higher values, as the
+volunteers attain greater skill levels (green point sizes, see
+\Sref{sec:results} below) and the Agent learns more about them. In this
+quadrant, the Agents perceive their volunteers to be ``astute.'' This trend is
+more clearly seen in \Fref{fig:swap:agent-histories}, which shows the skill of
+the same sample of Agents as the number of images classified increases. The
+histogram shows the distribution of classification number: a long tail to very
+high ``effort'' can be seen. 
+
 In \Sref{sec:results} below, we define several quantities based on the 
 probabilities listed above that serve to quantify the performance of the crowd
 in terms of the information they provide via their classifications, and report
 on the performance of the system in returning a sample of lens candidates
 as a function of $\pr(\LENS|C,T)$ threshold.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_trajectories.png}
+\caption{Typical \SW stage 1 subject trajectories. Subjects drift downwards in
+the top panel as they are classified, while being nudged left and right by the
+Agents as they interpret the volunteers input. The dotted vertical lines show
+(left to right) the retirement threshold, prior probability, and the detection
+threshold.}
+\label{fig:swap:subject-trajectories}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 During stage 1 classification of the CFHTLS images, we assigned a prior
 probability for each image to contain a lens of $2\times10^{-4}$, based on a
@@ -571,7 +634,18 @@ and (approximately symmetrically in the logarithm of probability), $10^{-7}$.
 Subjects that attained probability of less than the rejection threshold were
 scheduled for retirement and subsequently ignored by the analysis code.
 Subjects crossing the detection threshold were not retired from the website,
-but instead left in the system so that more volunteers could see them.
+but instead left in the system so that more volunteers could see them. The
+progress of the subjects is illustrated in \Fref{fig:swap:subject-trajectories}.
+Subjects appear on this plot at the tip of the arrow, at zero classifications
+and prior probability; they then drift downwards as they are classified by the
+crowd, with each Agent applying the appropriate kick in probability based on
+what it hears its volunteer say. Encouragingly, sims (blue) tend to end up
+with high probability, while duds (red) pile up at low probability; test
+subjects (black) mostly drift to low probability, but some go the other way.
+The latter will help make up the candidate sample. As this plot shows, around
+10 classifications are required for a subject to reach the retirement
+threshold.
+
 The analysis code was run every night during the project, and subjects retired
 in batches after its completion. This introduced some inefficiency, because
 some classifications were accumulated in the time between them crossing the
@@ -585,7 +659,16 @@ or more, the web app was paused and reconfigured for stage 2. The sample of
 subjects classified during stage 2 was selected to be all those that passed
 the detection threshold ($\pr(\LENS|C,T) > 0.95$) at stage 1. These were
 classified for one week, with no retirement but a maximum classification
-number of 50 each. 
+number of 50 each. {\bf The number of subjects at stage 2 was small enough that we
+did not need to retire any: instead, we simply collected classifications for a
+fixed period of time (about 4 weeks). Without the time pressure motivating the
+online analysis, we implemented an ``offline'' version of the analysis that
+performs a joint inference of all Agent confusion matrix elements and subject
+probabilities simultaneously, for comparison. We describe how this differs
+from the online analysis in the appendix. }
+
+\todo{Chris}{Please check and edit the offline analysis description (in bold)
+above -- and then the text in the appendix! (issue \#40)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -843,15 +926,77 @@ expected information gain as a measure of volunteer contribution.
 
 We now quantify the performance of the \sw system in terms of the recovery of
 the training set images. \Fref{fig:results:sample:roc} shows receiver
-operating characteristic (ROC) curves for CFHTLS stage 1 and stage 2. 
+operating characteristic (ROC) curves for CFHTLS stage 1 and stage 2. These
+plots show the true positive rate (TPR), the number of sims correctly detected
+divided by the total number of sims in the training set, and the false
+positive rate (FPR), the number of duds incorrectly detected  divided by total
+number of duds in the training set, both for a given sample of detections defined by
+a particular probability threshold, which varies along the curves.  In both
+stages, these curves show that true positive rates of  around 90\% were
+achieved, at very low false positive rates. For comparison we show the results
+of an analysis where the classifications of  training images were ignored, and
+none of the agents allowed to learn: they were instead assigned initial values
+of their confusion matrices of 0.75 for each element, which then remained
+constant. This emulates a very simple unweighted voting scheme, where all
+classifications are treated equally. In this case, the TPR remains under 80\%
+in stage 1 and 60\% in stage 2, showing the benefit of including training
+images and allowing the agents to learn. The choice of initial confusion
+matrix is not very important: the same 0.75 initial values applied to normal,
+learning agents results in a slightly lower TPR than the default case,
+indicating that initializing the system less conservatively results in
+slightly worse performance.
+
+The dot-dashed curves show the impact of the offline analysis. At stage 1 the
+results are very similar to the online version that was actually run (solid
+line), at stage 2 there seems to be some benefit to doing the analysis in this
+way. Remarkably, over 85\% TPR is achieved at zero FPR. Alternatively, if one
+is willing to accept a false positive rate of 5\%, the true positive rate
+rises to over 95\%, showing that some of the sims that were missed in the
+online analysis can be recovered by doing the analysis offline. The same is
+true at stage 1, but to a much lower degree.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/roc.png}
+\begin{figure*}
+\begin{minipage}{0.45\linewidth}
+  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage1_ROC.png}
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
+\end{minipage}
 \caption{Receiver operating characteristic curves for the \sw system, using
-the CFHTLS training set.}
+the CFHTLS training set. Left: stage 1, right: stage 2.}
 \label{fig:results:sample:roc}
-\end{figure}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Adopting the online stage 1 analysis, and the offline stage 2 analysis, we
+show in \Fref{fig:results:sample:CP} a plot of completeness versus purity in
+the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
+varies along the curves. Completeness is defined as the number of correctly
+detected sims divided by the total number of sims in the training set, while
+purity is the number of correct detections divided by the total number of
+detections. \footnote{The completeness is equivalent to the TPR and is also
+known elsewhere as the `recall'. The purity is also known as the `precision'.}
+If the training set samples from the same systems as the test set, then the
+completeness of the training set will be equivalent to the completeness of the
+test set. The purity depends on the proportion of sims to duds, and so the
+purity of the test set must be approximated by rescaling the training set to
+the expected proportion of lens systems to not-lens systems in the survey. 
+First we compute the expected number of false positives by multiplying the FPR
+by the expected number of non-lenses in the survey. Then we multiply the TPR
+by the expected number of lenses in the survey, to get the expected number of
+true positives. The sum of the true positives and the false positives gives
+the expected sample size; dividing the expected number of true positives by
+this sample size gives the purity. Note that the completeness is invariant to
+this transformation.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity.png}
+\caption{Completeness-estimated purity curves for the \sw system, using
+the CFHTLS training set.}
+\label{fig:results:sample:CP}
+\end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
@@ -960,7 +1105,8 @@ features. First, the interpretations will be quantitative (where before they
 were qualititative),  and thus will be useful in decision-making. Second, the
 agent will be able to predict, using its model, the probability of a test
 subject being a $\LENS$, given both its volunteer's classification, and its
-volunteer's experience. In this appendix we describe how these agents work.
+volunteer's experience. In this appendix we describe how these agents work,
+and other aspects of the \sw analysis pipeline (SWAP).
 
 
 \subsection{Agents and their Confusion Matrices}
@@ -1073,7 +1219,7 @@ confusion matrix, their agent would calculate
 {\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones.
 
 
-\subsection{Updating the Subject Probabilities}
+\subsection{Online SWAP: Updating the Subject Probabilities}
 \label{appendix:swap:examples}
 
 Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
@@ -1174,7 +1320,7 @@ measure of that classifier's
 \emph{contribution} to the lens search.
 
 We conservatively initialize both elements of each  agent's confusion
-matrix to be 0.5, that of a maximally ambivalent  random classifier, so
+matrix to be $\CM^0_{LL} = \CM^0_{NN} = 0.5$, that of a maximally ambivalent  random classifier, so
 that all agents start with zero skill. While  this makes no allowance
 for volunteers that actually do have previous experience of what
 gravitational lenses look like, we might expect it to help mitigate
@@ -1228,6 +1374,36 @@ provides an error bar for this quantity.
 %true strictly speaking given that our agents are learning and the values of the
 %confusion matrix are moving. Modelling the learning curve of our users is yet
 %another complicated extension we could think about.
+
+
+\subsection{Offline SWAP}
+\label{appendix:swap:offline}
+
+The probabilistic model described above does not need to be implemented as an
+online inference. Indeed, it might be more appropriate to perform the inference
+of all Agent confusion matrix elements and Subject probabilities
+simultaneously, so that the early classifications are not effectively
+downweighted as a result of the Agent's ignorance. It might also be that this
+ignorance builds in some conservatism to the system, reducing the noise due
+the early classifications if they are unreliable. In the joint analysis, the
+basic assumption that is built into the Agents, that their volunteers
+have innate and unchanging talent for lens spotting parameterised by two 
+constant confusion matrix elements which simply need to be inferred given the
+data, is implemented in full. The effect is that of applying the time-averaged
+confusion matrices, rather than one that evolves as the Agents (and in the
+real world, the volunteers) learn. 
+
+The mathematics of the offline inference are presented elsewhere (in
+preparation). Here we briefly note that we maximize the joint 
+posterior probability distribution for all the model parameters (some 66,000
+confusion matrix elements and 430,000 subject probabilities) with a simple
+expectation-maximisation algorithm. This procedure takes [approximately the
+same | somewhat less | somewhat more] CPU time as the online analysis, because
+[insert reason]. Other comments about the relative performance]. The plots in
+\Sref{sec:results:sample} show the difference in performance between the
+online and offline analyses. 
+
+\todo{Chris}{Please check this text and edit appropriately (issue \#40)}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

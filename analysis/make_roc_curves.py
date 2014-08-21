@@ -203,9 +203,9 @@ def make_roc_curves(argv):
                     xij = subject.annotationhistory['ItWas'][agent_i]
                     if name not in bureau_offline:
                         bureau_offline.update({name: {
-                            'Theta0': 0.75, 'Theta1': 0.75,
-                            'PL': bureau.member[name].PL,
-                            'PD': bureau.member[name].PD,
+                            'PD': 0.75, 'PL': 0.75,
+                            'PL_in': bureau.member[name].PL,
+                            'PD_in': bureau.member[name].PD,
                             'Pi': pi,
                             'Subjects': {ID: xij}}})
                     else:
@@ -270,7 +270,6 @@ def make_roc_curves(argv):
         # TODO: maybe repeat the same process for bureau?
         bureau = bureau2
 
-
         for ID in collection.keys():
             subject = collection[ID]
             n_assessment = len(subject.annotationhistory['ItWas'])
@@ -288,9 +287,9 @@ def make_roc_curves(argv):
                     xij = subject.annotationhistory['ItWas'][agent_i]
                     if name not in bureau_offline:
                         bureau_offline.update({name: {
-                            'Theta0': 0.75, 'Theta1': 0.75,
-                            'PL': bureau.member[name].PL,
-                            'PD': bureau.member[name].PD,
+                            'PD': 0.75, 'PL': 0.75,
+                            'PL_in': bureau.member[name].PL,
+                            'PD_in': bureau.member[name].PD,
                             'Pi': pi,
                             'Subjects': {ID: xij}}})
                     else:

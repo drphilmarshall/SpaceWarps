@@ -86,12 +86,13 @@ class Subject(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,ID,ZooID,category,kind,truth,thresholds,location):
+    def __init__(self,ID,ZooID,category,kind,flavor,truth,thresholds,location):
 
         self.ID = ID
         self.ZooID = ZooID
         self.category = category
         self.kind = kind
+        self.flavor = flavor
         self.truth = truth
 
         self.state = 'active'
@@ -167,7 +168,7 @@ class Subject(object):
 
         # Deal with active subjects. Ignore the classifier until they
         # have seen NT > a_few_at_the_start (ie they've had a
-        # certain amount of training):
+        # certain amount of training - at least one training image, for example):
             
             if by.NT > a_few_at_the_start:
                
@@ -232,20 +233,15 @@ class Subject(object):
                         self.retirement_time = 'not yet'
                         self.retirement_age = 0.0
 
-                # Update agent - training history is taken care of elsewhere:
+                # Update agent - training history is taken care of in agent.heard(), 
+                # which also keeps agent.skill up to date.
                 if self.kind == 'test':
 
-                     by.testhistory['ID'] = np.append(by.testhistory['ID'],
-                                                      self.ID)
-                     # by.testhistory['I'] = np.append(by.testhistory['I'], by.contribution)
-                     #by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
-                     informationGain=swap.informationGain(prior_probability,posterior_probability);
-                     by.testhistory['I'] = np.append(by.testhistory['I'], np.mean(informationGain));
-                     # by.testhistory['Skill'] = np.append(by.testhistory['Skill'], swap.expectedInformationGain(0.5,by.PL,by.PD))
+                     by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
+                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
                      by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
-                     by.contribution += by.skill
-
                      by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
+                     by.contribution += by.skill
 
                 # update the annotation history
                 self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)

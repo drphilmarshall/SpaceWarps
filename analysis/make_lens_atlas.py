@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # ======================================================================
 
+# TODO: when pulling points for zoomed, do the clustering as in catalog (should
+# be deterministic) so you can filter that way
+
 import sys, getopt, numpy as np
 
 import matplotlib
@@ -21,9 +24,11 @@ params = { 'axes.labelsize': bfs,
           'ytick.labelsize': sfs}
 plt.rcParams.update(params)
 
+origin = 'lower'
+
 import swap
 
-from scipy import ndimage
+from scipy.ndimage import gaussian_filter, imread
 from os import path
 from urllib import FancyURLopener
 from matplotlib.mlab import csv2rec
@@ -48,7 +53,7 @@ def get_online_png(url, outname=None):
         F = myopener.retrieve(url, outname)
     else:
         F = [outname]
-    I = ndimage.imread(F[0]) * 1. / 255.
+    I = imread(F[0]) * 1. / 255
     return I
 
 def pdf2d(ax, ay, xbins=51, ybins=51,
@@ -84,9 +89,11 @@ def pdf2d(ax, ay, xbins=51, ybins=51,
 
     if 'hist' in style:
         if axis != None:
-            axis.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'))
+            axis.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'),
+                        origin=origin)
         else:
-            plt.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'))
+            plt.imshow(H.T, extent=extent, cmap=plt.get_cmap('Blues_r'),
+                       origin=origin)
 
     return
 
@@ -97,7 +104,7 @@ def contour_hist(H, extent=None,
 
     # Smooth the histogram into a PDF:
     if smooth > 0:
-        H = ndimage.gaussian_filter(H, smooth)
+        H = gaussian_filter(H, smooth)
 
     norm = np.sum(H.flatten())
     H = H * (norm > 0.0) / (norm + (norm == 0.0))
@@ -176,7 +183,7 @@ def make_lens_atlas(args):
         collection collection.pickle
         catalog catalog.dat
             Assumed format:
-            ID   kind   x   y    P     N0   S
+            ID   kind   x   y    Prob     N0   Skill   Dist
 
             Here:
             ID = Space Warps subject ID
@@ -185,6 +192,7 @@ def make_lens_atlas(args):
             P = Space Warps subject probability
             N0 = number of markers in the cluster
             S = total skill per cluster, summed over markers
+            D = biggest distance within cluster
 
     OUTPUTS
 
@@ -215,10 +223,13 @@ def make_lens_atlas(args):
              'output_directory': './',
              'output_format': 'png',
              'stamp_size': 50,
-             'stamp_min': 10,
+             'dist_max': 30,
+             'stamp_min': 1,
              'smooth_click': 3,
              'figsize_stamp': 5,
-             'figsize_field': 15,
+             'figsize_field': 10,
+             'image_y_size': 440,
+             'diagnostics': False,
             }
 
     # ------------------------------------------------------------------
@@ -238,54 +249,12 @@ def make_lens_atlas(args):
     ybins = np.arange(flags['stamp_size'] * 2)
     figsize_stamp = (flags['figsize_stamp'], flags['figsize_stamp'])
     figsize_field = (flags['figsize_field'], flags['figsize_field'])
+    image_y_size = flags['image_y_size']
 
     print "make_lens_atlas: illustrating behaviour captured in collection, and lens files: "
     print "make_lens_atlas: ", collection_path
     print "make_lens_atlas: ", catalog_path
 
-    ## try:
-    ##     opts, args = getopt.getopt(argv,"h",
-    ##             ["help", "heatmap=", "contour=", "field=", "stamp=",
-    ##              "alpha=", "points=", "skill="])
-    ## except getopt.GetoptError, err:
-    ##     print str(err) # will print something like "option -a not recognized"
-    ##     print make_lens_atlas.__doc__  # will print the big comment above.
-    ##     return
-
-
-    ## for o,a in opts:
-    ##     if o in ("-h", "--help"):
-    ##         print make_lens_atlas.__doc__
-    ##         return
-    ##     elif o in ("--heatmap"):
-    ##         flags['heatmap'] = True
-    ##     elif o in ("--contour"):
-    ##         flags['contour'] = True
-    ##     elif o in ("--field"):
-    ##         flags['field'] = True
-    ##     elif o in ("--stamp"):
-    ##         flags['stamp'] = True
-    ##     elif o in ("--alpha"):
-    ##         flags['alpha'] = True
-    ##     elif o in ("--skill"):
-    ##         flags['skill'] = True
-    ##     elif o in ("--points"):
-    ##         flags['points'] = int(a)
-    ##     else:
-    ##         assert False, "unhandled option"
-
-    ## # Check for pickles in array args:
-    ## if len(args) == 2:
-    ##     #bureau_path = args[0]
-    ##     collection_path = args[0]
-    ##     catalog_path = args[1]
-    ##     print "make_lens_atlas: illustrating behaviour captured in bureau, collection, and lens files: "
-    ##     #print "make_lens_atlas: ", bureau_path
-    ##     print "make_lens_atlas: ", collection_path
-    ##     print "make_lens_atlas: ", catalog_path
-    ## else:
-    ##     print make_lens_atlas.__doc__
-    ##     return
 
     # ------------------------------------------------------------------
     # Read in files:
@@ -306,12 +275,21 @@ def make_lens_atlas(args):
     if flags['stamp']:
         print "make_lens_atlas: running stamps"
         for lens_i in range(len(catalog)):
-            ID = catalog[lens_i][0]
-            x = catalog[lens_i][2]
-            y = catalog[lens_i][3]
-            N0 = catalog[lens_i][5]
-            if ((x < 0) * (y < 0)) + (N0 < flags['stamp_min']):
+            ID = catalog[lens_i]['id']
+            kind = catalog[lens_i]['kind']
+            x = catalog[lens_i]['x']
+            # flip y axis
+            y = image_y_size - catalog[lens_i]['y']
+            N0 = catalog[lens_i]['n0']
+            if 'dist' in catalog.dtype.names:
+                if catalog[lens_i]['dist'] == 0:
+                    continue
+
+            if ((x < 0)):
                 # this is one of the 'non points'; skip
+                continue
+            if (N0 < flags['stamp_min']):
+                # not enough points!
                 continue
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
@@ -326,6 +304,10 @@ def make_lens_atlas(args):
             min_y = np.int(np.max((y - flags['stamp_size'], 0)))
             max_y = np.int(np.min((y + flags['stamp_size'], im.shape[1])))
 
+            min_member_x = np.int(np.max((x - flags['dist_max'], 0)))
+            max_member_x = np.int(np.min((x + flags['dist_max'], im.shape[0])))
+            min_member_y = np.int(np.max((y - flags['dist_max'], 0)))
+            max_member_y = np.int(np.min((y + flags['dist_max'], im.shape[1])))
             if (min_x >= max_x) + (min_y >= max_y):
                 print "make_lens_atlas: misshapen lens for ID ", ID
                 continue
@@ -338,7 +320,19 @@ def make_lens_atlas(args):
                 alpha = None
                 im = im[min_y: max_y, min_x: max_x]
 
-            if (flags['contour']) + (flags['heatmap']):
+            fig = plt.figure(figsize=figsize_stamp)
+            ax = fig.add_subplot(111)
+            ax.imshow(im, origin=origin)
+
+            ax.scatter(x - min_x,
+                       y - min_y,
+                       marker='d',
+                       c=(0, 1.0, 0), s=100,
+                       alpha=0.75)
+
+            if ((flags['contour'])
+                + (flags['heatmap'])
+                + (flags['points'] != 0)):
 
                 itwas = annotationhistory['ItWas']
                 x_all = annotationhistory['At_X']
@@ -347,19 +341,34 @@ def make_lens_atlas(args):
                 x_markers_all = np.array([xi for xj in x_all for xi in xj])
                 y_markers_all = np.array([yi for yj in y_all for yi in yj])
 
-                # now filter markers by those that are within
-                # stamp_size of the stamp
                 agents_numbers = np.arange(
                         x_markers_all.size)
-                conds = ((x_markers_all >= min_x) * (x_markers_all <= max_x) *
-                         (y_markers_all >= min_y) * (y_markers_all <= max_y))
+                if 'labels' in annotationhistory:
+                    # find which label is closest to your folks
+                    labels_all = annotationhistory['labels']
+                    labels = np.array([xi for xj in labels_all for xi in xj])
+                    cluster_labels = list(set(labels))
+                    data = np.vstack((x_markers_all, y_markers_all)).T
+                    cluster_centers = np.array([np.mean(data[labels == i], axis=0)
+                                                for i in cluster_labels])
+                    # find which label is closest to the (x,y)
+                    label_center = cluster_labels[np.argmin(np.sum(np.square(cluster_centers - np.vstack((x, y)).T), axis=1))]
+                    conds = (labels == label_center)
+                else:
+                    # now filter markers by those that are within
+                    # dist_max of the center (since I don't record cluster
+                    # members...)
+                    conds = ((x_markers_all >= min_member_x) *
+                             (x_markers_all <= max_member_x) *
+                             (y_markers_all >= min_member_y) *
+                             (y_markers_all <= max_member_y))
                 agents = agents_numbers[conds]
                 x_markers = x_markers_all[agents]
                 y_markers = y_markers_all[agents]
 
                 # filter markers
                 n_catalog = len(agents)
-                if (flags['points'] >= 0) * \
+                if (flags['points'] > 0) * \
                         (flags['points'] < n_catalog):
                     agents_points = np.random.choice(
                             agents,
@@ -369,7 +378,7 @@ def make_lens_atlas(args):
                 x_markers_filtered = x_markers_all[agents_points]
                 y_markers_filtered = y_markers_all[agents_points]
 
-                if flags['skill']:
+                if (flags['skill']) * (len(agents) > 0):
                     PL_all = annotationhistory['PL']
                     PD_all = annotationhistory['PD']
 
@@ -396,30 +405,59 @@ def make_lens_atlas(args):
                         sizes_filtered = sizes_all[agents_points]
                     else:
                         sizes_filtered = 50
-                    colors = [(0, 1.0, 0) for i in x_markers_filtered]
                 else:
                     skill = None
                     sizes_filtered = 50
-                    colors = (0, 1.0, 0)
+                colors = (0, 1.0, 0)
 
                 # ----------------------------------------------------------
-                # contours
-                if flags['contour']:
-                    fig = plt.figure(figsize=figsize_stamp)
-                    ax = fig.add_subplot(111)
-                    ax.imshow(im)
+                # heatmaps
+                if (flags['heatmap']) * (len(agents) > 0):
+                    fig_heatmap = plt.figure(figsize=figsize_stamp)
+                    ax_heatmap = fig_heatmap.add_subplot(111)
 
-                    # plot points
-                    if flags['points'] > 0:
-                        ax.scatter(x_markers_filtered - min_x,
-                                   y_markers_filtered - min_y,
-                                   c=colors, s=sizes_filtered,
-                                   alpha=0.25)
-                        ax.scatter(x - min_x,
-                                   y - min_y,
-                                   marker='d',
-                                   c=(0, 1.0, 0), s=50,
-                                   alpha=0.25)
+                    # now do the lens locations
+                    # don't need to filter the x's since that is filtered by
+                    # xbins and ybins anyways
+                    pdf2d(x_markers - min_x, y_markers - min_y,
+                          xbins=xbins, ybins=ybins,
+                          weights=skill, smooth=flags['smooth_click'],
+                          color=(0, 1.0, 0),
+                          style='hist',
+                          axis=ax_heatmap)
+
+                    if flags['alpha'] * (alpha != None):
+                        contour_hist(alpha.T,
+                            extent=(xbins[0], xbins[-1], ybins[0], ybins[-1]),
+                            color='w', style='contour', axis=ax_heatmap)
+
+                    ax_heatmap.tick_params(\
+                        axis='both',          # changes apply to the x-axis
+                        which='both',      # both major and minor ticks are affected
+                        bottom='off',      # ticks along the bottom edge are off
+                        top='off',         # ticks along the top edge are off
+                        left='off',
+                        right='off',
+                        labelleft='off',
+                        labelbottom='off') # labels along the bottom edge are off
+
+                    # CPD 04.08.14: Flip axis to old conventions
+                    ax_heatmap.invert_yaxis()
+                    try:
+                        outfile = flags['output_directory'] + \
+                                    '{0}_cluster_{1}_heatmap.{2}'.format(
+                                        ID, lens_i, flags['output_format'])
+                        # fig_heatmap.savefig(outfile)
+                        #fig_heatmap.canvas.print_png(outfile)
+                        fig_heatmap.savefig(outfile, bbox_inches='tight', pad_inches=0)
+                    except:
+                        print 'make_lens_catalog: heatmap problem with ', ID, lens_i
+                        # import ipdb; ipdb.set_trace()
+
+                # ---------------------------------------------------------
+                # back to our other plots
+                # contours
+                if (flags['contour']) * (len(agents) > 0):
 
                     # now do the lens locations
                     # don't need to filter the x's since that is filtered by
@@ -431,68 +469,43 @@ def make_lens_atlas(args):
                           style='contour',
                           axis=ax)
 
-                    if flags['alpha'] * (alpha != None):
-                        contour_hist(alpha.T,
-                            extent=(xbins[0], xbins[-1], ybins[0], ybins[-1]),
-                            color='w', style='contour', axis=ax)
+                # plot points
+                if (flags['points'] != 0) * (len(agents) > 0):
+                    ax.scatter(x_markers_filtered - min_x,
+                               y_markers_filtered - min_y,
+                               c=colors, s=sizes_filtered,
+                               alpha=0.25)
 
-                    ax.tick_params(\
-                        axis='both',          # changes apply to the x-axis
-                        which='both',      # both major and minor ticks are affected
-                        bottom='off',      # ticks along the bottom edge are off
-                        top='off',         # ticks along the top edge are off
-                        left='off',
-                        right='off',
-                        labelleft='off',
-                        labelbottom='off') # labels along the bottom edge are off
+            # plot alpha
+            if flags['alpha'] * (alpha != None):
+                contour_hist(alpha.T,
+                    extent=(xbins[0], xbins[-1], ybins[0], ybins[-1]),
+                    color='w', style='contour', axis=ax)
 
-                    try:
-                        fig.savefig(flags['output_directory'] +
-                                    '{0}_cluster_{1}_contour.{2}'.format(
-                                        ID, lens_i, flags['output_format']))
-                    except:
-                        print 'make_lens_catalog: problem with ', ID, lens_i
-                        # import ipdb; ipdb.set_trace()
-                    plt.close('all')
-                # ----------------------------------------------------------
-                # heatmaps
-                if flags['heatmap']:
-                    fig = plt.figure(figsize=figsize_stamp)
-                    ax = fig.add_subplot(111)
+            # ----------------------------------------------------------
+            ax.tick_params(\
+                axis='both',          # changes apply to the x-axis
+                which='both',      # both major and minor ticks are affected
+                bottom='off',      # ticks along the bottom edge are off
+                top='off',         # ticks along the top edge are off
+                left='off',
+                right='off',
+                labelleft='off',
+                labelbottom='off') # labels along the bottom edge are off
 
-                    # now do the lens locations
-                    # don't need to filter the x's since that is filtered by
-                    # xbins and ybins anyways
-                    pdf2d(x_markers - min_x, y_markers - min_y,
-                          xbins=xbins, ybins=ybins,
-                          weights=skill, smooth=flags['smooth_click'],
-                          color=(0, 1.0, 0),
-                          style='hist',
-                          axis=ax)
-
-                    if flags['alpha'] * (alpha != None):
-                        contour_hist(alpha.T,
-                            extent=(xbins[0], xbins[-1], ybins[0], ybins[-1]),
-                            color='w', style='contour', axis=ax)
-
-                    ax.tick_params(\
-                        axis='both',          # changes apply to the x-axis
-                        which='both',      # both major and minor ticks are affected
-                        bottom='off',      # ticks along the bottom edge are off
-                        top='off',         # ticks along the top edge are off
-                        left='off',
-                        right='off',
-                        labelleft='off',
-                        labelbottom='off') # labels along the bottom edge are off
-
-                    try:
-                        fig.savefig(flags['output_directory'] +
-                                    '{0}_cluster_{1}_heatmap.{2}'.format(
-                                        ID, lens_i, flags['output_format']))
-                    except:
-                        print 'make_lens_catalog: problem with ', ID, lens_i
-                        # import ipdb; ipdb.set_trace()
-                    plt.close('all')
+            ax.invert_yaxis()
+            try:
+                outfile = flags['output_directory'] + \
+                            '{0}_cluster_{1}_contour.{2}'.format(
+                                ID, lens_i, flags['output_format']
+                                )
+                # fig.savefig(outfile)
+                fig.savefig(outfile, bbox_inches='tight', pad_inches=0)
+                # fig.canvas.print_png(outfile)
+            except:
+                print 'make_lens_catalog: contour problem with ', ID, lens_i
+                # import ipdb; ipdb.set_trace()
+            plt.close('all')
 
     # ------------------------------------------------------------------
     # Fields
@@ -508,11 +521,16 @@ def make_lens_atlas(args):
             annotationhistory = subject.annotationhistory
 
             # plot cluster centers
+            kind = mini_catalog['kind']
             x_centers = mini_catalog['x']
-            y_centers = mini_catalog['y']
-            skill_centers = mini_catalog['s']
+            # flip y from catalog
+            y_centers = image_y_size - mini_catalog['y']
+            skill_centers = mini_catalog['skill']
             # filter out the -1 entry
             center_cond = (x_centers > 0) * (y_centers > 0)
+            # filter outliers if possible
+            if 'dist' in mini_catalog.dtype.names:
+                center_cond *= mini_catalog['dist'] > 0
             skill_centers = skill_centers[center_cond]
             x_centers = x_centers[center_cond]
             y_centers = y_centers[center_cond]
@@ -537,7 +555,7 @@ def make_lens_atlas(args):
 
             fig = plt.figure(figsize=figsize_field)
             ax = fig.add_subplot(111)
-            ax.imshow(im)
+            ax.imshow(im, origin=origin)
             xbins = np.arange(im.shape[0])
             ybins = np.arange(im.shape[1])
             min_x = 0
@@ -552,9 +570,30 @@ def make_lens_atlas(args):
                         (np.max(skill_centers) - np.min(skill_centers)))
             else:
                 sizes_centers = [100 for i in x_centers]
+            sizes_centers = [100 for i in x_centers]
             ax.scatter(x_centers, y_centers,
                        marker='d', c=colors_centers,
-                       s=sizes_centers, alpha=0.25)
+                       s=sizes_centers, alpha=0.75)
+
+            if flags['diagnostics']:
+                r = flags['dist_max']
+                b = flags['stamp_size']
+                b_ones = np.ones(100) * b
+                b_arr = np.linspace(-b, b, 100)
+                def xy(x0, y0, r, phi):
+                    return x0 + r * np.cos(phi), y0 + r * np.sin(phi)
+                phis = np.arange(0, 6.28, 0.01)
+                for i in xrange(len(x_centers)):
+                    x_center = x_centers[i]
+                    y_center = y_centers[i]
+
+                    ax.plot( *xy(x_center, y_center, r, phis), c='w', ls='-', linewidth=4)
+
+                    # plot box
+                    ax.plot(x_center + b_ones, y_center + b_arr, c='r', ls='--', linewidth=4)
+                    ax.plot(x_center - b_ones, y_center + b_arr, c='r', ls='--', linewidth=4)
+                    ax.plot(x_center + b_arr, y_center + b_ones, c='r', ls='--', linewidth=4)
+                    ax.plot(x_center + b_arr, y_center - b_ones, c='r', ls='--', linewidth=4)
 
             itwas = annotationhistory['ItWas']
             x_all = annotationhistory['At_X']
@@ -565,6 +604,8 @@ def make_lens_atlas(args):
 
             # now filter markers by those that are within
             # stamp_size of the stamp
+            # I'm pretty sure this step is redundant when going over the full
+            # image?
             agents_numbers = np.arange(
                     x_markers_all.size)
             conds = ((x_markers_all >= min_x) * (x_markers_all <= max_x) *
@@ -576,7 +617,7 @@ def make_lens_atlas(args):
 
             # filter markers
             n_catalog = len(agents)
-            if (flags['points'] >= 0) * \
+            if (flags['points'] > 0) * \
                     (flags['points'] < n_catalog):
                 agents_points = np.random.choice(
                         agents,
@@ -613,11 +654,25 @@ def make_lens_atlas(args):
                     sizes_filtered = sizes_all[agents_points]
                 else:
                     sizes_filtered = 50
-                colors = [(0, 1.0, 0) for i in x_markers_filtered]
             else:
                 skill = None
                 sizes_filtered = 50
+
+            if 'labels' in annotationhistory:
+                # find which label is closest to your folks
+                labels_all = annotationhistory['labels']
+                labels = np.array([xi for xj in labels_all for xi in xj])
+                labels_filtered = labels[agents_points]
+                colors = []
+                alpha = 0.75
+                for label in labels_filtered:
+                    if label == -1:
+                        colors.append((1.0, 0.0, 0))
+                    else:
+                        colors.append((0, 1.0, 0))
+            else:
                 colors = (0, 1.0, 0)
+                alpha = 0.25
 
             # ----------------------------------------------------------
             # contours
@@ -635,11 +690,11 @@ def make_lens_atlas(args):
 
             # ----------------------------------------------------------
             # plot points
-            if flags['points'] > 0:
+            if flags['points'] != 0:
                 ax.scatter(x_markers_filtered - min_x,
                            y_markers_filtered - min_y,
                            c=colors, s=sizes_filtered,
-                           alpha=0.25)
+                           alpha=alpha)
 
             # ----------------------------------------------------------
             # do alpha
@@ -659,10 +714,14 @@ def make_lens_atlas(args):
                 labelleft='off',
                 labelbottom='off') # labels along the bottom edge are off
 
+            ax.invert_yaxis()
             try:
-                fig.savefig(flags['output_directory'] + '{0}_field_output.{1}'.format(ID, flags['output_format']))
+                outfile = flags['output_directory'] + '{0}_field_output.{1}'.format(ID, flags['output_format'])
+                # fig.savefig(outfile)
+                fig.savefig(outfile, bbox_inches='tight', pad_inches=0)
+                #fig.canvas.print_png(outfile)
             except:
-                print 'make_lens_catalog: problem with field ', ID
+                print 'make_lens_catalog: field problem with field ', ID
             plt.close('all')
 
     print 'make_lens_catalog: All done!'
@@ -690,6 +749,24 @@ if __name__ == '__main__':
                         type=int,
                         default=30,
                         help="Number of points to plot. If < 0, do all points.")
+    parser.add_argument("--stamp_size",
+                        action="store",
+                        dest="stamp_size",
+                        type=int,
+                        default=50,
+                        help="Size of stamps we can make.")
+    parser.add_argument("--dist_max",
+                        action="store",
+                        dest="dist_max",
+                        type=int,
+                        default=30,
+                        help="Size over which we filter points.")
+    parser.add_argument("--image_y_size",
+                        action="store",
+                        dest="image_y_size",
+                        type=int,
+                        default=440,
+                        help="Specify the y coordinate size of the image. Used for converting between database and catalog coordinate conventions.")
     # Actions we can specify
     parser.add_argument("--heatmap",
                         action="store_true",
@@ -728,6 +805,12 @@ if __name__ == '__main__':
                         help="Path to catalog data file.")
     options = parser.parse_args()
     args = vars(options)
+
+    import sys
+    argv_str = ''
+    for argvi in sys.argv:
+        argv_str += argvi + ' '
+    print(argv_str)
     make_lens_atlas(args)
 
 # ======================================================================

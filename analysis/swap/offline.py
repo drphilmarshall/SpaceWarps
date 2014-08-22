@@ -223,12 +223,20 @@ def Mstep(bureau_offline, pi, taus, training_IDs={}):
     for name in bureau_offline:
         agent = bureau_offline[name]
         agent_prime = agent.copy()  # so that it has PL, PD, Subjects
-        PLi_num = 0
-        PLi_den = 0
-        PDi_num = 0
-        PDi_den = 0
+        # CPD 21.08.14: Added Laplace Smoothing to handle pathologic cases like
+        # when a user _only_ says there is no lens.
+        ## PLi_num = 0
+        ## PLi_den = 0
+        ## PDi_num = 0
+        ## PDi_den = 0
+        ## # pii_num = PLi_den
+        ## pii_den = 0
+        PLi_num = 1
+        PLi_den = 2
+        PDi_num = 1
+        PDi_den = 2
         # pii_num = PLi_den
-        pii_den = 0
+        pii_den = 1
         for ID in agent['Subjects']:
             if ID in taus:
 

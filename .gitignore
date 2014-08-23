@@ -7,7 +7,10 @@ client.py
 *.out
 *.bbl
 *.blg
-*.pdf
+sw-system.pdf
+sw-cfhtls.pdf
+sw-publication-policy-cfhtls.pdf
+sw-publication-policy-gen.pdf
 workspace
 litter
 *.pickle

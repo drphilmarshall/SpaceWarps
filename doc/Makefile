@@ -2,7 +2,7 @@
 all: papers
 
 clean:
-	-rm -f *.aux *.log *.dvi *.blg *.out *.bbl sw-system.pdf
+	-rm -f *.aux *.log *.dvi *.blg *.out *.bbl sw-system.pdf sw-cfhtls.pdf
 
 papers: system cfhtls
 

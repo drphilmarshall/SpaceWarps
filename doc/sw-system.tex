@@ -659,16 +659,13 @@ or more, the web app was paused and reconfigured for stage 2. The sample of
 subjects classified during stage 2 was selected to be all those that passed
 the detection threshold ($\pr(\LENS|C,T) > 0.95$) at stage 1. These were
 classified for one week, with no retirement but a maximum classification
-number of 50 each. {\bf The number of subjects at stage 2 was small enough that we
+number of 50 each. The number of subjects at stage 2 was small enough that we
 did not need to retire any: instead, we simply collected classifications for a
 fixed period of time (about 4 weeks). Without the time pressure motivating the
 online analysis, we implemented an ``offline'' version of the analysis that
 performs a joint inference of all Agent confusion matrix elements and subject
 probabilities simultaneously, for comparison. We describe how this differs
-from the online analysis in the appendix. }
-
-\todo{Chris}{Please check and edit the offline analysis description (in bold)
-above -- and then the text in the appendix! (issue \#40)}
+from the online analysis in the appendix.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1395,16 +1392,17 @@ confusion matrices, rather than one that evolves as the Agents (and in the
 real world, the volunteers) learn. 
 
 The mathematics of the offline inference are presented elsewhere (in
-preparation). Here we briefly note that we maximize the joint 
-posterior probability distribution for all the model parameters (some 66,000
-confusion matrix elements and 430,000 subject probabilities) with a simple
-expectation-maximisation algorithm. This procedure takes [approximately the
-same | somewhat less | somewhat more] CPU time as the online analysis, because
-[insert reason]. Other comments about the relative performance]. The plots in
-\Sref{sec:results:sample} show the difference in performance between the
-online and offline analyses. 
-
-\todo{Chris}{Please check this text and edit appropriately (issue \#40)}
+preparation). Here we briefly note that we maximize the joint posterior
+probability distribution for all the model parameters (some 66,000 confusion
+matrix elements and 430,000 subject probabilities) with a simple
+expectation-maximisation algorithm. This procedure takes approximately the same
+CPU time as the online analysis, because no matrix inversions are required in
+the algorithm. The algorithm scales well and is actually faster than the online
+analysis with the larger stage 1 dataset. The expectation-maximisation
+algorithm is robust to initial starting parameters in, e.g., initial Agent
+confusion matrix elements and Subject probabilities. The plots in
+\Sref{sec:results:sample} show the difference in performance between the online
+and offline analyses. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

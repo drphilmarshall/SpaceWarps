@@ -232,6 +232,12 @@ How many classifications, and so how many volunteers are needed per target?
 
 \end{itemize}
 
+Our basic method in this paper is to analyze the performance of the \sw system
+on a ``training set'' of simulated lenses and known non-lenses. This allows us
+to estimate completeness and purity with respect to gravitational lenses that
+have the same properties of the training set. In the companion paper we carry
+out similar tests but with a sample of known (real) lenses {\it in situ}.
+
 This paper is organised as follows.  In \Sref{sec:design} we introduce the \sw
 classification interface and the volunteers who make up the \sw
 collaboration,  explain how we use training images, and describe our two stage
@@ -240,11 +246,9 @@ the particular dataset used in the first experimental tests of the \sw system,
 and how we prepared the images prior to displaying them in the web interface.
 In \Sref{sec:swap} we describe our methodology for interpreting the
 classifications made by the volunteers, and then present the results of system
-performance tests  made on the training images in \Sref{sec:results}. % In
-this section, we also investigate the properties of the crowd, to % understand
-where the information is coming from. We discuss the implications of our
-results for future lens searches in \Sref{sec:discuss} and draw conclusions in
-\Sref{sec:conclude}.
+performance tests  made on the training images in \Sref{sec:results}.  We
+discuss the implications of our results for future lens searches in
+\Sref{sec:discuss} and draw conclusions in \Sref{sec:conclude}.
 
 % \section{Introduction}
 % \label{sec:intro}
@@ -937,7 +941,8 @@ none of the agents allowed to learn: they were instead assigned initial values
 of their confusion matrices of 0.75 for each element, which then remained
 constant. This emulates a very simple unweighted voting scheme, where all
 classifications are treated equally. In this case, the TPR remains under 80\%
-in stage 1 and 60\% in stage 2, showing the benefit of including training
+in stage 1 and 60\% in stage 2, thus quantifying 
+the benefit of including training
 images and allowing the agents to learn. The choice of initial confusion
 matrix is not very important: the same 0.75 initial values applied to normal,
 learning agents results in a slightly lower TPR than the default case,
@@ -946,12 +951,12 @@ slightly worse performance.
 
 The dot-dashed curves show the impact of the offline analysis. At stage 1 the
 results are very similar to the online version that was actually run (solid
-line), at stage 2 there seems to be some benefit to doing the analysis in this
-way. Remarkably, over 85\% TPR is achieved at zero FPR. Alternatively, if one
-is willing to accept a false positive rate of 5\%, the true positive rate
-rises to over 95\%, showing that some of the sims that were missed in the
-online analysis can be recovered by doing the analysis offline. The same is
-true at stage 1, but to a much lower degree.
+line). However, at stage 2 there seems to be somewhat greater benefit to doing
+the analysis in this way: over 85\% TPR is achieved at zero FPR.
+Alternatively, if one is willing to accept a false positive rate of 5\%, the
+true positive rate rises to over 95\%, showing that some of the sims that were
+missed in the online analysis can be recovered by doing the analysis offline.
+The same is true at stage 1, but to a lower degree.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
@@ -967,28 +972,44 @@ the CFHTLS training set. Left: stage 1, right: stage 2.}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Adopting the online stage 1 analysis, and the offline stage 2 analysis, we show
-in \Fref{fig:results:sample:CP} a plot of completeness versus purity in the two
-stages. As in \Fref{fig:results:sample:roc}, the detection threshold varies
-along the curves. Completeness is defined as the number of correctly detected
-sims divided by the total number of sims in the training set, while purity is
-the number of correct detections divided by the total number of
+Adopting the online stage 1 analysis, and the offline stage 2 analysis, we
+show in \Fref{fig:results:sample:CP} a plot of the more familiar (to
+astronomers) quantities completeness versus purity in
+the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
+varies along the curves. Completeness is defined as the number of correctly
+detected sims divided by the total number of sims in the training set, while
+purity is the number of correct detections divided by the total number of
 detections.\footnote{The completeness is equivalent to the TPR and is also
-known elsewhere as the `recall'. The purity is also known as the `precision'.}
-If the training set samples from the same systems as the test set, then the
-completeness of the training set will be equivalent to the completeness of the
-test set. The purity depends on the proportion of sims to duds, and so the
-purity of the test set must be approximated by rescaling the training set to
-the expected proportion of lens systems to not-lens systems in the survey.
-First we compute the expected number of false positives by multiplying the FPR
-by the expected number of non-lenses in the survey. Then we multiply the TPR by
-the expected number of lenses in the survey, to get the expected number of true
-positives. The sum of the true positives and the false positives gives the
-expected sample size; dividing the expected number of true positives by this
-sample size gives the purity. Note that the completeness is invariant to this
-transformation.
+known elsewhere as the ``recall.''  The purity is also known as the
+``precision.''} If the training set samples from the same systems as the test
+set, then the completeness of the training set will be equivalent to the
+completeness of the test set. The purity depends on the proportion of sims to
+duds, and so the purity of the test set must be approximated by rescaling the
+training set to the expected proportion of lens systems to not-lens systems in
+the survey. First we compute the expected number of false positives by
+multiplying the FPR by the expected number of non-lenses in the survey. Then
+we multiply the TPR by the expected number of lenses in the survey, to get the
+expected number of true positives. The sum of the true positives and the false
+positives gives the expected sample size; dividing the expected number of true
+positives by this sample size gives the purity. Note that the completeness is
+invariant to this transformation.
 
-\todo{Chris}{Write analysis of completeness purity.}
+The stage 1 curves are truncated by the retirement of subjects in this phase, 
+which sets the minimum size of this sample. We see from the solid blue curve
+that over 90\% completeness was reached, albeit in a sample with around 20\%
+purity. The lensed quasar part of the training set yielded the highest
+completeness, suggesting that these were the easiest sims to spot. The lensed
+galaxies were recovered at understandably lowest completeness, although the
+wider image separation  lensing clusters were not very different. At stage 2,
+where no retirement was carried out, it was possible to reach 100\% purity:
+indeed, the knee of the curve is at just under 90\% completeness. However, the
+purity decreases rapidly if higher completeness than this is sought.
+Interestingly, the lensing clusters can be seen to pose problems for the
+system, with its curve turning over at just 60\% completeness.
+
+The optimal sample in this simulated lens search experiment would have been
+constructed with a threshold value of $\pr(\LENS|C,T) > X.XX$. At 100\% purity
+and 9X\% completeness, it would have contained around N lens candidates.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}

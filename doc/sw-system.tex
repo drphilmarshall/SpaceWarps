@@ -861,7 +861,43 @@ many of the highest contributors showed relatively low skill early on.
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
 information generated in both stage 1 and 2 of the CFHTLS project, with the
 total numbers of agents and subjects for comparison. These numbers allow us to
-quantify the efficiency of the system. The contribution per classification is
+quantify the efficiency of the system. 
+
+
+
+% From Edwin, July 1:
+% 
+% I've read it through and I didn't need to make any edits. The only thing I'm
+% not completely convinced about is calculating inefficiency from
+% "contribution". 
+% 
+% If the agents were perfect classifiers, and the prior for the lens class was
+% set at 0.5, then it would make sense to have 1 bit contribution per subject.
+% However, with imperfect classifiers and a strong prior, you need several
+% labels from an agent to classify a subject confidently. I think this means you
+% require more than 1 bit of "contribution" per subject. 
+% 
+% So, given this set of agents and your priors over the classes, you could not
+% get close to 100% efficiency. However, I don't know how you could separate
+% inefficiencies due to the agents from inefficiencies due to the system
+% (allocating tasks, retiring subjects etc.).
+% 
+% Perhaps it is more correct to say that the 33% inefficiency is partly due to
+% not retiring things quickly enough, but can also be due to the agents being
+% imperfect classifiers, and the heavily skewed priors.
+% 
+
+
+
+
+
+
+
+
+
+
+
+The contribution per classification is
 defined in terms of a hypothetical subject with lens probability of 0.5; one
 bit of information is needed to update such a subject's lens probability to
 either zero or one. This means that a maximally complete classification stage

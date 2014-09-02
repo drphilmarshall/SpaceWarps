@@ -6159,7 +6159,89 @@ open \
       CFHTLS_057_0809_gri.png
 
 # ======================================================================
+# 2014-08-25 (Monday) 21:34 PDT
 
+# Look at galleries in paper 2, check we are happy with grades of each one
+# Names on gallery panels don't match lines in spreadsheet!!!!
+
+# OK, download tarball from email ionto candidates folder and view in preview 
+# there, to get names right. Just looking for promotions and demotions.
+
+cd analysis/workspace/CFHTLS/stage2/candidates
+
+# Start with R >= 2.5 panels: demote any?
+
+open lenscand_2.5.pdf 
+# 024_2215 Edge on, 2.3
+# 142_0979 Double, 2.3 
+
+open lenscand_2.3.pdf 
+# 073_2191 Unconvincing arc? 1.7
+# 062_0845 "" 1.7
+# 169_0592 Obvious giant arcs?! 2.5
+# 106_1051 Arc and counter arc, 2.5
+# 060_0352 Possible compound lens, but not too much curvature... 2.0
+
+open lenscand_2.0.pdf 
+# Demote to 1.7:
+# 089_0310 no counter-image?
+# 092_0049 not enough curvature
+# 092_0546
+# 119_2273 singly imaged
+# 131_0357 ring galaxy
+# 131_2432 spiral? cant tell
+# 249_0265 to bright to see arcs
+# promote to 2.3
+# 147_1730 binary lens, bright arcs
+
+open lenscand_1.7.pdf 
+# promote to 2.0
+# 066_0290 nice curvature across disk?
+# demote to 1.3
+# 027_2325 ring galaxy!
+
+open lenscand_1.3.pdf 
+# 159_0285 binary lens, not much fuzz apart from blue arcs, 1.7
+# 142_1003 no counter image but good arc definition, 1.7
+# 131_0568 could be Einstein ring? 1.7
+
+
+# Quick look through offline_extras - see a few 1-2's, plus:
+# 075_0005  red arcs, 2.5
+# 099_0477  massive cluster, thin red high z arc? 2.3
+# 156_0012  straightish arc through group 2.3
+# 168_1300  straight arc between BGGs 2.3
+
+
+OK, visual inspection of offline extras:
+
+cd offline_extras
+ls -l *png | awk '{print $NF}' > offline_extras_file_list
+wc -l offline_extras_file_list
+# 238
+
+# Now rearrange, we need a working directory and these images
+# in an "images" directory:
+
+cd ../
+mv images online
+
+# and th elist in the File_list:
+
+mkdirf 2014-08-27
+ln -s ../offline_extra images
+mv offline_extras_file_list File_list
+ln -s ../visapp2/visapp.jar .
+
+# OK, now can do inspection:
+
+java -jar visapp.jar &
+
+# Follow progress:
+
+tail -f record_position.txt
+
+# ======================================================================
 FINISH:
 
 

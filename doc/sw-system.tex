@@ -1397,14 +1397,14 @@ The mathematics of the offline inference are presented elsewhere (in
 preparation). Here we briefly note that we maximize the joint posterior
 probability distribution for all the model parameters (some 66,000 confusion
 matrix elements and 430,000 subject probabilities) with a simple
-expectation-maximisation algorithm. This procedure takes approximately the same
-CPU time as the online analysis, because no matrix inversions are required in
-the algorithm. The algorithm scales well and is actually faster than the online
-analysis with the larger stage 1 dataset. The expectation-maximisation
-algorithm is robust to initial starting parameters in, e.g., initial Agent
-confusion matrix elements and Subject probabilities. The plots in
-\Sref{sec:results:sample} show the difference in performance between the online
-and offline analyses. 
+expectation-maximisation algorithm. This procedure takes approximately the
+same CPU time as the stage 2 online analysis, because no matrix inversions are
+required in the algorithm. The algorithm scales well and is actually faster
+than the online analysis with the larger stage 1 dataset. The
+expectation-maximisation algorithm is robust to initial starting parameters
+in, e.g., initial Agent confusion matrix elements and Subject probabilities.
+The plots in \Sref{sec:results:sample} show the difference in performance
+between the online and offline analyses. 
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

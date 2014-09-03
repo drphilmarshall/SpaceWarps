@@ -212,10 +212,11 @@ successful.
 In this paper, we describe the \sw website, an online system that enables 
 crowd-sourced gravitational lens detection by inviting volunteers to classify
 astronomical survey images as containing lens candidates or not.  In a
-companion paper we will present the new gravitational lenses discovered in our
-first experimental lens search, and begin to investigate the differences
-between lens detections made in \sw and those made with automated techniques.
-Here though, we try to answer the following questions:
+companion paper (More et al, in preparation, herafter \papertwo) we will
+present the new gravitational lenses discovered in our first experimental lens
+search, and begin to investigate the differences between lens detections made
+in \sw and those made with automated techniques. Here though, we try to answer
+the following questions:
 
 \begin{itemize}
 
@@ -235,7 +236,7 @@ How many classifications, and so how many volunteers are needed per target?
 Our basic method in this paper is to analyze the performance of the \sw system
 on a ``training set'' of simulated lenses and known non-lenses. This allows us
 to estimate completeness and purity with respect to gravitational lenses that
-have the same properties of the training set. In the companion paper we carry
+have the same properties of the training set. In \papertwo we carry
 out similar tests but with a sample of known (real) lenses {\it in situ}.
 
 This paper is organised as follows.  In \Sref{sec:design} we introduce the \sw
@@ -335,16 +336,17 @@ contrast and color balance settings, to help bring out subtle features, and to
 zoom in on interesting regions of the image to assess small features. Markers
 can be placed in the Quick Dashboard just the same as in the main CI image
 viewer. The second is a link to that subject's page in the project discussion
-forum, \texttt{http://talk.spacewarps.org}. Here, volunteers can discuss the
-features they have seen either before they submit their classification, or
-after, if they ``favorite'' the subject. There is no ``back'' button: each
-volunteer may only classify a given subject once. However, the presence of an
-option to see what others think about any given subject before submitting your
-own classification means that the classifications may not be  strictly
-independent; the advantage of this system is that volunteers can learn from
-others what constitutes a good lens candidate. In practice, we might expect
-this to be a relatively unimportant educational resource, given the explicit
-training we provide for the volunteers, which we describe in the next section.
+forum, \texttt{http://talk.spacewarps.org} (known as ``Talk''). Here,
+volunteers can discuss the features they have seen either before they submit
+their classification, or after, if they ``favorite'' the subject. There is no
+``back'' button: each volunteer may only classify a given subject once.
+However, the presence of an option to see what others think about any given
+subject before submitting your own classification means that the
+classifications may not be  strictly independent; the advantage of this system
+is that volunteers can learn from others what constitutes a good lens
+candidate. In practice, we might expect this to be a relatively unimportant
+educational resource, given the explicit training we provide for the
+volunteers, which we describe in the next section.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
@@ -405,6 +407,13 @@ to over-optimism among the inspectors (and a resulting high false positive
 rate), we display the current ``Simulation Frequency'' on the classification
 interface (``1 in 5'' in \Fref{fig:screenshot}) and maintain the consistent
 theme in the feedback messages that lenses are rare.
+
+In \Fref{fig:training-gallery} we show 12 example training images from the
+first \sw project (\Sref{sec:data} below). 
+
+\todo{Phil, Aprajita}{Make gallery of 6 stage 2 sims and 6 stage 2 duds, to
+give the reader a feel for what the sims look like, and also how the images
+were presented, stretch and scale-wise.}
 
 
 \subsubsection{Spotter's Guide}
@@ -484,25 +493,43 @@ of various possible false positives.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\todo{Phil}{write this section (\#31)}
+
 \section{Data}
 \label{sec:data}
 
-Definitions: training subjects and test subjects. Sims and duds.
+We refer the reader to \papertwo for the details of the particular set of
+imaging survey data used in this first \sw project. Here, we summarize very
+briefly the choices that were made, in order to provide the context for our
+general description and illustrations of the \sw system.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{The CFHT Legacy Survey}
 \label{sec:data:CFHTLS}
 
-Describe survey. Refs. 
+The CFHT Legacy Survey \citep[CFHTLS,][]{CFHTLS} covered XXX square degrees of
+approximately equatorial sky, in four patches distributed in right ascension,
+over the course of N years. With homegeneous image quality of, typically, X
+arcsec (in the $i$-band), and reaching limiting magnitudes of XX-XX in the
+$ugriz$ filter set, this survey has yielded several dozen new gravitational
+lenses on both galaxy and group scales \citep{}. The quality of the data,
+combined with the presence of these comparison ``known lens'' samples, made
+this a natural choice against which to develop and test the \sw system. The
+CFHTLS is also well-representative of the data quality expected from several
+next-generation sky surveys, such as DES, KiDS, HSC and LSST. 
 
-Why this one? Good IQ, deep, colorful, homogeneous. Precursor to Stage III and
-IV imaging surveys, DES, KIDS, LSST etc. Already searched by robots: enables
-comparison of techniques. Lenses not yet found by robots, detectable by
-humans? 
-
-Blind search strategy.
-Preparation of data: divide survey into overlapping tiles. 
+In order to investigate the completeness of the previous, semi-automated, lens
+searches in the CFHTLS area, we designed a ``blind search.'' We divided the
+mosaiced images into some 430,000 equal size, overlapping tiles, approximately
+70~arcsec on a side. Each of these images is a ``test image'' (as opposed to a
+``training image''). In future, larger area projects we expect to implement
+the rather different strategy of producing image tiles centred on particular
+pre-selected ``targets,'' to make for a more efficient (but less complete)
+survey. We do not expect the performance of citizen image inspectors to change
+significantly between these strategies: to first order, both strategies
+require the inspectors to learn what lenses look like, and then search the
+presented images for similar features.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
@@ -510,9 +537,27 @@ Preparation of data: divide survey into overlapping tiles.
 \subsection{Image Presentation}
 \label{sec:data:display}
 
-Presentation of images. Uniform scales, to build intuition and avoid rescales
-due to bright objects. Arcsinh stretch, to bring out low SB features. 
-Approximately optimized, how? Examples of images.
+The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
+quality, and we chose to focus on this set (although the $u$ and $z$-band
+images were also available for inspection in Talk). We made colour composite
+images using publically-available code\footnote{The open source  colour image
+composition code used in this work is available from
+\texttt{http://github.com/drphilmarshall/HumVI}} following the prescription of
+\citet{LuptonEtal}. Specifically, we first rescaled the pixel values of each
+channel image into flux units, and then applied an arcsinh stretch. The
+stretch parameters were chosen using a small random sample of images, to
+ensure that the background noise was just visible,  and that the centres of
+bright, intermediate resdhift galaxies were not saturated. The color scales
+were chosen to maximize the contrast between faint extended objects. These
+parameters were then fixed during the production of all the tiles, in order to
+allow straightforward comparison between one image and another, and for
+intuition to be built up about the appearance of stars and galaxies across the
+survey. Alternative algorithms, such as adjusting the stretch and scale
+dynamically according to, for example, the root-mean-square pixel value in
+each image, can lead to better presentation of bright objects, but in doing so
+they tend to hide the faint features in those images: we needed to optimize
+the detectability of these faint features.   Examples of CFHTLS training set
+images can be seen in \Fref{fig:training-gallery}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -520,7 +565,8 @@ Approximately optimized, how? Examples of images.
 \section{Classification Stages and Analysis}
 \label{sec:swap}
 
-In this section we outline our methodology for interpreting the interactions
+Having described the classification interface, the training images and the
+test images,  we now outline our methodology for interpreting the interactions
 of the volunteers with the identification interface, and then describe how we
 applied this methodology in the two classification stages in the CFHTLS
 project in the \sw Analysis Pipeline (SWAP) code.\footnote{The open source 

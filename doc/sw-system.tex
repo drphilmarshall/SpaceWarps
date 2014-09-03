@@ -1098,6 +1098,8 @@ In general, there are three places we can act to improve system performance:
 educating the volunteers, assigning subjects for classification, and
 interpreting the classification data. The plots in this section suggest that
 ...
+\todo{Phil}{complete this thought, and update the text below, in the light of
+the FP and the FN figures} 
 
 Mistakes by reasonably high skill classifiers cause large jumps in subject
 probability in the wrong direction, as are occasionally visible in the
@@ -1164,6 +1166,27 @@ number of stage 2 classifications (to avoid losing the high skill users from
 stage 1 entirely), and also to make it very clear which stage the classifier
 was at (since stage 2 requires more careful attention). This is something we
 plan to experiment with in future.
+
+Finally, there could be some performance gains to be made by improving the
+SWAP agent model, or its implementation. In a future paper we plan to
+investigate the use of the test images as well as the training images in
+learning the agent confusion matrix elements (Davis et al, in preparation).
+One might also consider looking at introducing more conditional dependences in
+these elements, to allow for some classifiers having greater skill in one type
+of lens than another, or, more generally, as a function of lens property (such
+as color, brightness, and image separation). In the current model, all agents
+are considered to be completely independent, whereas in fact we might expect
+there to be significant clustering of the confusion matrix elements. A
+hierarchical model for the crowd, with hyper-parameters describing the
+distribution of confusion matrix elements across the population, may well
+accelerate the agent learning process by including the notion of one agent
+being likely to be similar to its neighbours. Finally, it is worth noting that
+the model of \citet{IBCC} explicitly avoids the assumption of the agent
+confusion matrix elements being constant in time, allowing the development of
+volunteer skill to be more accurately tracked -- and that they did see some
+time-evolution in the supernova zoo classifiers' skill. Finding a way to
+incorporate such a learning model into SWAP, while retaining its statistically
+online character is an interesting challenge for future work.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 

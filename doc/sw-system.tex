@@ -73,6 +73,8 @@ highly skewed distributions of these quantities. We comment on the scalability
 of the \sw system to the wide field survey era, and its potential to operate
 beyond its design as a supervised classification system. 
 
+\todo{Phil}{revisit abstract (\#29).}
+
 \end{abstract}
 
 % Full list of options at http://www.journals.uchicago.edu/ApJ/instruct.key.html
@@ -1080,12 +1082,58 @@ the CFHTLS training set.}
 \section{Discussion}
 \label{sec:discuss}
 
-Challenges for future.
+\todo{Phil}{write discussion (\#44).}
+
+Preamble. Notes for future. Improvements to system to be investigated. 
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Improving performance: reducing incompleteness and impurity}
+\label{sec:discuss:performance}
+
+Incompleteness, false negatives. Examples and trajectories, from stage 2
+training set. Generic properties: hard to spot? Or unlucky? Costly mistakes by
+expert classifiers? Or random walk? 
+
+Impurity, false positives. Examples and trajectories, from stage 2
+training set. Generic properties. Could also be solved by dynamical
+stage 2? Improve training?
+
+Solutions: dynamical stage 2, to reduce noise. Does stage 1 skill correlate
+with stage 2 skill? Missing group-scale lenses at stage 2. Improve training?
+Educational interventions?
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Improving efficiency}
+\label{sec:discuss:efficiency}
+
+Inefficiency. Move to truly online system: web app to analyse classifications
+as it goes. Place for weekly offline processing? Recovering false negatives by
+``resurrecting'' subjects that scattered down too soon.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Increasing capacity}
+\label{sec:discuss:capacity}
+
+Scaling of system. Factors of ten: 10^4 volunteers, 10^3 achieve high skill,
+10^2 make significant contribution. Good project size is few 10^4 subjects, to
+enable completion by a crowd of this size in short time. 
+
+Ways to increase numbers of high-contribution volunteers: 1) increase crowd
+size. Higher exposure through media. Multi-lingual user base - comes with
+problems.  2) Increase engagement rate:  feedback from survey teams. 
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Conclusions}
 \label{sec:conclude}
+
+\todo{Phil}{write conclusions (\#45).}
 
 Summary of system.
 

@@ -859,24 +859,6 @@ classified 10 or more training subjects.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.png}
-\caption{Stage 2 agent properties, separating veterans from stage 1 from new
-volunteers. Point size represents total information generated, dashed lines
-are drawn at the mean values for each sample.}
-\label{fig:crowd:stage1vstage2}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-We now look at the transition between stage 1 and stage 2 in more detail. Of
-the 1964 volunteers who took part in the stage 2 classification round, only
-774 were veterans from stage 1. However, these volunteers showed significantly
-higher skill levels than the new users, and also made more classifications
-(and hence made greater contributions. This is illustrated in  
-\Fref{fig:crowd:stage1vstage2}. In this figure, point size is proportional to
-information generated: the higher skill, higher effort stage 1 veterans
-generated most of the information.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -1084,24 +1066,104 @@ the CFHTLS training set.}
 
 \todo{Phil}{write discussion (\#44).}
 
-Preamble. Notes for future. Improvements to system to be investigated. 
+What can we learn from the results of the previous section, for future
+projects? Potential improvements to the \sw system can be divided into three
+categories, performance, efficiency and capacity.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{Improving performance: reducing incompleteness and impurity}
 \label{sec:discuss:performance}
 
-Incompleteness, false negatives. Examples and trajectories, from stage 2
-training set. Generic properties: hard to spot? Or unlucky? Costly mistakes by
-expert classifiers? Or random walk? 
+We first investigate the source of the incompleteness visible in 
+\Fref{fig:results:sample:CP}, by examining the stage 2 false negatives.
+\Fref{fig:discuss:performance:FNgallery} shows N example simulated lenses that
+were missed by the \sw system. In some cases their rejection is
+understandable: the lensed features are faint, or otherwise difficult to see.
+However, in other cases a reasonably obvious lens was passed over. 
+\Fref{fig:discuss:performance:FNtrajectories} shows the probability 
+trajectories of these subjects. \todo{Phil}{Make the FN plots, and look for
+behaviour. Can we see whether the FNs are due to costly mistakes by expert
+classifiers? Or are they just random walking south?}
 
-Impurity, false positives. Examples and trajectories, from stage 2
-training set. Generic properties. Could also be solved by dynamical
-stage 2? Improve training?
+Is the system's impurity a result of the same behaviour?
+Figures~\ref{fig:discuss:performance:FPgallery}
+and~\ref{fig:discuss:performance:FPtrajectories} show the corresponding
+figures for the false positives -- non-lenses that were incorrectly inferred
+to be lens candidates during stage 2. \todo{Phil}{Make the FP plots, and look
+for behaviour. Can we see whether the FPs are due to costly mistakes by expert
+classifiers? Or are they just random walking south?}
 
-Solutions: dynamical stage 2, to reduce noise. Does stage 1 skill correlate
-with stage 2 skill? Missing group-scale lenses at stage 2. Improve training?
-Educational interventions?
+In general, there are three places we can act to improve system performance:
+educating the volunteers, assigning subjects for classification, and
+interpreting the classification data. The plots in this section suggest that
+...
+
+Mistakes by reasonably high skill classifiers cause large jumps in subject
+probability in the wrong direction, as are occasionally visible in the
+trajectory plots in this section. We might wonder whether some of those
+mistakes could have been corrected by the classifiers themselves, had they had
+access to a ``go back'' option. While clearly enabling error reduction, we
+might worry about such a mechanism enabling classifiers to have a guess, then
+go and read the Talk discussion, and then return to the classification
+interface to change their mind to agree with the forum. In fact, this is
+already possible on the current interface -- and indeed, it is not obvious
+that such correlations would necessarily lead to poorer system performance.
+This could be tested by presenting a fraction of the volunteers with a version
+of the site that actively suggested that they take this approach, and then
+tracking the relative performance of ``collaborative'' classifications
+compared with independent ones. We leave this to further work.  
+
+Mistakes by both high and low skill classifiers could be reduced by improving
+the training in the system, which could be done in several ways. One is to 
+make more training images available to those who want or need it. A basic
+level of training images are needed for SWAP to build up an accurate picture
+of each classifier's skill -- but one could imagine volunteers {\it choosing}
+to see more training images (still at random) in their stream. Another could
+be to provide more information about what lenses do. In this project, the
+Spotter's Guide was always available on the site, but as a passive background
+resource. We might consider providing more links to this guide in the feedback
+messages shown to the classifiers as they go -- or perhaps extending these
+messages to themselves include more explanations and example images. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.png}
+\caption{Stage 2 agent properties, separating veterans from stage 1 from new
+volunteers. Point size represents total information generated, dashed lines
+are drawn at the mean values for each sample.}
+\label{fig:discuss:performance:stage1vstage2}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Some trajectories show signs of a random walk problem. Those subjects are
+simply ``unlucky:'' they are only seen by low skill classifiers, and  happen
+to be mis-classified  enough times to cross the retirement threshold (in the
+case of the false negatives) or remain in the system (in the case of the false
+positives). While improved training will help reduce this effect, it is here
+that targeted task assignment could help improve system performance. We
+advertised stage 2 of the current project to all registered users; it was
+taken up by stage 1 veterans with a broad range of skill, and also picked up a
+significant number of new users who did not have enough time to aquire high
+skill (since stage 2 was quite short): of
+the 1964 volunteers who took part in the stage 2 classification round, only
+774 were veterans from stage 1. \Fref{fig:discuss:performance:stage1vstage2}
+shows how the stage 1 skill maps on to stage 2 skill and contribution...
+
+\todo{Phil}{Remake figure to show stage 2 skill vs stage 1 skill with point
+size given by stage 2 contribution. Stage 2 newbies will all have 0 +/- small
+stage 1 skill. Then move this figure to here.}
+
+Thsi figure suggests that there may be some benefit to opening stage 2 on the
+basis of agent skill, in order to reduce the noise in the system generated by
+new and low skill volunteers in this more difficult classification stage. A
+simple implementation of this would be to switch the web app to the stage 2
+version when either a certain stage 1 skill (and/or effort) threshold was
+passed. Good strategy would probably be to switch back to stage 1 after some
+number of stage 2 classifications (to avoid losing the high skill users from
+stage 1 entirely), and also to make it very clear which stage the classifier
+was at (since stage 2 requires more careful attention). This is something we
+plan to experiment with in future.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 

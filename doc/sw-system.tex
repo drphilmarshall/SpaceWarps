@@ -860,59 +860,23 @@ many of the highest contributors showed relatively low skill early on.
 
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
 information generated in both stage 1 and 2 of the CFHTLS project, with the
-total numbers of agents and subjects for comparison. These numbers allow us to
-quantify the efficiency of the system. 
-
-
-
-% From Edwin, July 1:
-% 
-% I've read it through and I didn't need to make any edits. The only thing I'm
-% not completely convinced about is calculating inefficiency from
-% "contribution". 
-% 
-% If the agents were perfect classifiers, and the prior for the lens class was
-% set at 0.5, then it would make sense to have 1 bit contribution per subject.
-% However, with imperfect classifiers and a strong prior, you need several
-% labels from an agent to classify a subject confidently. I think this means you
-% require more than 1 bit of "contribution" per subject. 
-% 
-% So, given this set of agents and your priors over the classes, you could not
-% get close to 100% efficiency. However, I don't know how you could separate
-% inefficiencies due to the agents from inefficiencies due to the system
-% (allocating tasks, retiring subjects etc.).
-% 
-% Perhaps it is more correct to say that the 33% inefficiency is partly due to
-% not retiring things quickly enough, but can also be due to the agents being
-% imperfect classifiers, and the heavily skewed priors.
-% 
-
-
-
-
-
-
-
-
-
-
-
-The contribution per classification is
-defined in terms of a hypothetical subject with lens probability of 0.5; one
-bit of information is needed to update such a subject's lens probability to
-either zero or one. This means that a maximally complete classification stage
-would yield a total contribution (summed over all agents) equal to the number
-of subjects. The ratio of this hypothetical optimum to the actual total
+total numbers of agents and subjects for comparison.  These numbers allow us
+to quantify the efficiency of the system.  The contribution per classification
+is defined in terms of a hypothetical subject with lens probability of 0.5;
+one bit of information is needed to update such a subject's lens probability
+to either zero or one. This means that a maximally complete classification
+stage would yield a total contribution (summed over all agents) equal to the
+number of subjects. The ratio of this hypothetical optimum to the actual total
 contribution is therefore a measure of the stage's inefficiency. We find our
 inefficiency (by dividing column 2 by column 3) to be 33\% and 17\% in stage 1
 and 2 respectively. In stage 1, this inefficiency is due to the daily
 processing: we were not able to retire subjects fast enough, and so they,
-remained in the system, being over-classified. Only 3705745 classifications
-were needed to retire all the subjects: the ratio of this to the total number
-made is 34\%. (The remaining 1\% is due to not all subjects being classified
-to 1 or 0 probability.) At stage 2, we did not retire any subjects at all; the
-inefficiency in this case was by design, to give everyone a chance to
-appreciate what they had found together! 
+remained in the system, being over-classified. Indeed, only 3705745
+classifications were needed to retire all the subjects: the ratio of this to
+the total number made is 34\%. (The remaining 1\% is due to not all subjects
+being classified to 1 or 0 probability.) At stage 2, we did not retire any
+subjects at all; the inefficiency in this case was by design, to give everyone
+a chance to appreciate what they had found together! 
 
 The total skill of the crowd, computed by summing the skill of all the agents,
 is, similarly, a measure of the effective crowd size: a crowd of perfect

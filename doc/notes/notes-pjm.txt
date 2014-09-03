@@ -6241,6 +6241,37 @@ java -jar visapp.jar &
 
 tail -f record_position.txt
 
+
+# 2014-09-02 (Tuesday) 14:16 PDT
+
+# Inspecting offline deiscrepant systems:
+
+open \
+CFHTLS_169_1303_gri.png \
+CFHTLS_019_0882_gri.png \
+CFHTLS_168_1300_gri.png \
+CFHTLS_132_1679_gri.png \
+CFHTLS_122_2397_gri.png \
+CFHTLS_114_1574_gri.png \
+CFHTLS_091_0819_gri.png \
+CFHTLS_089_2040_gri.png \
+CFHTLS_089_2039_gri.png \
+CFHTLS_076_1953_gri.png \
+CFHTLS_022_0671_gri.png \
+CFHTLS_015_0346_gri.png \
+CFHTLS_068_2401_gri.png \
+CFHTLS_059_0098_gri.png \
+CFHTLS_164_1649_gri.png \
+CFHTLS_140_1121_gri.png \
+CFHTLS_103_0406_gri.png \
+CFHTLS_085_1183_gri.png \
+CFHTLS_077_1920_gri.png \
+CFHTLS_067_2054_gri.png \
+CFHTLS_062_0311_gri.png \
+CFHTLS_057_2380_gri.png \
+CFHTLS_048_0767_gri.png \
+CFHTLS_029_0688_gri.png
+
 # ======================================================================
 FINISH:
 

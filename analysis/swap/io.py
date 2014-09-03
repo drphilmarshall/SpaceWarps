@@ -2,7 +2,7 @@
 
 import swap
 
-import os,cPickle
+import os,cPickle,numpy as np
 
 # ======================================================================
 
@@ -16,14 +16,17 @@ import os,cPickle
     COMMENTS
 
     FUNCTIONS
-        writePickle(contents,filename):
+        write_pickle(contents,filename):
 
-        readPickle(filename): returns contents of pickle
+        read_pickle(filename):
 
-        readCatalog(filename,config): returns table, given column names
-                                      in configuration config
+        write_list(sample, filename, item=None):
+        
+        read_list(filename):
+     
+        write_catalog(sample, filename, thresholds, kind=kind):
 
-        rm(filename): silent file removal
+        rm(filename):
 
     BUGS
 
@@ -127,6 +130,12 @@ def write_list(sample, filename, item=None):
     F.close()
 
     return count
+
+# ----------------------------------------------------------------------------
+# Read in a simple list of string items.
+
+def read_list(filename):
+    return np.atleast_1d(np.loadtxt(filename,dtype='string'))
 
 # ----------------------------------------------------------------------------
 # Write out a multi-column catalog of high probability candidates.

@@ -1,11 +1,5 @@
 # ======================================================================
 
-"""
-TODO:
-    Figure out how to let there be multiple lenses in a subject...
-
-"""
-
 import swap
 
 import numpy as np
@@ -73,6 +67,11 @@ class Subject(object):
         Subject.plot_trajectory(axes)
 
     BUGS
+
+
+    FEATURE REQUESTS
+        Figure out how to let there be multiple lenses in a subject...
+
 
     AUTHORS
       This file is part of the Space Warps project, and is distributed
@@ -262,7 +261,7 @@ class Subject(object):
 # ----------------------------------------------------------------------
 # Plot subject's trajectory, as an overlay on an existing plot:
 
-    def plot_trajectory(self,axes):
+    def plot_trajectory(self,axes,highlight=False):
 
         plt.sca(axes[0])
         N = np.linspace(0, len(self.trajectory)/Ntrajectory+1, len(self.trajectory)/Ntrajectory, endpoint=True);
@@ -290,12 +289,26 @@ class Subject(object):
         else:
             facecolour = 'white'
 
-        plt.plot(mdn_trajectory,N,color=colour,alpha=0.1,linewidth=1.0, linestyle="-")
+        if highlight:
+            # Thicker, darker line:
+            plt.plot(mdn_trajectory,N,color=colour,alpha=0.5,linewidth=2.0, linestyle="-")
+        else:
+            # Thinner, fainter line:
+            plt.plot(mdn_trajectory,N,color=colour,alpha=0.1,linewidth=1.0, linestyle="-")
 
         NN = N[-1]
         if NN > swap.Ncmax: NN = swap.Ncmax
-        plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
-        plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
+        if highlight:
+            # Heavier symbol:
+            plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.8);
+            plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.5);
+        else:
+            # Fainter symbol:
+            plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
+            plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
+        
+        
+        
         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
 
         return

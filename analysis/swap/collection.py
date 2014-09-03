@@ -225,13 +225,18 @@ class Collection(object):
 # ----------------------------------------------------------------------
 # Prepare to plot subjects' trajectories:
 
-    def start_trajectory_plot(self,final=False):
+    def start_trajectory_plot(self,final=False,title=None,histogram=True,logscale=True):
     
-        fig = plt.figure(figsize=(5,8), dpi=300)
-
         left, width = 0.15, 0.8
-        upperarea = [left, 0.4, width, 0.5]# left, bottom, width, height
-        lowerarea = [left, 0.1, width, 0.3]
+
+        if histogram:
+            fig = plt.figure(figsize=(5,8), dpi=300)
+            upperarea = [left, 0.4, width, 0.5] # left, bottom, width, height
+            lowerarea = [left, 0.1, width, 0.3]
+        else:
+            fig = plt.figure(figsize=(5,5), dpi=300)
+            upperarea = [left, left, width, width] # left, bottom, width, height
+            lowerarea = []
 
         # Upper panel: subjects drifting downwards:
 
@@ -250,7 +255,10 @@ class Collection(object):
         for tick in hax.yaxis.get_ticklines(): 
             tick.set_visible(False) 
         plt.sca(hax)
-        plt.arrow(np.log10(2e-4), np.log10(0.3), 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
+        if logscale:
+            plt.arrow(np.log10(2e-4), np.log10(0.3), 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
+        else:
+            plt.arrow(np.log10(2e-4), -0.8, 0.0, 0.1, fc="k", ec="k", linewidth=2, head_width=0.2, head_length=0.1)
         # hax.set_axis_off()        
 
         # Now overlay a transparent frame to plot the subjects in:
@@ -259,7 +267,8 @@ class Collection(object):
         upper.set_xlim(swap.pmin,swap.pmax)
         upper.set_xscale('log')
         upper.set_ylim(swap.Ncmax,swap.Ncmin)
-        upper.set_yscale('log')
+        if logscale:
+            upper.set_yscale('log')
         
         # Vertical lines to mark prior and detect/rejection thresholds:
         x = self.thresholds()
@@ -268,25 +277,38 @@ class Collection(object):
         plt.axvline(x=x['rejection'],color='red',linestyle='dotted')
 
         upper.set_ylabel('No. of classifications')
-        for label in upper.get_xticklabels():
-            label.set_visible(False)
+        # Turn off upper panel x labels, if we are plotting a histogram:
+        if histogram:
+            for label in upper.get_xticklabels():
+                label.set_visible(False)
+        
+        # Plot title:
         if final:
             upper.set_title('Candidate Trajectories')
         else:
             upper.set_title('Example Subject Trajectories')
+        # Manual over-ride:
+        if title is not None:
+            upper.set_title(title)
+
+        if histogram:
+            # Lower panel: histogram:
+            lower = fig.add_axes(lowerarea, sharex=upper)
+            plt.sca(lower)
+            lower.set_xlim(swap.pmin,swap.pmax)
+            lower.set_xscale('log')
+            lower.set_ylim(0.1,9999)
+            # lower.set_yscale('log')
+            plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
+            plt.axvline(x=x['detection'],color='blue',linestyle='dotted')
+            plt.axvline(x=x['rejection'],color='red',linestyle='dotted')
+            lower.set_xlabel('Posterior Probability Pr(LENS|d)')
+            lower.set_ylabel('No. of subjects')
+            
+        else:
+            lower = False
+            upper.set_xlabel('Posterior Probability Pr(LENS|d)')
         
-        # Lower panel: histogram:
-        lower = fig.add_axes(lowerarea, sharex=upper)
-        plt.sca(lower)
-        lower.set_xlim(swap.pmin,swap.pmax)
-        lower.set_xscale('log')
-        lower.set_ylim(0.1,9999)
-        # lower.set_yscale('log')
-        plt.axvline(x=swap.prior,color='gray',linestyle='dotted')
-        plt.axvline(x=x['detection'],color='blue',linestyle='dotted')
-        plt.axvline(x=x['rejection'],color='red',linestyle='dotted')
-        lower.set_xlabel('Posterior Probability Pr(LENS|d)')
-        lower.set_ylabel('No. of subjects')
            
         return [upper,lower]
 
@@ -295,32 +317,36 @@ class Collection(object):
 
     def finish_trajectory_plot(self,axes,filename,t=None,final=None):
     
-        # Plot histograms! 0 is the upper panel, 1 the lower.
-        plt.sca(axes[1])
-        
-        bins = np.linspace(np.log10(swap.pmin),np.log10(swap.pmax),32,endpoint=True)
-        bins = 10.0**bins
-        colors = ['blue','red','black']
-        labels = ['Training: Sims','Training: Duds','Test: Survey']
-        thresholds = self.thresholds()
-        
-        for j,kind in enumerate(['sim','dud','test']):
-            
-            self.collect_probabilities(kind)
-            p = self.probabilities[kind]
-            
-            # Sometimes all probabilities are lower than pmin! 
-            # Snap to grid.
-            p[p<swap.pmin] = swap.pmin
-            # print "kind,bins,p = ",kind,bins,p
-            
-            # Final plot - only show subjects above threshold:
-            if final:
-                p = p[p>thresholds['rejection']]
-                
-            # Pylab histogram:
-            plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=0.7, label=labels[j])
-            plt.legend(prop={'size':10})
+        # If we are not plotting the histogram, the second axis is False...
+
+        if axes[1] is not False:
+
+            # Plot histograms! 0 is the upper panel, 1 the lower.
+            plt.sca(axes[1])
+
+            bins = np.linspace(np.log10(swap.pmin),np.log10(swap.pmax),32,endpoint=True)
+            bins = 10.0**bins
+            colors = ['blue','red','black']
+            labels = ['Training: Sims','Training: Duds','Test: Survey']
+            thresholds = self.thresholds()
+
+            for j,kind in enumerate(['sim','dud','test']):
+
+                self.collect_probabilities(kind)
+                p = self.probabilities[kind]
+
+                # Sometimes all probabilities are lower than pmin! 
+                # Snap to grid.
+                p[p<swap.pmin] = swap.pmin
+                # print "kind,bins,p = ",kind,bins,p
+
+                # Final plot - only show subjects above threshold:
+                if final:
+                    p = p[p>thresholds['rejection']]
+
+                # Pylab histogram:
+                plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=0.7, label=labels[j])
+                plt.legend(prop={'size':10})
         
         if t is not None:
             # Add timestamp in top righthand corner:

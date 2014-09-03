@@ -6273,15 +6273,112 @@ CFHTLS_048_0767_gri.png \
 CFHTLS_029_0688_gri.png
 
 # ======================================================================
+# 2014-09-03 (Wednesday) 15:02 PDT
+
+# Plotting specific subjects' trajectories. Notes/code from Anu:
+# 
+# 1. Using the attached file (loc_cfhtid*), you can extract ids,cfhtids of those
+# subjects which you want to plot trajectories of and store them in
+# "interesting_candidates.txt"
+# 
+# 2. In SWAP.py where you plot Subject trajectories, you can add these lines:
+# 
+#  ids,cfhtids=np.loadtxt("interesting_candidates.txt",dtype='string',unpack=1);
+# 
+#          for ID in ids:
+#              try:
+#                 sample.member[ID].plot_trajectory2(fig3);
+#                 print "SWAPDBG: Found ",ID," and plotting, it was ",sample.member[ID].status,sample.member[ID].kind
+#              except KeyError:
+#                 print "SWAPDBG: Notfound ",ID," and continuing, it was not_found"
+#                 continue;
+# 
+# 
+# 3. In analysis/swap/subject.py, You can add the plot_trajectory2 function (see
+# below) which will plot the magenta trajectories.
+# 
+# 
+#     def plot_trajectory2(self,axes):
+# 
+#         plt.sca(axes[0])
+#         N = np.linspace(0, len(self.trajectory)/Ntrajectory+1, len(self.trajectory)/Ntrajectory, endpoint=True);
+#         N[0] = 0.5
+#         mdn_trajectory=np.array([]);
+#         sigma_trajectory_m=np.array([]);
+#         sigma_trajectory_p=np.array([]);
+#         for i in range(len(N)):
+#         sorted_arr=np.sort(self.trajectory[i*Ntrajectory:(i+1)*Ntrajectory])
+#             sigma_p=sorted_arr[int(0.84*Ntrajectory)]-sorted_arr[int(0.50*Ntrajectory)]
+#             sigma_m=sorted_arr[int(0.50*Ntrajectory)]-sorted_arr[int(0.16*Ntrajectory)]
+#             mdn_trajectory=np.append(mdn_trajectory,sorted_arr[int(0.50*Ntrajectory)]);
+#             sigma_trajectory_p=np.append(sigma_trajectory_p,sigma_p);
+#             sigma_trajectory_m=np.append(sigma_trajectory_m,sigma_m);
+# 
+#         if self.kind == 'sim':
+#             colour = 'blue'
+#         elif self.kind == 'dud':
+#             colour = 'red'
+#         elif self.kind == 'test':
+#         # this is different
+#             colour = 'magenta'
+# 
+#         if self.status == 'undecided':
+#             facecolour = colour
+#         else:
+#             facecolour = 'white'
+# 
+#         # this is different
+#         plt.plot(mdn_trajectory,N,color=colour,alpha=0.15,linewidth=1.0, linestyle="-")
+# 
+#         NN = N[-1]
+#         if NN > swap.Ncmax: NN = swap.Ncmax
+#         plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
+#         plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
+#         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
+# 
+#         return
+
+
+# So, need to update subject.py to plot highlighted trajectories (not 
+# necessarily in magenta!), and then write a standalone trajectory plotter
+# (better than having SWAP do it, I think - its too specialized a task).
+ 
+set collection = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_collection.pickle
+
+set FNcatalog = $SWAP_DIR/projects/CFHTLS/stage2/results/online/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt 
+set FNlist = ${FNcatalog:r}_P.lt.0.0001.txt
+set FNpng = CFHTLS_stage2_false-negatives_trajectories.png
+
+# ZooIDs:
+# grep -v '#' $FNcatalog | awk '{if ($2 < 0.0001) print $1}' > $FNlist
+
+# Database IDs:
+grep -v '#' $FNcatalog | awk '{if ($2 < 0.0001) print $4}' | \
+  cut -d'/' -f6 | cut -d'.' -f1 > $FNlist
+
+make_trajectory_plots.py -f $FNlist -t "Stage 2 False Negatives" $collection
+mv trajectories.png $FNpng
+
+# OK! Got trajectories, no histograms, on linear scale, for 6 false negatives.
+
+# Now do false positives:
+
+set FPcatalog = $SWAP_DIR/projects/CFHTLS/stage2/results/online/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt 
+set FPlist = ${FPcatalog:r}_P.gt.0.95.txt
+set FPpng = CFHTLS_stage2_false-positives_trajectories.png
+
+# Database IDs:
+grep -v '#' $FPcatalog | awk '{if ($2 > 0.95) print $4}' | \
+  cut -d'/' -f6 | cut -d'.' -f1 > $FPlist
+wc -l $FPlist
+
+make_trajectory_plots.py -f $FPlist -t "Stage 2 False Positives" $collection
+mv trajectories.png $FPpng
+
+# Looks to me like its not the experts making mistakes - but just noise from the random walk.
+
+# ======================================================================
 FINISH:
-
-
-
-
-
-
-
-
 
 
 

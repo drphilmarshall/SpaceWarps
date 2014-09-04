@@ -1,7 +1,8 @@
 # ============================================================================
 # Shortcuts to useful snippets, for reproducing the SW results:
 # goto CFHTLS_STAGE1
-goto SPREADCHECK
+# goto SPREADCHECK
+goto FNFPTRAJECTORIES
 # ============================================================================
 # 2013-04-07 (Sunday) 00:58 IST
 #
@@ -6343,39 +6344,132 @@ CFHTLS_029_0688_gri.png
 # necessarily in magenta!), and then write a standalone trajectory plotter
 # (better than having SWAP do it, I think - its too specialized a task).
  
-set collection = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_collection.pickle
+mkdirf  $SWAP_DIR/workspace/CFHTLS/trajectories
+ 
+set collection2 = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_collection.pickle
 
-set FNcatalog = $SWAP_DIR/projects/CFHTLS/stage2/results/online/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt 
-set FNlist = ${FNcatalog:r}_P.lt.0.0001.txt
-set FNpng = CFHTLS_stage2_false-negatives_trajectories.png
+set FNcatalog2 = $SWAP_DIR/projects/CFHTLS/stage2/results/online/CFHTLS_2013-12-10_16:47:03_sim_catalog.txt 
+set FNlist2 = ${FNcatalog:r}_P.lt.0.0001.txt
+set FNpng2 = CFHTLS_stage2_false-negatives_trajectories.png
 
 # ZooIDs:
-# grep -v '#' $FNcatalog | awk '{if ($2 < 0.0001) print $1}' > $FNlist
+# grep -v '#' $FNcatalog2 | awk '{if ($2 < 0.0001) print $1}' > $FNlist2
 
 # Database IDs:
-grep -v '#' $FNcatalog | awk '{if ($2 < 0.0001) print $4}' | \
-  cut -d'/' -f6 | cut -d'.' -f1 > $FNlist
+grep -v '#' $FNcatalog2 | awk '{if ($2 < 0.0001) print $4}' | \
+  cut -d'/' -f6 | cut -d'.' -f1 > $FNlist2
+wc -l $FNlist2
+# 6
 
-make_trajectory_plots.py -f $FNlist -t "Stage 2 False Negatives" $collection
-mv trajectories.png $FNpng
+make_trajectory_plots.py -f $FNlist2 -t "Stage 2 False Negatives" $collection2
+mv trajectories.png $FNpng2
 
 # OK! Got trajectories, no histograms, on linear scale, for 6 false negatives.
 
 # Now do false positives:
 
-set FPcatalog = $SWAP_DIR/projects/CFHTLS/stage2/results/online/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt 
-set FPlist = ${FPcatalog:r}_P.gt.0.95.txt
-set FPpng = CFHTLS_stage2_false-positives_trajectories.png
+set FPcatalog2 = $SWAP_DIR/projects/CFHTLS/stage2/results/online/CFHTLS_2013-12-10_16:47:03_dud_catalog.txt 
+set FPlist2 = ${FPcatalog2:r}_P.gt.0.95.txt
+set FPpng2 = CFHTLS_stage2_false-positives_trajectories.png
 
 # Database IDs:
-grep -v '#' $FPcatalog | awk '{if ($2 > 0.95) print $4}' | \
-  cut -d'/' -f6 | cut -d'.' -f1 > $FPlist
-wc -l $FPlist
+grep -v '#' $FPcatalog2 | awk '{if ($2 > 0.95) print $4}' | \
+  cut -d'/' -f6 | cut -d'.' -f1 > $FPlist2
+wc -l $FPlist2
+# 1
 
-make_trajectory_plots.py -f $FPlist -t "Stage 2 False Positives" $collection
-mv trajectories.png $FPpng
+make_trajectory_plots.py -f $FPlist2 -t "Stage 2 False Positives" $collection2
+mv trajectories.png $FPpng2
 
 # Looks to me like its not the experts making mistakes - but just noise from the random walk.
+
+# Check the stage 1 systems too:
+
+set collection1 = $SWAP_DIR/workspace/CFHTLS/stage1/CFHTLS_collection.pickle
+
+set FNcatalog1 = $SWAP_DIR/projects/CFHTLS/stage1/results/CFHTLS_2013-12-08_10:20:56_sim_catalog.txt  
+set FNlist1 = ${FNcatalog:r}_P.lt.0.00001.txt
+set FNpng1 = CFHTLS_stage1_false-negatives_trajectories.png
+
+grep -v '#' $FNcatalog1 | awk '{if ($2 < 0.00001) print $4}' | \
+  cut -d'/' -f6 | cut -d'.' -f1 > $FNlist1
+wc -l $FNlist1
+# 4
+
+make_trajectory_plots.py -f $FNlist1 -t "Stage 1 False Negatives" $collection
+mv trajectories.png $FNpng1
+
+# Now do false positives:
+
+set FPcatalog1 = $SWAP_DIR/projects/CFHTLS/stage1/results/CFHTLS_2013-12-08_10:20:56_dud_catalog.txt
+set FPlist1 = ${FPcatalog1:r}_P.gt.0.95.txt
+set FPpng1 = CFHTLS_stage1_false-positives_trajectories.png
+
+grep -v '#' $FPcatalog1 | awk '{if ($2 > 0.95) print $4}' | \
+  cut -d'/' -f6 | cut -d'.' -f1 > $FPlist1
+wc -l $FPlist1
+# 4
+
+make_trajectory_plots.py -f $FPlist1 -t "Stage 1 False Positives" $collection
+mv trajectories.png $FPpng1
+
+# OK, FPs show a few costly mistakes...
+# Maybe because PD is less well constrained at stage 1?
+
+# OK, look at trajectories next to subjects. 
+# Need to pull down PNGs and save next to personal trajectory plot.
+# Plot title needs to be "ASW0000XXX: Stage 1 False Positive" etc,
+# and filenames should be ASW0000XXX_gri.png, ASW0000XXX_stage1_trajectory.png
+
+FNFPTRAJECTORIES:
+
+set collections = ( $collection1 $collection2 )
+set FNcatalogs = ( $FNcatalog1 $FNcatalog2 )
+set FPcatalogs = ( $FPcatalog1 $FPcatalog2 )
+set FNlists = ( $FNlist1 $FNlist2 )
+set FPlists = ( $FPlist1 $FPlist2 )
+
+set panels = ( )
+
+foreach stage ( 1 2 )
+  set collection = $collections[$stage]
+  foreach failure ( 'FN' 'FP' )
+    if ($failure == 'FN') then
+      set catalog = $FNcatalogs[$stage]
+      set list = $FNlists[$stage]
+      set titleending = ": Stage $stage False Negative"
+    else
+      set catalog = $FPcatalogs[$stage]
+      set list = $FPlists[$stage]
+      set titleending = ": Stage $stage False Positive"
+    endif
+    foreach ID ( `cat $list` )
+      set ZooID = `grep $ID $catalog | awk '{print $1}'`
+      set title = "${ZooID}$titleending"
+      set url = `grep $ID $catalog | awk '{print $4}'`
+      set image = ${ZooID}_gri.png
+      set plot = ${ZooID}_stage${stage}_trajectory.png
+      if (! -e $plot) then
+        wget -O $image "$url"
+        echo $ID > toto
+        set log = $plot:r.log
+        make_trajectory_plots.py -f toto -t "$title" $collection >& $log
+        mv trajectories.png $plot
+      endif
+      set panels = ( $panels $image )
+      set panels = ( $panels $plot )
+      du -h $image $plot
+    end
+  end
+end
+
+gallery.pl -x 2 -y 2 -pdf -o trajectories_gallery.pdf $panels
+
+goto FINISH
+
+# OK, send around. FNs are genuinely hard!
+# Do see some costly mistakes, in stage 1 FPs, eg ASW0003j2s (and also ASW0002c4t, 
+# which is the same object, weirdly). 
 
 # ======================================================================
 FINISH:

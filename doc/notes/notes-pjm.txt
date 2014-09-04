@@ -6429,6 +6429,8 @@ set FPcatalogs = ( $FPcatalog1 $FPcatalog2 )
 set FNlists = ( $FNlist1 $FNlist2 )
 set FPlists = ( $FPlist1 $FPlist2 )
 
+set manifest = loc_cfhtid_d1_d11
+
 set panels = ( )
 
 foreach stage ( 1 2 )
@@ -6458,12 +6460,14 @@ foreach stage ( 1 2 )
       endif
       set panels = ( $panels $image )
       set panels = ( $panels $plot )
-      du -h $image $plot
+      # du -h $image $plot
+      set CFHTLSID = `grep $ID $manifest | awk '{print $2}'`
+      echo "$title  ( $CFHTLSID )"
     end
   end
 end
 
-gallery.pl -x 2 -y 2 -pdf -o trajectories_gallery.pdf $panels
+# gallery.pl -x 2 -y 2 -pdf -o trajectories_gallery.pdf $panels
 
 goto FINISH
 

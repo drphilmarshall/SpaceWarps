@@ -865,36 +865,43 @@ classified 10 or more training subjects.}
 \label{sec:results:sample}
 
 We now quantify the performance of the \sw system in terms of the recovery of
-the training set images. \Fref{fig:results:sample:roc} shows receiver
-operating characteristic (ROC) curves for CFHTLS stage 1 and stage 2. These
-plots show the true positive rate (TPR), the number of sims correctly detected
-divided by the total number of sims in the training set, and the false
-positive rate (FPR), the number of duds incorrectly detected  divided by total
-number of duds in the training set, both for a given sample of detections defined by
-a particular probability threshold, which varies along the curves.  In both
-stages, these curves show that true positive rates of  around 90\% were
-achieved, at very low false positive rates. For comparison we show the results
-of an analysis where the classifications of  training images were ignored, and
-none of the agents allowed to learn: they were instead assigned initial values
-of their confusion matrices of 0.75 for each element, which then remained
-constant. This emulates a very simple unweighted voting scheme, where all
-classifications are treated equally. In this case, the TPR remains under 80\%
-in stage 1 and 60\% in stage 2, thus quantifying 
-the benefit of including training
-images and allowing the agents to learn. The choice of initial confusion
-matrix is not very important: the same 0.75 initial values applied to normal,
-learning agents results in a slightly lower TPR than the default case,
-indicating that initializing the system less conservatively results in
-slightly worse performance.
+the training set images. At stage 1, this set contains around 5712 simulated
+lenses, and 450 duds; at stage 2, we used 152 simulated lenses and 201 duds.
+\Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
+curves for CFHTLS stage 1 and stage 2. These plots show the true positive rate
+(TPR), the number of sims correctly detected divided by the total number of
+sims in the training set, and the false positive rate (FPR), the number of
+duds incorrectly detected  divided by total number of duds in the training
+set, both for a given sample of detections defined by a particular probability
+threshold, which varies along the curves.  In both stages, these curves show
+that true positive rates of  around 90\% were achieved, at very low false
+positive rates. For comparison we show the results of an analysis where the
+classifications of  training images were ignored, and none of the agents
+allowed to learn: they were instead assigned initial values of their confusion
+matrices of 0.75 for each element, which then remained constant. This emulates
+a very simple unweighted voting scheme, where all classifications are treated
+equally. In this case, the TPR remains under 80\% in stage 1 and 60\% in stage
+2, thus quantifying  the benefit of including training images and allowing the
+agents to learn. The choice of initial confusion matrix is not very important:
+the same 0.75 initial values applied to normal, learning agents results in a
+slightly lower TPR than the default case, indicating that initializing the
+system less conservatively results in slightly worse performance.
 
 The dot-dashed curves show the impact of the offline analysis. At stage 1 the
 results are very similar to the online version that was actually run (solid
-line). However, at stage 2 there seems to be somewhat greater benefit to doing
-the analysis in this way: over 85\% TPR is achieved at zero FPR.
-Alternatively, if one is willing to accept a false positive rate of 5\%, the
-true positive rate rises to over 95\%, showing that some of the sims that were
-missed in the online analysis can be recovered by doing the analysis offline.
-The same is true at stage 1, but to a lower degree.
+line). However, at stage 2 there is marginal evidence of there being greater
+benefit to doing the analysis offline. Over 85\% TPR is achieved at zero FPR
+in the offline analysis , while if one is willing to accept a false positive
+rate of 5\%, the true positive rate rises to over 95\%, showing that some of
+the sims that were missed in the online analysis may be being recovered by
+doing the analysis offline. The same is true at stage 1, but to a lower
+degree. Assuming Poisson statistics for the fluctuations in the numbers of
+recovered lenses, the uncertainty in the measured stage 2 TPR values is around
+8\%, but the online and offline samples are highly correlated, such that the
+uncertainty on the difference between the ROC curves is somewhat less than
+this. Still, a larger validation set is needed to test these algorithmic
+choices more rigorously. At stage 1, high TPR can be measured to better than
+1\%.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
@@ -1036,19 +1043,26 @@ classifiers have been involved, causing random walks with longer step lengths
 
 We investigated the source of the incompleteness and impurity visible in 
 \Fref{fig:results:sample:CP}, by examining the stage 2 false negatives and
-false positives. \Fref{fig:discuss:performance:trajectories} shows 2 example
-simulated lenses  that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \sw
-system, and 2 example non-lenses that were incoreectly flagged as candidates
-($\pr(\LENS|C,T) > 0.95$) by the \sw system. 
+false positives, and their behaviour as they are classified using the online
+analysis trajectory plots introduced in \Sref{sec:swap}
+(\Fref{fig:swap:subject-trajectories}).
+\Fref{fig:discuss:performance:trajectories} shows 2 example simulated lenses 
+that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \sw system, and 2 example
+non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
+0.95$) by the \sw system. While the final stage 2 analysis was done offline,
+these trajectory plots still serve to illustrate the approximate
+classification histories of the subjects.
 
 In some cases the rejection of the false negatives is understandable: the
-lensed features are faint, or otherwise difficult to see. However, in other
-cases a reasonably obvious lens was passed over.  This mainly seems to be due
-to noise in the system: when only low-skill classifiers view a subject, all
-the updates to its posterior probability are small, and if none are very
-confident about the presence of lensing, the subject follows a random walk
-down its trajectory plot. This can be seen in the top left panel of the
-figure.  The false positives show similar behaviour, for example in the bottom
+lensed features are faint, or in some cases, somewhat unrealistic as lenses.
+However, in other cases a reasonably obvious lens was passed over.  This
+mainly seems to be due to noise in the system: when only low-skill classifiers
+view a subject, all the updates to its posterior probability are small, and if
+none are very confident about the presence of lensing, the subject follows a
+random walk down its trajectory plot. This can be seen in the top left panel
+of the figure. 
+
+The false positives show similar behaviour, for example in the bottom
 lefthand panel of the figure. As well as subjects being ``unlucky'' in this
 way, there are two less common failure modes associated with mistakes made by
 higher skill users, illustrated in the righthand column of the figure. In the
@@ -1088,12 +1102,20 @@ the training in the system, which could be done in several ways. One is to
 make more training images available to those who want or need it. A basic
 level of training images are needed for SWAP to build up an accurate picture
 of each classifier's skill -- but one could imagine volunteers {\it choosing}
-to see more training images (still at random) in their stream. Another could
-be to provide more information about what lenses do. In this project, the
-Spotter's Guide was always available on the site, but as a passive background
-resource. We might consider providing more links to this guide in the feedback
-messages shown to the classifiers as they go -- or perhaps extending these
-messages to themselves include more explanations and example images. 
+to see more training images (still at random) in their stream. We could also
+experiment with providing greater training rates early on for all volunteers;
+the risk associated with this is that retention rates may drop if too few
+``fresh'' test images are shown early on. Another way of improving the
+training could be to provide more information about what lenses do. In this
+project, the Spotter's Guide was always available on the site, but as a
+passive background resource. We might consider providing more links to this
+guide in the feedback messages shown to the classifiers as they go -- or
+perhaps extending these messages to themselves include more explanations and
+example images. We might also investigate a more dynamic Spotter's Guide: a
+set of manipulable model lenses illustrating all the possible image
+configurations that that those deflectors can make could help volunteers gain
+understanding of what lensed features can look like very quickly. Such a toy
+is under development.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -1109,9 +1131,12 @@ noise in the system.}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 However, most identification failures (around 60\%) seem to be due to the
-random walk problem. While improved training will help reduce this effect, it
-is here that targeted task assignment could help improve system performance.
-We advertised stage 2 of the current project to all registered users; it was
+random walk problem. Short, random direction steps arise from low skill
+classifiers, arising from classifier inexperience (\Sref{sec:results:crowd}). 
+While improved training will help reduce this effect, it is here
+that targeted task assignment could also help improve system performance, by
+bringing higher skill volunteers in to the mix. We
+advertised stage 2 of the current project to all registered users; it was
 taken up by stage 1 veterans with a broad range of skill, and also picked up a
 significant number of new users who did not have enough time to aquire high
 skill (since stage 2 was quite short): of the 1964 volunteers who took part in
@@ -1120,36 +1145,41 @@ the stage 2 classification round, only 774 were veterans from stage 1.
 on to stage 2 skill and contribution.
 
 This figure suggests that there may be some benefit to opening stage 2 on the
-basis of agent skill, in order to reduce the noise in the system generated by
-new and low skill volunteers in this more difficult classification stage. A
-simple implementation of this would be to switch the web app to the stage 2
-version when either a certain stage 1 skill (and/or effort) threshold was
-passed. Good strategy would probably be to switch back to stage 1 after some
-number of stage 2 classifications (to avoid losing the high skill users from
-stage 1 entirely), and also to make it very clear which stage the classifier
-was at (since stage 2 requires more careful attention). This is something we
-plan to experiment with in future.
+basis of stage 1 agent skill, in order to reduce the noise in the system
+generated by new and low skill volunteers in this more difficult
+classification stage.  A simple implementation of this would be to switch the
+web app to the stage 2 version when either a certain stage 1 skill (and/or
+effort) threshold was passed. Good strategy would probably be to switch back
+to stage 1 after some number of stage 2 classifications (to avoid losing the
+high skill users from stage 1 entirely), and also to make it very clear which
+stage the classifier was at (since stage 2 requires more careful attention).
+This is something we plan to experiment with in future.
 
 Finally, there could be some performance gains to be made by improving the
-SWAP agent model, or its implementation. In a future paper we plan to
-investigate the use of the test images as well as the training images in
-learning the agent confusion matrix elements (Davis et al, in preparation).
-One might also consider looking at introducing more conditional dependences in
-these elements, to allow for some classifiers having greater skill in one type
-of lens than another, or, more generally, as a function of lens property (such
-as color, brightness, and image separation). In the current model, all agents
-are considered to be completely independent, whereas in fact we might expect
-there to be significant clustering of the confusion matrix elements. A
-hierarchical model for the crowd, with hyper-parameters describing the
-distribution of confusion matrix elements across the population, may well
-accelerate the agent learning process by including the notion of one agent
-being likely to be similar to its neighbours. Finally, it is worth noting that
-the model of \citet{IBCC} explicitly avoids the assumption of the agent
-confusion matrix elements being constant in time, allowing the development of
-volunteer skill to be more accurately tracked -- and that they did see some
-time-evolution in the supernova zoo classifiers' skill. Finding a way to
-incorporate such a learning model into SWAP, while retaining its statistically
-online character is an interesting challenge for future work.
+SWAP agent model, or its implementation. Low skill is typically a result  of
+inexperience (\Sref{sec:results:crowd}), but it could be the agent that is
+inexperienced as well as the classifier or its agent. In a future paper we
+plan to investigate the use of the test images as well as the training images
+in accelerating the agent's learning (Davis et al, in preparation). We also
+plan to investigate the use of offline analysis at Stage 1, for the same
+reason (see also \Sref{sec:discuss:efficiency} below.) 
+One might also consider looking at
+introducing more conditional dependences in the confusion matrix elements, to
+allow for some classifiers having greater skill in spotting one type of lens
+than another, or, more generally, as a function of lens property (such as
+color, brightness, and image separation). In the current model, all agents are
+considered to be completely independent, whereas in fact we might expect there
+to be significant clustering of the confusion matrix elements. A hierarchical
+model for the crowd, with hyper-parameters describing the distribution of
+confusion matrix elements across the population, may well accelerate the agent
+learning process by including the notion of one agent being likely to be
+similar to its neighbours. Finally, it is worth noting that the model of
+\citet{IBCC} explicitly avoids the assumption of the agent confusion matrix
+elements being constant in time, allowing the development of volunteer skill
+to be more accurately tracked -- and that they did see some time-evolution in
+the supernova zoo classifiers' skill. Finding a way to incorporate such a
+learning model into SWAP, while retaining its statistically online character
+is an interesting challenge for future work.
 
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

@@ -176,6 +176,9 @@ def make_crowd_plots(argv):
     effort2 = []
     information2 = []
     
+    # stage 1 skill of stage 2 classifiers:
+    final_skill1 = []
+    
     final_skill_all2 = []
     contribution_all2 = []
     experience_all2 = []
@@ -188,7 +191,9 @@ def make_crowd_plots(argv):
     new_s2_information = []
 
     for ID in bureau2.list():
+
         agent = bureau2.member[ID]
+
         final_skill_all2.append(agent.traininghistory['Skill'][-1])
         information_all2.append(agent.testhistory['I'].sum())
         effort_all2.append(agent.N-agent.NT)
@@ -206,6 +211,10 @@ def make_crowd_plots(argv):
         effort2.append(agent.N-agent.NT)
         information2.append(agent.testhistory['I'].sum())
         experience2.append(agent.NT)
+
+        oldagent = bureau1.member[ID]
+        final_skill1.append(oldagent.traininghistory['Skill'][-1])
+        
 
     experience2 = np.array(experience2)
     effort2 = np.array(effort2)
@@ -407,20 +416,33 @@ def make_crowd_plots(argv):
 
     # Plot #4: stage 2 -- new volunteers vs. veterans: contribution.
 
-    plt.figure(figsize=(10,8))
-    plt.xlim(-10.0,895.0)
+    # PJM: updated 2014-09-03 to show stage 1 vs 2 skill, point size shows effort.
+
+    # plt.figure(figsize=(10,8))
+    plt.figure(figsize=(8,8))
+    # plt.xlim(-10.0,895.0)
+    plt.xlim(-0.02,0.85)
     plt.ylim(-0.02,0.85)
-    plt.xlabel('Stage 2 Contribution $\sum_k \langle I \\rangle_k$ / bits')
+    # plt.xlabel('Stage 2 Contribution $\sum_k \langle I \\rangle_k$ / bits')
+    plt.xlabel('Stage 1 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
     plt.ylabel('Stage 2 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
 
-    # size = 0.5*effort2
-    size = 20 + 10*information2
-    plt.scatter(contribution2, final_skill2, s=size, color='blue', alpha=0.4)
-    plt.scatter(contribution2, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
-    # size = 0.5*new_s2_effort
-    size = 20 + 10*new_s2_information
-    plt.scatter(new_s2_contribution, new_s2_skill,s = size, color='#FFA500', alpha=0.4)
-    plt.scatter(new_s2_contribution, new_s2_skill,          color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
+    size = 0.5*effort2
+    # size = 20 + 10*information2
+    # size = 20 + 10*contribution2
+    # plt.scatter(contribution2, final_skill2, s=size, color='blue', alpha=0.4)
+    # plt.scatter(contribution2, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
+    plt.scatter(final_skill1, final_skill2, s=size, color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
+    # plt.scatter(final_skill1, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
+    
+    size = 0.5*new_s2_effort
+    # size = 20 + 10*new_s2_information
+    # size = 20 + 10*new_s2_contribution
+    # plt.scatter(new_s2_contribution, new_s2_skill,s = size, color='#FFA500', alpha=0.4)
+    # plt.scatter(new_s2_contribution, new_s2_skill,          color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
+    new_s1_skill = new_s2_skill.copy()*0.0 # All had zero skill at stage 1, because they didn't show up!
+    plt.scatter(new_s1_skill, new_s2_skill,s = size, color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
+    # plt.scatter(new_s1_skill, new_s2_skill,          color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
 
     Nvets = len(contribution2)
     Nnewb = len(new_s2_contribution)
@@ -430,19 +452,22 @@ def make_crowd_plots(argv):
     total = totalvets + totalnewb
     print "make_crowd_plots: total contribution in Stage 2 was",phr(total),"bits by",N,"volunteers"
 
-    x0,y0,z0 = np.mean(contribution2),np.mean(final_skill2),np.mean(effort2)
+    x0,y0,w0,z0 = np.mean(final_skill1),np.mean(final_skill2),np.mean(contribution2),np.mean(effort2)
     l = plt.axvline(x=x0,color='blue',ls='--')
     l = plt.axhline(y=y0,color='blue',ls='--')
     print "make_crowd_plots: ",Nvets,"stage 1 veteran users (",phr(100*Nvets/N),"% of the total) made",phr(100*totalvets/total),"% of the contribution"
-    print "make_crowd_plots: the average stage 1 veteran had skill, contribution, effort = ",phr(y0,ndp=2),phr(x0),int(z0)
+    print "make_crowd_plots: the average stage 1 veteran had skill1, skill2, contribution, effort = ",phr(x0,ndp=2),phr(y0,ndp=2),phr(w0),int(z0)
     
-    x0,y0,z0 = np.mean(new_s2_contribution),np.mean(new_s2_skill),np.mean(new_s2_effort)
+    x0,y0,w0,z0 = np.mean(new_s1_skill),np.mean(new_s2_skill),np.mean(new_s2_contribution),np.mean(new_s2_effort)
     l = plt.axvline(x=x0,color='#FFA500',ls='--')
     l = plt.axhline(y=y0,color='#FFA500',ls='--')
     print "make_crowd_plots: ",Nnewb,"new users (",phr(100*Nnewb/N),"% of the total) made",phr(100*totalnewb/total),"% of the contribution"
-    print "make_crowd_plots: the average stage 2 newbie had skill, contribution, effort = ",phr(y0,ndp=2),phr(x0),int(z0)
+    print "make_crowd_plots: the average stage 2 newbie had skill1, skill2, contribution, effort = ",phr(x0,ndp=2),phr(y0,ndp=2),phr(w0),int(z0)
 
-    plt.legend(loc='upper right')
+    lgnd = plt.legend(loc='upper right')
+    lgnd.legendHandles[0]._sizes = [30]
+    lgnd.legendHandles[1]._sizes = [30]
+    
     pngfile = output_directory+'stage2_veteran_contribution.png'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: newbies vs veterans plot saved to "+pngfile

@@ -1072,49 +1072,110 @@ categories, performance, efficiency and capacity.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\begin{minipage}{\linewidth}
+  \begin{minipage}[t]{0.47\linewidth}
+    \begin{minipage}{0.46\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0008wyp_gri.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.50\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0008wyp_stage2_trajectory.png}
+    \end{minipage}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.47\linewidth}
+    \begin{minipage}{0.46\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0006rkx_gri.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.50\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0006rkx_stage1_trajectory.png}
+    \end{minipage}
+  \end{minipage}
+\end{minipage}
+
+\vspace{\baselineskip}
+
+\begin{minipage}{\linewidth}
+  \begin{minipage}[t]{0.47\linewidth}
+    \begin{minipage}{0.46\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0000fgj_gri.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.50\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0000fgj_stage1_trajectory.png}
+    \end{minipage}
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.47\linewidth}
+    \begin{minipage}{0.46\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0003j2s_gri.png}
+    \end{minipage}\hfill
+    \begin{minipage}{0.50\linewidth}
+      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0003j2s_stage1_trajectory.png}
+    \end{minipage}
+  \end{minipage}
+\end{minipage}
+\caption{Illustrative examples of 
+false negatives (blue) and false positives (red) from the classification of
+the \sw CFHTLS training set. The trajectory plot for each of the 4 subjects is
+shown to the right of its image. lefthand panels show the most common types of
+trajectories: short step random walks resulting from no high skill classifiers
+viewing the subject. The righthand panels show examples where higher skill
+classifiers have been involved, causing random walks with longer step lengths
+(top) and catastrophic mis-classifications (bottom right).}
+\label{fig:discuss:performance:trajectories}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \subsection{Improving performance: reducing incompleteness and impurity}
 \label{sec:discuss:performance}
 
-We first investigate the source of the incompleteness visible in 
-\Fref{fig:results:sample:CP}, by examining the stage 2 false negatives.
-\Fref{fig:discuss:performance:FNgallery} shows N example simulated lenses that
-were missed by the \sw system. In some cases their rejection is
-understandable: the lensed features are faint, or otherwise difficult to see.
-However, in other cases a reasonably obvious lens was passed over. 
-\Fref{fig:discuss:performance:FNtrajectories} shows the probability 
-trajectories of these subjects. \todo{Phil}{Make the FN plots, and look for
-behaviour. Can we see whether the FNs are due to costly mistakes by expert
-classifiers? Or are they just random walking south?}
+We investigated the source of the incompleteness and impurity visible in 
+\Fref{fig:results:sample:CP}, by examining the stage 2 false negatives and
+false positives. \Fref{fig:discuss:performance:trajectories} shows 2 example
+simulated lenses  that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \sw
+system, and 2 example non-lenses that were incoreectly flagged as candidates
+($\pr(\LENS|C,T) > 0.95$) by the \sw system. 
 
-Is the system's impurity a result of the same behaviour?
-Figures~\ref{fig:discuss:performance:FPgallery}
-and~\ref{fig:discuss:performance:FPtrajectories} show the corresponding
-figures for the false positives -- non-lenses that were incorrectly inferred
-to be lens candidates during stage 2. \todo{Phil}{Make the FP plots, and look
-for behaviour. Can we see whether the FPs are due to costly mistakes by expert
-classifiers? Or are they just random walking south?}
+In some cases the rejection of the false negatives is understandable: the
+lensed features are faint, or otherwise difficult to see. However, in other
+cases a reasonably obvious lens was passed over.  This mainly seems to be due
+to noise in the system: when only low-skill classifiers view a subject, all
+the updates to its posterior probability are small, and if none are very
+confident about the presence of lensing, the subject follows a random walk
+down its trajectory plot. This can be seen in the top left panel of the
+figure.  The false positives show similar behaviour, for example in the bottom
+lefthand panel of the figure. As well as subjects being ``unlucky'' in this
+way, there are two less common failure modes associated with mistakes made by
+higher skill users, illustrated in the righthand column of the figure. In the
+false negative subject shown in the top right-hand panel, several high skill
+classifiers update the subject upwards in log probability by some way each
+time, but other, comparable skill classifiers mis-classify the system to lower
+probability. If we had retired subjects after crossing a high probability
+detection threshold, this subject would have been correctly identified as a
+lens candidate; instead, it was kept in the system and eventually scattered
+down to retirement. The trajectory looks like a random walk, but with bigger
+steps. The bottom righthand panel shows an example of a final, apparently
+rare, failure mode: we see some short-step random walk behaviour, followed by
+a mis-classification by a very high skill ``expert'' classifier after 20
+classifications that promotes the subject to high probability. 
 
-In general, there are three places we can act to improve system performance:
-educating the volunteers, assigning subjects for classification, and
-interpreting the classification data. The plots in this section suggest that
-...
-\todo{Phil}{complete this thought, and update the text below, in the light of
-the FP and the FN figures} 
+There are a number of places where we can address these problems and
+improve system performance: adding flexibility to the classification
+interface, educating the volunteers, assigning subjects for
+classification, and interpreting the classification data. 
 
-Mistakes by reasonably high skill classifiers cause large jumps in subject
-probability in the wrong direction, as are occasionally visible in the
-trajectory plots in this section. We might wonder whether some of those
-mistakes could have been corrected by the classifiers themselves, had they had
-access to a ``go back'' option. While clearly enabling error reduction, we
-might worry about such a mechanism enabling classifiers to have a guess, then
-go and read the Talk discussion, and then return to the classification
-interface to change their mind to agree with the forum. In fact, this is
-already possible on the current interface -- and indeed, it is not obvious
-that such correlations would necessarily lead to poorer system performance.
-This could be tested by presenting a fraction of the volunteers with a version
-of the site that actively suggested that they take this approach, and then
-tracking the relative performance of ``collaborative'' classifications
-compared with independent ones. We leave this to further work.  
+We might wonder whether some of  the mistakes made by reasonably high skill
+classifiers could have been corrected by those classifiers themselves, had
+they had access to a ``go back'' option. While clearly enabling error
+reduction, we might worry about such a mechanism enabling classifiers to have
+a guess, then go and read the Talk discussion, and then return to the
+classification interface to change their mind to agree with the forum. In
+fact, this is already possible on the current interface -- and indeed, it is
+not obvious that such correlations would necessarily lead to poorer system
+performance. This could be tested by presenting a fraction of the volunteers
+with a version of the site that actively suggested that they take this
+approach, and then tracking the relative performance of ``collaborative''
+classifications compared with independent ones. We leave this to further
+work.  
 
 Mistakes by both high and low skill classifiers could be reduced by improving
 the training in the system, which could be done in several ways. One is to 
@@ -1138,25 +1199,22 @@ are drawn at the mean values for each sample.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Some trajectories show signs of a random walk problem. Those subjects are
-simply ``unlucky:'' they are only seen by low skill classifiers, and  happen
-to be mis-classified  enough times to cross the retirement threshold (in the
-case of the false negatives) or remain in the system (in the case of the false
-positives). While improved training will help reduce this effect, it is here
-that targeted task assignment could help improve system performance. We
-advertised stage 2 of the current project to all registered users; it was
+However, most identification failures (around 60\%) seem to be due to the
+random walk problem. While improved training will help reduce this effect, it
+is here that targeted task assignment could help improve system performance.
+We advertised stage 2 of the current project to all registered users; it was
 taken up by stage 1 veterans with a broad range of skill, and also picked up a
 significant number of new users who did not have enough time to aquire high
-skill (since stage 2 was quite short): of
-the 1964 volunteers who took part in the stage 2 classification round, only
-774 were veterans from stage 1. \Fref{fig:discuss:performance:stage1vstage2}
-shows how the stage 1 skill maps on to stage 2 skill and contribution...
+skill (since stage 2 was quite short): of the 1964 volunteers who took part in
+the stage 2 classification round, only 774 were veterans from stage 1.
+\Fref{fig:discuss:performance:stage1vstage2} shows how the stage 1 skill maps
+on to stage 2 skill and contribution...
 
 \todo{Phil}{Remake figure to show stage 2 skill vs stage 1 skill with point
 size given by stage 2 contribution. Stage 2 newbies will need to be plotted to
 have (0 +/- small) stage 1 skill, to show up as a cloud.}
 
-Thsi figure suggests that there may be some benefit to opening stage 2 on the
+This figure suggests that there may be some benefit to opening stage 2 on the
 basis of agent skill, in order to reduce the noise in the system generated by
 new and low skill volunteers in this more difficult classification stage. A
 simple implementation of this would be to switch the web app to the stage 2

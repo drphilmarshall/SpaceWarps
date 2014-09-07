@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # ======================================================================
 
+# TODO: also make the completeness-purity curves
+
 import sys,getopt,numpy as np
 from sklearn.metrics import roc_curve
 
@@ -80,7 +82,7 @@ def make_roc_curves(args):
         else:
             print "make_roc_curves: unrecognized flag ",arg
 
-    output_directory = flags['output_directory']
+    print flags
 
     # check that collections etc are equal length
     if len(flags['collections']) != len(flags['labels']):
@@ -91,7 +93,8 @@ def make_roc_curves(args):
         raise Exception('Collections and colors must be same length!')
 
     n_min = 0
-
+    output_directory = flags['output_directory']
+    collections = flags['collections']
 
     fig, ax = plt.subplots(figsize=(10,8))
 
@@ -101,7 +104,7 @@ def make_roc_curves(args):
 
         collection = swap.read_pickle(collection_path, 'collection')
 
-        print "make_roc_curves: collection {0} subject numbers: {1}".format(len(collection.list()))
+        print "make_roc_curves: collection {0} subject numbers: {1}".format(i, len(collection.list()))
 
 
         # ------------------------------------------------------------------
@@ -124,7 +127,7 @@ def make_roc_curves(args):
         label = flags['labels'][i]
         line_style = flags['line_styles'][i]
 
-        ax.plot(fpr, tpr, color, label=label, line_style=line_style, linewidth=3)
+        ax.plot(fpr, tpr, color, label=label, linestyle=line_style, linewidth=3)
 
     ax.set_xlim(0, 0.1)
     ax.set_ylim(0.8, 1)
@@ -155,9 +158,9 @@ if __name__ == '__main__':
                         dest="output_directory",
                         default="./",
                         help="Output directory for reports.")
-    parser.add_argument("--collection",
+    parser.add_argument("--collections",
                         nargs="+",
-                        dest="collection",
+                        dest="collections",
                         help="Collection files used.")
     parser.add_argument("--colors",
                         nargs="+",

@@ -164,24 +164,38 @@ surveys.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\subsection{Known \cfhtls lens samples}
+\subsection{Existing \cfhtls lens samples}
 \label{sec:data:kls}
 
-The \cfhtls data has been searched for lenses using semi-automated
-algorithms, primarily, in the $g$ band which is optimal for finding
-lenses. Here, we briefly mention the lens samples which were known to
-the authors prior to the lens search with \sw.
+The \cfhtls data has been searched for lenses using semi-automated algorithms,
+primarily, in the $g$ band where the predominantly  faint blue  source
+galaxies are bright compared to the predominantly red deflector galaxies.
+Here, we briefly mention the lens samples which were known to the authors
+prior to the lens search with \sw.
 
-At galaxy-scales, there are two main types of lens searches. The
-RingFinder \citet{Gavazzi2014} was used for finding compact rings or arcs
-around centers of isolated and massive early-type galaxies. By
-subtracting the PSF-matched i-band images from the g-band, the
-algorithm looks for excess flux in the bluer g-band which is typical of
-the distant lensed star forming galaxies. An object detector measures
-the properties of these residual blue features and candidates meeting a
-length-width ratio and tangential alignment criteria are then visually
-inspected to form the final sample. This rings sample consists of 39
-confirmed lenses and 17 promising candidates. 
+At galaxy-scales, we focus on two primary lens searches. The RingFinder
+\citep{Gavazzi2014} was used for finding compact rings or arcs around centers
+of isolated and massive early-type galaxies. By subtracting the PSF-matched
+$i$-band images from the $g$-band images, the algorithm looks for excess flux
+in the bluer $g$-band. An object detector measures the properties of these
+residual blue features, and candidates meeting length-width ratio and
+tangential alignment criteria are then visually inspected to form the final
+sample. \citet{Gavazzi2014} first selected some 638,000 targets as either
+photometrically-classified early type galaxies, or objects selected to have
+red centers and blue outer parts. 14370 were found to show detectable blue
+residuals, and 2524 were visually inspected, having passed the automatic
+feature selection process. This led to a sample of 42 good quality
+(\texttt{q\_flag} = 3) and 288 medium quality (\texttt{q\_flag} = 2) lens
+candidates. In addition to this well defined sample, \citet{Gavazzi2014}
+reported a further 71 serendipitously detected lens candidates. 
+From this sample of ``RingFinder candidates,'' the SL2S team found, during
+their follow-up campaign, 39 confirmed lenses (and 17 promising
+candidates). We use this sample of 39 ``confirmed RingFinder lenses'' in our
+completeness analysis.
+
+\todo{Phil}{check with RG about SQL queries for the RF candidates.
+\texttt{q\_flag = 3} returns 55, not 42, systems, and 
+\texttt{q\_flag = 3} returns 346, not 288, systems. This is all issue \#69}
 
 The second galaxy-scale lens search was to find edge-on galaxy lenses in
 the \cfhtls \citep{Sygnet2010} by selecting the galaxy's profile from the
@@ -200,11 +214,12 @@ lensed images or arcs with larger image separations i.e. more massive
 systems like groups and clusters. Thus, the SARCS sample has mostly
 groups/cluster-scale lenses and a few galaxy-scale lenses.
 
-For the purpose of transparency, the volunteers participating in
-\sw-\cfhtls lens search were made aware of these known lens samples. Images
-containing the lenses from these lens samples were labelled so in the
-forum Talk where volunteers have the opportunity to discuss their
-findings with other volunteers and the science team. 
+For the purposes of transparency and to help a little with their training, 
+the volunteers participating in \sw-\cfhtls lens search were made aware of
+these known lens samples. Images containing the systems from the above samples
+were labelled as ``Known Lens Candidates'' in the Talk forum, where volunteers
+have the opportunity to discuss their findings with other volunteers and the
+science team. 
 
 XXX refer Paper I ?
 

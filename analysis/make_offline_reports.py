@@ -25,6 +25,8 @@ origin = 'lower'
 
 import swap
 
+from swap.offline import EM_algorithm
+
 # ======================================================================
 
 def make_offline_reports(args):
@@ -68,6 +70,7 @@ def make_offline_reports(args):
 
     # default settings are for offline using only exact training info
     flags = {'do_offline': False,
+             'output_directory': '.',
              'PL0': 0.5,  # initial PL guess
              'PD0': 0.5,  # initial PD guess
              'pi': 4e-2,  # initial lens probability
@@ -93,9 +96,23 @@ def make_offline_reports(args):
         else:
             print "make_offline_reports: unrecognized flag ",arg
 
+    out_dir = flags['output_directory']
+
     # ------------------------------------------------------------------
     # Read in run configuration:
     tonights = swap.Configuration(configfile)
+    # TODO: do this correctly
+    tonights.parameters['finish'] = 'now'
+    tonights.parameters['start'] = 'now'
+    tonights.parameters['trunk'] = \
+        tonights.parameters['survey']+'_'+tonights.parameters['finish']
+    tonights.parameters['dir'] = out_dir
+    # How will we make decisions based on probability?
+    thresholds = {}
+    thresholds['detection'] = tonights.parameters['detection_threshold']
+    thresholds['rejection'] = tonights.parameters['rejection_threshold']
+
+    t = -1  # for now?!
 
     # ------------------------------------------------------------------
     # Read in, or create, a bureau of agents who will represent the
@@ -189,6 +206,7 @@ def make_offline_reports(args):
             # just in case any IDs didn't get into offline somehow?!
             if ID not in probabilities.keys():
                 sample.member.pop(ID)
+                continue
             # This is a bit hackish: update mean_probability,
             # median_probability, and do the rejection threshold stuff
             subject = sample.member[ID]
@@ -199,7 +217,7 @@ def make_offline_reports(args):
                 subject.status = 'rejected'
                 if subject.kind == 'test':
                     subject.state = 'inactive'
-                    subject.retirement_time = at_time
+                    subject.retirement_time = -1#at_time
                     subject.retirement_age = subject.exposure
 
             elif subject.mean_probability > subject.detection_threshold:
@@ -227,7 +245,7 @@ def make_offline_reports(args):
             sample.collect_probabilities(kind)
 
         # now save
-        collectionfile = out_dir + 'collection_offline.pickle'
+        collectionfile = out_dir + '/collection_offline.pickle'
         swap.write_pickle(collection, collectionfile)
 
         # now update bureau
@@ -235,6 +253,7 @@ def make_offline_reports(args):
             # just in case any IDs didn't make it to offline?
             if ID not in bureau_offline.keys():
                 bureau.member.pop(ID)
+                continue
             # update PL, PD, then update_skill
             agent = bureau.member[ID]
             agent.PL = bureau_offline[ID]['PL']
@@ -248,7 +267,7 @@ def make_offline_reports(args):
 
 
         # now save
-        bureaufile = out_dir + 'bureau_offline.pickle'
+        bureaufile = out_dir + '/bureau_offline.pickle'
         swap.write_pickle(bureau, bureaufile)
 
     # ------------------------------------------------------------------
@@ -392,19 +411,27 @@ def make_offline_reports(args):
 if __name__ == '__main__':
     # do argparse style; I find this /much/ easier than getopt (sorry Phil!)
     import argparse
-    parser = argparse.ArgumentParser(description=make_lens_atlas.__doc__)
+    parser = argparse.ArgumentParser(description=make_offline_reports.__doc__)
     # Options we can configure
     parser.add_argument("--output_directory",
                         action="store",
                         dest="output_directory",
-                        default="./",
+                        default=".",
                         help="Output directory for reports.")
     parser.add_argument("--do_offline",
                         action="store_true",
                         dest="do_offline",
                         default=False,
                         help="Do offline analysis if not already done.")
-    parser.add_argument(
+    parser.add_argument("--config",
+                        dest="config",
+                        help="Location of configfile.")
+    parser.add_argument("--collection",
+                        dest="collection",
+                        help="Location of collectionfile.")
+    parser.add_argument("--bureau",
+                        dest="bureau",
+                        help="Location of bureaufile.")
 
     options = parser.parse_args()
     args = vars(options)
@@ -413,6 +440,6 @@ if __name__ == '__main__':
     for argvi in sys.argv:
         argv_str += argvi + ' '
     print(argv_str)
-    make_lens_atlas(args)
+    make_offline_reports(args)
 
 # ======================================================================

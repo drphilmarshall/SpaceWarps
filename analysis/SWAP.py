@@ -362,23 +362,29 @@ def SWAP(argv):
             offline_add_to_bureau = False
             if category == 'test':
                 if (not supervised) + supervised_and_unsupervised:
-                    offline_add_to_bureau = True
+                    # don't add to training_IDs since we don't have perfect info
+                    pass
+                else:
+                    # exclude the other guys
+                    offline_training_IDs.update({ID: -1})
             if category == 'training':
                 if supervised + supervised_and_unsupervised:
                     # have perfect info, so:
                     truth = {'LENS': 1, 'NOT': 0}[Y]
                     offline_training_IDs.update({ID: truth})
-                    offline_add_to_bureau = True
-
-            if offline_add_to_bureau:
-                if Name not in offline_bureau:
-                    offline_bureau.update({Name:
-                        {'PD': offline_initial_PD,
-                         'PL': offline_initial_PL,
-                         'Pi': offline_initial_prior,
-                         'Subjects': {ID: X}}})
                 else:
-                    offline_bureau[Name]['Subjects'].update({ID: X})
+                    # exclude the other guys
+                    offline_training_IDs.update({ID: -1})
+
+            # now add subject classification to offline_bureau
+            if Name not in offline_bureau:
+                offline_bureau.update({Name:
+                    {'PD': offline_initial_PD,
+                     'PL': offline_initial_PL,
+                     'Pi': offline_initial_prior,
+                     'Subjects': {ID: X}}})
+            else:
+                offline_bureau[Name]['Subjects'].update({ID: X})
 
         # Brag about it:
         count += 1

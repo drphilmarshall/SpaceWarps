@@ -248,6 +248,7 @@ def write_config(filename, pars):
                  'report', \
                  'repickle', \
                  'supervised', \
+                 'supervised_and_unsupervised', \
                  'initialPL', \
                  'initialPD', \
                  'agents_willing_to_learn', \
@@ -259,7 +260,8 @@ def write_config(filename, pars):
                  'detection_threshold', \
                  'rejection_threshold', \
                  'random_file', \
-                 'dbspecies']
+                 'dbspecies', \
+                 'offline']
 
     for keyword in shortlist:
         F.write('\n')

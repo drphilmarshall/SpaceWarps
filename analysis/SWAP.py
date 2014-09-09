@@ -128,11 +128,18 @@ def SWAP(argv):
     print "SWAP: looks like we are on Stage "+stage+" of the ",survey," survey project"
 
 
-    supervised = tonights.parameters['supervised']
-    agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
+    try: supervised = tonights.parameters['supervised']
+    except: supervised = False
+    try: supervised_and_unsupervised = tonights.parameters['supervised_and_unsupervised']
+    except: supervised_and_unsupervised = False
+    # will agents be able to learn?
+    try: agents_willing_to_learn = tonights.parameters['agents_willing_to_learn']
+    except: agents_willing_to_learn = False
     if agents_willing_to_learn:
 
-        if supervised:
+        if supervised_and_unsupervised:
+            print "SWAP: agents will use both training AND test data to update their confusion matrices"
+        elif supervised:
             print "SWAP: agents will use training data to update their confusion matrices"
         else:
             print "SWAP: agents will only use test data to update their confusion matrices"
@@ -193,6 +200,11 @@ def SWAP(argv):
     try: use_marker_positions = tonights.parameters['use_marker_positions']
     except: use_marker_positions = False
     print "SWAP: should we use the marker positions on sims? ",use_marker_positions
+
+    # Will we do offline analysis?
+    try: offline = tonights.parameters['offline']
+    except: offline = False
+    print "SWAP: should we do offline analysis? ",offline
 
     # How will we make decisions based on probability?
     thresholds = {}
@@ -304,13 +316,19 @@ def SWAP(argv):
         
         P = sample.member[ID].mean_probability
         
-        if supervised:
+
+        if supervised_and_unsupervised:
+            # use both training and test images
+            if agents_willing_to_learn:
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+            else:
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
+        elif supervised:
             # Only use training images!                
             if category == 'training' and agents_willing_to_learn:
                 bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
             elif category == 'training':
                 bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
-
         else:
             # Unsupervised: ignore all the training images...                
             if category == 'test' and agents_willing_to_learn:
@@ -318,8 +336,6 @@ def SWAP(argv):
             elif category == 'test':
                 bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
         
-        # TODO: use training AND test images...
-
         # Brag about it:
         count += 1
         if vb:

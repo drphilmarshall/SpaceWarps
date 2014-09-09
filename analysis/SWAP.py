@@ -319,9 +319,9 @@ def SWAP(argv):
 
         if supervised_and_unsupervised:
             # use both training and test images
-            if agents_willing_to_learn:
+            if agents_willing_to_learn * ((category == 'test') + (category == 'training')):
                 bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
-            else:
+            elif ((category == 'test') + (category == 'training')):
                 bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
         elif supervised:
             # Only use training images!                

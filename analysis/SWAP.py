@@ -361,10 +361,10 @@ def SWAP(argv):
             # now figure out the offline_bureau
             offline_add_to_bureau = False
             if category == 'test':
-                if supervised + supervised_and_unsupervised:
+                if (not supervised) + supervised_and_unsupervised:
                     offline_add_to_bureau = True
             if category == 'training':
-                if ((not supervised) + supervised_and_unsupervised):
+                if supervised + supervised_and_unsupervised:
                     # have perfect info, so:
                     truth = {'LENS': 1, 'NOT': 0}[Y]
                     offline_training_IDs.update({ID: truth})

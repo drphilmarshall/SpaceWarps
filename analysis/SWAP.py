@@ -217,11 +217,13 @@ def SWAP(argv):
         offline_training_IDs = {}
 
         # some settings that I guess you could configure but these work fine enough
-        offline_initial_PL = tonights.parameters['initial_PL']
-        offline_initial_PD = tonights.parameters['initial_PD']
+        offline_initialPL = tonights.parameters['initialPL']
+        offline_initialPD = tonights.parameters['initialPD']
         offline_N_min = 10   # min number of EM steps required
         offline_N_max = 100  # max number of EM steps allowed
         offline_epsilon_min = 1e-6  # average change in probabilities before we claim convergence
+
+        offline_conversion = {'LENS': 1, 'NOT': 0}
 
     # How will we make decisions based on probability?
     thresholds = {}
@@ -370,7 +372,7 @@ def SWAP(argv):
             if category == 'training':
                 if supervised + supervised_and_unsupervised:
                     # have perfect info, so:
-                    truth = {'LENS': 1, 'NOT': 0}[Y]
+                    truth = offline_conversion[Y]
                     offline_training_IDs.update({ID: truth})
                 else:
                     # exclude the other guys
@@ -379,12 +381,12 @@ def SWAP(argv):
             # now add subject classification to offline_bureau
             if Name not in offline_bureau:
                 offline_bureau.update({Name:
-                    {'PD': offline_initial_PD,
-                     'PL': offline_initial_PL,
+                    {'PD': offline_initialPD,
+                     'PL': offline_initialPL,
                      'Pi': offline_initial_prior,
-                     'Subjects': {ID: X}}})
+                     'Subjects': {ID: offline_conversion[X]}}})
             else:
-                offline_bureau[Name]['Subjects'].update({ID: X})
+                offline_bureau[Name]['Subjects'].update({ID: offline_conversion[X]})
 
         # Brag about it:
         count += 1
@@ -420,7 +422,7 @@ def SWAP(argv):
     if offline:
         # run EM_algorithm
         offline_bureau, offline_prior, offline_probabilities, offline_information_dict \
-            = swap.offline.EM_algorithm(offline_bureau, offline_initial_prior,
+            = swap.EM_algorithm(offline_bureau, offline_initial_prior,
                     offline_probabilities, offline_training_IDs,
                     offline_N_min, offline_N_max, offline_epsilon_min,
                     return_information=True)

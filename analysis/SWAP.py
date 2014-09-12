@@ -435,7 +435,9 @@ def SWAP(argv):
             # This is a bit hackish: update mean_probability,
             # median_probability, and do the rejection threshold stuff
             subject = sample.member[ID]
+            subject.online_mean_probability = subject.mean_probability
             subject.mean_probability = offline_probabilities[ID]
+            subject.online_median_probability = subject.median_probability
             subject.median_probability = offline_probabilities[ID]
             # ripped from subject.py
             if subject.mean_probability < subject.rejection_threshold:
@@ -477,7 +479,9 @@ def SWAP(argv):
                 continue
             # update PL, PD, then update_skill
             agent = bureau.member[ID]
+            agent.online_PL = agent.PL
             agent.PL = offline_bureau[ID]['PL']
+            agent.online_PD = agent.PD
             agent.PD = offline_bureau[ID]['PD']
             agent.update_skill()
 

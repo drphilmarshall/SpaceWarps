@@ -431,6 +431,7 @@ def SWAP(argv):
             # just in case any IDs didn't get into offline somehow?!
             if ID not in offline_probabilities:
                 sample.member.pop(ID)
+                print "SWAP: offline popping this ID: ,"ID
                 continue
             # This is a bit hackish: update mean_probability,
             # median_probability, and do the rejection threshold stuff

@@ -210,7 +210,8 @@ def SWAP(argv):
         try: offline_initial_prior = tonights.parameters['offline_initial_prior']
         except: offline_initial_prior = 2e-4
         print "SWAP: set initial prior for offline analysis to ",offline_initial_prior
-
+        # PJM bug: offline_initial_prior should just be the same p0 as online
+        # code uses. (I think this means updating subject.py)
         # now initialize some parameters
         offline_probabilities = {}
         offline_bureau = {}
@@ -418,6 +419,8 @@ def SWAP(argv):
     if vb: print swap.dashedline
     print "SWAP: total no. of classifications processed: ",count
 
+    #-------------------------------------------------------------------------
+
     # Now do offline analysis
     if offline:
         # run EM_algorithm
@@ -440,6 +443,7 @@ def SWAP(argv):
             subject.mean_probability = offline_probabilities[ID]
             subject.online_median_probability = subject.median_probability
             subject.median_probability = offline_probabilities[ID]
+
             # ripped from subject.py
             if subject.mean_probability < subject.rejection_threshold:
                 subject.status = 'rejected'

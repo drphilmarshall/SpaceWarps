@@ -6476,6 +6476,64 @@ goto FINISH
 # which is the same object, weirdly). 
 
 # ======================================================================
+# 2014-09-27 (Saturday) 12:11 PDT
+
+# Visual inspection of extra 60 offline extras:
+
+mkdirf 2014-09-27
+ln -s ../offline_extra_60 images
+mv offline_extras_60/File_list File_list
+ln -s ../visapp2/visapp.jar .
+
+# OK, now can do inspection:
+
+java -jar visapp.jar &
+
+# Follow progress:
+
+tail -f record_position.txt
+
+# Done.
+# Had to copy some images over from the online tarball.
+# 2 files were missing: 
+#   CFHTLS_165_1845_gri.png 
+#   CFHTLS_211_1224_gri.png
+
+# Sent record_position_pjm.txt to Anu.
+
+# 2014-10-02 (Thursday) 16:45 PDT
+
+# From Anu:
+# Here are the discrepant systems. The order is AV, PJM and AM
+# 
+# CFHTLS_003_1593_gri.png 40.0 202.0     2 1 0  too far apart + merger?
+# CFHTLS_022_2021_gri.png 154.66 170.66  2 0 0
+# CFHTLS_127_1932_gri.png 95.0 21.0      2 3 0  merger?
+# CFHTLS_139_1034_gri.png 334.0 244.0    2 0 0
+# CFHTLS_145_0148_gri.png 179.0 273.0    2 0 0
+# CFHTLS_146_0251_gri.png 235.0 210.0    2 0 0
+# CFHTLS_165_1845_gri.png 118.0 411.0    2 0 0  missing for Phil
+# CFHTLS_211_1224_gri.png 62.0 403.0     2 0 1  missing for Phil
+# CFHTLS_042_1284_gri.png 265.91 291.52  0 2 0  merger?
+
+set conflicts = ( \
+images/CFHTLS_003_1593_gri.png \  # 1
+images/CFHTLS_022_2021_gri.png \  # 1 missed this the first time...
+images/CFHTLS_127_1932_gri.png \  # 1 maybe merger. arcs not that round...
+images/CFHTLS_139_1034_gri.png \  # 0 arc too far away
+images/CFHTLS_145_0148_gri.png \  # 0
+images/CFHTLS_146_0251_gri.png \  # 0
+images/CFHTLS_165_1845_gri.png \  # 1 maybe something in bottom left?
+images/CFHTLS_211_1224_gri.png \  # 1 
+images/CFHTLS_042_1284_gri.png \  # 1 ok, could be a merger, arc not quite right...
+)
+
+open $conflicts
+
+# New grades are above as comments...
+
+# ======================================================================
+
 FINISH:
 
 

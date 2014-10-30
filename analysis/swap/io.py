@@ -180,7 +180,8 @@ def get_new_filename(pars,flavour):
 
     if flavour == 'bureau' or \
          flavour == 'collection' or \
-         flavour == 'database':
+         flavour == 'database' or \
+         flavour == 'offline':
         stem = pars['survey']+'_'+flavour
         ext = 'pickle'
         folder = '.'
@@ -248,6 +249,7 @@ def write_config(filename, pars):
                  'report', \
                  'repickle', \
                  'supervised', \
+                 'supervised_and_unsupervised', \
                  'initialPL', \
                  'initialPD', \
                  'agents_willing_to_learn', \
@@ -259,7 +261,10 @@ def write_config(filename, pars):
                  'detection_threshold', \
                  'rejection_threshold', \
                  'random_file', \
-                 'dbspecies']
+                 'dbspecies', \
+                 'offline', \
+                 'offline_initial_prior', \
+                 ]
 
     for keyword in shortlist:
         F.write('\n')

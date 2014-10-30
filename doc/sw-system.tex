@@ -943,10 +943,12 @@ The stage 1 curves are truncated by the retirement of subjects in this phase,
 which sets the minimum size of this sample. We see from the solid blue curve
 that over 90\% completeness was reached, albeit in a sample with around 20\%
 purity. To investigate the completeness to the three different types of lens
-in the training set, we ... 
+in the training set, we repeat the same procedure, only now we consider only
+the detections of a certain kind of lens and of the non-lenses in the training
+set. We estimate the expected number of lenses and non-lens false positives by
+dividing the lens and dud sets into equal fractions.
 
-\todo{Chris}{complete the above sentence to explain what purity means in the
-divided-by-sim-type case. Thanks! \#66}
+\todo{Chris}{That still could be worded better... \# 66}
 
 The lensed quasar part of the training set yielded the highest
 completeness, suggesting that these were the easiest sims to spot. The lensed
@@ -959,10 +961,9 @@ Interestingly, the lensing clusters can be seen to pose problems for the
 system, with its curve turning over at just 60\% completeness.
 
 The optimal sample in this simulated lens search experiment would have been
-constructed with a threshold value of $\pr(\LENS|C,T) > X.XX$. At 100\% purity
-and 9X\% completeness, it would have contained around N lens candidates.
-
-\todo{Chris}{fill in the numbers above, please! :-) \#65}
+constructed with a threshold value of $\pr(\LENS|C,T) > 0.47$. At 100\% purity
+and 89\% completeness, it would have contained around 89 lens candidates.
+% TP + FN ~ 2e-4 * 430000 ~ 100 ~ TP/C ; so TP ~ 89 candidates
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}

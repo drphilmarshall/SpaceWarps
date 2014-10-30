@@ -54,15 +54,16 @@ in the complete \cfhtls WIDE survey with \sw. We describe the training
 sample used for both training the citizen scientists that participated
 in \sw and calibrating their performance. We generate realistic looking
 simulated samples of lenses both at galaxy and group-scales as part of
-this training sample. We present 74 new strong gravitational lens
-candidates discovered from the \sw-\cfhtls search. Furthermore, we
-compile a sample of false positives which can be used for robot testing,
-first of its kind for the lensing community. The simulated sample is
-also used to make a comparison between human performance against the
-robots. We find that the XX per cent of the known lens sample is
-recovered and the new lens sample has XX completeness with respect to
-the simulated sample. We make available the following data products:
-simulated sample, simulation code and the false positives sample at XXX.
+this training sample. We present 80 new strong gravitational lens
+candidates discovered from the \sw-\cfhtls search out of which 40
+candidates are promising. Furthermore, we compile a sample of false
+positives which can be used for robot testing, first of its kind for the
+lensing community. The simulated sample is also used to make a
+comparison between human performance against the robots. We find that
+the XX per cent of the known lens sample is recovered and the new lens
+sample has XX completeness with respect to the simulated sample. We make
+available the following data products: simulated sample, simulation code
+and the false positives sample at XXX.
 
 \end{abstract}
 
@@ -599,18 +600,6 @@ sample compared to the known lens sample SARCS XXXX check?
 \end{figure*}
 
 
-%\begin{figure*}
-%\begin{center}
-%\includegraphics[scale=0.95]{sw-cfhtls-figs/distrib_srczmag.eps}
-%\caption{ \label{fig:szmdist}
-%Redshift distribution on the left and magnitude distribution on the right of the
-%simulated sample for the background sources. The different types of lines show the
-%distribution correspond to the three types of simulated lenses galaxy-quasar,
-%galaxy-galaxy and group-galaxy. 
-%}
-%\end{center}
-%\end{figure*}
-%
 %
 %\begin{figure}
 %\begin{center}
@@ -651,13 +640,127 @@ science team. Such a sample is tremendously helpful for training and
 understanding performances of various lens finding algorithms (refer
 james, sherry's paper ? XXX)
 {\bf TBA data products; make the FP sample available}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results}
 \label{sec:results}
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Discovery of new lenses from \sw}
+\onecolumn
+
+\begin{center}
+\begin{longtable}{lcccccccccr}
+\caption{ \label{tab:swcands} 
+Thresholds used in the selection of the simulated lenses. }\\
+\hline
+SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm A}$ & R$_{avg}$ & ZooID & P & Comments  \\
+  &  & (deg) & (deg) &  & (mag) &  (") &  &  & & \\ 
+\hline
+\endfirsthead
+\hline
+SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm A}$ & R$_{avg}$ & ZooID & P & Comments  \\
+  &  & (deg) & (deg) &  & (mag) &  (") &  &  & & \\ 
+\hline
+\endhead
+\hline
+\multicolumn{11}{p{18cm}}{
+The column Comments has two type of notes. The first is about the lens
+image configuration where the symbols mean the following A: Arc, D: Double, Q:
+Quad, R: Ring. The second is a comment on the type of lens assessed
+visually. Note that this classification is not based on colors or spectral
+analysis. The symbols are E: Elliptical, S: (face on) Spiral, G: Group-scale, D:
+Edge on disk, R: Red starforming galaxy.  This galaxy falls within the masked region as per the catalog from
+which the magnitudes and the redshift are extracted.  
+}\\  
+\endlastfoot
+ SW1 & CFHTLS J020338-051901 &   30.9097 &   -5.3171 &  0.4 & 18.8 &  1.6 &  2.0 & ASW0001sqw &  0.7  &  D,E   \\ 
+ SW2 & CFHTLS J020341-074722 &   30.9223 &   -7.7897 &  0.5 & 18.8 &  1.6 &  2.0 & ASW000993q &  1.0  &  A,E   \\ 
+ SW3 & CFHTLS J020457-110309 &   31.2392 &  -11.0526 &  0.7 & 20.0 &  1.6 &  2.3 & ASW00099b9 &  1.0  &  A,R   \\ 
+ SW4 & CFHTLS J020642-095157 &   31.6751 &   -9.8659 &  --  &  --  &  0.9 &  2.0 & ASW0001ld7 &  1.0  &  A,R   \\ 
+ SW5 & CFHTLS J020810-040220 &   32.0450 &   -4.0389 &  --  &  --  &  1.8 &  1.3 & ASW0001c3j &  1.0  &  A,R   \\ 
+ SW6 & CFHTLS J020832-043315 &   32.1339 &   -4.5544 &  --  &  --  &  1.6 &  2.3 & ASW0002asp &  1.0  &  A,R   \\ 
+ SW7 & CFHTLS J020848-042427 &   32.2011 &   -4.4076 &  --  &  --  &  1.1 &  2.7 & ASW0002bmc &  1.0  &  D,D   \\ 
+ SW8 & CFHTLS J020849-050429 &   32.2078 &   -5.0748 &  --  &  --  &  0.9 &  2.3 & ASW0002qtn &  1.0  &  A,R   \\ 
+ SW9 & CFHTLS J021021-093415 &   32.5898 &   -9.5711 &  0.4 & 18.4 &  2.7 &  1.3 & ASW0002k40 &  0.5  &  D,S   \\ 
+SW10 & CFHTLS J021057-084450 &   32.7415 &   -8.7474 &  --  &  --  &  2.5 &  1.7 & ASW0002p8y &  0.4  &  A,G   \\ 
+SW11 & CFHTLS J021221-105251 &   33.0881 &  -10.8811 &  0.3 & 17.9 &  1.8 &  2.0 & ASW0002dx7 &  1.0  &  D,E/S   \\ 
+SW12 & CFHTLS J021225-085211 &   33.1051 &   -8.8697 &  0.8 & 19.5 &  2.1 &  1.7 & ASW00024id &  1.0  &  R,R   \\ 
+SW13 & CFHTLS J021230-074727 &   33.1264 &   -7.7909 &  0.9 & 20.3 &  1.7 &  1.7 & ASW0001ze0 &  0.5  &  A,R/G   \\ 
+SW14 & CFHTLS J021317-084819 &   33.3234 &   -8.8055 &  0.5 & 19.8 &  1.3 &  1.3 & ASW00024q6 &  0.6  &  A,R/E   \\ 
+SW15 & CFHTLS J021514-092440 &   33.8109 &   -9.4111 &  0.7 & 19.9 &  2.6 &  1.3 & ASW00021r0 &  0.5  &  A,R/G   \\ 
+SW16 & CFHTLS J022016-102446 &   35.0688 &  -10.4129 &  0.6 & 19.4 &  1.5 &  2.3 & ASW0009a4w &  0.7  &  D,E   \\ 
+SW17 & CFHTLS J022359-083651 &   35.9995 &   -8.6144 &  --  &  --  &  3.1 &  1.3 & ASW0004iye &  0.7  &  A,E   \\ 
+SW18 & CFHTLS J022406-062846 &   36.0256 &   -6.4796 &  0.4 & 19.6 &  0.9 &  2.3 & ASW0003wsu &  1.0  &  A,E   \\ 
+SW19 & CFHTLS J022409-105808 &   36.0398 &  -10.9689 &  --  &  --  &  4.8 &  3.0 & ASW0004dv8 &  1.0  &  A,G   \\ 
+SW20 & CFHTLS J022533-053204 &   36.3888 &   -5.5346 &  0.5 & 19.4 &  3.6 &  2.0 & ASW0004m3x &  0.7  &  A,R/G   \\ 
+SW21 & CFHTLS J022716-105602 &   36.8186 &  -10.9341 &  0.4 & 17.3 &  1.8 &  2.0 & ASW0009ab8 &  0.8  &  A,E/G   \\ 
+SW22 & CFHTLS J022745-062518 &   36.9387 &   -6.4218 &  0.6 & 20.5 &  1.2 &  1.7 & ASW0003s0m &  0.7  &  A,R   \\ 
+SW23 & CFHTLS J022805-051733 &   37.0236 &   -5.2927 &  0.4 & 18.8 &  1.4 &  2.3 & ASW0009ans &  1.0  &  Q,E   \\ 
+SW24 & CFHTLS J022817-080242 &   37.0727 &   -8.0452 &  0.5 & 19.6 &  0.9 &  2.0 & ASW00042d9 &  1.0  &  A,E/R   \\ 
+SW25 & CFHTLS J022843-063316 &   37.1794 &   -6.5547 &  0.5 & 19.1 &  1.8 &  1.3 & ASW0003r6c &  0.4  &  D/A,E   \\ 
+SW26 & CFHTLS J023008-054038 &   37.5359 &   -5.6774 &  0.6 & 19.7 &  1.9 &  2.3 & ASW0003r61 &  0.6  &  A,E   \\ 
+SW27 & CFHTLS J023010-110409 &   37.5420 &  -11.0694 &  0.9 & 20.6 &  1.2 &  1.7 & ASW0004fgb &  0.7  &  A,R   \\ 
+SW28 & CFHTLS J023051-082423 &   37.7141 &   -8.4064 &  --  &  --  &  0.8 &  2.3 & ASW000412m &  0.6  &  A,E   \\ 
+SW29 & CFHTLS J023123-082535 &   37.8468 &   -8.4266 &  --  &  --  &  1.2 &  2.3 & ASW0004xjk &  0.4  &  A,R   \\ 
+SW30 & CFHTLS J023315-042243 &   38.3133 &   -4.3789 &  0.7 & 19.7 &  1.0 &  2.0 & ASW00050sk &  1.0  &  A,R   \\ 
+SW31 & CFHTLS J023325-053104 &   38.3547 &   -5.5178 &  0.5 & 18.8 &  1.3 &  1.7 & ASW0005ire &  1.0  &  Q,M   \\ 
+SW32 & CFHTLS J023453-093032 &   38.7232 &   -9.5089 &  0.5 & 19.8 &  0.7 &  1.7 & ASW00051ld &  0.5  &  A,D   \\ 
+SW33 & CFHTLS J084833-044051 &  132.1385 &   -4.6809 &  0.7 & 20.2 &  0.9 &  1.7 & ASW0004wgd &  0.9  &  A,R   \\ 
+SW34 & CFHTLS J084841-045237 &  132.1708 &   -4.8772 &  0.3 & 19.0 &  1.0 &  2.3 & ASW0004nan &  1.0  &  A,E   \\ 
+SW35 & CFHTLS J084941-051650 &  132.4216 &   -5.2808 &  0.4 & 19.1 &  1.5 &  1.3 & ASW0004nh3 &  0.6  &  A,E/S   \\ 
+SW36 & CFHTLS J085135-052232 &  132.8980 &   -5.3756 &  --  &  --  &  1.9 &  1.3 & ASW0004n2x &  0.7  &  D,R   \\ 
+SW37 & CFHTLS J085317-020312 &  133.3233 &   -2.0535 &  0.7 & 20.6 &  1.2 &  1.3 & ASW0000vtc &  0.7  &  A,R   \\ 
+SW38 & CFHTLS J090218-053924 &  135.5790 &   -5.6567 &  --  &  --  &  2.0 &  1.3 & ASW0000g95 &  1.0  &  A,R/E   \\ 
+SW39 & CFHTLS J090248-010232 &  135.7020 &   -1.0424 &  0.4 & 19.1 &  1.4 &  1.7 & ASW000096t &  0.8  &  D,E   \\ 
+SW40 & CFHTLS J090308-043252 &  135.7840 &   -4.5479 &  --  &  --  &  1.2 &  2.0 & ASW00007mq &  0.8  &  A,E   \\ 
+SW41 & CFHTLS J090319-040146 &  135.8311 &   -4.0297 &  --  & 19.8 &  1.2 &  1.7 & ASW00007ls &  0.6  &  A,R/E   \\ 
+SW42 & CFHTLS J090333-005829 &  135.8890 &   -0.9749 &  --  &  --  &  2.1 &  1.7 & ASW00008a0 &  1.0  &  A/D,E/G   \\ 
+SW43 & CFHTLS J135724+561614 &  209.3540 &   56.2707 &  --  &  --  &  2.6 &  1.3 & ASW0006e0o &  1.0  &  D,E   \\ 
+SW44 & CFHTLS J135755+571722 &  209.4827 &   57.2897 &  0.8 & 20.2 &  1.3 &  2.0 & ASW0005ma2 &  1.0  &  D,D   \\ 
+SW45 & CFHTLS J140027+541028 &  210.1160 &   54.1745 &  --  &  --  &  1.2 &  1.3 & ASW0006a07 &  0.8  &  Q,R/E   \\ 
+SW46 & CFHTLS J140030+574437 &  210.1260 &   57.7437 &  0.4 & 18.2 &  2.0 &  2.3 & ASW0009bp2 &  0.9  &  A,E   \\ 
+SW47 & CFHTLS J140425+520506 &  211.1062 &   52.0850 &  0.4 & 18.9 &  1.4 &  1.3 & ASW0005o0w &  0.9  &  D,E   \\ 
+SW48 & CFHTLS J140522+574333 &  211.3426 &   57.7259 &  0.7 & 19.7 &  1.0 &  2.7 & ASW000619d &  1.0  &  A,R   \\ 
+SW49 & CFHTLS J140622+520942 &  211.5958 &   52.1617 &  0.7 & 20.3 &  1.2 &  2.3 & ASW0005rnb &  1.0  &  A,R   \\ 
+SW50 & CFHTLS J140845+514913 &  212.1907 &   51.8205 &  0.7 & 19.7 &  1.5 &  2.7 & ASW0005o38 &  1.0  &  A,E   \\ 
+SW51 & CFHTLS J141056+533225 &  212.7364 &   53.5405 &  0.6 & 19.4 &  1.7 &  2.0 & ASW0006kjx &  0.6  &  A,R/G   \\ 
+SW52 & CFHTLS J141432+534004 &  213.6372 &   53.6679 &  0.7 & 21.4 &  0.9 &  2.0 & ASW0006jh5 &  1.0  &  A,R   \\ 
+SW53 & CFHTLS J141448+545548 &  213.7010 &   54.9301 &  0.4 & 18.3 &  2.1 &  1.3 & ASW0006zc9 &  0.4  &  A,G   \\ 
+SW54 & CFHTLS J141518+513915 &  213.8290 &   51.6542 &  0.4 & 18.3 &  3.0 &  1.7 & ASW00070vl &  1.0  &  D,E   \\ 
+SW55 & CFHTLS J141927+533919 &  214.8627 &   53.6554 &  0.7 & 20.5 &  2.3 &  1.7 & ASW0006yrw &  0.5  &  A,R/G   \\ 
+SW56 & CFHTLS J142432+550019 &  216.1354 &   55.0055 &  0.5 & 19.5 &  1.1 &  2.0 & ASW0007vx2 &  1.0  &  A,E   \\ 
+SW57 & CFHTLS J142603+511421 &  216.5140 &   51.2393 &  --  &  --  &  4.4 &  2.7 & ASW0006mea &  1.0  &  A,G   \\ 
+SW58 & CFHTLS J142620+561356 &  216.5870 &   56.2323 &  0.4 & 19.5 &  1.3 &  1.3 & ASW0007sez &  1.0  &  A/R,S   \\ 
+SW59 & CFHTLS J142652+560001 &  216.7200 &   56.0004 &  --  &  --  &  1.5 &  1.7 & ASW0007t5y &  1.0  &  R,R   \\ 
+SW60 & CFHTLS J142843+543713 &  217.1815 &   54.6204 &  0.4 & 19.7 &  1.3 &  1.3 & ASW0007pga &  0.9  &  D,D   \\ 
+SW61 & CFHTLS J142934+562541 &  217.3926 &   56.4281 &  0.5 & 19.0 &  5.9 &  2.7 & ASW0009cjs &  1.0  &  A,G   \\ 
+SW62 & CFHTLS J143055+572431 &  217.7333 &   57.4088 &  0.7 & 19.3 &  1.0 &  2.0 & ASW0007wfj &  1.0  &  A,R   \\ 
+SW63 & CFHTLS J143100+564603 &  217.7510 &   56.7675 &  --  &  --  &  1.8 &  1.7 & ASW00086xq &  1.0  &  A,E   \\ 
+SW64 & CFHTLS J143353+542310 &  218.4736 &   54.3862 &  0.8 & 19.8 &  1.6 &  2.0 & ASW0009cox &  0.9  &  A,R/G   \\ 
+SW65 & CFHTLS J143454+522850 &  218.7270 &   52.4808 &  0.6 & 19.4 &  4.4 &  2.3 & ASW0007k4r &  0.4  &  Q,G/R   \\ 
+SW66 & CFHTLS J143627+563832 &  219.1164 &   56.6425 &  0.5 & 19.5 &  1.5 &  2.3 & ASW0008swn &  1.0  &  A,D   \\ 
+SW67 & CFHTLS J143631+571131 &  219.1315 &   57.1922 &  0.7 & 20.9 &  1.3 &  1.3 & ASW0008pag &  0.8  &  D/A,R   \\ 
+SW68 & CFHTLS J143651+530705 &  219.2150 &   53.1183 &  0.6 & 19.2 &  3.1 &  1.3 & ASW0007h27 &  1.0  &  A,E/G   \\ 
+SW69 & CFHTLS J143658+533807 &  219.2425 &   53.6355 &  0.7 & 19.6 &  0.9 &  2.7 & ASW0007hu2 &  0.9  &  D,D   \\ 
+SW70 & CFHTLS J143838+572647 &  219.6589 &   57.4464 &  0.8 & 20.2 &  1.1 &  2.0 & ASW0008qsm &  1.0  &  A,R   \\ 
+SW71 & CFHTLS J143950+544606 &  219.9610 &   54.7686 &  --  &  --  &  1.7 &  1.3 & ASW00085cp &  0.6  &  A,G/R   \\ 
+SW72 & CFHTLS J220215+012124 &  330.5635 &    1.3567 &  0.3 & 17.4 &  4.6 &  1.7 & ASW0005qiz &  0.5  &  rA,G   \\ 
+SW73 & CFHTLS J220256+023432 &  330.7370 &    2.5758 &  --  &  --  &  6.8 &  2.3 & ASW0007e08 &  1.0  &  A,G/C   \\ 
+SW74 & CFHTLS J220722+013610 &  331.8441 &    1.6030 &  0.8 & 20.3 &  1.0 &  2.0 & ASW0001uuz &  0.6  &  A,R   \\ 
+SW75 & CFHTLS J221101+003401 &  332.7582 &    0.5671 &  0.9 & 20.0 &  1.1 &  1.3 & ASW00090l5 &  1.0  &  A,E/R   \\ 
+SW76 & CFHTLS J221306+014708 &  333.2758 &    1.7856 &  --  & 17.1 &  1.4 &  1.7 & ASW0008wmr &  1.0  &  A,S   \\ 
+SW77 & CFHTLS J221513+010240 &  333.8060 &    1.0445 &  --  &  --  &  0.8 &  1.7 & ASW0008dxh &  0.6  &  A,R/G   \\ 
+SW78 & CFHTLS J221519+005758 &  333.8321 &    0.9661 &  0.4 & 20.2 &  1.0 &  1.7 & ASW0008xbu &  1.0  &  A,D   \\ 
+SW79 & CFHTLS J221716+015826 &  334.3189 &    1.9739 &  0.1 & 21.6 &  1.0 &  1.7 & ASW00096rm &  1.0  &  A/R,R   \\ 
+SW80 & CFHTLS J222007-002505 &  335.0307 &   -0.4182 &  0.3 & 21.4 &  1.2 &  2.0 & ASW00094fq &  1.0  &  Q,R/G   \\ 
+\end{longtable}
+\end{center}
+
+
+\twocolumn
+
+\subsection{New lens candidates from \sw}
 \label{sec:results:disc}
 
 
@@ -665,46 +768,11 @@ james, sherry's paper ? XXX)
 cases why they were missed }
 
 
-%
-%\begin{longtable*}{l c c c c c c c l}
-%\caption{ \label{tab:all} 
-%Characteristics of lens candidates from the \SA sample. }\\
-%ID & RA & Dec &  $i$ & $z_{\rm phot}$ & $R_{\rm A}$ & Rank & Type & previous ID  \\
-%    & (hms) & (dms) &  (mag) &   & (arcsec) &  &  & \\ [1.5ex] \hline \\ 
-%\endfirsthead
-%
-%ID & RA & Dec &  $i$ & $z_{\rm phot}$ & $R_{\rm A}$ & Rank & Type & previous ID  \\
-%    & (hms) & (dms) &  (mag) &   & (arcsec) &  &  & \\ [1.5ex] \hline \\ 
-%\endhead
-%
-%\hline  
-%\multicolumn{11}{p{15cm}}{
-%{\bfseries
-%{\bf m:} This galaxy falls within the masked region as per the catalog from
-%which the magnitudes and the redshift are extracted.  {\bf z:} The magnitudes
-%and/or redshift are not from the catalog instead are measured by the author.
-%}  }\\
-%
-%\endlastfoot
-%   SW1  & 02:01:21.89 & $-$09:15:15.09 & 19.90 &  0.46 &  2.2 &   2.0 & A &  SA18 \\ 
-%   SW2  & 02:02:10.50 & $-$11:09:11.68 & 17.80 &  0.48 &  5.0 &   3.7 & A &  SA87 \\ 
-%\end{longtable*}
-%
-
 \begin{figure*}
 \begin{center}
 \includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_2p0_3p0.pdf}
 \caption{ \label{fig:lch1}
-Sample of promising lens candidates ($R_{avg}>=2.0$)
-}
-\end{center}
-\end{figure*}
-
-\begin{figure*}
-\begin{center}
-\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_2p0_3p0_1.pdf}
-\caption{ \label{fig:lch2}
-contd. - Sample of promising lens candidates ($R_{avg}>=2.0$)
+Sample of high probability lens candidates ($R_{avg}>=2.0$).
 }
 \end{center}
 \end{figure*}
@@ -713,13 +781,23 @@ contd. - Sample of promising lens candidates ($R_{avg}>=2.0$)
 \begin{center}
 \includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_1p3_1p7.pdf}
 \caption{ \label{fig:lcl}
-Sample of low probability lens candidates ($1.0<R_{avg}<2.0$)
+Sample of medium probability lens candidates ($1.0<R_{avg}<2.0$).
 }
 \end{center}
 \end{figure*}
 
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=0.65]{sw-cfhtls-figs/zlens_reinst.pdf}
+\caption{ \label{fig:zlre}
+Comparison of Lens redshift and Arc radius for all three lens samples,
+namely, from \sw, SARCS and those from the RingFinder.}
+\end{center}
+\end{figure}
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-\subsection{Recovery of known \cfhtls lenses from \sw}
+
+\subsection{Recovery of known \cfhtls lenses with \sw}
 \label{sec:results:reco}
 
 {\it Describe which lenses were recovered and explain any cases missed by
@@ -748,8 +826,6 @@ Summarize performance at some fiducial threshold: eg P = 95\%.}
 
 \subsection{Comparison with ``Expert'' Classification}
 \label{sec:results:experts}
-
-
 
 
 

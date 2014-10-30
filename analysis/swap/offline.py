@@ -216,7 +216,7 @@ def Estep(bureau_offline, pi, taus, training_IDs={}):
 # ----------------------------------------------------------------------------
 # Maximization step.
 
-def Mstep(bureau_offline, pi, taus, training_IDs={}):
+def Mstep(bureau_offline, pi, taus, training_IDs={}, laplace=1):
     pi_num = 0
     pi_den = 0
     bureau_offline_prime = bureau_offline.copy()
@@ -231,12 +231,12 @@ def Mstep(bureau_offline, pi, taus, training_IDs={}):
         ## PDi_den = 0
         ## # pii_num = PLi_den
         ## pii_den = 0
-        PLi_num = 1
-        PLi_den = 2
-        PDi_num = 1
-        PDi_den = 2
+        PLi_num = laplace
+        PLi_den = 2 * laplace
+        PDi_num = laplace
+        PDi_den = 2 * laplace
         # pii_num = PLi_den
-        pii_den = 1
+        pii_den = laplace
         for ID in agent['Subjects']:
             if ID in taus:
 

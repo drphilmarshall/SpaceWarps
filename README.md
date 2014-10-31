@@ -19,7 +19,7 @@ See also, for fun:
 
 ### Contact
 
-* Phil Marshall ([KIPAC, SLAC National Accelerator Laboratory](http://drphilmarshall.net))
+* [Phil Marshall](http://drphilmarshall.net) (KIPAC, SLAC National Accelerator Laboratory)
 * Aprajita Verma (Physics Department, University of Oxford)
 * Anupreeta More (Kavli IPMU, University of Tokyo)
 

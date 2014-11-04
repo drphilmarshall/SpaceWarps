@@ -50,7 +50,7 @@
 The CFHT Legacy Survey has been searched for strong lenses with
 semi-automated algorithms both at galaxy and groups scales. With the aim
 of improving these lens finding robots, we carry out a blind lens search
-in the complete \cfhtls WIDE survey with \sw. We describe the training
+in the complete \cfhtls \textsc{wide} survey with \sw. We describe the training
 sample used for both training the citizen scientists that participated
 in \sw and calibrating their performance. We generate realistic looking
 simulated samples of lenses both at galaxy and group-scales as part of
@@ -135,7 +135,7 @@ We discuss the implications of our results for future lens searches in
 The Canada-France-Hawaii Telescope Legacy Survey (CFHTLS) is a
 photometric survey in five optical bands ($u^*g'r'i'z'$) carried out
 with the wide-field imager MegaPrime which has a 1~deg$^2$ field-of-view
-and a pixel size of 0.186\arcsec. The \cfhtls WIDE covers a total area
+and a pixel size of 0.186\arcsec. The \cfhtls \textsc{WIDE} covers a total area
 of 171~deg$^2$ on the sky and it consists of four fields W1, W2, W3 and
 W4. The field W1 has the largest sky coverage of 63.65~deg$^2$. The
 fields W2 and W4 have similar sky coverages of 20.32~deg$^2$ and
@@ -531,6 +531,17 @@ Source PA & 0 & 180 & & \\
 \end{center}
 \end{table}
 
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.0]{sw-cfhtls-figs/distrib_remu.pdf}
+\caption{ \label{fig:remudist}
+Einstein radius distribution for all types of lenses. The dashed-dotted (blue)
+curves show the theoretical prediction assuming an SIS model at galaxy-scales
+and a total (NFW+Hernquist) model at groups-scales taken from \citep{More2012}.
+}
+\end{center}
+\end{figure}
+
 In this section, we describe some of the properties of our simulated sample for
 each of the three types of lens samples.
 
@@ -578,16 +589,6 @@ effective radius when the background sources are galaxies.
 
 %magdiff=5*0.1;
 %zdiffq=0.1;
-\begin{figure*}
-\begin{center}
-\includegraphics[scale=0.85]{sw-cfhtls-figs/distrib_remu.pdf}
-\caption{ \label{fig:remudist}
-Einstein radius distribution for all types of lenses. The dashed-dotted (blue)
-curves show the theoretical prediction assuming an SIS model at galaxy-scales
-and a total (NFW+Hernquist) model at groups-scales taken from \citep{More2012}.
-}
-\end{center}
-\end{figure*}
 
 \begin{figure*}
 \begin{center}
@@ -646,6 +647,58 @@ james, sherry's paper ? XXX)
 \section{Results}
 \label{sec:results}
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{\sw Lens Sample}
+
+\subsubsection{Selection of \sw lens candidates}
+\label{sec:results:stage1}
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.0]{sw-cfhtls-figs/poffl_expr_ncl.pdf}
+\caption{ \label{fig:comp_exp} Comparison of the P(lens) with the expert
+grades and number of classification for each subject.  }
+\end{center}
+\end{figure}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{New lens candidates from \sw}
+\label{sec:results:disc}
+
+{\bf \textcolor{red} {CHANGE THE TABLE, CHECK IF ALL FIGS ARE UPDATED,
+ADD ISD PLOT, CHECK FOR STAGE 1 -- COMPLETENESS OF SIMS AND KNOWN LENSES
+and P value comparison, what about the duplicate lenses near the borders
+- stats on those?, MAKE A STATS TABLE that gives various numbers and
+fractions of (new and known) lens candidates detected at stages 1 and 2.}}
+
+{\it Describe the newly found lenses and explain for a few
+cases why they were missed }
+
+\begin{table}
+\begin{center}
+\caption{ \label{tab:stats} 
+Statistics of detections in \sw }
+\begin{tabular}{l l l l l l}
+\hline
+   &  \multicolumn{2}{c} {Stage I}  & \multicolumn{3}{c}{Stage II} \\ 
+      & KnCa  &  KnCo  & KnCa & KnCo & NeCa \\
+\hline
+\hline
+Number  & 1.0 & 1.0 & 1.0  & 1.0  & 1.0 \\
+Fraction  & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 \\
+P(lens) & 0.95 & 0.95 & 0.3 & 0.3 & 0.3 \\
+
+\hline
+\end{tabular}
+\end{center}
+{KnCa}-- Known lens candidates \\
+{KnCo}-- Known confirmed lenses \\
+{NeCa}-- New lens candidates  \\
+\end{table}
+
+
 
 \onecolumn
 
@@ -760,73 +813,60 @@ SW80 & CFHTLS J222007-002505 &  335.0307 &   -0.4182 &  0.3 & 21.4 &  1.2 &  2.0
 
 \twocolumn
 
-\subsection{New lens candidates from \sw}
-\label{sec:results:disc}
-
-
-{\it Describe the newly found lenses and explain for a few
-cases why they were missed }
-
-
 \begin{figure*}
 \begin{center}
-\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_2p0_3p0.pdf}
+\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscandfin.pdf}
 \caption{ \label{fig:lch1}
-Sample of high probability lens candidates ($R_{avg}>=2.0$).
+Sample of lens candidates with $R_{avg}>=1.3$.
 }
 \end{center}
 \end{figure*}
 
 \begin{figure*}
 \begin{center}
-\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscand_1p3_1p7.pdf}
+\includegraphics[scale=1.5]{sw-cfhtls-figs/lenscandfin_1.pdf}
 \caption{ \label{fig:lcl}
-Sample of medium probability lens candidates ($1.0<R_{avg}<2.0$).
+Sample of lens candidates $R_{avg}>=1.3$.
 }
 \end{center}
 \end{figure*}
 
 
-\begin{figure}
-\begin{center}
-\includegraphics[scale=0.65]{sw-cfhtls-figs/zlens_reinst.pdf}
-\caption{ \label{fig:zlre}
-Comparison of Lens redshift and Arc radius for all three lens samples,
-namely, from \sw, SARCS and those from the RingFinder.}
-\end{center}
-\end{figure}
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
 \subsection{Recovery of known \cfhtls lenses with \sw}
-\label{sec:results:reco}
+\label{sec:results:known}
 
 {\it Describe which lenses were recovered and explain any cases missed by
 citizen scientists}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-\subsection{\cfhtls completeness and purity}
-\label{sec:results:sample}
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.0]{sw-cfhtls-figs/comp_reinst.pdf}
+\caption{ \label{fig:compre} Completeness of simulated and known lens
+samples based on the final \sw sample. }
+\end{center}
+\end{figure}
+
 
 {\it Rejection rate. Completeness and purity at P > retirement, P > 95\%, and 
 as function of probability P. 
 
 Summarize performance at some fiducial threshold: eg P = 95\%.}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-\subsection{Stage 1 Classification}
-\label{sec:results:stage1}
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
-\subsection{Stage 2 Classification}
-\label{sec:results:stage2}
+\subsection{Image separation distribution}
+\label{sec:results:isd}
 
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
-
-\subsection{Comparison with ``Expert'' Classification}
-\label{sec:results:experts}
-
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.0]{sw-cfhtls-figs/isd_cfhtls_sw.pdf}
+\caption{ \label{fig:isd} Image separation distribution. Comparing
+theoretical predictions with the \cfhtls known lens samples (REF) and
+the same \cfhtls sample after combining with the incremental lens sample
+from \sw }
+\end{center}
+\end{figure}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -844,6 +884,15 @@ Describe the importance of this kind of study
 - being able to quantify the completeness of the lens samples
 - state how this will be used in a future \sw paper }
 
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.0]{sw-cfhtls-figs/zlens_reinst.pdf}
+\caption{ \label{fig:zlre}
+Comparison of Lens redshift and Arc radius for all three lens samples,
+namely, from \sw, SARCS and those from the RingFinder.}
+\end{center}
+\end{figure}
+
 {\bf TBD: 
 add section on offline analysis - extra lenses found etc;  
 expand FP section;  
@@ -853,7 +902,7 @@ check if some candidates were detected because they were hidden
 underneath the sims ie. from the D11;
 
 }
-
+\subsection{Blind Lens Search}
 We looked at the locations of simulated and real lenses from our data
 those were missed by \sw compared to the locations of the lenses that
 got detected. The real lens sample consists of a total of 383 candidates
@@ -965,8 +1014,6 @@ the facilities of the Canadian Astronomy Data Centre operated by the National
 Research Council of Canada with the support of the Canadian Space Agency.
 CFHTLenS data processing was made possible thanks to significant computing
 support from the NSERC Research Tools and Instruments grant program.
-This work was supported by World Premier International Research Center
-Initiative (WPI Initiative), MEXT, Japan.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  APPENDICES

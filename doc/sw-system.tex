@@ -265,13 +265,13 @@ lens searches in \Sref{sec:discuss} and draw conclusions in
 \label{sec:design}
 
 The basic steps of a visual search for gravitational lenses are: 1) prepare
-images, 2) display them to an inspector, 3) record the inspector's
+the images, 2) display them to an inspector, 3) record the inspector's
 classification of each image (as, for example, containing a lens candidate or
-not) and 4) analyzing those classifications (and all others) in order to
-produce a final candidate list. We describe step 1 in \Sref{sec:data} and step
-4 in \Sref{sec:swap}. In this section we take a volunteer's eye view and
-begin by describing the \sw classification interface, the crowd of volunteers,
-and the interactions between the two.
+not) and 4) analyze that classification along with all others to produce a
+final candidate list. We describe step 1 in \Sref{sec:data} and step 4 in
+\Sref{sec:swap}. In this section we take a volunteer's eye view and begin by
+describing the \sw classification interface, the crowd of volunteers, and the
+interactions between the two.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
@@ -283,7 +283,7 @@ and the interactions between the two.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 
-\subsection{Classification Interface}
+\subsection{The Classification Interface}
 \label{sec:design:interface}
 
 A screenshot of the \sw classification interface (CI) is shown in
@@ -308,8 +308,10 @@ queue allows several images to be pre-loaded while the volunteer is
 classifying the current subject, and the rapid movement is designed to
 encourage volunteers to classify rapidly.
 
+% PJM: how quickly? How much clock time per classification?
+
 For the more interesting subjects, the CI offers two features that  enable
-further investigation of the subjects. First is the ``Quick Dashboard'' (QD) a
+further investigation of the subjects. The first is the ``Quick Dashboard'' (QD) a
 more advanced image viewer. This allows the viewer to compare three different
 contrast and color balance settings, to help bring out subtle features, and to
 zoom in on interesting regions of the image to assess small features. Markers
@@ -870,6 +872,39 @@ classified 10 or more training subjects.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+
+\subsection{Classification Speed}
+\label{sec:results:speed}
+
+How fast does the \sw crowd classify subjects? Each agent records the
+timestamp of each classification its volunteer makes; by measuring the time
+lags between successive classifications we can make estimates of each
+volunteer's speed, and that of the crowd.
+
+A histogram of all time lags for all volunteers is shown in
+\Fref{fig:crowd:timelags}, with those of the ``experienced volunteers''
+(those who classified 10 or more training subjects.) overlaid. 
+
+\todo{PJM}{Make this histogram, and try and infer the typical inter-session
+lag.}
+
+Defining a new classification session to have started at least X minutes since
+the previous classification, we assign all classifications into sessions, and
+compute the mean intra-session time lag recorded by each agent. This gives
+some measure of classification speed within a session; we also compute the 
+mean session length, and the rate of information contribution. The
+latter is the most relevant measure of speed for future project design. The
+distributions of these speeds are shown in \Fref{fig:crowd:speeddists}, in a corner
+plot that also shows the effort and skill from \Fref{fig:crowd:cornerplot}. We
+see that ...
+
+The overall contribution rate for the \sw crowd was found (by simple average),
+and is plotted as a function of time in \Fref{fig:crowd:speed}. We see that
+...
+
+\todo{Phil, Chris}{Compute classification speeds, make plots, discuss.}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
 

@@ -267,9 +267,16 @@ class Subject(object):
 # Update mean and median probability, status, retirement
 
     def update_state(self,at_time=None):
-        # Update median probability
-        self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
-        self.median_probability=np.sort(self.probability)[Ntrajectory/2]
+        # check if iterable
+        try: iterator = iter(self.probability)
+        except TypeError:
+            self.mean_probability=self.probability
+            self.median_probability=self.mean_probability
+        else:
+            # is iterable
+            # Update median probability
+            self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
+            self.median_probability=np.sort(self.probability)[Ntrajectory/2]
 
         # Should we count it as a detection, or a rejection?
         # Only test subjects get de-activated:

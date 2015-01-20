@@ -405,7 +405,7 @@ def SWAP(argv):
                 names = annotationhistory['Name']
                 classifications = annotationhistory['ItWas']
                 if len(names) > 0:
-                    old_probability = sample.mean_probability
+                    old_probability = sample.member[ID].mean_probability
                     sample.member[ID].was_described_many_times(bureau, names, classifications)
                     epsilon_taus += (sample.member[ID].mean_probability - old_probability) ** 2
                     num_taus += 1

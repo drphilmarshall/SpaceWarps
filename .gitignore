@@ -1,4 +1,6 @@
 client.py
+*.swp
+*.synctex.gz
 *.pyc
 *.DS_Store
 *.log

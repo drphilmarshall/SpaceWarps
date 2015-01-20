@@ -16,6 +16,7 @@
 \usepackage{graphicx}
 \usepackage{amssymb}
 \usepackage{amsmath}
+\usepackage{epsfig}
 
 % Macros:
 \input{macros.tex}
@@ -483,7 +484,44 @@ defined, where the duds all contain an object identified by one of us (AV, AM
 and PM) as a potential false positive. \Fref{fig:training:gallery} shows some
 example images from the CFHTLS stage 2 training set. 
 
-\todo{Phil}{Show some example sims and duds...}
+%%% Sims and Duds from Stage2
+
+\begin{figure*}%[!ht]
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/0.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/1.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/2.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/3.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+  \caption{Typical \SW duds. Insets indicate regions where volunteers typically
+  clicked.}
+  \label{fig:training-gallery:duds}
+\end{figure*}
+
+\begin{figure*}%[!ht]
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/4.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/5.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/6.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+\begin{minipage}[b]{0.24\linewidth}
+\centering\epsfig{file=sw-system-figs/gallery/7.png,width=\linewidth,angle=0,clip=}
+\end{minipage} \hfill
+  \caption{Typical \SW sims. Insets indicate the location of the lens in the
+  image. Users needed to click on these specific features in order to make a
+correct classification.}
+  \label{fig:training-gallery:sims}
+\end{figure*}
 
 We also attempted to encourage discernment by changing the look and feel of
 the app, slowing down the arrival of new images, and switching the background
@@ -559,7 +597,8 @@ dynamically according to, for example, the root-mean-square pixel value in
 each image, can lead to better presentation of bright objects, but in doing so
 they tend to hide the faint features in those images: we needed to optimize
 the detectability of these faint features.   Examples of CFHTLS training set
-images can be seen in \Fref{fig:training-gallery}.
+images can be seen in \Fref{fig:training-gallery:duds} and
+\Fref{fig:training-gallery:sims}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1030,11 +1069,15 @@ categories, performance, efficiency and capacity.
 \caption{Illustrative examples of 
 false negatives (blue) and false positives (red) from the classification of
 the \sw CFHTLS training set. The trajectory plot for each of the 4 subjects is
-shown to the right of its image. lefthand panels show the most common types of
+shown to the right of its image. Lefthand panels show the most common types of
 trajectories: short step random walks resulting from no high skill classifiers
 viewing the subject. The righthand panels show examples where higher skill
 classifiers have been involved, causing random walks with longer step lengths
-(top) and catastrophic mis-classifications (bottom right).}
+(top) and catastrophic mis-classifications (bottom right). Insets for the false
+negatives show the lens feature. The inset for the lower righthand panel shows
+where most users believed a lens was located. There is no corresponding inset
+for the lower left panel because no particular feature stood out to users.
+Instead, users clicked many different features.}
 \label{fig:discuss:performance:trajectories}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

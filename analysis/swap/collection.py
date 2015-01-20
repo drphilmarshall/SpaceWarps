@@ -222,6 +222,7 @@ class Collection(object):
         
         return the_departed
         
+
 # ----------------------------------------------------------------------
 # Prepare to plot subjects' trajectories:
 

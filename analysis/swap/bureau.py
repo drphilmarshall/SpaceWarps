@@ -39,6 +39,7 @@ class Bureau(object):
 
     HISTORY
       2013-04-17  Started Marshall (Oxford)
+      2014-01-19  Added batch_update (CPD)
     """
 
 # ----------------------------------------------------------------------------

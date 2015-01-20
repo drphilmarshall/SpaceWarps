@@ -135,6 +135,10 @@ class Subject(object):
 
     def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1],online=True,record=True):
 
+        # TODO: CPD: make likelihood into an attribute?  if so, I need to
+        # probably wipe it here to avoid silent bugs (likelihood not updating,
+        # etc)
+
         # Rename some variables:
         a_few_at_the_start = while_ignoring
 
@@ -183,8 +187,8 @@ class Subject(object):
             if by.NT > a_few_at_the_start:
                
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
-                PL_realization=by.get_PL_realization(Ntrajectory);
-                PD_realization=by.get_PD_realization(Ntrajectory);
+                PL_realization=np.ones(Ntrajectory) * by.PL#by.get_PL_realization(Ntrajectory);
+                PD_realization=np.ones(Ntrajectory) * by.PD#by.get_PD_realization(Ntrajectory);
                 prior_probability=self.probability*1.0;  # TODO: not used?!
 
                 if as_being == 'LENS':

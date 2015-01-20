@@ -264,7 +264,7 @@ class Subject(object):
 
             by = agent
             as_being = ['NOT', 'LENS'][classification]
-            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=False,record=record)
+            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=False,record=record,realize_confusion=realize_confusion)
             N_classifications_used += 1
         self.probability = likelihood_sum * self.probability / N_classifications_used
         self.update_state()

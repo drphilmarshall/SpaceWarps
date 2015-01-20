@@ -406,7 +406,7 @@ def SWAP(argv):
                 classifications = annotationhistory['ItWas']
                 if len(names) > 0:
                     old_probability = sample.member[ID].mean_probability
-                    sample.member[ID].was_described_many_times(bureau, names, classifications)
+                    sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False)  # not doing the binomial realization
                     epsilon_taus += (sample.member[ID].mean_probability - old_probability) ** 2
                     num_taus += 1
 

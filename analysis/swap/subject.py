@@ -167,7 +167,7 @@ class Subject(object):
         else:
 
             # update the annotation history
-            if online:
+            if record:
                 as_being_dict = {'LENS': 1, 'NOT': 0}
                 self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)
                 self.annotationhistory['ItWas'] = np.append(self.annotationhistory['ItWas'], as_being_dict[as_being])
@@ -240,7 +240,7 @@ class Subject(object):
 # ----------------------------------------------------------------------
 # Update probability of LENS, given many classifications at once (E step):
 
-    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=0):
+    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=-1):
         # classifications is assumed to be a list of 0s and 1s for NOT and LENS
         # names is assumed to just be a list of agent names
         N_classifications_used = 0

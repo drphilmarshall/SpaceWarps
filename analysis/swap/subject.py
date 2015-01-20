@@ -133,7 +133,7 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1],online=True,record=True):
+    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1],online=True,record=True,realize_confusion=True):
 
         # TODO: CPD: make likelihood into an attribute?  if so, I need to
         # probably wipe it here to avoid silent bugs (likelihood not updating,
@@ -187,8 +187,13 @@ class Subject(object):
             if by.NT > a_few_at_the_start:
                
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
-                PL_realization=np.ones(Ntrajectory) * by.PL#by.get_PL_realization(Ntrajectory);
-                PD_realization=np.ones(Ntrajectory) * by.PD#by.get_PD_realization(Ntrajectory);
+                if realize_confusion:
+
+                    PL_realization=by.get_PL_realization(Ntrajectory);
+                    PD_realization=by.get_PD_realization(Ntrajectory);
+                else:
+                    PL_realization=np.ones(Ntrajectory) * by.PL
+                    PD_realization=np.ones(Ntrajectory) * by.PD
                 prior_probability=self.probability*1.0;  # TODO: not used?!
 
                 if as_being == 'LENS':
@@ -244,7 +249,7 @@ class Subject(object):
 # ----------------------------------------------------------------------
 # Update probability of LENS, given many classifications at once (E step):
 
-    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=-1):
+    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=-1,realize_confusion=False):
         # classifications is assumed to be a list of 0s and 1s for NOT and LENS
         # names is assumed to just be a list of agent names
         N_classifications_used = 0
@@ -259,8 +264,7 @@ class Subject(object):
 
             by = agent
             as_being = ['NOT', 'LENS'][classification]
-            online = False
-            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=online,record=record)
+            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=False,record=record)
             N_classifications_used += 1
         self.probability = likelihood_sum * self.probability / N_classifications_used
         self.update_state()

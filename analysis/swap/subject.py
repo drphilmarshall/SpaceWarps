@@ -183,9 +183,9 @@ class Subject(object):
         # Deal with active subjects. Ignore the classifier until they
         # have seen NT > a_few_at_the_start (ie they've had a
         # certain amount of training - at least one training image, for example):
-            
+
             if by.NT > a_few_at_the_start:
-               
+
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
                 if realize_confusion:
 
@@ -223,7 +223,7 @@ class Subject(object):
 
                     self.update_state(at_time)
 
-                    # Update agent - training history is taken care of in agent.heard(), 
+                    # Update agent - training history is taken care of in agent.heard(),
                     # which also keeps agent.skill up to date.
                     if self.kind == 'test' and record:
 
@@ -366,9 +366,9 @@ class Subject(object):
             # Fainter symbol:
             plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
             plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
-        
-        
-        
+
+
+
         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
 
         return

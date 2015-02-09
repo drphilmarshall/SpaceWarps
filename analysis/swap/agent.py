@@ -108,8 +108,16 @@ class Agent(object):
         self.NT = 0
         # back-compatibility:
         self.contribution = 0.0*self.update_skill() # This call also sets self.skill, internally
-        self.traininghistory = {'ID':np.array([]), 'Skill':np.array([self.skill]), 'PL':np.array([self.PL]), 'PD':np.array([self.PD]), 'ItWas':np.array([], dtype=int), 'ActuallyItWas':np.array([], dtype=int)}
-        self.testhistory = {'ID':[], 'I':np.array([]), 'Skill':np.array([]), 'ItWas':np.array([], dtype=int)}
+        self.traininghistory = {'ID':np.array([]),
+                                'Skill':np.array([self.skill]),
+                                'PL':np.array([self.PL]),
+                                'PD':np.array([self.PD]),
+                                'ItWas':np.array([], dtype=int),
+                                'ActuallyItWas':np.array([], dtype=int)}
+        self.testhistory = {'ID':[],
+                            'I':np.array([]),
+                            'Skill':np.array([]),
+                            'ItWas':np.array([], dtype=int)}
 
         return None
 

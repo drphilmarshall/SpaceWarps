@@ -1,8 +1,3 @@
-"""
-TODO:
-    Save the list of clicks!
-"""
-
 # ======================================================================
 
 import swap
@@ -113,11 +108,13 @@ class Agent(object):
                                 'PL':np.array([self.PL]),
                                 'PD':np.array([self.PD]),
                                 'ItWas':np.array([], dtype=int),
-                                'ActuallyItWas':np.array([], dtype=int)}
+                                'ActuallyItWas':np.array([], dtype=int),
+                                'At_Time': np.array([])}
         self.testhistory = {'ID':[],
                             'I':np.array([]),
                             'Skill':np.array([]),
-                            'ItWas':np.array([], dtype=int)}
+                            'ItWas':np.array([], dtype=int),
+                            'At_Time': np.array([])}
 
         return None
 
@@ -145,7 +142,7 @@ class Agent(object):
 # Update confusion matrix with latest result:
 #   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT',with_probability=P,ignore=False)
 
-    def heard(self,it_was=None,actually_it_was=None,with_probability=1.0,ignore=False,ID=None,record=True):
+    def heard(self,it_was=None,actually_it_was=None,with_probability=1.0,ignore=False,ID=None,record=True,at_time=None):
 
         if it_was==None or actually_it_was==None:
             pass
@@ -221,6 +218,7 @@ class Agent(object):
 
                 self.traininghistory['ItWas'] = np.append(self.traininghistory['ItWas'], actually_it_was_dictionary[it_was])
                 self.traininghistory['ActuallyItWas'] = np.append(self.traininghistory['ActuallyItWas'], actually_it_was_dictionary[actually_it_was])
+                self.traininghistory['At_Time'] = np.append(self.traininghistory['At_Time'], at_time)
 
         return
 

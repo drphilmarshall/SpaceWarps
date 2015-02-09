@@ -319,21 +319,21 @@ def SWAP(argv):
         if supervised_and_unsupervised:
             # use both training and test images
             if agents_willing_to_learn * ((category == 'test') + (category == 'training')):
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID,at_time=tstring)
             elif ((category == 'test') + (category == 'training')):
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID,at_time=tstring)
         elif supervised:
             # Only use training images!
             if category == 'training' and agents_willing_to_learn:
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID,at_time=tstring)
             elif category == 'training':
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID,at_time=tstring)
         else:
             # Unsupervised: ignore all the training images...
             if category == 'test' and agents_willing_to_learn:
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID,at_time=tstring)
             elif category == 'test':
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID,at_time=tstring)
 
 
         # Brag about it:

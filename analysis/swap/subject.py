@@ -116,7 +116,8 @@ class Subject(object):
                             'PL': np.array([]),
                             'PD': np.array([]),
                             'At_X': [],
-                            'At_Y': []}
+                            'At_Y': [],
+                            'At_Time': []}
 
         return None
 
@@ -179,6 +180,7 @@ class Subject(object):
                 self.annotationhistory['At_Y'].append(at_y)
                 self.annotationhistory['PL'] = np.append(self.annotationhistory['PL'], by.PL)
                 self.annotationhistory['PD'] = np.append(self.annotationhistory['PD'], by.PD)
+                self.annotationhistory['At_Time'].append(at_time)
 
         # Deal with active subjects. Ignore the classifier until they
         # have seen NT > a_few_at_the_start (ie they've had a
@@ -231,6 +233,7 @@ class Subject(object):
                          by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
                          by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
                          by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
+                         by.testhistory['At_Time'] = np.append(by.testhistory['At_Time'], at_time)
                          by.contribution += by.skill
 
                 else:

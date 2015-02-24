@@ -6533,6 +6533,31 @@ open $conflicts
 # New grades are above as comments...
 
 # ======================================================================
+# 2014-11-06 (Thursday) 14:33 PST
+
+# HumVI settings for SW DES:
+
+# Downloaded data from Anu:
+
+cd /Users/pjm/public_html/SpaceWarps/DES
+wget http://member.ipmu.jp/anupreeta.more/des_cutouts_1.tgz
+tar xvfz des_cutouts_1.tgz
+
+set IDs = DES_1106641609684
+
+
+foreach ID ( $IDs )
+
+  compose.py -v -s 1.0,1.2,2.5 -z 0.0 -p 1.0,0.03 -m -1.0 \
+    -o ${ID}_gri.png \
+    ${ID}_i.fits ${ID}_r.fits ${ID}_g.fits \
+
+end
+
+
+
+
+# ======================================================================
 
 FINISH:
 

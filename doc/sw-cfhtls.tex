@@ -674,7 +674,7 @@ sample for the \sw users so that they can correctly identify the true
 lens candidates. Hence, in addition to the simulated lenses, we
 added a sample of duds and false positives to the training sample. Duds
 are images which have been visually inspected by experts and confirmed
-to contain no lenses.  False positives are systems which look like
+to contain no lenses.  False positives (FPs) are systems which look like
 lenses but are not, for example, spiral galaxies, starforming galaxies,
 chance alignments of features arranged in a lensing configuration and
 stars. 
@@ -1085,8 +1085,7 @@ if we consider the \af lens sample, $\sim$23\% are missed by \sw. This
 is a relatively small sample of $\sim 5$ systems and visual inspection
 suggests that, by and large, either the lensed features are faint
 or they have odd properties which makes them difficult to identify
-correctly.  ({\bf show some
-example images XXX}). For further tests, we combine the \rf and \af sample.
+correctly. For further tests, we combine the \rf and \af sample.
 
 For a lens finding method which uses collective skill, experience and
 knowledge of a group of citizens, it may be difficult to find a single
@@ -1098,9 +1097,9 @@ of the factors that could affect the efficiency of finding lenses.
 
 First, we check if the Nclass is different for the detected and the
 missed sample. Surprisingly, most of the lenses in the known sample have
-few classifications (Nclass<10) which includes both the detected and
+few classifications (Nclass$<$10) which includes both the detected and
 missed lenses. Many of the remaining have between 10 to 20
-classifications. And, only a few subjects have Nclass>20 which continue
+classifications. And, only a few subjects have Nclass$>$20 which continue
 to remain for long in the database because these candidates may have
 been difficult to identify.
   
@@ -1153,7 +1152,7 @@ because they happen to be close to the borders of the image cutouts.
  
 From the SWAP, the image cutouts inspected by the \sw volunteers receive
 a status of detected (if P$>$P$_{\rm acc thresh}$), rejected (if
-P$<$P$_{\rm rej thresh}$) and undecided (if P$_{\rm rej thresh}$ $<$ P
+P$<$P$_{\rm rej thresh}$) and undecided (if P$_{\rm rej thresh}<$ P
 $<$ P$_{\rm acc thresh}$). In \Fref{fig:comppos}, we compare the
 positions of simulated lenses which are detected (red), undecided
 (green) and rejected (blue). We also make the same comparison for the
@@ -1169,9 +1168,10 @@ the center.
 
 \subsubsection{Volunteer profile}
 
-Here, we investigate if the skill or experience of volunteers is
-systematically different between the sample of detected and missed
-lenses.
+Here, we investigate if the skill\footnote{see the
+\Aref{appendix:skill} for the choice of this term and how it is
+different from that used in paper I} of volunteers is systematically
+different between the sample of detected and missed lenses.
 
 We check how the posterior probability P (see XXXX Paper I) of an image
 or a subject to contain a lens changes as the image receives more
@@ -1179,20 +1179,70 @@ classifications from multiple users.  In \Fref{fig:detmis}, we show the
 trajectory plots of a few examples of detected lenses (top left panels)
 and missed lenses (bottom left panels) by \sw at stage I. The number of
 classifications (Nclass) for a subject increase from top to bottom.
-Also, every subject is assigned a prior probability P0=2.e-4 (grey
+Also, every subject is assigned a prior probability P0$=2\times10^{-4}$ (grey
 dashed line) and starts at the middle of the trajectory plot. The P
 value of a subject is updated with every classification from the
 volunteer.  If a volunteer identifies a lens candidate, the trajectory
 moves to the right otherwise moves to the left. A subject is accepted if it
 crosses the blue-dashed line marking the (P$_{\rm acc thresh}=0.95$) on
 the right and is rejected, if it crosses the red-dashed line marking the
-P$_{\rm rej thresh}=1.e-7$ on the left.
+P$_{\rm rej thresh}=10^{-7}$ on the left.
 
 By how much the P value will change depends on how well the
 volunteers are performing on the training sample. Thus, more skilled
 volunteers will change the P by a large factor compared to the less
 skilled volunteers. This is evident in the trajectory plots as large and
-small distances in between consequent points.   
+small distances in between the consequent points which we refer to as
+kicks. Comparison of the kick sizes between the detected
+and the missed lenses suggests that the missed lenses do not have as
+many volunteers giving large kicks. We also note that most of the large
+kicks seen in the trajectories of the missed lenses seem to be moving
+the subjects to the right. In other words, the more skilled volunteers
+are mostly classifying them as subjects with lens candidates. Further
+qualitative comparison and discussion of the trajectory plots is given
+in \Aref{appendix:traj}. 
+
+For a quantitative comparison of the large and small kicks for the
+entire samples of detected and missed known lenses, we show a plot of
+histogram on the right of \Fref{fig:detmis}. Qualitatively, there are
+four types of volunteers making classifications - those causing positive
+large kicks (correct classifications by more skilled volunteers, those
+causing positive small kicks (correct classifications by less skilled
+volunteers), those causing negative small kicks (incorrect
+classifications by less skilled volunteers) and those causing negative
+large kicks (incorrect classifications by more skilled volunteers). The
+four histograms in the figure correspond to these four types of
+volunteers for each sample (that is, detected or missed). The kick size
+is small if $\Delta$ log(P)$=$log (P$_{\rm current}) - $log(P$_{\rm
+previous}) < \Delta$log(P)$_{\rm cut}$ (chosen to be 1.2) and is large
+if greather than $\Delta$log(P)$_{\rm cut}$. 
+
+Some of the key differences are i) the ratio of positive large kicks to
+positive small kicks for the detected sample is higher than the missed
+sample suggesting that the fraction of more skilled volunteers is large
+for the detected sample ii) in terms of Nclass, the missed sample is
+dominated by volunteers causing negative small kicks whereas for the
+detected sample there is a comparable contribution from three types of
+volunteers - positive small and large kicks and negative small kicks.
+iii) the Nclass from volunteers with negative large kicks are lower both
+for the detected and the missed samples. this is consistent with our
+expectation that more skilled volunteers should not be making incorrect
+classifications.Therefore, lack of more skilled volunteers classifying
+the missed lenses seems to be one of the major factors. 
+
+We rerun SWAP for stage I where we use classifications from volunteers
+who produce $\Delta$ log(P)$>1.2$ only. This obviously means reducing
+the total Nclass per subject by a large fraction. As a result, we also
+need to change the P$_{\rm acc thresh}$ which is chosen to be 0.1 and we
+find that about a third of the missed lenses are detected while all the
+previously detected lenses remain detected too. The others simply do not
+have enough classifications from volunteers producing large positive
+kicks. Thus, it may be possible to detect more promising candidates if
+we preferentially show the rejected systems to a few more skilled
+volunteers. We understand that changing the rejection and acceptance
+thresholds will likely increase the rate of FPs along with
+improved completeness but most probably the increase in FPs will not be
+too significant and that it will still be worth using the new strategy.
 
 
 \begin{figure*}
@@ -1213,9 +1263,10 @@ simulated and the real sample of lens candidates. }
 \includegraphics[scale=0.6]{sw-cfhtls-figs/det_mis_traj.pdf}
 \includegraphics[scale=0.6]{sw-cfhtls-figs/det_mis_hist.pdf}
 \caption{ \label{fig:detmis}
-Example cases of trajectories of known lenses on the left and histogram
-of the known lenses. The trajectories on the left are lenses that are
-detected by \sw are at the top and lenses that are missed are at the bottom. }
+Examples of trajectories of some known lenses (top-left: detected and
+bottom-left: missed) at stage I and histogram of the known lenses for
+different types of volunteers (right).
+}
 \end{center}
 \end{figure*}
 
@@ -1224,40 +1275,73 @@ detected by \sw are at the top and lenses that are missed are at the bottom. }
 
 \section{Summary and Conclusions}
 \label{sec:conclude}
-In this paper, we describe the framework and procedure used to generate
-simulated lens sample for the blind lens search in the \cfhtls survey in
-collaboration with \sw. The aim of this lens search is to find lenses that have
-been missed by lens finding algorithms. The simulated lens sample is used for
-training the citizen scientists, calibrating their performance and rejecting
-unlikely lenses from the sample based on the classifications of citizen
-scientists. As a result, the simulated lenses need to consist of realistic
-looking lenses.
 
-We use the photometric and redshift catalogues for the foreground galaxies and
-additionally, color catalogues for background galaxies and quasars. We
-use scaling relations to relate light properties to properties such as mass and
-size to generate lens models. We further account for the
-instrumental effects such as seeing and noise before creating the final lensed
-images of model background sources. We add the lensed images on top of the real
-galaxies and groups in the \cfhtls data in all filters.
+We report the discovery of new gravitational lens candidates from the
+the first lens search through \sw. In this search, volunteers are shown
+$g-r-i$ color images of random regions of the sky taken by the CFHT Legacy
+Survey. The aim of this lens search is to find lenses that have been
+missed by previous searches done on the \cfhtls with lens finding
+algorithms. In this search, we use a training sample to train the
+volunteers and calibrate their performance which helps us in more
+efficient pruning of the lens candidates. The training sample has
+simulated lenses, duds and FPs. In this paper, we describe the details
+of the training sample generated and tuned for the \cfhtls data.
+Volunteers receive feedback messages when they click or fail to click on
+the training images during live classification of real images which
+helps them remain focused and improve their performance over time.
+
+The blind lens search in the \cfhtls is done in two stages: stage I and
+stage II. The aim of stage I is to do fast inspection of a large sample
+of $\sim$ 430 000 images and reduce them to a smaller sample of $\sim$
+3000 images with interesting lens candidates. The aim of stage II is to
+carefully reinspect the smaller pool of images to exclude as many FPs as
+possible and reduce the sample to $\sim$~500 candidates. In the next
+step, the images are graded by three lens experts (AM,AV and PJM)
+leaving in systems that are mildly interesting to very promising lens
+candidates.
+
+%For the simulated sample, we use the photometric and redshift
+%catalogues for the foreground galaxies and additionally, color
+%catalogues for background galaxies and quasars. Scaling relations allow
+%us to relate the light properties to properties such as mass and size
+%to generate lens models. We further account for the instrumental
+%effects such as seeing and noise before creating the simulated lensed
+%features of model background sources. We add the simulated lensed
+%features on top of the real galaxies and groups in the \cfhtls data in
+%all filters. A sample of duds and FPs is vetted visually before
+%ingesting them to the database.
+
 
 We draw the following conclusions:
 
 \begin{itemize} 
 
-\item Crowd-sourced gravitational lens detection works, as shown in by comparing with real lenses in CFHTLS:
-Real (robotically-detected and expert-confirmed) lenses are
-recovered/missed at similar/comparable/different rates C’\% and P’\% - this is a partial test of supervised vs unsupervised learning
+\item Crowd-sourced gravitational lens detection works. We present a new
+sample of 61 gravitational lens candidates with average expert grade of
+1.3 and above where 1-mildly interesting, 2-probably, a lens and
+3-certainly, a lens.
 
-%Which real lenses were missed? False negatives
+%Real (robotically-detected and expert-confirmed) lenses are
+%recovered/missed at similar/comparable/different rates C’\% and P’\% -
+%this is a partial test of supervised vs unsupervised learning
 
-\item We found a sample of new gravitational lens candidates. An
-expert-graded sample of 74 with 44 promising and 30 low probability
-candiates.
+\item Compared to the sample of robotically (the \rf and \af) detected
+lens candidates, the \sw sample finds lens systems with similar range in
+the lens redshift and the flux and the Einstein radii of the lensed
+images. However, the \sw search being a purely visual one cannot find
+some of the \rf-identified-lensed images with sub-arcsecond Einstein
+radii because the flux of the typically faint lensed images is obscured
+by the flux from bright lensing galaxies. The \rf finds these candidates
+because it works with lensing galaxy-subtracted images.
 
-The SW lenses are different from the robotically (\rf and \af) detected lenses, in the following ways.
-XXXXX
+\item Qualitatively, the \sw sample finds lens systems with different
+types of lensing galaxies, for example, elliptical, spiral (face on and
+edge on) and small red galaxies unlike those found from robotic
+searches. Similarly, the lensed images too have different colors,
+morphologies and sizes which are again typically missed by any given
+algorithm.
 
+\item  
 
 \end{itemize}
 
@@ -1378,6 +1462,38 @@ support from the NSERC Research Tools and Instruments grant program.
 
 \appendix
 
+\section{Qualitative comparison of detected and missed known lenses}
+\label{appendix:traj}
+
+\section{Skill}
+\label{appendix:skill}
+In paper I, the term skill is given by the expectation value of the
+information gain which is related to the P$_{\rm L}$, the probability to
+correctly identify a lens as a lens and P$_{\rm D}$, the probability to
+correctly identify a dud as a dud. The skill does not have simple
+dependency on P$_{\rm L}$ and P$_{\rm D}$. One can get the same value of
+skill for different combinations of P$_{\rm L}$ and P$_{\rm D}$. 
+
+As described in the appendix of paper I, the posterior probability P is
+related to the volunteers skill (or information gain). Also, a volunteer
+with a given skill, will have different positive ($\Delta$~log(P)) and
+negative (-$\Delta$~log(P)) kicks on the trajectory plot. Thus, it is
+not useful to compare classifications of high and low skill volunteers
+to understand if there is a difference in their performance and if the
+high skill volunteers can increase the completeness of the lenses. For
+example, a volunteer who is very good at rejecting duds and not so good
+at identifying lenses will still have a high skill. But such a
+volunteer will fail to detect many of the interesting lenses. Therefore,
+we do not compare high skill vs. low skill volunteers to address this
+issue.
+
+For lack of a better word, we also use the same term skill which has a
+similar meaning to that described in paper I but not identical. We use a
+more qualitative definition implying the ability of the volunteers to
+make correct lens identification. 
+
+%%%%%%%%%%%%%%
+XXXXX
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  REFERENCES

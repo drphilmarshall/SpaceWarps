@@ -1,5 +1,4 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
 % Space Warps System Paper
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -155,19 +154,19 @@ HST or spectroscopic follow-up to confirm the candidates as lenses
 
 How can we scale these lens searches up to imaging surveys covering a hundred
 times the sky area, such as the almost-all sky surveys planned with LSST and
-Euclid?  There are two approaches to detecting lenses in imaging surveys.
-The first one is robotic: automated analysis of the object catalogs and the
-survey images. The candidate samples produced by these methods have, to date,
-not been of high purity  \citep[see
+Euclid?  There are two approaches to detecting lenses in imaging surveys. The
+first one is robotic: automated analysis of the object catalogs and the survey
+images. The candidate samples produced by these methods have, to date, not been
+of high purity  \citep[see
 e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}, with visual inspection
 by teams of humans still required to narrow down the robotically-generated
-samples. In this approach, the image data may or may not be explicitly
-modelled by the robots as if it contained a gravitational lens, but the visual
-inspection can be thought of as a ``mental modeling'' step. Systems classified
-by an inspector to be good lens candidates are deemed as such because the
-features in the image can be explained by a model of what gravitational lenses
-do contained in the inspector's brain. The second approach simply cuts out the
-robot middleman: \citet{MoustakasEtal2007,FaureEtal2008,Jackson2008} and
+samples. In this approach, the image data may or may not be explicitly modelled
+by the robots as if it contained a gravitational lens, but the visual inspection
+can be thought of as a ``mental modeling'' step. Systems classified by an
+inspector to be good lens candidates are deemed as such because the features in
+the image can be explained by a model of what gravitational lenses do contained
+in the inspector's brain. The second approach simply cuts out the robot
+middleman: \citet{MoustakasEtal2007,FaureEtal2008,Jackson2008} and
 \citet{PawaseEtal2014} all performed successful, entirely visual searches for
 lenses in HST imaging.
 
@@ -293,46 +292,41 @@ interactions between the two.
 
 A screenshot of the \sw classification interface (CI) is shown in
 \Fref{fig:screenshot}. The CI is the centrepiece of the \sw website,
-\texttt{http://spacewarps.org}; the web application is written in
-coffeescript, css and html and follows the general design of others written by
-the Zooniverse team.\footnote{The \sw web application code is open source and
-can be accessed from \texttt{https://github.com/zooniverse/Lens-Zoo}}  The
-focus of the CI is a large display of the current pre-prepared PNG image of
-the ``subject'' being inspected.   When the image is clicked on by the
-volunteer, a marker symbol appears where the pointer was. Several markers can
-be placed.  The next image moves rapidly in from a queue formed at the right
-hand side of the screen when the ``Finished marking'' button is pressed. At
-the same time, the positions of the markers are written out to the
-classification database, in an entry that also stores the ID of the subject,
-the username (or IP address) of the volunteer, a timestamp and some other
-metadata.
+\texttt{http://spacewarps.org}; the web application is written in coffeescript,
+css and html and follows the general design of others written by the Zooniverse
+team.\footnote{The \sw web application code is open source and can be accessed
+from \texttt{https://github.com/zooniverse/Lens-Zoo}}  The focus of the CI is a
+large display of a pre-prepared PNG image of the ``subject'' being inspected.
+When the image is clicked on by the volunteer, a marker symbol appears where the
+pointer was. Several markers can be placed.
 
-Gravitational lenses are rare: typically, most of the images will not contain
-a lens candidate, and these need to be quickly rejected by the inspector. The
-queue allows several images to be pre-loaded while the volunteer is
-classifying the current subject, and the rapid movement is designed to
-encourage volunteers to classify rapidly.
-
-% PJM: how quickly? How much clock time per classification?
+The next image moves rapidly in from a queue formed at the right hand side of
+the screen when the ``Finished marking'' button is pressed. Gravitational lenses
+are rare: typically, most of the images will not contain a lens candidate, and
+these need to be quickly rejected by the inspector. The queue allows several
+images to be pre-loaded while the volunteer is classifying the current subject,
+and the rapid movement is designed to encourage volunteers to classify rapidly.
+After each classification, the positions of the markers are written out to the
+classification database, in an entry that also stores the ID of the subject, the
+username (or IP address) of the volunteer, a timestamp and some other metadata.
 
 For the more interesting subjects, the CI offers two features that  enable
-further investigation of the subjects. The first is the ``Quick Dashboard'' (QD) a
-more advanced image viewer. This allows the viewer to compare three different
+further investigation of the subjects. The first is the ``Quick Dashboard'' (QD)
+a more advanced image viewer. This allows the viewer to compare three different
 contrast and color balance settings, to help bring out subtle features, and to
-zoom in on interesting regions of the image to assess small features. Markers
-can be placed in the Quick Dashboard just the same as in the main CI image
-viewer. The second is a link to that subject's page in the project discussion
-forum, \texttt{http://talk.spacewarps.org} (known as ``Talk''). Here,
+pan and zoom in on interesting regions of the image to assess small features.
+Markers can be placed in the Quick Dashboard just the same as in the main CI
+image viewer. The second is a link to that subject's page in the project
+discussion forum, \texttt{http://talk.spacewarps.org} (known as ``Talk''). Here,
 volunteers can discuss the features they have seen either before they submit
 their classification, or after, if they ``favorite'' the subject. There is no
-``back'' button: each volunteer may only classify a given subject once.
-However, the presence of an option to see what others think about any given
-subject before submitting your own classification means that the
-classifications may not be  strictly independent; the advantage of this system
-is that volunteers can learn from others what constitutes a good lens
-candidate. In practice, we might expect this to be a relatively unimportant
-educational resource, given the explicit training we provide for the
-volunteers, which we describe in the next section.
+``back'' button: each volunteer may only classify a given subject once. However,
+the presence of an option to see what others think about any given subject
+before submitting your own classification means that the classifications may not
+be strictly independent; the advantage of this system is that volunteers can
+learn from others what constitutes a good lens candidate. This is not, however,
+the primary educational resource; we describe the explicit training that we
+provide for the volunteers in the next section.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -347,7 +341,7 @@ need to learn what lenses do not look like, in order to reduce the false
 positive detection rate. There are three primary mechanisms in the \sw system
 for teaching the volunteers what to look for. These are, in the order in which
 they are encountered, an inline tutorial, instant feedback,
-and a ``Spotter's Guide.''
+and a ``Spotter's Guide.'' As well as this, we provide ``About'', ``FAQ'' and ``Science'' pages explaining the physics of gravitational lensing. While we expect that the insight from this static material should help volunteers make sense of the features in the images, we focus on the more dynamic, activity-based training early, when engaging new volunteers to participate takes priority.
 
 \subsubsection{Inline Tutorial}
 
@@ -366,7 +360,7 @@ image, in order to get the volunteers engaged in the real task as quickly as
 possible. Training continues beyond the first image tutorial through
 ``training subjects'' inserted randomly into the stream.  These training
 subjects are either simulated lenses (known as ``sims''), or survey images
-that were expert-classified (by AV, AM and PM) and found not to contain any
+that were expert-classified and found not to contain any
 lens candidates (these images are known as ``duds''). The tutorial explains
 that the volunteers  will be shown such training images. They are also
 informed that they will receive instant feedback about their performance after
@@ -375,14 +369,14 @@ finishes marking a training subject and hits ``Finished marking,'' a pop-up
 message is generated, containing either positive feedback for a successful
 classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
-example, ``There is no gravitational lens in this field!'')
+example, ``There is no gravitational lens in this field!'').
 
+\todo{PJM}{Insert simulations paragraph here. General description of sim generation. Principles: use real images, draw from realistic populations, strike balance between easy to see (for education) and realistically difficult (to push sensitivity). \#106}.
 
-The initial frequency of the training images is set to be two in five;
-subjects are drawn randomly from the pool of training images with this
-frequency. The pool contains equal numbers of sims and duds, and the draw is
-made without replacement (for that volunteer). As the number of
-classifications made by a volunteer increases, this frequency is decreased, to
+When a volunteer begins classifying, they are initially shown training images at
+a frequency of two in five; these subjects are drawn at random from a pool
+containing equal numbers of sims and duds, such that that volunteer never sees a given image more than once. As the number of classifications made by a
+volunteer increases, this frequency is decreased, to
 $2/(5\times2^{(\textrm{int}(N_c/20)+1)/2})$ ($\approx 0.3$ for the second 20
 subjects, $0.2$ for the third 20 subjects, and so on).
 
@@ -394,8 +388,9 @@ rate), we display the current ``Simulation Frequency'' on the classification
 interface (``1 in 5'' in \Fref{fig:screenshot}) and maintain the consistent
 theme in the feedback messages that lenses are rare.
 
-In \Fref{fig:training-gallery} we show 8 example training images from the
-first \sw project (\Sref{sec:data} below).
+In Figures~\ref{fig:training-gallery:sims}~and~\ref{fig:training-gallery:duds}
+we show example training images from the first \sw project (\Sref{sec:data}
+below).
 
 
 \subsubsection{Spotter's Guide}
@@ -427,7 +422,7 @@ and the task set.
 \label{sec:design:stages}
 
 We now describe briefly the two-stage strategy that was employed in the CFHTLS
-project, initial classification (involving the rejection of very large numbers
+project: initial classification (involving the rejection of very large numbers
 of non-lenses), and refinement (to further narrow down the sample). The web
 application was reconfigured between the two stages, to assist in their
 functioning.
@@ -441,19 +436,18 @@ provide a sense of urgency: initial classification must be done fairly
 quickly for the search to be completed within a reasonable time period.  We
 expect some trade-off between speed and accuracy, which we return to in the
 results section below. Completion of the search requires subjects to be
-``retired'' over time, as a result of their being classified. We do this by
+``retired'' over time, as a result of their being classified. We did this by
 analyzing the classifications on a daily basis, as described in
-\Sref{sec:swap} below. As subjects are retired, new ones are ingested into
+\Sref{sec:swap} below. As subjects were retired, new ones were ingested into
 the web app for classification. This means that the discovery of lens
 candidates in stage 1 is truly a community effort: to detect a lens candidate,
-many non-lenses must first be rejected.
+many non-lenses must first be rejected, and several classifications by different inspectors are needed in either case.
 
 The stage 1 training set was chosen to be quite clear cut, in order to err on
 the side of inclusivity, and so ensure high completeness. For the training
-duds we selected several hundred images at random, and three of us (AV, AM,
-PM) inspected them and discarded anything that could be a lens candidate. The
-remainder were ingested into the site.
+duds we selected several hundred images at random, and three of us (AM, with AM and PM) inspected them and discarded anything that could be considered a lens candidate.
 
+% PJM IS HERE
 
 \subsubsection{Stage 2: Refinement}
 

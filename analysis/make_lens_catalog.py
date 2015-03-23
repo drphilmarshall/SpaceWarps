@@ -291,6 +291,7 @@ def make_lens_catalog(args):
 
         if len(x_markers) == 0:
             # apparently everyone was a not...
+            catalog[ID]['agents_labels'] = np.array([])
             continue
 
         # ------------------------------------------------------------------

@@ -245,6 +245,7 @@ def make_lens_atlas(args):
             catalog_path = args[arg]
         else:
             print "make_lens_atlas: unrecognized flag ",arg
+    print(flags)
     xbins = np.arange(flags['stamp_size'] * 2)
     ybins = np.arange(flags['stamp_size'] * 2)
     figsize_stamp = (flags['figsize_stamp'], flags['figsize_stamp'])
@@ -287,9 +288,11 @@ def make_lens_atlas(args):
 
             if ((x < 0)):
                 # this is one of the 'non points'; skip
+                print(lens_i, 'x < 0!')
                 continue
             if (N0 < flags['stamp_min']):
                 # not enough points!
+                print(lens_i, '{0} < {1}'.format(N0, flags['stamp_min']))
                 continue
             subject = collection.member[ID]
             annotationhistory = subject.annotationhistory
@@ -368,6 +371,8 @@ def make_lens_atlas(args):
 
                 # filter markers
                 n_catalog = len(agents)
+                if n_catalog < 1:
+                    print(lens_i, n_catalog)
                 if (flags['points'] > 0) * \
                         (flags['points'] < n_catalog):
                     agents_points = np.random.choice(

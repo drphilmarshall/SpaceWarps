@@ -85,7 +85,7 @@ class Subject(object):
 
 # ----------------------------------------------------------------------
 
-    def __init__(self,ID,ZooID,category,kind,flavor,truth,thresholds,location):
+    def __init__(self,ID,ZooID,category,kind,flavor,truth,thresholds,location,prior=2e-4):
 
         self.ID = ID
         self.ZooID = ZooID
@@ -116,7 +116,8 @@ class Subject(object):
                             'PL': np.array([]),
                             'PD': np.array([]),
                             'At_X': [],
-                            'At_Y': []}
+                            'At_Y': [],
+                            'At_Time': []}
 
         return None
 
@@ -127,21 +128,26 @@ class Subject(object):
         mean_logp =sum(np.log(self.probability))/Ntrajectory
         error_logp=sum((np.log(self.probability)-mean_logp)**2/Ntrajectory)
         return 'individual (%s) subject, ID %s, Pr(LENS|d) = %.2f \pm %.2f' % \
-               (self.kind,self.ID,exp(mean_logp),exp(mean_logp)*error_logp)
+               (self.kind,self.ID,np.exp(mean_logp),np.exp(mean_logp)*error_logp)
 
 # ----------------------------------------------------------------------
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1]):
+    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1],online=True,record=True,realize_confusion=True):
+
+        # TODO: CPD: make likelihood into an attribute?  if so, I need to
+        # probably wipe it here to avoid silent bugs (likelihood not updating,
+        # etc)
 
         # Rename some variables:
         a_few_at_the_start = while_ignoring
 
-        # Update agent:
-        by.N += 1
+        if online:
+            # Update agent:
+            by.N += 1
 
-        if by==None or as_being==None:
+        if by==None or as_being==None or by.kind == 'banned':
             pass
 
         # Optional: skip straight past inactive subjects.
@@ -165,16 +171,32 @@ class Subject(object):
 
         else:
 
+            # update the annotation history
+            if record:
+                as_being_dict = {'LENS': 1, 'NOT': 0}
+                self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)
+                self.annotationhistory['ItWas'] = np.append(self.annotationhistory['ItWas'], as_being_dict[as_being])
+                self.annotationhistory['At_X'].append(at_x)
+                self.annotationhistory['At_Y'].append(at_y)
+                self.annotationhistory['PL'] = np.append(self.annotationhistory['PL'], by.PL)
+                self.annotationhistory['PD'] = np.append(self.annotationhistory['PD'], by.PD)
+                self.annotationhistory['At_Time'].append(at_time)
+
         # Deal with active subjects. Ignore the classifier until they
         # have seen NT > a_few_at_the_start (ie they've had a
         # certain amount of training - at least one training image, for example):
-            
+
             if by.NT > a_few_at_the_start:
-               
+
                 # Calculate likelihood for all Ntrajectory trajectories, generating as many binomial deviates
-                PL_realization=by.get_PL_realization(Ntrajectory);
-                PD_realization=by.get_PD_realization(Ntrajectory);
-                prior_probability=self.probability*1.0;
+                if realize_confusion:
+
+                    PL_realization=by.get_PL_realization(Ntrajectory);
+                    PD_realization=by.get_PD_realization(Ntrajectory);
+                else:
+                    PL_realization=np.ones(Ntrajectory) * by.PL
+                    PD_realization=np.ones(Ntrajectory) * by.PD
+                prior_probability=self.probability*1.0;  # TODO: not used?!
 
                 if as_being == 'LENS':
                     likelihood = PL_realization
@@ -189,66 +211,35 @@ class Subject(object):
                 else:
                     raise Exception("Unrecognised classification result: "+as_being)
 
-                # Update subject:
-                self.probability = likelihood*self.probability
-                idx=np.where(self.probability < swap.pmin)
-                self.probability[idx]=swap.pmin
-                #if self.probability < swap.pmin: self.probability = swap.pmin
-                posterior_probability=self.probability*1.0;
+                if online:
+                    # Update subject:
+                    self.probability = likelihood*self.probability
+                    idx=np.where(self.probability < swap.pmin)
+                    self.probability[idx]=swap.pmin
+                    #if self.probability < swap.pmin: self.probability = swap.pmin
+                    posterior_probability=self.probability*1.0;
 
-                self.trajectory = np.append(self.trajectory,self.probability)
+                    self.trajectory = np.append(self.trajectory,self.probability)
 
-                self.exposure += 1
+                    self.exposure += 1
 
-                # Update median probability
-                self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
-                self.median_probability=np.sort(self.probability)[Ntrajectory/2]
+                    self.update_state(at_time)
 
-                # Should we count it as a detection, or a rejection?
-                # Only test subjects get de-activated:
+                    # Update agent - training history is taken care of in agent.heard(),
+                    # which also keeps agent.skill up to date.
+                    if self.kind == 'test' and record:
 
-                if self.mean_probability < self.rejection_threshold:
-                    self.status = 'rejected'
-                    if self.kind == 'test':
-                        self.state = 'inactive'
-                        self.retirement_time = at_time
-                        self.retirement_age = self.exposure
-
-                elif self.mean_probability > self.detection_threshold:
-                    self.status = 'detected'
-                    if self.kind == 'test':
-                        # Let's keep the detections live!
-                        #   self.state = 'inactive'
-                        #   self.retirement_time = at_time
-                        #   self.retirement_age = self.exposure
-                        pass
+                         by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
+                         by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
+                         by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
+                         by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
+                         by.testhistory['At_Time'] = np.append(by.testhistory['At_Time'], at_time)
+                         by.contribution += by.skill
 
                 else:
-                    # Keep the subject alive! This code is only reached if
-                    # we are not being hasty.
-                    self.status = 'undecided'
-                    if self.kind == 'test':
-                        self.state = 'active'
-                        self.retirement_time = 'not yet'
-                        self.retirement_age = 0.0
+                    # offline
+                    return likelihood
 
-                # Update agent - training history is taken care of in agent.heard(), 
-                # which also keeps agent.skill up to date.
-                if self.kind == 'test':
-
-                     by.testhistory['ID'] = np.append(by.testhistory['ID'], self.ID)
-                     by.testhistory['I'] = np.append(by.testhistory['I'], swap.informationGain(self.mean_probability, by.PL, by.PD, as_being))
-                     by.testhistory['Skill'] = np.append(by.testhistory['Skill'], by.skill)
-                     by.testhistory['ItWas'] = np.append(by.testhistory['ItWas'], as_being_number)
-                     by.contribution += by.skill
-
-                # update the annotation history
-                self.annotationhistory['Name'] = np.append(self.annotationhistory['Name'], by.name)
-                self.annotationhistory['ItWas'] = np.append(self.annotationhistory['ItWas'], as_being_number)
-                self.annotationhistory['At_X'].append(at_x)
-                self.annotationhistory['At_Y'].append(at_y)
-                self.annotationhistory['PL'] = np.append(self.annotationhistory['PL'], by.PL)
-                self.annotationhistory['PD'] = np.append(self.annotationhistory['PD'], by.PD)
 
             else:
                 # Still advance exposure, even if by.NT <= ignore:
@@ -257,6 +248,78 @@ class Subject(object):
                 self.exposure += 1
 
         return
+
+# ----------------------------------------------------------------------
+# Update probability of LENS, given many classifications at once (E step):
+
+    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=-1,realize_confusion=False):
+        # classifications is assumed to be a list of 0s and 1s for NOT and LENS
+        # names is assumed to just be a list of agent names
+        N_classifications_used = 0
+        likelihood_sum = 0
+
+        if len(names) != len(classifications):
+            raise Exception('len names {0} != len classifications {1}'.format(len(names), len(classifications)))
+        for name, classification in zip(names, classifications):
+            agent = bureau.member[name]
+            if agent.kind == 'banned':
+                continue
+
+            by = agent
+            as_being = ['NOT', 'LENS'][classification]
+            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=False,record=record,realize_confusion=realize_confusion)
+            N_classifications_used += 1
+        self.probability = likelihood_sum * self.probability / N_classifications_used
+        self.update_state()
+
+        return
+
+# ----------------------------------------------------------------------
+# Update mean and median probability, status, retirement
+
+    def update_state(self,at_time=None):
+        # check if iterable
+        try: iterator = iter(self.probability)
+        except TypeError:
+            self.mean_probability=self.probability
+            self.median_probability=self.mean_probability
+        else:
+            # is iterable
+            # Update median probability
+            self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
+            self.median_probability=np.sort(self.probability)[Ntrajectory/2]
+
+        # Should we count it as a detection, or a rejection?
+        # Only test subjects get de-activated:
+
+        if self.mean_probability < self.rejection_threshold:
+            self.status = 'rejected'
+            if self.kind == 'test':
+                self.state = 'inactive'
+                if at_time:
+                    self.retirement_time = at_time
+                else:
+                    self.retirement_time = 'end of time'
+                self.retirement_age = self.exposure
+
+        elif self.mean_probability > self.detection_threshold:
+            self.status = 'detected'
+            if self.kind == 'test':
+                # Let's keep the detections live!
+                #   self.state = 'inactive'
+                #   self.retirement_time = at_time
+                #   self.retirement_age = self.exposure
+                pass
+
+        else:
+            # Keep the subject alive! This code is only reached if
+            # we are not being hasty.
+            self.status = 'undecided'
+            if self.kind == 'test':
+                self.state = 'active'
+                self.retirement_time = 'not yet'
+                self.retirement_age = 0.0
+
 
 # ----------------------------------------------------------------------
 # Plot subject's trajectory, as an overlay on an existing plot:
@@ -306,9 +369,9 @@ class Subject(object):
             # Fainter symbol:
             plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
             plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
-        
-        
-        
+
+
+
         # if self.kind == 'sim': print self.trajectory[-1], N[-1]
 
         return

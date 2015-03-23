@@ -1,8 +1,3 @@
-"""
-TODO:
-    Save the list of clicks!
-"""
-
 #!/usr/bin/env python
 # ======================================================================
 
@@ -145,7 +140,7 @@ def SWAP(argv):
             print "SWAP: agents will only use test data to update their confusion matrices"
 
         a_few_at_the_start = tonights.parameters['a_few_at_the_start']
-        if a_few_at_the_start > 0: 
+        if a_few_at_the_start > 0:
             print "SWAP: but at first they'll ignore their volunteer until "
             print "SWAP: they've done ",int(a_few_at_the_start)," images"
 
@@ -201,30 +196,14 @@ def SWAP(argv):
     except: use_marker_positions = False
     print "SWAP: should we use the marker positions on sims? ",use_marker_positions
 
+    try: prior = tonights.parameters['prior']
+    except: prior = 2e-4
+    print "SWAP: set prior for analysis to ",prior
+
     # Will we do offline analysis?
     try: offline = tonights.parameters['offline']
     except: offline = False
     print "SWAP: should we do offline analysis? ",offline
-
-    if offline:
-        try: offline_initial_prior = tonights.parameters['offline_initial_prior']
-        except: offline_initial_prior = 2e-4
-        print "SWAP: set initial prior for offline analysis to ",offline_initial_prior
-        # PJM bug: offline_initial_prior should just be the same p0 as online
-        # code uses. (I think this means updating subject.py)
-        # now initialize some parameters
-        offline_probabilities = {}
-        offline_bureau = {}
-        offline_training_IDs = {}
-
-        # some settings that I guess you could configure but these work fine enough
-        offline_initialPL = tonights.parameters['initialPL']
-        offline_initialPD = tonights.parameters['initialPD']
-        offline_N_min = 10   # min number of EM steps required
-        offline_N_max = 100  # max number of EM steps allowed
-        offline_epsilon_min = 1e-6  # average change in probabilities before we claim convergence
-
-        offline_conversion = {'LENS': 1, 'NOT': 0}
 
     # How will we make decisions based on probability?
     thresholds = {}
@@ -325,7 +304,7 @@ def SWAP(argv):
         # Register newly-classified subjects:
         # Old, slow code: if ID not in sample.list():
         try: test = sample.member[ID]
-        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,flavor,Y,thresholds,location)
+        except: sample.member[ID] = swap.Subject(ID,ZooID,category,kind,flavor,Y,thresholds,location,prior=prior)
 
         # Update the subject's lens probability using input from the
         # classifier. We send that classifier's agent to the subject
@@ -333,61 +312,29 @@ def SWAP(argv):
         sample.member[ID].was_described(by=bureau.member[Name],as_being=X,at_time=tstring,while_ignoring=a_few_at_the_start,haste=waste,at_x=at_x,at_y=at_y)
 
         # Update the agent's confusion matrix, based on what it heard:
-        
+
         P = sample.member[ID].mean_probability
-        
+
+
         if supervised_and_unsupervised:
             # use both training and test images
             if agents_willing_to_learn * ((category == 'test') + (category == 'training')):
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID,at_time=tstring)
             elif ((category == 'test') + (category == 'training')):
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID,at_time=tstring)
         elif supervised:
-            # Only use training images!                
+            # Only use training images!
             if category == 'training' and agents_willing_to_learn:
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID,at_time=tstring)
             elif category == 'training':
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID,at_time=tstring)
         else:
-            # Unsupervised: ignore all the training images...                
+            # Unsupervised: ignore all the training images...
             if category == 'test' and agents_willing_to_learn:
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=False,ID=ID,at_time=tstring)
             elif category == 'test':
-                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True)
+                bureau.member[Name].heard(it_was=X,actually_it_was=Y,with_probability=P,ignore=True,ID=ID,at_time=tstring)
 
-        # Update offline system
-        if offline:
-            # all subjects are evaluated.
-            if ID not in offline_probabilities:
-                offline_probabilities[ID] = offline_initial_prior
-
-            # now figure out the offline_bureau
-            offline_add_to_bureau = False
-            if category == 'test':
-                if (not supervised) + supervised_and_unsupervised:
-                    # don't add to training_IDs since we don't have perfect info
-                    pass
-                else:
-                    # exclude the other guys
-                    offline_training_IDs.update({ID: -1})
-            if category == 'training':
-                if supervised + supervised_and_unsupervised:
-                    # have perfect info, so:
-                    truth = offline_conversion[Y]
-                    offline_training_IDs.update({ID: truth})
-                else:
-                    # exclude the other guys
-                    offline_training_IDs.update({ID: -1})
-
-            # now add subject classification to offline_bureau
-            if Name not in offline_bureau:
-                offline_bureau.update({Name:
-                    {'PD': offline_initialPD,
-                     'PL': offline_initialPL,
-                     'Pi': offline_initial_prior,
-                     'Subjects': {ID: offline_conversion[X]}}})
-            else:
-                offline_bureau[Name]['Subjects'].update({ID: offline_conversion[X]})
 
         # Brag about it:
         count += 1
@@ -423,77 +370,96 @@ def SWAP(argv):
 
     # Now do offline analysis
     if offline:
-        # run EM_algorithm
-        offline_bureau, offline_prior, offline_probabilities, offline_information_dict \
-            = swap.EM_algorithm(offline_bureau, offline_initial_prior,
-                    offline_probabilities, offline_training_IDs,
-                    offline_N_min, offline_N_max, offline_epsilon_min,
-                    return_information=True)
-        # now replace probabilities in the main bureau and such
+        # for each step in EM algorithm, construct agents and classifications
+        # list
+        # will also need to set probabilities to prior_probability and such
+        # before the algorithm is run
+
+        # some settings that I guess you could configure but these work fine enough
+        initialPL = tonights.parameters['initialPL']
+        initialPD = tonights.parameters['initialPD']
+        N_min = 10   # min number of EM steps required
+        N_max = 100  # max number of EM steps allowed
+        epsilon_min = 1e-6  # average change in probabilities before we claim convergence
+        epsilon_taus = 10  # initial value
+        N_try = 0  # initial value
+        epsilon_list = []
+
+        print "SWAP: offline: resetting prior probability to ",prior
         for ID in sample.list():
-            # just in case any IDs didn't get into offline somehow?!
-            if ID not in offline_probabilities:
-                sample.member.pop(ID)
-                print "SWAP: offline popping this ID: ",ID
-                continue
-            # This is a bit hackish: update mean_probability,
-            # median_probability, and do the rejection threshold stuff
-            subject = sample.member[ID]
-            subject.online_mean_probability = subject.mean_probability
-            subject.mean_probability = offline_probabilities[ID]
-            subject.online_median_probability = subject.median_probability
-            subject.median_probability = offline_probabilities[ID]
+            sample.member[ID].probability = prior
+            sample.member[ID].update_state()
+        print "SWAP: offline: resetting PL and PDs to ",initialPL,initialPD
+        for ID in bureau.list():
+            bureau.member[ID].PD = initialPD
+            bureau.member[ID].PL = initialPL
 
-            # ripped from subject.py
-            if subject.mean_probability < subject.rejection_threshold:
-                subject.status = 'rejected'
-                if subject.kind == 'test':
-                    subject.state = 'inactive'
-                    subject.retirement_time = tstring
-                    subject.retirement_age = subject.exposure
+        print "SWAP: offline: running EM"
+        while (epsilon_taus > epsilon_min) * (N_try < N_max) + (N_try < N_min):
 
-            elif subject.mean_probability > subject.detection_threshold:
-                subject.status = 'detected'
-                if subject.kind == 'test':
-                    # Let's keep the detections live!
-                    #   subject.state = 'inactive'
-                    #   subject.retirement_time = at_time
-                    #   subject.retirement_age = subject.exposure
-                    pass
+            # do E step
+            epsilon_taus = 0
+            num_taus = 0
+            for ID in sample.list():
+                annotationhistory = sample.member[ID].annotationhistory
+                names = annotationhistory['Name']
+                classifications = annotationhistory['ItWas']
+                if len(names) > 0:
+                    old_probability = sample.member[ID].mean_probability
+                    sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False)  # not doing the binomial realization
+                    epsilon_taus += (sample.member[ID].mean_probability - old_probability) ** 2
+                    num_taus += 1
 
-            else:
-                # Keep the subject alive! This code is only reached if
-                # we are not being hasty.
-                subject.status = 'undecided'
-                if subject.kind == 'test':
-                    subject.state = 'active'
-                    subject.retirement_time = 'not yet'
-                    subject.retirement_age = 0.0
+            # divide epsilon_taus by the number of taus
+            epsilon_taus = np.sqrt(epsilon_taus) * 1. / num_taus
 
-            # I don't think this is necessary, but just in case
-            sample.member[ID] = subject
+            # do M step
+            # I am PRETTY sure this is inefficient!
+            for ID in bureau.list():
+                agent = bureau.member[ID]
+                if supervised_and_unsupervised:
+                    # supervised learning AND unsupervised
+                    # use perfect training in M step
+                    # use test info in M step
+                    probabilities_train = agent.traininghistory['ActuallyItWas']
+                    classifications_train = agent.traininghistory['ItWas']
 
+                    classifications_test = agent.testhistory['ItWas']
+                    probabilities_test = []
+                    for Subj_ID in agent.testhistory['ID']:
+                        probabilities_test.append(sample.member[Subj_ID].mean_probability)
+                    probabilities_test = np.array(probabilities_test)
+
+                    probabilities = np.append(probabilities_train, probabilities_test)
+                    classifications = np.append(classifications_train, classifications_test)
+                elif supervised:
+                    # supervised learning
+                    # use perfect training in M step
+                    # DONT use test info in M step
+                    probabilities = agent.traininghistory['ActuallyItWas']
+                    classifications = agent.traininghistory['ItWas']
+
+                else:
+                    # totally unsupervised
+                    # DONT use perfect training in M step
+                    # use test info in M step
+                    classifications = agent.testhistory['ItWas']
+                    probabilities = []
+                    for Subj_ID in agent.testhistory['ID']:
+                        probabilities.append(sample.member[Subj_ID].mean_probability)
+                    probabilities = np.array(probabilities)
+
+                bureau.member[ID].heard_many_times(probabilities, classifications)
+            # done with the EM steps! add one to the tally of tries
+            N_try += 1
+
+        # done with EM! collect probabilities in the bureau
+        bureau.collect_probabilities()
+
+        # repeat for the sample
         for kind in ['sim', 'dud', 'test']:
             sample.collect_probabilities(kind)
 
-        # now update bureau
-        for ID in bureau.list():
-            # just in case any IDs didn't make it to offline?
-            if ID not in offline_bureau:
-                bureau.member.pop(ID)
-                continue
-            # update PL, PD, then update_skill
-            agent = bureau.member[ID]
-            agent.online_PL = agent.PL
-            agent.PL = offline_bureau[ID]['PL']
-            agent.online_PD = agent.PD
-            agent.PD = offline_bureau[ID]['PD']
-            agent.update_skill()
-
-            # I don't think this is necessary, but just in case
-            bureau.member[ID] = agent
-
-        bureau.collect_probabilities()
 
     # All good things come to an end:
     if count == 0:
@@ -550,11 +516,6 @@ def SWAP(argv):
             swap.write_pickle(db,new_dbfile)
             tonights.parameters['dbfile'] = new_dbfile
 
-        if offline:
-            new_offlinefile = swap.get_new_filename(tonights.parameters,'offline')
-            print "SWAP: saving offline pickle to "+new_offlinefile
-            tup = (offline_bureau, offline_prior, offline_probabilities, offline_information_dict)
-            swap.write_pickle(tup, new_offlinefile)
 
     # ------------------------------------------------------------------
 

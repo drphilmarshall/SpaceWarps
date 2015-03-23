@@ -1,8 +1,3 @@
-"""
-TODO:
-    Save the list of clicks!
-"""
-
 # ======================================================================
 
 import swap
@@ -65,6 +60,13 @@ class Agent(object):
         clearly sub-optimal, but might be good enough for a first
         attempt. We'll see!
 
+        Agents now also have a kind attribute. Agents may be 'normal' users,
+        'super' users, or 'banned' users. Currently being a 'super' user does
+        nothing, but maybe in the future they will get harder images.  'banned'
+        agents are ones whose contributions are ignored. Agents do not have a
+        method for converting themselves to 'super' or 'banned' -- that is
+        something for SWAP, or a bureau to do.
+
 
     INITIALISATION
         name
@@ -85,12 +87,14 @@ class Agent(object):
 
     HISTORY
       2013-04-17:  Started Marshall (Oxford)
+      2015-01-19:  Added 'kind'. (CPD)
     """
 
 # ----------------------------------------------------------------------
 
     def __init__(self,name,pars):
         self.name = name
+        self.kind = 'normal'  # normal, super, banned
         self.PD = pars['initialPD']
         self.PL = pars['initialPL']
         self.ND = 2 + pars['skepticism']
@@ -99,8 +103,18 @@ class Agent(object):
         self.NT = 0
         # back-compatibility:
         self.contribution = 0.0*self.update_skill() # This call also sets self.skill, internally
-        self.traininghistory = {'ID':'tutorial', 'Skill':np.array([self.skill]), 'PL':np.array([self.PL]), 'PD':np.array([self.PD]), 'ItWas':np.array([], dtype=int), 'ActuallyItWas':np.array([], dtype=int)}
-        self.testhistory = {'ID':[], 'I':np.array([]), 'Skill':np.array([]), 'ItWas':np.array([], dtype=int)}
+        self.traininghistory = {'ID':np.array([]),
+                                'Skill':np.array([self.skill]),
+                                'PL':np.array([self.PL]),
+                                'PD':np.array([self.PD]),
+                                'ItWas':np.array([], dtype=int),
+                                'ActuallyItWas':np.array([], dtype=int),
+                                'At_Time': np.array([])}
+        self.testhistory = {'ID':[],
+                            'I':np.array([]),
+                            'Skill':np.array([]),
+                            'ItWas':np.array([], dtype=int),
+                            'At_Time': np.array([])}
 
         return None
 
@@ -128,7 +142,7 @@ class Agent(object):
 # Update confusion matrix with latest result:
 #   eg.  collaboration.member[Name].heard(it_was='LENS',actually_it_was='NOT',with_probability=P,ignore=False)
 
-    def heard(self,it_was=None,actually_it_was=None,with_probability=1.0,ignore=False):
+    def heard(self,it_was=None,actually_it_was=None,with_probability=1.0,ignore=False,ID=None,record=True,at_time=None):
 
         if it_was==None or actually_it_was==None:
             pass
@@ -193,14 +207,34 @@ class Agent(object):
             else:
                 raise Exception("Apparently, the subject was actually a "+str(actually_it_was))
 
-            # Always log progress, even if not learning:
-            self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
-            # NB. self.skill is now up to date.
-            self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
-            self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
+            if record:
+                # Always log on what are we trained, even if not learning:
+                self.traininghistory['ID'] = np.append(self.traininghistory['ID'],ID)
+                # Always log progress, even if not learning:
+                self.traininghistory['Skill'] = np.append(self.traininghistory['Skill'],self.update_skill())
+                # NB. self.skill is now up to date.
+                self.traininghistory['PL'] = np.append(self.traininghistory['PL'],self.PL)
+                self.traininghistory['PD'] = np.append(self.traininghistory['PD'],self.PD)
 
-            self.traininghistory['ItWas'] = np.append(self.traininghistory['ItWas'], actually_it_was_dictionary[it_was])
-            self.traininghistory['ActuallyItWas'] = np.append(self.traininghistory['ActuallyItWas'], actually_it_was_dictionary[actually_it_was])
+                self.traininghistory['ItWas'] = np.append(self.traininghistory['ItWas'], actually_it_was_dictionary[it_was])
+                self.traininghistory['ActuallyItWas'] = np.append(self.traininghistory['ActuallyItWas'], actually_it_was_dictionary[actually_it_was])
+                self.traininghistory['At_Time'] = np.append(self.traininghistory['At_Time'], at_time)
+
+        return
+
+# ----------------------------------------------------------------------
+# Update confusion matrix with many results given at once (M step):
+
+    def heard_many_times(self, probabilities, classifications, laplace_smoothing=1.):
+        # unlike the equivalent function in subject, this one does not need to
+        # reference self.heard
+        # classifications are assumed to be 0 (NOT) or 1 (LENS)
+        probability_sum = np.sum(probabilities)
+        probability_num = len(probabilities)
+        classification_probability_sum = np.dot(classifications, probabilities)
+        classification_sum = np.sum(classifications)
+        self.PL = (laplace_smoothing + classification_probability_sum) / (2 * laplace_smoothing + probability_sum)
+        self.PD = (laplace_smoothing + probability_num - classification_sum - probability_sum + classification_probability_sum) / (2 * laplace_smoothing + probability_num - probability_sum)
 
         return
 

@@ -263,7 +263,7 @@ def write_config(filename, pars):
                  'random_file', \
                  'dbspecies', \
                  'offline', \
-                 'offline_initial_prior', \
+                 'prior', \
                  ]
 
     for keyword in shortlist:

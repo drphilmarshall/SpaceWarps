@@ -877,33 +877,27 @@ classified 10 or more training subjects.}
 \subsection{Classification Speed}
 \label{sec:results:speed}
 
-% How fast does the \sw crowd classify subjects? Each agent records the
-% timestamp of each classification its volunteer makes; by measuring the time
-% lags between successive classifications we can make estimates of each
-% volunteer's speed, and that of the crowd.
-%
-% A histogram of all time lags for all volunteers is shown in
-% \Fref{fig:crowd:timelags}, with those of the ``experienced volunteers''
-% (those who classified 10 or more training subjects.) overlaid.
-%
-% \todo{PJM}{Make this histogram, and try and infer the typical inter-session
-% lag.}
-%
-% Defining a new classification session to have started at least X minutes since
-% the previous classification, we assign all classifications into sessions, and
-% compute the mean intra-session time lag recorded by each agent. This gives
-% some measure of classification speed within a session; we also compute the
-% mean session length, and the rate of information contribution. The
-% latter is the most relevant measure of speed for future project design. The
-% distributions of these speeds are shown in \Fref{fig:crowd:speeddists}, in a corner
-% plot that also shows the effort and skill from \Fref{fig:crowd:cornerplot}. We
-% see that ...
+How fast does the \sw crowd classify subjects? Each agent records the timestamp
+of each classification its volunteer makes; by measuring the time lags between
+successive classifications we can make estimates of the crowd's classification
+and contribution speed. We plot these two quantities for both Stage 1 and Stage
+2 in \Fref{fig:results:speed}, normalizing the speed and time axes to the
+respective totals. The fractional classification rates in each stage of the survey fall off in approximately the same way, despite the factor of nearly 20 difference in crowd size. Stage 1 (consisting of $\sim430,000$ subjects) was completed in around 5000 hours (by some 37,000 participants), with classification rates in the first few days averaging at $\sim10^4$ per hour, stimulated by various forms of advertising (press releases, and emails to registered Zooniverse users). The asymptotic classification rate was $\sim10^3$ per hour. The average skill was found to be approximately constant over the lifetime of Stage 1, leading to a contribution rate that tracks closely the classification rate. (A 10\% increase in average skill was seen over the first 40 days, and a decrease of the same amount in the last 40 days -- not enough to cause a significant difference between classification and contribution rate behavior, but perhaps reflecting a learning period at the start and a decrease in participation late on.) Stage 2 (3700 subjects) was completed in around 600 hours by around 2000 participants, with classification rates starting at $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
-The overall contribution rate for the \sw crowd was found,
-and is plotted as a function of time in \Fref{fig:crowd:speed}. We see that
-...
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=\linewidth]{sw-system-figs/rate_classification.png}
+\caption{Fractional classification rate in the \SW CFHTLS survey.}
+\label{fig:results:speed}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\todo{Phil, Chris}{Compute classification speeds, make plots, discuss. \#95}
+The similarities between Stage 1 and 2, suggest that these numbers could be scaled to estimate the speed of future \SW projects (or at least those following a similar blind search strategy). For example, the completion time for a \SW project could be approximated as
+\begin{equation}
+    \tau \approx 18\,{\rm days} \left(\frac{10^4}{N_p}\right)
+                               \left(\frac{N_s}{10^4}\right),
+\end{equation}
+where $N_s$ is the number of subjects to be classified, and $N_p$ is the number of volunteers in the crowd.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 

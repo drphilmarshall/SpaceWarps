@@ -1424,7 +1424,7 @@ located close to the border or well within the center.
 \subsubsection{Volunteer profile}
 
 Here, we investigate if the skill\footnote{see the
-\Aref{appendix:skill} for the choice of this term and how it is
+\Aref{appendix:power} for the choice of this term and how it is
 different from that used in paper I} of volunteers is systematically
 different between the sample of detected and missed lenses.
 
@@ -1774,37 +1774,25 @@ examples of randomly selected cases which demonstrate how having sufficient
 number of large positive kicks allows lenses to be detected in spite of several
 short negative kicks.
 
-\section{Skill}
-\label{appendix:skill}
-In paper I, the term skill is given by the expectation value of the
-information gain which is related to the P$_{\rm L}$, the probability to
-correctly identify a lens as a lens and P$_{\rm D}$, the probability to
-correctly identify a dud as a dud. The skill is not linearly related to
- P$_{\rm L}$ and P$_{\rm D}$. One can get the same value of
-skill for different combinations of P$_{\rm L}$ and P$_{\rm D}$ (see
-Fig. XXX).
+\section{Lens Detection Power}
+\label{appendix:power}
 
-\question{AM}{PJM, Is it useful to have this description, any other comments on
-this section?}
-{\bf AM: add figure and polish this further upon suggestion from PJM}
+In \PaperOne, we defined the ``Skill'' of an agent as being given by the
+expectation value of the information gain per classification. This quantity is a
+non-linear function of both the $P_{\rm L}$, the probability of correctly
+identifying a lens as a lens and $P_{\rm D}$, the probability of correctly
+identifying a dud as a dud. This means that one can get the same value of Skill
+for different combinations of $P_{\rm L}$ and $P_{\rm D}$ (see Fig. XXX) -- it
+reflect the all-round ability of a classifier to contribute information.
 
-As described in the appendix of paper I, the posterior probability P is
-related to the volunteers skill (or information gain). Also, a volunteer
-with a given skill, will have different positive ($\Delta$~log(P)) and
-negative (-$\Delta$~log(P)) kicks on the trajectory plot. Thus, it is
-not useful to compare classifications of high and low skill volunteers
-to understand if there is a difference in their performance and if the
-high skill volunteers can increase the completeness of the lenses. For
-example, a volunteer who is very good at rejecting duds and not so good
-at identifying lenses will still have a high skill. But such a
-volunteer will fail to detect many of the interesting lenses. Therefore,
-we do not compare high skill vs. low skill volunteers to address this
-issue.
-
-For lack of a better word, we also use the same term skill which has a
-similar meaning to that described in Paper I but not identical. We use a
-more qualitative definition implying the ability of the volunteers to
-make correct lens identification.
+As described in the appendix of \PaperOne, the posterior probability $P$ of a
+subject is determined by the $P_{\rm L}$ and $P_{\rm D}$ of all the volunteers
+who marked it, via Bayes' Theorem. Each agent will apply a different ``kick'' to
+the subject probability, $\Delta\log(P)$, which can be either positive (if the
+classifier thinks it contains a lens) or negative (if they don't). These kicks
+appear as steps on the subject's trajectory plot. This kick magnitude gives a useful measure of an agent's ``Power'' to move subjects closer to detection.
+Note that a volunteer who is very good at rejecting duds, but not so good
+at identifying lenses, may have a high Skill but a low Power (since they may fail to detect many of the interesting lenses): Power provides a more precise quantification of a classifier's ability to detect lenses.
 
 %{\bf todo: run swap and extract the status of all the known lens candidates
 %-- because the undecided are not known otherwise. fig will have to be

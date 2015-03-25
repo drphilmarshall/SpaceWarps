@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 
+%
 % Space Warps Paper I: System
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -484,7 +484,7 @@ were deemed ``obvious'' by the same expert classifiers.
 \begin{minipage}[b]{0.24\linewidth}
 \centering\epsfig{file=sw-system-figs/gallery/7.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
-\caption{Typical \SW ``sims'' from the \StageTwo training set. Insets indicate the
+\caption{Typical \SW ``sims'' from the \StageTwo training set. The top right-hand corner insets indicate the
 location of the simulated lens in each of these training images. Users needed to
 click on these specific features in order to make a correct classification.}
 \label{fig:training-gallery:sims}
@@ -505,7 +505,7 @@ click on these specific features in order to make a correct classification.}
 \end{minipage} \hfill
 \caption{Typical \SW ``duds'' from the \StageTwo training set. All of these
 subjects were correctly classified by the community as not likely to contain
-gravitational lenses; the insets merely indicate regions where $\sim10\%$ of the
+gravitational lenses; the top right-hand corner insets merely indicate regions where a minority ($\sim10\%$) of the
 volunteers clicked.} \label{fig:training-gallery:duds}
 \end{figure*}
 
@@ -591,7 +591,7 @@ and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of vi
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Classification Stages and Analysis}
+\section{Classification Analysis}
 \label{sec:swap}
 
 Having described the classification interface, the training images and the
@@ -603,26 +603,26 @@ SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
 Each classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs, a timestamp and the classification results.  The
-{\it kind} of subject -- whether it is a training subject (a simulated lens
-or a known non-lens) or a test subject (an unseen image drawn from the survey)
--- is also recorded. For all subjects, the positions of all Markers are
+(anonymous) volunteer IDs, a timestamp and the classification results (the image pixel-coordinate positions of every marker placed).  The
+``category'' of subject -- whether it is a ``training'' subject (a simulated
+lens or a known non-lens) or a ``test'' subject (an unseen image drawn from the
+survey) -- is also recorded. For all subjects, the positions of all Markers are
 recorded, in pixel coordinates. For training subjects, we also store the
-``classification'' of the subject as a lens, or a non-lens, and also the type
-of object present in the image. These types are summarized in
-\Tref{tab:objecttypes}.  This classification is used to provide instant
-feedback, but is also the basic measurement used in a probabilistic
+``kind'' of the subject as a lens (``sim''), or a non-lens (``dud''), and also
+the ``flavor'' of lens object if one is present in the image (``lensed galaxy'',
+``lensed quasar'' or ``cluster lens'').  This classification is used to provide
+instant feedback, but is also the basic measurement used in a probabilistic
 classification of every subject based on all image views to date.
 
-While the \sw web app is live, and classifications are being made, we
-perform an online analysis of the classifications,  updating a
-probabilistic model of every (anonymous) volunteer's data, and also updating
-the lens probability of each subject  (in both the training and test sets), on
-a daily basis. This gives us a dynamic estimate of the posterior probability
-for  any given  subject being a lens, given all classifications of it to date.
-Assigning thresholds in this lens probability then allows us to make good
-decisions about whether or not to retire a subject from the system, in order to
-focus attention on new images.
+While the \sw web app is live, and classifications are being made, we perform an
+online analysis of the classifications,  updating a probabilistic model of every
+(anonymous) volunteer's data, and also updating the posterior probability that
+each subject (in both the training and test sets) contains a lens, on a daily
+basis. This gives us a dynamic estimate of the posterior probability for  any
+given  subject being a lens, given all classifications of it to date. Assigning
+thresholds in this lens probability then allows us to make good decisions about
+whether or not to retire a subject from the system, in order to focus attention
+on new images.
 
 The details of how the lens probabilities are calculated are given in
 \Aref{appendix:swap}. In summary:
@@ -637,9 +637,10 @@ an image does not contain a lens when it really doesn't contain a lens,
 $\pr(\saidNOT|\LENS,T)$.
 
 \item Each agent updates its confusion matrix elements based on the number of
-times its volunteer has been right in each way while classifying subjects from
-the training set, accounting for noise early on due to small number
-statistics: $T$ is the set of all training images seen to date.
+times its volunteer has been right in each way (about both the sims and the
+duds) while classifying subjects from the training set, accounting for noise
+early on due to small number statistics: $T$ is the set of all training images
+seen to date.
 
 \item Each agent uses its confusion matrices to update, via Bayes' theorem,
 the probability of an image from the test set containing a lens,
@@ -652,11 +653,11 @@ set of all classifications made of this subject.)
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_probabilities.png}
 \caption{Typical \SW Agent confusion matrix elements. At a particular
-snapshot, 200 random Agents are shown distributed over the unit plane, with a
+snapshot, 200 randomly-selected agents are shown distributed over the unit plane, with a
 tendency to move towards the ``astute'' region in the upper right hand
-quadrant as the Agents' volunteers view more images. Yellow point size is
+quadrant as each agent's volunteer views more images. Yellow point size is
 proprtional to the number of images classified; green point size shows
-Agent-perceived ``skill.''}
+agent-perceived ``skill.''}
 \label{fig:swap:agent-probabilities}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -672,17 +673,17 @@ the background shows the distribution of effort.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\Fref{fig:swap:agent-probabilities} shows a random selection of Agents'
-confusion matrix elements, as they were on a particular day towards the end of
-the CFHTLS project. Many volunteers classify  only a small number of images,
-and so their Agents' confusion matrix elements remain close to their initial
-values of (0.5,0.5). As more images are classified (shown by the yellow point
-size), the Agents' matrix elements tend to move towards higher values, as the
+\Fref{fig:swap:agent-probabilities} shows the confusion matrix elements of 200
+randomly-selected agents, as they were on a particular day towards the end of
+the CFHTLS project. Many volunteers classify  only a small number of images, and
+so their agents' confusion matrix elements remain close to their initial values
+of (0.5,0.5). As more images are classified (shown by the yellow point size),
+the agents' matrix elements tend to move towards higher values, as the
 volunteers attain greater skill levels (green point sizes, see
-\Sref{sec:results} below) and the Agent learns more about them. In this
-quadrant, the Agents perceive their volunteers to be ``astute.'' This trend is
+\Sref{sec:results} below) and the agent learns more about them. In this
+quadrant, the agents perceive their volunteers to be ``astute.'' This trend is
 more clearly seen in \Fref{fig:swap:agent-histories}, which shows the skill of
-the same sample of Agents as the number of images classified increases. The
+the same sample of agents as the number of images classified increases. The
 histogram shows the distribution of classification number: a long tail to very
 high ``effort'' can be seen.
 

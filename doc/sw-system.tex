@@ -1,5 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Space Warps System Paper
+% 
+% Space Warps Paper I: System
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -56,7 +57,7 @@ are inserted into the image stream at random intervals; this training set is
 used to give the volunteers feedback on their performance, and to estimate a
 dynamically-updated probability for any given image to contain a lens. Low
 probability systems are retired from the site periodically, concentrating the
-sample towards a set of candidates; this ``stage 1'' set is then re-classified
+sample towards a set of candidates; this ``\StageOne'' set is then re-classified
 by the volunteers in a second  refinement stage. Analyzing the classification
 of the training set, we predict that the first stage alone should yield a
 sample that is C\% complete, while leading to the rejection of R\% of the
@@ -64,8 +65,8 @@ initial target sample. Having divided the 150 square degree CFHTLS imaging
 survey into 430000 overlapping 70 by 70 arcminute tiles and displayed them on
 the site, we were joined by 33000 volunteers who contributed X million image
 classifications over the course of N months. The sample was reduced to 3500
-stage 1 candidates; these were then refined to yield a sample of 1400
-candidates rankable by their stage 2 probability. We expect this sample to be
+\StageOne candidates; these were then refined to yield a sample of 1400
+candidates rankable by their \StageTwo probability. We expect this sample to be
 X\% complete and Y\% pure at a threshold of 95\% classification probability.
 We find that, on average, and given the assumptions we make in our analysis,
 we need 9 classifications per image during the first stage, X in the second.
@@ -221,7 +222,7 @@ In this paper, we describe the \sw web application, an
 online system that was conceived to address the visual inspection problem in
 gravitational lens detection for future large surveys via crowd-sourcing, and
 implemented as a Zooniverse project.
-In a companion paper (More et al, in preparation, herafter \papertwo) we will
+In a companion paper (More et al, in preparation, herafter \PaperTwo) we will
 present the new gravitational lenses discovered in our first, experimental,
 lens search, and begin to investigate the differences between lens detections
 made in \sw and those made with automated techniques. Here though, we simply
@@ -245,7 +246,7 @@ How many classifications, and so how many volunteers are needed per target?
 Our basic method in this paper is to analyze the performance of the \sw system
 on the ``training set'' of simulated lenses and known non-lenses. This allows
 us to estimate completeness and purity with respect to gravitational lenses
-that have the same properties of the training set. In \papertwo,
+that have the same properties of the training set. In \PaperTwo,
 we carry out a complementary analysis using a sample of
 ``known'' (reported in the literature) lenses.
 
@@ -427,9 +428,9 @@ of non-lenses), and refinement (to further narrow down the sample). The web
 application was reconfigured between the two stages, to assist in their
 functioning.
 
-\subsubsection{Stage 1: Initial Classification}
+\subsubsection{\StageOne: Initial Classification}
 
-The goal of a stage 1 classification is to achieve a high rejection rate,
+The goal of a \StageOne classification is to achieve a high rejection rate,
 while maintaining high completeness.  In this mode, therefore, the pre-loading
 of images was used to make the sliding in of new subjects happen quickly, to
 provide a sense of urgency: initial classification must be done fairly
@@ -440,33 +441,33 @@ results section below. Completion of the search requires subjects to be
 analyzing the classifications on a daily basis, as described in
 \Sref{sec:swap} below. As subjects were retired, new ones were ingested into
 the web app for classification. This means that the discovery of lens
-candidates in stage 1 is truly a community effort: to detect a lens candidate,
+candidates in \StageOne is truly a community effort: to detect a lens candidate,
 many non-lenses must first be rejected, and several classifications by different inspectors are needed in either case.
 
-The stage 1 training set was chosen to be quite clear cut, in order to err on
+The \StageOne training set was chosen to be quite clear cut, in order to err on
 the side of inclusivity, and so ensure high completeness. For the training duds
 we selected several hundred images at random, and three of us (AM, with AV and
 PM) inspected them and discarded anything that could be considered a lens
 candidate: this meant that objects that looks similar to lenses, such as galaxy
 mergers, tidal tails and spiral arms, pairs of blue stars and so on, were
 specifically excluded from the training set, and so we expect some of those
-types of object to appear in the stage 1 candidate list. The training sims for
-stage 1 were also selected to be relatively straightforward to spot, as we sought a balance between sensitivity to faint or difficult lenses, and the need to educate the volunteers in what gravitational lenses look like. We return to this balance below.
+types of object to appear in the \StageOne candidate list. The training sims for
+\StageOne were also selected to be relatively straightforward to spot, as we sought a balance between sensitivity to faint or difficult lenses, and the need to educate the volunteers in what gravitational lenses look like. We return to this balance below.
 
 
-\subsubsection{Stage 2: Refinement}
+\subsubsection{\StageTwo: Refinement}
 
-The design of the stage 1 classification task, and its training set, should lead
+The design of the \StageOne classification task, and its training set, should lead
 to sample of lens candidates that has high completeness but may have low purity.
 To refine this sample to higher purity, we need to reject more non-lenses, which
 means providing the volunteers with a more realistic and challenging training
-set as they re-classify it. The more demanding stage 2 training set was
-generated as follows. The stage 2 duds were selected from the image pool by at
+set as they re-classify it. The more demanding \StageTwo training set was
+generated as follows. The \StageTwo duds were selected from the image pool by at
 least one of three of us  (AV, AM and PM) as being a potential false positive,
-while the stage 2 sims were chosen to be a subset of stage 1 sims, none of which
+while the \StageTwo sims were chosen to be a subset of \StageOne sims, none of which
 were deemed ``obvious'' by the same expert classifiers.
 \Fref{fig:training:gallery} shows some example images from the resulting CFHTLS
-stage 2 training set.
+\StageTwo training set.
 
 %%% Sims and Duds from Stage2
 
@@ -483,7 +484,7 @@ stage 2 training set.
 \begin{minipage}[b]{0.24\linewidth}
 \centering\epsfig{file=sw-system-figs/gallery/7.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
-\caption{Typical \SW ``sims'' from the stage 2 training set. Insets indicate the
+\caption{Typical \SW ``sims'' from the \StageTwo training set. Insets indicate the
 location of the simulated lens in each of these training images. Users needed to
 click on these specific features in order to make a correct classification.}
 \label{fig:training-gallery:sims}
@@ -502,7 +503,7 @@ click on these specific features in order to make a correct classification.}
 \begin{minipage}[b]{0.24\linewidth}
 \centering\epsfig{file=sw-system-figs/gallery/3.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
-\caption{Typical \SW ``duds'' from the stage 2 training set. All of these
+\caption{Typical \SW ``duds'' from the \StageTwo training set. All of these
 subjects were correctly classified by the community as not likely to contain
 gravitational lenses; the insets merely indicate regions where $\sim10\%$ of the
 volunteers clicked.} \label{fig:training-gallery:duds}
@@ -521,7 +522,7 @@ of various possible false positives, divided into sub-classes.
 \section{Data}
 \label{sec:data}
 
-We refer the reader to \papertwo for the details of the particular set of
+We refer the reader to \PaperTwo for the details of the particular set of
 imaging survey data used in this first \sw project. Here, we summarize very
 briefly the choices that were made, in order to provide the context for our
 general description and illustrations of the \sw system.
@@ -694,7 +695,7 @@ as a function of $\pr(\LENS|C,T)$ threshold.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_trajectories.png}
-\caption{Typical \SW stage 1 subject trajectories. Subjects drift downwards in
+\caption{Typical \SW \StageOne subject trajectories. Subjects drift downwards in
 the top panel as they are classified, while being nudged left and right by the
 Agents as they interpret the volunteers input. The dotted vertical lines show
 (left to right) the retirement threshold, prior probability, and the detection
@@ -703,7 +704,7 @@ threshold.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-During stage 1 classification of the CFHTLS images, we assigned a prior
+During \StageOne classification of the CFHTLS images, we assigned a prior
 probability for each image to contain a lens of $2\times10^{-4}$, based on a
 rough estimate of the number of expected lenses in the survey. We then
 assigned two values of the images' posterior probability, $\pr(\LENS|C,T)$, to
@@ -733,11 +734,11 @@ way, the volunteers who down-voted images for not containing any lensed
 features enabled new images to be shown to other members of the community.
 
 When all the subjects had either been retired, or classified around 10 times
-or more, the web app was paused and reconfigured for stage 2. The sample of
-subjects classified during stage 2 was selected to be all those that passed
-the detection threshold ($\pr(\LENS|C,T) > 0.95$) at stage 1. These were
+or more, the web app was paused and reconfigured for \StageTwo. The sample of
+subjects classified during \StageTwo was selected to be all those that passed
+the detection threshold ($\pr(\LENS|C,T) > 0.95$) at \StageOne. These were
 classified for one week, with no retirement but a maximum classification
-number of 50 each. The number of subjects at stage 2 was small enough that we
+number of 50 each. The number of subjects at \StageTwo was small enough that we
 did not need to retire any: instead, we simply collected classifications for a
 fixed period of time (about 4 weeks). Without the time pressure motivating the
 online analysis, we implemented an ``offline'' version of the analysis that
@@ -767,8 +768,8 @@ that they made.
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/all_skill_contribution_experience_education.png}
 \caption{Key properties and contributions of the \sw crowd. Plotted are the
 1-D and 2-D marginalized distributions for the logarithms of the
-properties of the agents described in the text. The stage 1 agents are shown
-in blue, the stage 2 agents in orange.}
+properties of the agents described in the text. The \StageOne agents are shown
+in blue, the \StageTwo agents in orange.}
 \label{fig:crowd:cornerplot}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -780,12 +781,11 @@ agents, and plot the distributions of their logarithms in
 \begin{description}
 %
 \item{\noindent\bf ``Effort:''} The number of test images, $\effort$, classified by a
-volunteer. In stage 1, the mean effort per agent was 263; in the shorter stage
-2 it was 81.
+volunteer. In \StageOne, the mean effort per agent was 263; in the shorter \StageTwo it was 81.
 %
 \item{\noindent\bf ``Experience:''} The number of training images, $\experience$,
-classified by a volunteer. In stage 1, the mean experience per agent was 29;
-in stage 2 (where the training image fequency was set higher) it was 34.
+classified by a volunteer. In \StageOne, the mean experience per agent was 29;
+in \StageTwo (where the training image fequency was set higher) it was 34.
 %
 \item{\noindent\bf ``Skill:''} The expectation value of the information gain,
 $\skill$
@@ -793,14 +793,14 @@ should  the next subject classified have lens probability 0.5
 (\Aref{appendix:swap}),  in bits. Random classifiers have $\skill = 0.0$,
 perfect classifiers have $\skill = 1.0$. All agents start with $\skill = 0.0$;
 this increases as training subjects are classified, and the agent's estimates
-of its confusion matrix elements improve. In stage 1, the mean skill per agent
-was 0.04 bits; in  stage 2 it was 0.05.
+of its confusion matrix elements improve. In \StageOne, the mean skill per agent
+was 0.04 bits; in  \StageTwo it was 0.05.
 %
 \item{\noindent\bf ``Contribution:''} The integrated skill over a volunteer's test
 subject classification history, and represents the total  contribution to the
 project that volunteer (see the appendix for more discussion of this
-quantity). In stage 1, the mean contribution per agent was 34.9 bits; in
-stage 2 it was 33.5.
+quantity). In \StageOne, the mean contribution per agent was 34.9 bits; in
+\StageTwo it was 33.5.
 %
 \item{\noindent\bf ``Information:''} The total information $\information$ generated by
 the  agent during the volunteer's classification activity. This quantity
@@ -827,21 +827,21 @@ all high effort ``super-users'' have high skill. These two properties are
 reflected in both the contributions these volunteers make (third row) and the
 information they generate (fourth row).
 
-The distributions for the stage 2 agents (orange) are qualitatively similar to
-those for the stage 1 agents (blue). Differences are: 1) the maximum effort
-possible at stage 2 is smaller, because fewer subjects were available to be
-classifed, but 2) the mean effort expended at stage 2 was higher (perhaps
+The distributions for the \StageTwo agents (orange) are qualitatively similar to
+those for the \StageOne agents (blue). Differences are: 1) the maximum effort
+possible at \StageTwo is smaller, because fewer subjects were available to be
+classifed, but 2) the mean effort expended at \StageTwo was higher (perhaps
 because the subjects were higher probability, and more compelling); 3) the
-information generated per agent was higher at stage 2, because the subjects
+information generated per agent was higher at \StageTwo, because the subjects
 had higher probability.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.png}
 \caption{Narrow cumulative distributions of the contributions made by the
-agents: for example, 90\% of the stage 2 contributions were made by the
-highest contributing  7\% of the crowd. The stage 1 agents are shown in blue,
-the stage 2 agents in orange. ``Experienced volunteers'' classified 10 or more
+agents: for example, 90\% of the \StageTwo contributions were made by the
+highest contributing  7\% of the crowd. The \StageOne agents are shown in blue,
+the \StageTwo agents in orange. ``Experienced volunteers'' classified 10 or more
 training subjects.}
 \label{fig:crowd:cumulplot}
 \end{figure}
@@ -852,8 +852,8 @@ distributions of logarithmic effort, skill, and contribution. To better
 quantify the contributions made by the volunteers, we show their cumulative
 distribution on a linear scale in \Fref{fig:crowd:cumulplot}. This plot shows
 clearly the importance of the hardest-working, most active volunteers: at
-stage 1,  1.0\% of the volunteers -- 375 people -- made 90\% of the
-contribution.  At stage 2, where it was not possible to make as
+\StageOne,  1.0\% of the volunteers -- 375 people -- made 90\% of the
+contribution.  At \StageTwo, where it was not possible to make as
 many classifications before running out of subjects, 7.2\% of the volunteers
 -- 141 people -- made 90\% of the contribution.
 
@@ -866,7 +866,7 @@ The cumulative distribution of agent skill is shown in
 \Fref{fig:crowd:cumulskillplot}: these distributions are significantly broader
 than the corresponding distributions of agent contribution in
 \Fref{fig:crowd:cumulplot}. The most skilled 20\% of agents possess only  79\%
-of the skill at stage 1, and 77\% at stage 2. The inexperienced volunteers
+of the skill at \StageOne, and 77\% at \StageTwo. The inexperienced volunteers
 also possess a significant fraction of the skill: the most skillful 20\% of
 experienced volunteers (1824 people)  possess just 43\% of the total skill.
 The level of contribution made at \sw by experienced volunteers is largely a
@@ -876,9 +876,9 @@ matter of choice (or perhaps, availability of time!).
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_skill_cumul.png}
 \caption{Broad cumulative distributions of agent skill:
-the most skilled 20\% of the crowd only possess 79\% of the skill at stage 1.
-The stage 1 agents
-are shown in blue, the stage 2 agents in orange. ``Experienced volunteers''
+the most skilled 20\% of the crowd only possess 79\% of the skill at \StageOne.
+The \StageOne agents
+are shown in blue, the \StageTwo agents in orange. ``Experienced volunteers''
 classified 10 or more training subjects.}
 \label{fig:crowd:cumulskillplot}
 \end{figure}
@@ -893,9 +893,8 @@ classified 10 or more training subjects.}
 How fast does the \sw crowd classify subjects? Each agent records the timestamp
 of each classification its volunteer makes; by measuring the time lags between
 successive classifications we can make estimates of the crowd's classification
-and contribution speed. We plot these two quantities for both Stage 1 and Stage
-2 in \Fref{fig:results:speed}, normalizing the speed and time axes to the
-respective totals. The fractional classification rates in each stage of the survey fall off in approximately the same way, despite the factor of nearly 20 difference in crowd size. Stage 1 (consisting of $\sim430,000$ subjects) was completed in around 5000 hours (by some 37,000 participants), with classification rates in the first few days averaging at $\sim10^4$ per hour, stimulated by various forms of advertising (press releases, and emails to registered Zooniverse users). The asymptotic classification rate was $\sim10^3$ per hour. The average skill was found to be approximately constant over the lifetime of Stage 1, leading to a contribution rate that tracks closely the classification rate. (A 10\% increase in average skill was seen over the first 40 days, and a decrease of the same amount in the last 40 days -- not enough to cause a significant difference between classification and contribution rate behavior, but perhaps reflecting a learning period at the start and a decrease in participation late on.) Stage 2 (3700 subjects) was completed in around 600 hours by around 2000 participants, with classification rates starting at $~\sim2000$ per hour and decaying to $\sim100$ per hour.
+and contribution speed. We plot these two quantities for both \StageOne and \StageTwo in \Fref{fig:results:speed}, normalizing the speed and time axes to the
+respective totals. The fractional classification rates in each stage of the survey fall off in approximately the same way, despite the factor of nearly 20 difference in crowd size. \StageOne (consisting of $\sim430,000$ subjects) was completed in around 5000 hours (by some 37,000 participants), with classification rates in the first few days averaging at $\sim10^4$ per hour, stimulated by various forms of advertising (press releases, and emails to registered Zooniverse users). The asymptotic classification rate was $\sim10^3$ per hour. The average skill was found to be approximately constant over the lifetime of \StageOne, leading to a contribution rate that tracks closely the classification rate. (A 10\% increase in average skill was seen over the first 40 days, and a decrease of the same amount in the last 40 days -- not enough to cause a significant difference between classification and contribution rate behavior, but perhaps reflecting a learning period at the start and a decrease in participation late on.) \StageTwo (3700 subjects) was completed in around 600 hours by around 2000 participants, with classification rates starting at $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -905,7 +904,7 @@ respective totals. The fractional classification rates in each stage of the surv
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The similarities between Stage 1 and 2, suggest that these numbers could be scaled to estimate the speed of future \SW projects (or at least those following a similar blind search strategy). For example, the completion time for a \SW project could be approximated as
+The similarities between \StageOne and 2, suggest that these numbers could be scaled to estimate the speed of future \SW projects (or at least those following a similar blind search strategy). For example, the completion time for a \SW project could be approximated as
 \begin{equation}
     \tau \approx 18\,{\rm days} \left(\frac{10^4}{N_p}\right)
                                \left(\frac{N_s}{10^4}\right),
@@ -918,42 +917,42 @@ where $N_s$ is the number of subjects to be classified, and $N_p$ is the number 
 \label{sec:results:sample}
 
 We now quantify the performance of the \sw system in terms of the recovery of
-the training set images. At stage 1, this set contains around 5712 simulated
-lenses, and 450 duds; at stage 2, we used 152 simulated lenses and 201 duds.
+the training set images. At \StageOne, this set contains around 5712 simulated
+lenses, and 450 duds; at \StageTwo, we used 152 simulated lenses and 201 duds.
 \Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
-curves for CFHTLS stage 1 and stage 2. These plots show the true positive rate
-(TPR), the number of sims correctly detected divided by the total number of
-sims in the training set, and the false positive rate (FPR), the number of
-duds incorrectly detected  divided by total number of duds in the training
-set, both for a given sample of detections defined by a particular probability
-threshold, which varies along the curves.  In both stages, these curves show
-that true positive rates of  around 90\% were achieved, at very low false
-positive rates. For comparison we show the results of an analysis where the
-classifications of  training images were ignored, and none of the agents
-allowed to learn: they were instead assigned initial values of their confusion
-matrices of 0.75 for each element, which then remained constant. This emulates
-a very simple unweighted voting scheme, where all classifications are treated
-equally. In this case, the TPR remains under 80\% in stage 1 and 60\% in stage
-2, thus quantifying  the benefit of including training images and allowing the
-agents to learn. The choice of initial confusion matrix is not very important:
-the same 0.75 initial values applied to normal, learning agents results in a
-slightly lower TPR than the default case, indicating that initializing the
-system less conservatively results in slightly worse performance.
+curves for CFHTLS \StageOne and \StageTwo. These plots show the true positive
+rate (TPR), the number of sims correctly detected divided by the total number of
+sims in the training set, and the false positive rate (FPR), the number of duds
+incorrectly detected  divided by total number of duds in the training set, both
+for a given sample of detections defined by a particular probability threshold,
+which varies along the curves.  In both stages, these curves show that true
+positive rates of  around 90\% were achieved, at very low false positive rates.
+For comparison we show the results of an analysis where the classifications of
+training images were ignored, and none of the agents allowed to learn: they were
+instead assigned initial values of their confusion matrices of 0.75 for each
+element, which then remained constant. This emulates a very simple unweighted
+voting scheme, where all classifications are treated equally. In this case, the
+TPR remains under 80\% in \StageOne and 60\% in \StageTwo, thus quantifying  the
+benefit of including training images and allowing the agents to learn. The
+choice of initial confusion matrix is not very important: the same 0.75 initial
+values applied to normal, learning agents results in a slightly lower TPR than
+the default case, indicating that initializing the system less conservatively
+results in slightly worse performance.
 
-The dot-dashed curves show the impact of the offline analysis. At stage 1 the
+The dot-dashed curves show the impact of the offline analysis. At \StageOne the
 results are very similar to the online version that was actually run (solid
-line). However, at stage 2 there is marginal evidence of there being greater
+line). However, at \StageTwo there is marginal evidence of there being greater
 benefit to doing the analysis offline. Over 85\% TPR is achieved at zero FPR
 in the offline analysis , while if one is willing to accept a false positive
 rate of 5\%, the true positive rate rises to over 95\%, showing that some of
 the sims that were missed in the online analysis may be being recovered by
-doing the analysis offline. The same is true at stage 1, but to a lower
+doing the analysis offline. The same is true at \StageOne, but to a lower
 degree. Assuming Poisson statistics for the fluctuations in the numbers of
-recovered lenses, the uncertainty in the measured stage 2 TPR values is around
+recovered lenses, the uncertainty in the measured \StageTwo TPR values is around
 8\%, but the online and offline samples are highly correlated, such that the
 uncertainty on the difference between the ROC curves is somewhat less than
 this. Still, a larger validation set is needed to test these algorithmic
-choices more rigorously. At stage 1, high TPR can be measured to better than
+choices more rigorously. At \StageOne, high TPR can be measured to better than
 1\%.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -965,12 +964,12 @@ choices more rigorously. At stage 1, high TPR can be measured to better than
   \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
 \end{minipage}
 \caption{Receiver operating characteristic curves for the \sw system, using
-the CFHTLS training set. Left: stage 1, right: stage 2.}
+the CFHTLS training set. Left: \StageOne, right: \StageTwo.}
 \label{fig:results:sample:roc}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-Adopting the online stage 1 analysis, and the offline stage 2 analysis, we
+Adopting the online \StageOne analysis, and the offline \StageTwo analysis, we
 show in \Fref{fig:results:sample:CP} a plot of the more familiar (to
 astronomers) quantities completeness versus purity in
 the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
@@ -992,7 +991,7 @@ positives gives the expected sample size; dividing the expected number of true
 positives by this sample size gives the purity. Note that the completeness is
 invariant to this transformation.
 
-The stage 1 curves are truncated by the retirement of subjects in this phase,
+The \StageOne curves are truncated by the retirement of subjects in this phase,
 which sets the minimum size of this sample. We see from the solid blue curve
 that over 90\% completeness was reached, albeit in a sample with around 20\%
 purity. To investigate the completeness to the three different types of lens
@@ -1006,7 +1005,7 @@ dividing the lens and dud sets into equal fractions.
 The lensed quasar part of the training set yielded the highest
 completeness, suggesting that these were the easiest sims to spot. The lensed
 galaxies were recovered at understandably lowest completeness, although the
-wider image separation  lensing clusters were not very different. At stage 2,
+wider image separation  lensing clusters were not very different. At \StageTwo,
 where no retirement was carried out, it was possible to reach 100\% purity:
 indeed, the knee of the curve is at just under 90\% completeness. However, the
 purity decreases rapidly if higher completeness than this is sought.
@@ -1100,14 +1099,14 @@ Instead, users clicked many different features.}
 \label{sec:discuss:performance}
 
 We investigated the source of the incompleteness and impurity visible in
-\Fref{fig:results:sample:CP}, by examining the stage 2 false negatives and
+\Fref{fig:results:sample:CP}, by examining the \StageTwo false negatives and
 false positives, and their behaviour as they are classified using the online
 analysis trajectory plots introduced in \Sref{sec:swap}
 (\Fref{fig:swap:subject-trajectories}).
 \Fref{fig:discuss:performance:trajectories} shows 2 example simulated lenses
 that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \sw system, and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
-0.95$) by the \sw system. While the final stage 2 analysis was done offline,
+0.95$) by the \sw system. While the final \StageTwo analysis was done offline,
 these trajectory plots still serve to illustrate the approximate
 classification histories of the subjects.
 
@@ -1178,11 +1177,11 @@ is under development.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.png}
-\caption{Stage 2 classifier skill, as a function of their stage 1 skill.
-Veterans from stage 1  are shown in blue, while new volunteers are shown in
-orange. Point size is proportional to the number of stage 2 classifications
+\caption{\StageTwo classifier skill, as a function of their \StageOne skill.
+Veterans from \StageOne  are shown in blue, while new volunteers are shown in
+orange. Point size is proportional to the number of \StageTwo classifications
 made, while dashed lines are drawn at the mean values for each sample.
-Restricting stage 2 to classifiers with high stage 1 skill could reduce the
+Restricting \StageTwo to classifiers with high \StageOne skill could reduce the
 noise in the system.}
 \label{fig:discuss:performance:stage1vstage2}
 \end{figure}
@@ -1194,23 +1193,23 @@ classifiers, arising from classifier inexperience (\Sref{sec:results:crowd}).
 While improved training will help reduce this effect, it is here
 that targeted task assignment could also help improve system performance, by
 bringing higher skill volunteers in to the mix. We
-advertised stage 2 of the current project to all registered users; it was
-taken up by stage 1 veterans with a broad range of skill, and also picked up a
+advertised \StageTwo of the current project to all registered users; it was
+taken up by \StageOne veterans with a broad range of skill, and also picked up a
 significant number of new users who did not have enough time to aquire high
-skill (since stage 2 was quite short): of the 1964 volunteers who took part in
-the stage 2 classification round, only 774 were veterans from stage 1.
-\Fref{fig:discuss:performance:stage1vstage2} shows how the stage 1 skill maps
-on to stage 2 skill and contribution.
+skill (since \StageTwo was quite short): of the 1964 volunteers who took part in
+the \StageTwo classification round, only 774 were veterans from \StageOne.
+\Fref{fig:discuss:performance:stage1vstage2} shows how the \StageOne skill maps
+on to \StageTwo skill and contribution.
 
-This figure suggests that there may be some benefit to opening stage 2 on the
-basis of stage 1 agent skill, in order to reduce the noise in the system
+This figure suggests that there may be some benefit to opening \StageTwo on the
+basis of \StageOne agent skill, in order to reduce the noise in the system
 generated by new and low skill volunteers in this more difficult
 classification stage.  A simple implementation of this would be to switch the
-web app to the stage 2 version when either a certain stage 1 skill (and/or
+web app to the \StageTwo version when either a certain \StageOne skill (and/or
 effort) threshold was passed. Good strategy would probably be to switch back
-to stage 1 after some number of stage 2 classifications (to avoid losing the
-high skill users from stage 1 entirely), and also to make it very clear which
-stage the classifier was at (since stage 2 requires more careful attention).
+to \StageOne after some number of \StageTwo classifications (to avoid losing the
+high skill users from \StageOne entirely), and also to make it very clear which
+stage the classifier was at (since \StageTwo requires more careful attention).
 This is something we plan to experiment with in future.
 
 Finally, there could be some performance gains to be made by improving the
@@ -1219,7 +1218,7 @@ inexperience (\Sref{sec:results:crowd}), but it could be the agent that is
 inexperienced as well as the classifier or its agent. In a future paper we
 plan to investigate the use of the test images as well as the training images
 in accelerating the agent's learning (Davis et al, in preparation). We also
-plan to investigate the use of offline analysis at Stage 1, for the same
+plan to investigate the use of offline analysis at \StageOne, for the same
 reason (see also \Sref{sec:discuss:efficiency} below.)
 One might also consider looking at
 introducing more conditional dependences in the confusion matrix elements, to
@@ -1244,7 +1243,7 @@ is an interesting challenge for future work.
 % \begin{figure}
 % \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/early_vs_final_skill.png}
 % \caption{Predictability of final skill from early skill (after 10 training
-% classifications) in stage 1 agents. The dashed lines enclose 649 agents with
+% classifications) in \StageOne agents. The dashed lines enclose 649 agents with
 % early skill greater than 0.1
 % who retain final skill of greater than 0.05. Point size is proportional to
 % contribution (plus a constant).}
@@ -1252,17 +1251,17 @@ is an interesting challenge for future work.
 % \end{figure}
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Having seen the importance of the high skill volunteers at both stage 1 and
-% stage 2, we might ask, can we predict agent skill after, say, the volunteer
+% Having seen the importance of the high skill volunteers at both \StageOne and
+% \StageTwo, we might ask, can we predict agent skill after, say, the volunteer
 % has experienced 10 training subjects? In \Fref{fig:crowd:skillprediction} we
-% plot this ``early skill'' against final skill, for all experienced stage 1
+% plot this ``early skill'' against final skill, for all experienced \StageOne
 % volunteers. The majority of the crowd shows little correlation, but at the
-% high early skill end, some predictability appears. The 649 experienced  stage
-% 1 volunteers who had early skill greater than 0.1 went on to attain a mean
+% high early skill end, some predictability appears. The 649 experienced \StageOne
+% volunteers who had early skill greater than 0.1 went on to attain a mean
 % final skill of 0.22, with 97\% remaining at skill 0.05 or higher. This
 % suggests that it might be worth tracking volunteers' skill as a project
 % progresses, in order to encourage those showing an aptitude for the task to
-% take part in the more difficult activities, such as stage 2 refinement.
+% take part in the more difficult activities, such as \StageTwo refinement.
 % However, this would not have done a very good job at identifying the
 % volunteers who went on to make the largest contributions: the point size in
 % \Fref{fig:crowd:skillprediction} is proportional to contribution (plus a constant):
@@ -1295,7 +1294,7 @@ is an interesting challenge for future work.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
-information generated in both stage 1 and 2 of the CFHTLS project, with the
+information generated in both \StageOne and 2 of the CFHTLS project, with the
 total numbers of agents and subjects for comparison.   These numbers allow us
 to quantify the efficiency of the system.
 
@@ -1306,13 +1305,13 @@ that a maximally complete classification stage would yield a total
 contribution (summed over all agents) equal to the number of subjects. The
 ratio of this hypothetical optimum to the actual total contribution is
 therefore a measure of the stage's inefficiency. We find our inefficiency (by
-dividing column 2 by column 3) to be 33\% and 17\% in stage 1 and 2
-respectively. In stage 1, this inefficiency is due to the daily processing: we
+dividing column 2 by column 3) to be 33\% and 17\% in \StageOne and \StageTwo
+respectively. In \StageOne, this inefficiency is due to the daily processing: we
 were not able to retire subjects fast enough, and so they, remained in the
 system, being over-classified. Indeed, only 3705745 classifications were
 needed to retire all the subjects: the ratio of this to the total number made
 is 34\%. (The remaining 1\% is due to not all subjects being classified to 1
-or 0 probability.) At stage 2, we did not retire any subjects at all; the
+or 0 probability.) At \StageTwo, we did not retire any subjects at all; the
 inefficiency in this case was by design, to give everyone a chance to
 appreciate what they had found together. (An unwanted side effect of this
 policy was noted in \Fref{fig:discuss:performance:stage1vstage2} in the
@@ -1343,8 +1342,8 @@ considerable skill, and a few $10^2$ having the time to make a significant
 contribution. Slightly more quantitively, we might note that  the total skill
 of the crowd, computed by summing the skill of all the agents, is a measure of
 the effective crowd size, in the sense that a crowd of perfect classifiers
-would be of this size. By this measure,the stage 1 crowd was equivalent to a
-team of 1470 perfect classifiers, while the stage 2 crowd was equivalent to a
+would be of this size. By this measure,the \StageOne crowd was equivalent to a
+team of 1470 perfect classifiers, while the \StageTwo crowd was equivalent to a
 team of 102 perfect classifiers. With this same crowd, we can see that surveys
 providing a few $10^4$ subjects would be completed quickly, if the high
 contribution rate of the current crowd were to be repeated.
@@ -1363,9 +1362,9 @@ The second way to scale up the number of high contribution classifiers is to
 increase the rate at which new volunteers become dedicated volunteers. Based
 on feedback from the wider \sw community, this could potentially be achieved
 through closer collaboration with the science team. It's also possible that
-the dynamic stage 2 system proposed in the previous section may act as an
+the dynamic \StageTwo system proposed in the previous section may act as an
 incentive to some volunteers to increase their contribution (while gaining
-skill in order to ``reach'' stage 2). Reducing the rate at which  new
+skill in order to ``reach'' \StageTwo). Reducing the rate at which  new
 volunteers lose interest could also play a role. Anecdotally, it seems fairly
 common for new volunteers to be wary of classifying at all, for fear of
 introducing errors. Better explanation of how their early classifications are
@@ -1405,9 +1404,9 @@ specific ways:
 
 \item Participation (crowd size, activity rate) enabled project completion
 
-\item Both stages (1 and 2) achieved the required rejection rates
+\item Both \StageOne and \StageTwo achieved the required rejection rates
 
-\item Integrated humanpower = X (stage 1) and Y (stage 2), cf hours taken by
+\item Integrated humanpower = X (\StageOne) and Y (\StageTwo), cf hours taken by
 small team of experts
 
 \item Nightly processing is inefficient: more classifications were made than
@@ -1416,13 +1415,13 @@ was necessary during peak participation. Need kafka...
 \item Retirement rate. False negatives: which sims were missed?
 
 \item The optimal true positive rate (completeness) and false positive rate in
-the training set were estimated to be TPR\% and FPR\% at Stage 1, assuming a
+the training set were estimated to be TPR\% and FPR\% at \StageOne, assuming a
 detection threshold of xxx.
 
-\item In the ``refinement'' stage 2, X\% of the stage 1 candidates were
+\item In the ``refinement'' \StageTwo, X\% of the \StageOne candidates were
 rejected (with P less than threshold), and the remainder assigned lens
 ``probabilities.'' Ranking
-subjects by their Stage 2 lens probability gives an ROC curve for the system
+subjects by their \StageTwo lens probability gives an ROC curve for the system
 with X properties. The optimal true positive rate (completeness) and false
 positive rate in the training set were estimated as TPR\% and FPR\%;
 
@@ -1717,7 +1716,7 @@ might do the following. Dividing this by the amount of information it takes to
 classify a \sw subject all the way to the detection threshold (lens
 probability 0.95), and then multiplying by the survey inefficiency gives us a
 very rough estimate for the effective number of detections corresponding to
-the crowd's contribution: these are 2830 and 25 bits for stages 1 and 2
+the crowd's contribution: these are 2830 and 25 bits for \StageOne and \StageTwo
 respectively.  These figures are close to the numbers of detections given in
 column 7 of the table.
 % The uncertainty in the interpretation of the total
@@ -1794,9 +1793,9 @@ preparation). Here we briefly note that we maximize the joint posterior
 probability distribution for all the model parameters (some 66,000 confusion
 matrix elements and 430,000 subject probabilities) with a simple
 expectation-maximisation algorithm. This procedure takes approximately the
-same CPU time as the stage 2 online analysis, because no matrix inversions are
+same CPU time as the \StageTwo online analysis, because no matrix inversions are
 required in the algorithm. The algorithm scales well and is actually faster
-than the online analysis with the larger stage 1 dataset. The
+than the online analysis with the larger \StageOne dataset. The
 expectation-maximisation algorithm is robust to initial starting parameters
 in, e.g., initial Agent confusion matrix elements and Subject probabilities.
 The plots in \Sref{sec:results:sample} show the difference in performance

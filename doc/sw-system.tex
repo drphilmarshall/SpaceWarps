@@ -313,7 +313,7 @@ username (or IP address) of the volunteer, a timestamp and some other metadata.
 For the more interesting subjects, the CI offers two features that  enable
 further investigation of the subjects. The first is the ``Quick Dashboard'' (QD)
 a more advanced image viewer. This allows the viewer to compare three different
-contrast and color balance settings, to help bring out subtle features, and to
+contrast and colour balance settings, to help bring out subtle features, and to
 pan and zoom in on interesting regions of the image to assess small features.
 Markers can be placed in the Quick Dashboard just the same as in the main CI
 image viewer. The second is a link to that subject's page in the project
@@ -326,7 +326,7 @@ before submitting your own classification means that the classifications may not
 be strictly independent; the advantage of this system is that volunteers can
 learn from others what constitutes a good lens candidate. This is not, however,
 the primary educational resource; we describe the explicit training that we
-provide for the volunteers in the next section.
+provide for the volunteers in the next section. The FITS images of the subject can be further explored with Zooniverse ``Dashboard Tools,'' using a more powerful image viewer that enables dynamic variation of the colour balance and contrast (stretch), and for any given view to be shared via unique URL back to Talk.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -515,8 +515,6 @@ The frequency with which training images were shown was fixed at 1 in 3.
 Finally, the Spotter's Guide was upgraded to include more examples
 of various possible false positives, divided into sub-classes.
 
-% PJM IS HERE
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -533,28 +531,30 @@ general description and illustrations of the \sw system.
 \subsection{The CFHT Legacy Survey}
 \label{sec:data:CFHTLS}
 
-The CFHT Legacy Survey \citep[CFHTLS,][]{CFHTLS} covered XXX square degrees of
-approximately equatorial sky, in four patches distributed in right ascension,
-over the course of N years. With homegeneous image quality of, typically, X
-arcsec (in the $i$-band), and reaching limiting magnitudes of XX-XX in the
-$ugriz$ filter set, this survey has yielded several dozen new gravitational
-lenses on both galaxy and group scales \citep{}. The quality of the data,
-combined with the presence of these comparison ``known lens'' samples, made
-this a natural choice against which to develop and test the \sw system. The
-CFHTLS is also well-representative of the data quality expected from several
-next-generation sky surveys, such as DES, KiDS, HSC and LSST.
+The CFHT Legacy Survey \citep[CFHTLS,][]{CFHTLS} covered 171 square degrees of
+approximately equatorial sky, in four patches distributed in right ascension.
+With high and homogeneous image quality (the mean seeing in the $g$-band is
+0.78''), and reaching limiting magnitudes of around 25 across the $ugriz$ filter
+set, this survey has yielded several dozen new gravitational lenses on both
+galaxy and group scales
+\citep{GavazziEtal2014,SonnenfeldEtal13,CabanacEtal2007,MoreEtal2012}. The
+quality of the data, combined with the presence of these comparison ``known
+lens'' samples, makes this a natural choice against which to develop and test
+the \sw system. The CFHTLS is also well-representative of the data quality
+expected from several next-generation sky surveys, such as DES, KiDS, HSC and
+LSST.
 
 In order to investigate the completeness of the previous, semi-automated, lens
 searches in the CFHTLS area, we designed a ``blind search.'' We divided the
 mosaiced images into some 430,000 equal size, overlapping tiles, approximately
-70~arcsec on a side. Each of these images is a ``test image'' (as opposed to a
-``training image''). In future, larger area projects we expect to implement
-the rather different strategy of producing image tiles centred on particular
+70~arcsec on a side. We refer to these images as ``test images'' (as opposed to
+``training images''). In future, larger area projects we expect to implement the
+rather different strategy of producing image tiles centred on particular
 pre-selected ``targets,'' to make for a more efficient (but less complete)
 survey. We do not expect the performance of citizen image inspectors to change
-significantly between these strategies: to first order, both strategies
-require the inspectors to learn what lenses look like, and then search the
-presented images for similar features.
+significantly between these strategies: to first order, both strategies require
+the inspectors to learn what lenses look like, and then search the presented
+images for similar features.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -563,28 +563,30 @@ presented images for similar features.
 \label{sec:data:display}
 
 The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
-quality, and we chose to focus on this set (although the $u$ and $z$-band
-images were also available for inspection in Talk). We made colour composite
-images using publically-available code\footnote{The open source  colour image
-composition code used in this work is available from
-\texttt{http://github.com/drphilmarshall/HumVI}} following the prescription of
-\citet{LuptonEtal}. Specifically, we first rescaled the pixel values of each
-channel image into flux units, and then applied an arcsinh stretch. The
-stretch parameters were chosen using a small random sample of images, to
-ensure that the background noise was just visible,  and that the centres of
-bright, intermediate resdhift galaxies were not saturated. The color scales
-were chosen to maximize the contrast between faint extended objects. These
-parameters were then fixed during the production of all the tiles, in order to
-allow straightforward comparison between one image and another, and for
-intuition to be built up about the appearance of stars and galaxies across the
-survey. Alternative algorithms, such as adjusting the stretch and scale
-dynamically according to, for example, the root-mean-square pixel value in
-each image, can lead to better presentation of bright objects, but in doing so
-they tend to hide the faint features in those images: we needed to optimize
-the detectability of these faint features.   Examples of CFHTLS training set
-images can be seen in \Fref{fig:training-gallery:duds} and
-\Fref{fig:training-gallery:sims}.
+quality, and we chose to focus on this set (although the $u$ and $z$-band images
+were also available for perusal in Talk). We made colour composite PNG format
+images\footnote{The open source colour image composition code used in this work
+is available from \texttt{http://github.com/drphilmarshall/HumVI}} following the
+prescription of \citet{LuptonEtal2004} \citep[with extensions
+by]{WherryEtal2004}. Specifically, we first rescaled the pixel values of each
+channel image into flux units, and then applied an arcsinh stretch. The stretch
+parameters were optimized by visually inspecting a small randomly-selected
+sample of images, to ensure that the background noise was just visible,  and
+that the centres of bright, intermediate redshift galaxies were not saturated.
+The color scales were chosen to maximize the contrast between faint extended
+objects. These parameters were then fixed during the production of all the
+tiles, in order to allow straightforward comparison between one image and
+another, and for intuition to be built up about the appearance of stars and
+galaxies across the survey. Alternative algorithms, such as adjusting the
+stretch and scale dynamically according to, for example, the root-mean-square
+pixel value in each image, can lead to better presentation of bright objects,
+but in doing so they tend to hide the faint features in those images: we needed
+to optimize the detectability of these faint features.   Examples of CFHTLS
+training set images prepared in this way can be seen in the galleries of the
+previous section (Figures~\ref{fig:training-gallery:sims}
+and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of visualization parameters, to display a ``bluer'' image and a ``brighter'' image in the classification interface Quick Dashboard (\Sref{sec:design:interface}). The QD code performs the same image composition as just described, but dynamically on FITS images in the browser. These FITS images are also available for viewing in Talk, via the main Zooniverse Dashboard image display tool, which again offers the same stretch settings, as a starting point for image exploration.
 
+% PJM IS HERE.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

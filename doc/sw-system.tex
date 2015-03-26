@@ -666,7 +666,7 @@ agent-perceived ``skill.''}
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
 \caption{Typical \SW Agent histories. The ``skill'' of the  same 200 random
-Agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
+agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
 of the number  of subjects classified (``effort''). The yellow histogram in
 the background shows the distribution of effort.}
 \label{fig:swap:agent-histories}
@@ -698,7 +698,7 @@ as a function of $\pr(\LENS|C,T)$ threshold.
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_trajectories.png}
 \caption{Typical \SW \StageOne subject trajectories. Subjects drift downwards in
 the top panel as they are classified, while being nudged left and right by the
-Agents as they interpret the volunteers input. The dotted vertical lines show
+agents as they interpret the volunteers input. The dotted vertical lines show
 (left to right) the retirement threshold, prior probability, and the detection
 threshold.}
 \label{fig:swap:subject-trajectories}
@@ -707,24 +707,24 @@ threshold.}
 
 During \StageOne classification of the CFHTLS images, we assigned a prior
 probability for each image to contain a lens of $2\times10^{-4}$, based on a
-rough estimate of the number of expected lenses in the survey. We then
-assigned two values of the images' posterior probability, $\pr(\LENS|C,T)$, to
-define ``detection'' and ``rejection'' thresholds. These were set to be 0.95
-and (approximately symmetrically in the logarithm of probability), $10^{-7}$.
-Subjects that attained probability of less than the rejection threshold were
-scheduled for retirement and subsequently ignored by the analysis code.
-Subjects crossing the detection threshold were not retired from the website,
-but instead left in the system so that more volunteers could see them. The
-progress of the subjects is illustrated in \Fref{fig:swap:subject-trajectories}.
-Subjects appear on this plot at the tip of the arrow, at zero classifications
-and prior probability; they then drift downwards as they are classified by the
-crowd, with each Agent applying the appropriate kick in probability based on
-what it hears its volunteer say. Encouragingly, sims (blue) tend to end up
-with high probability, while duds (red) pile up at low probability; test
-subjects (black) mostly drift to low probability, but some go the other way.
-The latter will help make up the candidate sample. As this plot shows, around
-10 classifications are required for a subject to reach the retirement
-threshold.
+rough estimate of the number of expected lenses in the survey, and the fraction
+of the survey area covered by each image. We then assigned two values of the
+images' posterior probability, $\pr(\LENS|C,T)$, to define ``detection'' and
+``rejection'' thresholds. These were set to be 0.95 and (approximately
+symmetrically in the logarithm of probability), $10^{-7}$. Subjects that
+attained probability of less than the rejection threshold were scheduled for
+retirement and subsequently ignored by the analysis code. Subjects crossing the
+detection threshold were not retired from the website, but instead left in the
+system so that more volunteers could see them (and continue to update their
+probabilities). The progress of the subjects is illustrated in
+\Fref{fig:swap:subject-trajectories}. Subjects appear on this plot at the tip of
+the arrow, at zero classifications and prior probability; they then drift
+downwards as they are classified by the crowd, with each agent applying the
+appropriate kick in probability based on what it hears its volunteer say.
+Encouragingly, sims (blue) tend to end up with high probability, while duds
+(red) pile up at low probability; test subjects (black) mostly drift to low
+probability, but some go the other way. The latter will help make up the
+candidate sample. As this plot shows, around 10 classifications are typically required for a subject to reach the retirement (or detection) threshold.
 
 The analysis code was run every night during the project, and subjects retired
 in batches after its completion. This introduced some inefficiency, because
@@ -743,7 +743,7 @@ number of 50 each. The number of subjects at \StageTwo was small enough that we
 did not need to retire any: instead, we simply collected classifications for a
 fixed period of time (about 4 weeks). Without the time pressure motivating the
 online analysis, we implemented an ``offline'' version of the analysis that
-performs a joint inference of all Agent confusion matrix elements and subject
+performs a joint inference of all agent confusion matrix elements and subject
 probabilities simultaneously, for comparison. We describe how this differs
 from the online analysis in the appendix.
 
@@ -1777,16 +1777,16 @@ provides an error bar for this quantity.
 
 The probabilistic model described above does not need to be implemented as an
 online inference. Indeed, it might be more appropriate to perform the inference
-of all Agent confusion matrix elements and Subject probabilities
+of all agent confusion matrix elements and Subject probabilities
 simultaneously, so that the early classifications are not effectively
-downweighted as a result of the Agent's ignorance. It might also be that this
+downweighted as a result of the agent's ignorance. It might also be that this
 ignorance builds in some conservatism to the system, reducing the noise due
 the early classifications if they are unreliable. In the joint analysis, the
-basic assumption that is built into the Agents, that their volunteers
+basic assumption that is built into the agents, that their volunteers
 have innate and unchanging talent for lens spotting parameterised by two
 constant confusion matrix elements which simply need to be inferred given the
 data, is implemented in full. The effect is that of applying the time-averaged
-confusion matrices, rather than one that evolves as the Agents (and in the
+confusion matrices, rather than one that evolves as the agents (and in the
 real world, the volunteers) learn.
 
 The mathematics of the offline inference are presented elsewhere (in
@@ -1798,7 +1798,7 @@ same CPU time as the \StageTwo online analysis, because no matrix inversions are
 required in the algorithm. The algorithm scales well and is actually faster
 than the online analysis with the larger \StageOne dataset. The
 expectation-maximisation algorithm is robust to initial starting parameters
-in, e.g., initial Agent confusion matrix elements and Subject probabilities.
+in, e.g., initial agent confusion matrix elements and Subject probabilities.
 The plots in \Sref{sec:results:sample} show the difference in performance
 between the online and offline analyses.
 

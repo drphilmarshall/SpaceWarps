@@ -28,8 +28,7 @@
 
 \begin{abstract} 
 \noindent \SW was conceived as a strong lens
-discovery {\it service} by harnessing the power of citizen scientists that the DES strong lensing group (hereafter DES survey science team or DES SST) can make use of
-(within the logistical constraints). In this document we discuss how the DES SST can become involved with \SW and the relationship
+discovery {\it service} that harnesses the power of citizen scientists. The DES strong lensing group (hereafter DES survey science team or DES SST) can make use of \SW within the logistical constraints. In this document we discuss how the DES SST can become involved with \SW and the relationship
 between the DES SST and the \SW collaboration. 
 This document includes guidelines for proposing projects, data provision, data policy and for publications of \SW-enabled discoveries.
 \end{abstract}
@@ -42,13 +41,13 @@ This document includes guidelines for proposing projects, data provision, data p
 
 The \SW website is designed to motivate and  enable tens of thousands of
 people to perform the scientific tasks of strong gravitational lens
-identification.  \SW comprises a primary `classification' interface (\texttt{http://spacewarps.org}) that allows citizen scientists to inspect images and mark those that contain potential gravitational lenses. In addition, these volunteers are shown simulated lenses (appropriate for the survey being conducted) as an interactive training tool that also allows us to establish the citizens' likelihood of identifying potential lenses and blank fields using the \SW Analysis Pipeline (SWAPR). 
+identification.  \SW comprises a primary `classification' interface (\texttt{http://spacewarps.org}) that allows citizen scientists to inspect images and mark those that contain potential gravitational lenses. A mandatory part of this inspection is the classification of simulated lenses (appropriate for the survey being conducted). The classification of simulated lenses acts as an interactive training activity that also allows us to establish the citizens' likelihood of identifying potential lenses and blank fields. This is fed into the \SW Analysis Pipeline (SWAPR) that analyses the classifications made per image (or subject in Zooniverse terms) giving a probability of whether an image contains a lens candidate or not.
 
-A key part of the \SW project is the ability for all members of the \SW collaboration (see Section \ref{sec:members}) to communicate with each other and discuss interesting candidates through \Talk\footnote{\Talk (found at \texttt{http://talk.spacewarps.org}) is a forum for \SW collaborators to discuss individual sources and the \SW project in general. Bugs can also be reported. This is the direct portal for communication with the \SW community.}).
+A key part of the \SW project is the ability for all members of the \SW collaboration (see Section \ref{sec:members}) to communicate with each other and discuss interesting candidates through \Talk\footnote{\Talk (found at \texttt{http://talk.spacewarps.org}) is a forum for \SW collaborators to discuss individual sources and the \SW project in general. Bugs can also be reported. This is the direct portal for communication with the \SW community.}.
 
-In order to use \SW interface, the DES Survey Science Team \textbf{must define and propose a project to the \SW PIs} who will establish whether the use of the \SW interface is appropriate and liaise with the DES Survey Science Team to implement their project in the \SW interface. Details are given in  Section \ref{sec:project}.
+In order to use the \SW interface, the DES Survey Science Team \textbf{must define and propose a project to the \SW PIs} who will discuss whether the project is suitable with the SST. The \SW PIs will then liaise further with the SST to implement the project in the \SW interface. Details are given in Section \ref{sec:project}.
 
-\vspace{2mm}
+\vspace{4mm}
 The PIs of the \SW project are the authors of this document, P.\,Marshall, 
 A.\,More and A.\,Verma, please do not hesitate to contact us if you require any further information or have any questions. The PIs may be collectively contacted via the email address \href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com}
 
@@ -66,7 +65,7 @@ We now discuss the relationship between the \SW collaboration and the DES SST, w
 When we refer to the \SW collaboration, it comprises the \SW science team, \SW development team, and all the volunteers who have 
 logged in\footnote{with a Zooniverse ID. It is possible to classify anonymously, and we count those classification but as we don't know who they are, we are unable to collaborate with them directly.} and contributed classifications to the project. 
 
-If required, an expanded definition of the \SW membership is given in the document ``\SW Publication Policy: CFHT-LS''\footnote{available from \texttt{\url{https://github.com/drphilmarshall/SpaceWarps/blob/master/doc/sw-publication-policy-cfhtls.pdf}}}, however this will not be relevant for publications, see Section \ref{sec:papers} for details.
+If required, an expanded definition of the \SW membership is given in the document ``\SW Publication Policy: CFHT-LS''\footnote{available from \texttt{\url{https://github.com/drphilmarshall/SpaceWarps/blob/master/doc/sw-publication-policy-cfhtls.pdf}}}, however this will not be relevant for \SW-DES publications, see Section \ref{sec:papers} for details.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -74,77 +73,71 @@ If required, an expanded definition of the \SW membership is given in the docume
 \section{Defining a suitable \sw science project}
 \label{sec:project}
 
-The DES SST is expected to propose a project to the \SW collaboration that can be best or only be done using the power of citizen scientists. Typically this involves visual inspection tasks that are too time consuming for the SST themselves to execute. As such any science programme conducted through \SW should be complementary, not in competition, to the lens finding activities being carried out by the SST.
+The DES SST is expected to propose a project to the \SW collaboration that can be best or only be done using the power of citizen scientists. Typically, this involves visual inspection tasks that are too time consuming for the SST themselves to execute. As such, any science programme conducted through \SW should be complementary, not in competition, to the lens finding activities being carried out by the SST.
 
-For example, in the first \SW project, the \SW collaboration conducted a lens finding search with \SW over the entire CFHT-LS survey area. The goal was to increase the completeness of strong lenses in the survey areas. Both RingFinder and ArcFinder algorithms had been used to discover lenses of different types. \SW complemented these searches with the potential to find strong lenses missed by these algorithms. The method, proposed by Anupreeta More (who served as the SST for this project), was to inspect the entire survey area by getting citizens to inspect $\sim$430,000 tiles of the survey area. This was a \textit{blind} search. Such a search could not be conducted by a normal sized SST.
+For example, in the first \SW project, the collaboration conducted a lens finding search with \SW over the entire CFHT-LS survey area. The goal was to increase the completeness of strong lenses in the survey areas. Both RingFinder and ArcFinder algorithms had been used to discover lenses of different types. \SW complemented these searches with the potential to find strong lenses missed by these algorithms. The method, proposed by Anupreeta More (who served as the SST for this project), was to inspect the entire survey area by getting citizens to view $\sim$430,000 tiles of the survey area. This was a \textit{blind} search. Such a search could not be conducted by a normal sized SST.
 
-\textit{Targeted} searches are also possible, as we performed in the second \SW project on the VICS82 survey area. Here we inspected $\sim$40,000 images from the VICS82 survey centred on likely strong lens targets, e.g. LRGs, groups, clusters, quasars.  Again this was more images than the VICS82-SST could manage to inspect alone.
+\textit{Targeted} searches are also possible, as we performed in the second \SW project on the VICS82 survey area. Here we inspected $\sim$40,000 images from the VICS82 survey centred on likely strong lens targets, e.g. LRGs, groups, clusters, quasars.  Again, this was more images than the VICS82 SST could manage to inspect alone.
 
-Another approach is to use the \SW service to inspect the typically large output from automated algorithms or searches that are typically dominated by false positives.
+Another approach is to use the \SW service to inspect the normally large candidate lists generated by automated algorithms or searches, which are typically dominated by false positives.
 
 \subsection{DES specific thoughts}
 In the case of DES, with its long data release plan and large strong lens group, we request the SST to consider the following:
 \begin{enumerate}
 \item The \SW facility should be used for science projects that cannot be completed by the Strong Lens Group itself. 
-\item Any \SW search should be complementary, not in competition, to the lens finding being conducted by the DES SST itself.
+\item Any \SW search should be complementary, not in competition, to the lens finding being conducted by the DES SST.
 \item While \SW uses citizen science, its primary goal is \textbf{not outreach}, it is harnessing citizen power for visual classifications (and eventually modelling) to perform science.
-\item A duplicate project is not encouraged provided there is sufficient scientific motivation and justification to do so.
+\item A duplicate project is not encouraged unless there is sufficient scientific motivation and justification to do so.
 \item \SW requires volunteers/citizens to give up their personal time to conduct the experiment, this should not be taken lightly, the crowd are motivated by contributing to real science not just doing things for the sake of them. This is the reason the suitability of the project for citizen scientists should be carefully considered. The \SW PIs will be able to discuss any planned \SW-DES projects with the DES SST. It is important to bear this in mind for long-term surveys like DES, if needed the crowd needs to be engaged and feel like they are contributing while the entire \SW-DES project runs.
-\item The success of \SW-DES will rely on input from the DES SST working with the \SW collaboration, dedicated effort is required for this and the DES SST should identify team members who can commit time to the \SW-DES tasks for this before embarking on a project. The \SW PIs will help to establish the main efforts required, these will depend on the actual project put forward by the DES SST (e.g. image preparation, simulations, interacting with volunteers on \Talk).
+\item The success of \SW-DES will rely on input from the DES SST working with the \SW collaboration, dedicated effort is required for this and the DES SST should identify team members who can commit time to the \SW-DES tasks for this before embarking on a project. The \SW PIs will help to establish the main efforts required, these will depend on the actual project put forward by the DES SST (e.g.\ image preparation, simulations, interacting with volunteers on \Talk).
 \end{enumerate}
 
 \textbf{As such, \SW should be considered to be an integral part of the DES SST lens finding strategy, rather than an alternative method.}
 
-The scientific project, process and outcome is the domain of the SST, the \SW collaboration enables this work by making it a live project on the website. We do not, per se, expect the \SW collaboration lead the resultant papers, we just request some of us are included on discovery papers in return for our help, see Section \ref{sec:papers} for more details on the publication policy.
+The scientific project, process and outcome is the domain of the SST. The \SW collaboration enables this work by making it a live project on the website. We do not, per se, expect the \SW collaboration lead the resultant papers, we just request some of us are included on discovery papers in return for our help, please see Section \ref{sec:papers} for more details on the publication policy.
 
-Please do remember that \SW is setup to provide a service to help your team find lenses. Any discovery in \SW-DES is the DES SSTs discovery. The goal of the \SW PIs or the \SW collaboration is to enable your science project and make it work. Using the automatic analysis pipeline (SWAPR) we will send the DES SST lists of the candidates selected by the citizens (at some regular intervals or at the end of a project). 
-
-If the DES SST wish to have the \SW PIs input or to collaboratively work on targets the \SW team are happy to become more involved (the \SW PIs have strong lensing science interests).  
-The \SW team is happy to help with further grading of the candidates or assist with any scientific investigations and follow-up of the candidates, if the DES SST so requests. 
+The goal of the \SW PIs and the \SW collaboration is to enable the DES SST's science project in \sw and make it work. Using the automatic analysis pipeline (SWAPR), the \SW PIs we will send the DES SST lists of the candidates selected by the citizens (at some regular intervals or at the end of a project), we will then discuss strategies for further analysis based on our experience of previous projects. Some members of the \SW PIs  and team may become more involved in analysis steps such as grading of the \sw candidates or assist with any scientific investigations and follow-up of the candidates, at the DES SST's request. 
 
 \subsection{Previewing images and \Talk}
-We are aware that there is some interest in the DES SST for using the \SW web interface to preview images for the SST themselves. This is not the function or purpose of the \SW interface or the Zooniverse. However  it will be possible for DES SST members to view the images in parallel with the crowd through the public interface.  The DES SST members who wish to do this will need to register with the Zooniverse to classify. We can extract the classifications of SSTs only to provide and expert selected sample, if required. The images marked by any inspector (SST or citizen)  are automatically recorded in an individual's \SW/Zooniverse account. These can be accessed through the \SW interface and as a 'collection' in \Talk. This collection can be explored (and discussed if required) through the \Talk interface.
+We are aware that there is some interest in the DES SST for using the \SW web interface to preview images for the SST themselves. This is not the function or purpose of the \SW interface or the Zooniverse. However,  it will be possible for DES SST members to view the images in parallel with the crowd through the public interface.  The DES SST members who wish to do this will need to register with the Zooniverse to classify. We can extract the classifications of SSTs only to provide an expert selected sample, if required. The images marked by any inspector (SST or citizen)  are automatically recorded in an individual's \SW/Zooniverse account. These can be accessed through the \SW interface and as a 'collection' in \Talk. This collection can be explored (and discussed if required) through the \Talk interface.
 
-\SW \Talk is a key and integral part of \SW. The DES SST are strongly encouraged to interact with the volunteers on \Talk. This exchange allows the crowd to learn from the experts, this in turn has the very positive effect of motivating the citizens to contriute further. In addition it also results in better and informed classification when they return to that task. 
-
-Note that all possible candidates are in the public domain as all images are available online (but without WCS information). 
+\SW\ \Talk is a key and integral part of \SW. The DES SST is strongly encouraged to interact with the volunteers on \Talk. This exchange allows the crowd to learn from the experts, this in turn has the very positive effect of motivating the citizens to contribute further. In addition it also results in better and informed classification when they return to that task. Thus, engagement of the SST is very important in log-term surveys such as DES.
 
 \subsection{Possible \SW-DES survey strategies}
 
-In our experience, a citizen science project like SW cannot function successfully without significant support and co-ordination of the SST. Thus, we recommend that all DES members with an interest in strong lensing are told about \SW and how it can complement their lens finding effort. We are here to assist your science! While we can't expect the entirety of the DES Strong Lensing Group or the STRIDES consortium to be behind \SW-DES, all should be made aware of the projects being undertaken and planned with \SW.
+In our experience, a citizen science project like SW cannot function successfully without significant support and co-ordination of the SST. Thus, we recommend that all DES members with an interest in strong lensing are told about \SW and how it can complement their lens finding effort. Our goal is to enable your science. While we can't expect the entirety of the DES Strong Lensing Group or the STRIDES consortium to be behind \SW-DES, all should be made aware of the projects being undertaken and planned with \SW.
 
-We encourage the DES SST to strongly consider the timing for when they wish to ingest the images into \SW so that it is in line with the interests of the DES SST and consortium.
+We also encourage the DES SST to consider the timing for when they wish to ingest the images into \SW so that it is in line with the interests of the DES SST and those of the DES consortium.
 
 Possible projects for the DES SST could consider (just to get a flavour of what can be done)
 \begin{itemize}
-\item \textbf{New Data}:Inspection of areas (targeted or blind) that the SST has not had time to inspect, i.e. use the crowd to increase the speed at which potential lens candidates are discovered
+\item \textbf{New Data}: Inspection of areas (targeted or blind) that the SST has not had time to inspect, i.e. use the crowd to increase the speed at which potential lens candidates are discovered
 \item \textbf{Comparison of Expert vs Citizen Classification}: DES SST and citizen's view images in parallel (targeted or blind)
 \item \textbf{Completeness of Expert Classification}: Citizen's classify images already inspected by the DES SST (targeted or blind)
 \item \textbf{Helping the robots}: Use citizens to weed out false positives from candidate samples generated by algorithm based searches
 \item \textbf{Training sets}: Blind inspection to generate a large training set for  machine learning algorithms.
 \end{itemize}
 
-Note that the projects that you propose to \SW need not be one of the above. You can also suggest multiple projects that we could run in a mixture or phased set of experiments. Please do consider your timeline with reference to data release and the searches the DES SST want to make themselves.
+Note that the projects that are proposed to \SW need not be one of the above. Multiple projects could also be run in a mixture or phased set of experiments. Please do consider the DES timeline with reference to data release and the searches the DES SST want to make themselves.
 
-If the DES SST wants to inspect targets within the consortium and is concerned about being scooped, we suggest that this should happen first before images are passed to \SW. We would then label any images containing candidate lenses already discovered by the SST as `known lens candidates'. This applies to visually inspected by the SST or algorithm searched images. 
-
+If the DES SST wants to inspect targets within the consortium and is concerned about being scooped by the crowd, please be assured that there is little scope or motivation to do this. If the project is well defined, the goal of \SW-DES will be a complementary part of the DES SST lens finding strategy. By definition this means that \SW is working with the DES SST as it is designed to do. In addition, the images could be stripped of WCS info (described in Section \ref{sec:data}), meaning that no-one other than the SST can follow-up or catalogue the targets\footnote{We cannot exclude the possibility that individual sources might be serendipitously identified e.g. by recognisable morphologies.}.  The DES SST could also perform their inspection before the images are passed to \SW. Any lens candidates discovered by the SST would then be labelled as `known lens candidates' in \sw\,\Talk. This applies to candidates discovered through visual inspection or algorithm based searches. 
 
 \subsection{What to do next: Project Proposals}
-Once you have narrowed down what search you would like to do with \SW, please approach the \SW PIs (Phil Marshall, Anupreeta More, Aprajita Verma, collectively contacted via \href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com}) with a short description of their project that includes the following information.
+Once the DES SST have narrowed down what search to be conducted \SW, please approach the \SW PIs (Phil Marshall, Anupreeta More, Aprajita Verma, collectively contacted via \href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com}) with a short description of the project that includes the following information.
 
 \begin{itemize}
 \item Survey area
-\item Bands to be included
+\item Bands that could be included
 \item Total number of images to be viewed (approx.)
-\item Targeted survey or blind field search \footnote{Targeted: inspection of a list of candidates; Blind: inspection of tiles of a survey area}
+\item Targeted survey or blind field search\footnote{Targeted: inspection of a list of candidates; Blind: inspection of tiles of a survey area}
 \item Brief outline of the overall goal(s) of that inspection, highlighting how this is complementary (not competing) with the goals of the DES lens finding group
 \item Proprietary data issues 
-\item identify an initial core team who will lead and work closely with \SW
+\item Identify an initial core team who will lead and work closely with \SW
 \end{itemize}
 
-Note, the proposed science project(s) should harness citizen classification power to achieve your science goals.
+Note, the proposed science project(s) should harness citizen classification power to achieve the science goals.
 
-The \SW PIs will then arrange a telecon with the DES SST to discuss the project further. This includes discussing effort required and roles for the the SST team for expected tasks.
+The \SW PIs will then arrange a telecon with the DES SST to discuss the project further. This includes discussing the initial effort required and roles for the the SST team for expected tasks.
 
 The original \SW papers, by definition, provide a complete description of the system, and its results from the CFHT-LS survey. The SST will be able
 to read these papers before designing their own \SW project, and cite them as justification for some of their experimental decisions. As the \SW paper series get published, links to the papers will be given in this draft. Prior to publications, draft papers can also be shared on request by the \SW PIs (\href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com})
@@ -166,7 +159,7 @@ public domain, and so must be expected to be downloaded, copied and
 redistributed by any \SW user. This is a \textbf{good thing}: images of the sky taken
 with publicly-funded telescopes belong to everyone. 
 
-However, some surveys including DES come with their own proprietary access policy. It is the responsibility
+However, some surveys, including DES, come with their own proprietary access policy. It is the responsibility
 of the DES SST to provide images to \SW in a way that is consistent
 with their own data access rules. There are two things that SSTs can
 do to in order to respect any proprietary period that they have imposed on
@@ -197,7 +190,7 @@ by \texttt{astrometry.net}. \textbf{Please note}, however, that we cannot exclud
 
 \subsection{Collaborating with \SW Science Team}
 
-Implementing a new project based on different survey data will require support from the \SW Science Team, in three respects: 
+Implementing a new project based on different survey data will require support from the \SW consortium, in four respects: 
 
 \begin{enumerate}
 
@@ -218,7 +211,7 @@ collaboration by the SST in \Talk. Since this social filter is
 a key part of the sample refinement, the latter may involve a
 significant time commitment.
 
-\item In {\bf running the \SW analysis pipeline} which will be our responsibility. This will provide citizen selected candidates to be sent to the DES SST.
+\item In {\bf running the \SW analysis pipeline} (SWAPR) which will be the \sw PIs responsibility. This will provide citizen selected candidates to be sent to the DES SST.
 
 \end{enumerate}
 
@@ -248,14 +241,17 @@ registration, may write a Zooniverse
 Letter\footnote{\texttt{http://letters.zooniverse.org}} describing their
 investigation of any lens candidate they find in \SW. This, along with
 posts in  \Talk, is the primary means by which we expect \SW-DES collaboration
-members will communicate their findings to the rest of the
+members (citizens participating in the project) will communicate their findings to the rest of the
 astronomical community. The investigation of any \SW images that are
 provided without world coordinate system (WCS) information will be
-necessarily limited but the \SW Zooniverse \Letters will contribute to the collective knowledge and understanding of the presented system(s). Zooniverse \Letters are citable\SW
+necessarily limited but the \SW Zooniverse \Letters will contribute to the collective knowledge and understanding of the presented system(s). Zooniverse \Letters are citable \SW
 objects, and in some cases will appear listed on ADS\footnote{To be confirmed.}. 
 
 
-As \SW classifications are a community wide activity, it is impossible to attribute the discovery of a candidate to a single community member, or group  of members. Therefore, in recognition of their contribution to the \SW project, \SW community members will be listed (on their approval) on the \SW members web page. This web page will be linked in every ensuing \SW publication. If a community member makes a significant contribution e.g.\,in the further investigation of a lens candidate with modelling tools, they are strongly encouraged to write Zooniverse \Letters. This may lead to them being invited to join journal publications by the lead author of a ``discovery'' publication. 
+As \SW classifications are a community wide activity, it is impossible to attribute the discovery of a candidate to a single community member, or group  of members. Therefore, in recognition of their contribution to the \SW project, \SW community members will be listed (on their approval) on the \SW members web page. This web page will be linked in every ensuing \SW publication. If a community member makes a significant contribution e.g.\ in the further investigation of a lens candidate with modelling tools, they are strongly encouraged to write Zooniverse \Letters. This may lead to them being invited to join journal publications by the lead author of a ``discovery'' publication. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

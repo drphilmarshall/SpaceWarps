@@ -332,36 +332,41 @@ provide for the volunteers in the next section. The FITS images of the subject c
 \subsection{Training}
 \label{sec:design:training}
 
-Gravitational lenses are unfamiliar objects to volunteers who are new
-to the site. New volunteers need to learn what lenses look like as quickly as
-possible, so that they can contribute informative classifications. They also
-need to learn what lenses do not look like, in order to reduce the false
-positive detection rate. There are three primary mechanisms in the \sw system
-for teaching the volunteers what to look for. These are, in the order in which
-they are encountered, an inline tutorial, instant feedback,
-and a ``Spotter's Guide.'' As well as this, we provide ``About'', ``FAQ'' and ``Science'' pages explaining the physics of gravitational lensing. While we expect that the insight from this static material should help volunteers make sense of the features in the images, we focus on the more dynamic, activity-based training early, when engaging new volunteers to participate takes priority.
+Gravitational lenses are largely unfamiliar objects to the general public. 
+New volunteers need to learn what lenses look like as quickly as possible, so
+that they can contribute informative classifications. They also need to learn
+what lenses do not look like, in order to reduce the false positive detection
+rate. There are three primary mechanisms in the \sw system for teaching the
+volunteers what to look for. These are, in the order in which they are
+encountered, an inline tutorial, instant feedback on ``training images''
+inserted into the stream of images presented to them, and a ``Spotter's
+Guide.'' As well as this, we provide ``About'', ``FAQ'' and ``Science'' pages
+explaining the physics of gravitational lensing. While we expect that the
+insight from this static material should help volunteers make sense of the
+features in the images, we focus on the more dynamic, activity-based training
+early, when engaging new volunteers to participate takes priority.
 
 \subsubsection{Inline Tutorial}
 
 New volunteers are welcomed to the site with a very short tutorial, in which
 the task is introduced, a typical image containing a simulated lens is
 displayed, and the marking procedure walked through, using pop-up message
-boxes. Subsequent images gradually introduce the more advanced
-features of the classification interface (the QD and Talk buttons), also using
-pop-up messages. The tutorial was purposely kept as short as possible so as to
+boxes. Subsequent images gradually introduce the more advanced features of the
+classification interface (the QD and Talk buttons), also using pop-up
+messages. The tutorial was purposely kept as short as possible so as to
 provide the minimal barrier to entry.
 
 \subsubsection{Training Subjects and Instant Feedback}
 
 The second image viewed after the initial tutorial image is already a survey
 image, in order to get the volunteers engaged in the real task as quickly as
-possible. Training continues beyond the first image tutorial through
-``training subjects'' inserted randomly into the stream.  These training
-subjects are either simulated lenses (known as ``sims''), or survey images
-that were expert-classified and found not to contain any
-lens candidates (these images are known as ``duds''). The tutorial explains
-that the volunteers  will be shown such training images. They are also
-informed that they will receive instant feedback about their performance after
+possible. However, training then continues, beyond the first image tutorial,
+through ``training subjects'' inserted randomly into the stream.  These
+training subjects are either simulated lenses (known as ``sims''), or survey
+images that were expert-classified and found not to contain any lens
+candidates (these images are known as ``duds''). The tutorial explains that
+the volunteers  will be shown such training images. They are also informed
+that they will receive instant feedback about their performance after
 classifying (blind) any of these training subjects. Indeed, after a volunteer
 finishes marking a training subject and hits ``Finished marking,'' a pop-up
 message is generated, containing either positive feedback for a successful
@@ -369,7 +374,53 @@ classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'').
 
-\todo{PJM}{Insert simulations paragraph here. General description of sim generation. Principles: use real images, draw from realistic populations, strike balance between easy to see (for education) and realistically difficult (to push sensitivity). \#106}.
+\new{Because we include a training set of images in amongst the survey ``test''
+images in this way, \sw can be viewed as a {\it supervised learning} system. 
+Consequently, we should expect to find lens candidates that look like the sims
+that we put in the training set, and so the design of this training set is
+quite important. The training images must look realistic, in two ways. First,
+apart from the simulated lenses they contain, they must look like all the
+other survey images -- otherwise they could be identified as training images
+without the volunteer learning anything about what lenses look like. For this
+reason, we make the sims by {\it adding in} simulated lensed features to real
+images drawn from the survey. It also means that each dataset presented for
+inspection in the \sw interface needs to come with its own training set.}
+
+\new{Second, the lensed features themselves must be realistic; if they did not
+resemble real lenses, we could not expect to find real lenses in the test
+images. The details of how we generated the sims for the CFHTLS project are
+given in \PaperTwo, where we also carry out performance tests relative to real
+lens candidates in the survey fields. Here, we merely note the following
+aspects to place this paper's results in context.}
+
+\new{We start by selecting massive galaxies and groups in the CFHTLS catalogs,
+by color, brightness and photometric redshift. We then assign plausible mass
+distributions to these ``potential lenses:'' a singular isothermal ellipsoid
+model for each massive galaxy, and an additional NFW profile dark matter halo
+for groups and clusters. The mass distributions are centred, elongated and
+aligned with the measured optical properties of the galaxies present. We then
+draw a source from a plausible background population, of either galaxies (for
+the group or galaxy lenses) or quasars (for the galaxy-scale lenses). The
+source redshift, luminosity and size distributions are all chosen to match
+those observed, while the source abundance is artificially increased such that
+each potential lens has a high probability of having a source occur at a
+position that will lead to it being  highly magnified. Source galaxies are
+given plausible surface brightness profiles and ellipticities. We then compute
+the predicted multiple images of the source using the \gravlens ray-tracing
+code \citep{Keeton2000}.}
+
+\new{At this point, the distribution of lens and source properties are quite
+realistic. At this point, we chose to make several cuts, to reject sims that
+were likely to be difficult to spot. While this ensured the educational value
+of the sims when giving feedback, it meant that we should only {\it expect} to
+detect real lens candidates that also pass these cuts. Any real lenses
+candidates we find with properties outside the ranges of the sims may in some
+sense be considered bonuses, a product of the {\it imagination} of the crowd
+in extrapolating their understanding of gravitational lenses into a regime
+where they have not seen any before. In the CFHTLS project, the most important
+selection cuts were to only keep sims with a)  second brightest image brighter
+that $i = 23$ and b) magnification greater than 20 (\PaperTwo, Table 1).}
+
 
 When a volunteer begins classifying, they are initially shown training images at
 a frequency of two in five; these subjects are drawn at random from a pool

@@ -611,29 +611,83 @@ images for similar features.
 \label{sec:data:display}
 
 The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
-quality, and we chose to focus on this set (although the $u$ and $z$-band images
-were also available for perusal in Talk). We made colour composite PNG format
-images\footnote{The open source colour image composition code used in this work
-is available from \texttt{http://github.com/drphilmarshall/HumVI}} following the
-prescription of \citet{LuptonEtal2004} \citep[with extensions
-by]{WherryEtal2004}. Specifically, we first rescaled the pixel values of each
-channel image into flux units, and then applied an arcsinh stretch. The stretch
-parameters were optimized by visually inspecting a small randomly-selected
-sample of images, to ensure that the background noise was just visible,  and
-that the centres of bright, intermediate redshift galaxies were not saturated.
-The color scales were chosen to maximize the contrast between faint extended
-objects. These parameters were then fixed during the production of all the
-tiles, in order to allow straightforward comparison between one image and
-another, and for intuition to be built up about the appearance of stars and
-galaxies across the survey. Alternative algorithms, such as adjusting the
-stretch and scale dynamically according to, for example, the root-mean-square
-pixel value in each image, can lead to better presentation of bright objects,
-but in doing so they tend to hide the faint features in those images: we needed
-to optimize the detectability of these faint features.   Examples of CFHTLS
-training set images prepared in this way can be seen in the galleries of the
-previous section (Figures~\ref{fig:training-gallery:sims}
-and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of visualization parameters, to display a ``bluer'' image and a ``brighter'' image in the classification interface Quick Dashboard (\Sref{sec:design:interface}). The QD code performs the same image composition as just described, but dynamically on FITS images in the browser. These FITS images are also available for viewing in Talk, via the main Zooniverse Dashboard image display tool, which again offers the same stretch settings, as a starting point for image exploration.
+quality, and we chose to focus on this set (although the $u$ and $z$-band
+images were also available for perusal in Talk). \new{We made colour composite PNG
+format images
+following the prescription of \citet{LuptonEtal2004} \citep[with extensions
+by][and some particular choices of our own]{WherryEtal2004}, using the \humvi
+software.\footnote{The \humvi colour image composition code used in
+this work is open source and available from \texttt{http://github.com/drphilmarshall/HumVI}} Specifically, we
+first rescaled the pixel values of each image, in the notation of
+\citeauthor{LuptonEtal2004}) into flux units (``picomaggies,''), via the image
+AB zeropoint $m_0$ and the pixel value calibration factor $f$  given by
+$\log_{10}{f} = 0.4(30.0 - m_0)$. We then applied further aesthetic
+``scales'' $s_{i,r,g}$ before computing the intensity image $I$ and applying
+an arcsinh stretch. (The scales are re-normalized to sum to one.) Thus, the red
+($R$), green ($G$) and blue ($B$) channel images correspond to the CFHTLS $i$,
+$r$ and $g$-band images in the following way:
+\bea
+I & = & (i \cdot s_i + r \cdot s_r + g \cdot s_g), \notag \\
+R & = & i \cdot s_i \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}, \notag \\
+G & = & r \cdot s_r \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}, \notag \\
+B & = & g \cdot s_g \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}. \notag \\
+\eea
+We chose to allow the composite image formed from these channel images to
+saturate to white: any pixels in any of the channel images lying outside the
+range 0 to 1 was assigned the value 0 or 1 appropriately. This was not the
+recommendation of \citet{LuptonEtal2004}, but we found it to give very
+informative but also familiar-looking astronomical images.} 
 
+\new{The non-linearity parameters $Q$ and $\alpha$ control the brightness and
+contrast of the images. We first tuned $\alpha$ (which acts as an additional
+scale factor) until the background noise was just visible. Then we tuned the
+colour scales $s$ to find a balance between exposing the low surface
+brightness blue features (important for lens spotting!), and having the noise
+appear to have equal red, green and blue components. Non-linearity sets in at
+about $1/(Q \alpha)$ in the  scaled intensity image: finally, tuning $Q$ at
+fixed $\alpha$ determines the appearance of bright galaxies, which we need to
+be suppressed enough to allow the low surface brightness features to show
+through, but not so much that they no longer looked like massive galaxies.}
+
+These parameters were then fixed during the production of all the tiles, in
+order to allow straightforward comparison between one image and another, and
+for intuition to be built up about the appearance of stars and galaxies across
+the survey. Alternative algorithms, such as adjusting the stretch and scale
+dynamically according to, for example, the root-mean-square pixel value in
+each image, can lead to better presentation of bright objects, but in doing so
+they tend to hide the faint features in those images: we needed to optimize
+the detectability of these faint features.   Examples of CFHTLS training set
+images prepared in this way can be seen in the galleries of the previous
+section (Figures~\ref{fig:training-gallery:sims}
+and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of
+visualization parameters, to display a ``bluer'' image and a ``brighter''
+image in the classification interface Quick Dashboard
+(\Sref{sec:design:interface}). The QD code performs the same image composition
+as just described, but dynamically on FITS images in the browser. These FITS
+images are also available for viewing in Talk, via the main Zooniverse
+Dashboard image display tool, which again offers the same stretch settings, as
+a starting point for image exploration. Our parameter choices are given in
+\Tref{tab:data:humvi}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+\begin{center}
+\caption{Example \humvi image display parameters, for the CFHTLS images.}
+\label{tab:data:humvi}
+\begin{tabular}{cccc}
+  \hline
+  \hline {Image} & Scales ${s_i,s_r,s_g}$ & $\alpha$ & $Q$ \\                         
+  \hline
+    ``Standard'' &    ${0.4,0.6,1.7}$     &   0.09   & 1.0 \\
+    ``Brighter'' &    ${0.4,0.6,1.7}$     &   0.17   & 1.0 \\
+       ``Bluer'' &    ${0.4,0.6,2.5}$     &   0.11   & 2.0 \\
+  \hline \hline
+\end{tabular}
+\medskip\\
+\end{center}
+\end{table}
+% Quck Dashboard code: https://github.com/zooniverse/Lens-Zoo/blob/vics82/app/controllers/quick_dashboard.coffee
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

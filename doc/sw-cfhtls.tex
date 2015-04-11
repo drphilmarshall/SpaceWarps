@@ -503,10 +503,9 @@ to find in \cfhtls) in order to have a reasonably large and diverse
 training sample for thousands of \sw volunteers. Therefore, we
 artificially boost the average number of sources by a factor (see
 Table~\ref{tab:thresh}, which increases the occurrence of lensing. We
-draw a Poisson deviate with a mean equal to the boosted average number
-of sources. If the Poisson deviate is greater than zero, then 
-this galaxy is flagged as a potential lensing galaxy with
-Nsrc number of background sources. {\bf XXXX check if this is correct.}
+draw a Poisson deviate, $N_{\rm src}$ with a mean equal to the boosted
+average number of sources. If $N_{\rm src}$ is greater than zero, then
+this galaxy is flagged as a potential lensing galaxy.
 
 Next, we determine properties of the background sources for every lens.
 We follow similar procedures for both background galaxies and quasars.

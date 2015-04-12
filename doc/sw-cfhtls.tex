@@ -502,7 +502,7 @@ simulated lenses (larger than the number of real galaxy lenses we expect
 to find in \cfhtls) in order to have a reasonably large and diverse
 training sample for thousands of \sw volunteers. Therefore, we
 artificially boost the average number of sources by a factor (see
-Table~\ref{tab:thresh}, which increases the occurrence of lensing. We
+Table~\ref{tab:thresh}), which increases the occurrence of lensing. We
 draw a Poisson deviate, $N_{\rm src}$ with a mean equal to the boosted
 average number of sources. If $N_{\rm src}$ is greater than zero, then
 this galaxy is flagged as a potential lensing galaxy.
@@ -639,7 +639,7 @@ of these potential lensing groups. The complexity in the lens models makes it
 analytically intractable to calculate the size of the caustics\footnote{The lens
 mass distribution determines size and shape of the caustics. Any source
 located within the caustics will form multiple lensed images which is the
-criteria for strong lensing. To further understand caustics, see XXX.}.
+criteria for strong lensing. To further understand caustics, see e.g., \citet{Schneider1992}.}.
 Therefore, we generate the caustics numerically using \gravlens and then
 determine the area covered by the caustics. We consider only galaxies as our
 background source population since group or cluster-scale quasar lenses are
@@ -653,7 +653,7 @@ respective distributions (see Eqs.~\ref{eqn:ps}-\ref{eqn:ns}).
 All those groups that are found to have no background galaxies within the
 cross-sectional area are rejected and the rest are included as potential lenses.
 As mentioned earlier, we artificially boost the total number of sources behind
-every lens but ensure that (check XXX) the statistical properties such as the profile of the
+every lens but ensure that the statistical properties such as the profile of the
 image separation distribution are not affected (see \Fref{fig:remudist}). We
 follow the same procedure and apply thresholds to determine properties
 of the lensed galaxies for every lens as are described for galaxy-galaxy lenses
@@ -865,7 +865,7 @@ averaged grades as described in the next section.
 \label{sec:swlens}
 
 In this section, we describe the \sw-\cfhtls lens sample (henceforth,
-called the \sw lens sample). We find a total of  (and XXX new)
+called the \sw lens sample). We find a total of XXX (and XXX new)
 candidates with averaged grade $0<$G$<1.3$ (low probability sample)
 which means - in the worst case, at least one of the inspector thought
 the candidate is possibly a lens and in the best case, all three
@@ -918,7 +918,6 @@ known sample and thus, the new sample which combined with expert grading
 allows us to achieve further purity of our sample.
 
 %{\bf AM: give some numbers for the completeness/purity ? I will check what grades we gave to the stage 2 detected KLs and comment on it.}
-
 
 \begin{table}
 \begin{center}
@@ -1311,7 +1310,8 @@ excluding these galaxies from the inital catalog.
 Candidate detections by the \rf, \sw and the \af as a
 function of the Einstein radius and $g$ band magnitude of the lensed
 images.
-%(XXXX check how different are the estimates from the different measurement techniques for a given lens candidates.)
+%{\bf check how different are the estimates from the different
+%measurement techniques for a given lens candidates.}
 }
 \end{center}
 \end{figure*}

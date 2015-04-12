@@ -1385,7 +1385,6 @@ galaxy within typical radius in order to reduce the false positives.
 
 \subsection{False negatives: known lenses missed by \sw}
 \label{sec:fn}
-%{\bf: test the delta logP cut on the FPs to see if there's any increase in FP rate}
 Like any lens finding method, the \sw system can fail to detect certain
 kinds of lenses.  We find that about 40\% of the known sample of lenses
 are missed both at \StageOne and II (see \Tref{tab:stats}). In fact, most
@@ -1530,10 +1529,12 @@ have enough classifications from volunteers producing large positive
 kicks. Thus, it may be possible to detect more promising candidates if
 we preferentially show the rejected systems to a few high power
 volunteers. We understand that changing the rejection and acceptance
-thresholds will likely increase the rate of FPs along with
-improved completeness but most probably the increase in FPs will not be
-too significant and that it will still be worth using the new strategy.
-
+thresholds will likely increase the rate of FPs along with improved
+completeness. After testing on a subsample of both \StageOne and
+\StageOne FPs, we find that a small fraction of FPs are rejected when
+only classifications with $\Delta$ log(P)$>1.2$ only are considered.
+Therefore, we think it is worth adopting the new strategy in the future
+runs of SWAP in future lens searches.
 
 \begin{figure*}
 \begin{center}
@@ -1856,7 +1857,7 @@ quantities indicate the ability of the volunteers but do not have a simple
 linear relation with $P_{\rm L}$ and $P_{\rm D}$.  
 \question{AM}{PJM, should we just use power everywhere instead of the
 $\Delta\log(P)$? This figure and this section still needs to be
-polished.}
+polished. }
 }
 \end{center}
 \end{figure*}

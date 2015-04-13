@@ -1638,8 +1638,8 @@ the training set of subjects.
 How should we model these compressed data? The circumstances of each
 classification are quite complex, as are the human classifiers in general: the
 volunteers learn more about the problem as they go, but also inevitably make
-occasional mistakes (perhaps because a lens is difficult to see, or they
-became distracted during the task). To cope with this uncertainty, we assign a
+occasional mistakes (especially when classifying at high speed).
+To cope with this uncertainty, we assign a
 simple software {\it agent} to partner each volunteer. The agent's task is to
 interpret their volunteer's classification data as best it can, using a model
 that makes a number of necessary approximations. These interpretations will
@@ -1760,7 +1760,8 @@ confusion matrix, their agent would calculate
            {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
    &= 1.0.
 \end{align}
-{\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones.
+{\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones, because
+the agents know to trust the opposite of their classifications.
 
 
 \subsection{Online SWAP: Updating the Subject Probabilities}

@@ -309,22 +309,28 @@ classification database, in an entry that also stores the ID of the subject, the
 username (or IP address) of the volunteer, a timestamp and some other metadata.
 
 For the more interesting subjects, the CI offers two features that  enable
-further investigation of the subjects. The first is the ``Quick Dashboard'' (QD)
-a more advanced image viewer. This allows the viewer to compare three different
-contrast and colour balance settings, to help bring out subtle features, and to
-pan and zoom in on interesting regions of the image to assess small features.
-Markers can be placed in the Quick Dashboard just the same as in the main CI
-image viewer. The second is a link to that subject's page in the project
-discussion forum, \texttt{http://talk.spacewarps.org} (known as ``Talk''). Here,
-volunteers can discuss the features they have seen either before they submit
-their classification, or after, if they ``favorite'' the subject. There is no
-``back'' button: each volunteer may only classify a given subject once. However,
-the presence of an option to see what others think about any given subject
-before submitting your own classification means that the classifications may not
-be strictly independent; the advantage of this system is that volunteers can
-learn from others what constitutes a good lens candidate. This is not, however,
-the primary educational resource; we describe the explicit training that we
-provide for the volunteers in the next section. The FITS images of the subject can be further explored with Zooniverse ``Dashboard Tools,'' using a more powerful image viewer that enables dynamic variation of the colour balance and contrast (stretch), and for any given view to be shared via unique URL back to Talk.
+further investigation of the subjects. The first is the ``Quick Dashboard''
+(QD) a more advanced image viewer. This allows the viewer to compare three
+different contrast and colour balance settings, to help bring out subtle
+features, and to pan and zoom in on interesting regions of the image to assess
+small features. Markers can be placed in the Quick Dashboard just the same as
+in the main CI image viewer. The second is a link to that subject's page in
+the project discussion forum, \texttt{http://talk.spacewarps.org} (known as
+``Talk''). Here, volunteers can discuss the features they have seen either
+before they submit their classification, or after, if they ``favorite'' the
+subject. There is no ``back'' button: each volunteer may only classify a given
+subject once. However, the presence of an option to see what others think
+about any given subject before submitting your own classification means that
+the classifications may not be strictly independent; the advantage of this
+system is that volunteers can learn from others what constitutes a good lens
+candidate. This is not, however, the primary educational resource; we describe
+the explicit training that we provide for the volunteers in the next section.
+The FITS images of the subject can be further explored with Zooniverse
+``Dashboard Tools,'' using a more powerful image viewer that enables dynamic
+variation of the colour balance and contrast (stretch), and for any given view
+to be shared via unique URL back to Talk. The FITS image viewing in both the
+Quick Dashboard and the Dashboard Tools are enabled by the javascript library
+\fitsjs \citep{fitsjs}.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -332,36 +338,42 @@ provide for the volunteers in the next section. The FITS images of the subject c
 \subsection{Training}
 \label{sec:design:training}
 
-Gravitational lenses are unfamiliar objects to volunteers who are new
-to the site. New volunteers need to learn what lenses look like as quickly as
-possible, so that they can contribute informative classifications. They also
-need to learn what lenses do not look like, in order to reduce the false
-positive detection rate. There are three primary mechanisms in the \SW system
-for teaching the volunteers what to look for. These are, in the order in which
-they are encountered, an inline tutorial, instant feedback,
-and a ``Spotter's Guide.'' As well as this, we provide ``About'', ``FAQ'' and ``Science'' pages explaining the physics of gravitational lensing. While we expect that the insight from this static material should help volunteers make sense of the features in the images, we focus on the more dynamic, activity-based training early, when engaging new volunteers to participate takes priority.
+Gravitational lenses are largely unfamiliar objects to the general public.
+New volunteers need to learn what lenses look like as quickly as possible, so
+that they can contribute informative classifications. They also need to learn
+what lenses do not look like, in order to reduce the false positive detection
+rate. There are three primary mechanisms in the \sw system for teaching the
+volunteers what to look for. These are, in the order in which they are
+encountered, an inline tutorial, instant feedback on ``training images''
+inserted into the stream of images presented to them, and a ``Spotter's
+Guide.'' As well as this, we provide ``About'', ``FAQ'' and ``Science'' pages
+explaining the physics of gravitational lensing. While we expect that the
+insight from this static material should help volunteers make sense of the
+features in the images, we focus on the more dynamic, activity-based training
+early, when engaging new volunteers to participate takes priority.
+
 
 \subsubsection{Inline Tutorial}
 
 New volunteers are welcomed to the site with a very short tutorial, in which
 the task is introduced, a typical image containing a simulated lens is
 displayed, and the marking procedure walked through, using pop-up message
-boxes. Subsequent images gradually introduce the more advanced
-features of the classification interface (the QD and Talk buttons), also using
-pop-up messages. The tutorial was purposely kept as short as possible so as to
+boxes. Subsequent images gradually introduce the more advanced features of the
+classification interface (the QD and Talk buttons), also using pop-up
+messages. The tutorial was purposely kept as short as possible so as to
 provide the minimal barrier to entry.
 
 \subsubsection{Training Subjects and Instant Feedback}
 
 The second image viewed after the initial tutorial image is already a survey
 image, in order to get the volunteers engaged in the real task as quickly as
-possible. Training continues beyond the first image tutorial through
-``training subjects'' inserted randomly into the stream.  These training
-subjects are either simulated lenses (known as ``sims''), or survey images
-that were expert-classified and found not to contain any
-lens candidates (these images are known as ``duds''). The tutorial explains
-that the volunteers  will be shown such training images. They are also
-informed that they will receive instant feedback about their performance after
+possible. However, training then continues, beyond the first image tutorial,
+through ``training subjects'' inserted randomly into the stream.  These
+training subjects are either simulated lenses (known as ``sims''), or survey
+images that were expert-classified and found not to contain any lens
+candidates (these images are known as ``duds''). The tutorial explains that
+the volunteers  will be shown such training images. They are also informed
+that they will receive instant feedback about their performance after
 classifying (blind) any of these training subjects. Indeed, after a volunteer
 finishes marking a training subject and hits ``Finished marking,'' a pop-up
 message is generated, containing either positive feedback for a successful
@@ -369,7 +381,53 @@ classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'').
 
-\todo{PJM}{Insert simulations paragraph here. General description of sim generation. Principles: use real images, draw from realistic populations, strike balance between easy to see (for education) and realistically difficult (to push sensitivity). \#106}.
+\new{Because we include a training set of images in amongst the survey ``test''
+images in this way, \sw can be viewed as a {\it supervised learning} system.
+Consequently, we should expect to find lens candidates that look like the sims
+that we put in the training set, and so the design of this training set is
+quite important. The training images must look realistic, in two ways. First,
+apart from the simulated lenses they contain, they must look like all the
+other survey images -- otherwise they could be identified as training images
+without the volunteer learning anything about what lenses look like. For this
+reason, we make the sims by {\it adding in} simulated lensed features to real
+images drawn from the survey. It also means that each dataset presented for
+inspection in the \sw interface needs to come with its own training set.}
+
+\new{Second, the lensed features themselves must be realistic; if they did not
+resemble real lenses, we could not expect to find real lenses in the test
+images. The details of how we generated the sims for the CFHTLS project are
+given in \PaperTwo, where we also carry out performance tests relative to real
+lens candidates in the survey fields. Here, we merely note the following
+aspects to place this paper's results in context.}
+
+\new{We start by selecting massive galaxies and groups in the CFHTLS catalogs,
+by color, brightness and photometric redshift. We then assign plausible mass
+distributions to these ``potential lenses:'' a singular isothermal ellipsoid
+model for each massive galaxy, and an additional NFW profile dark matter halo
+for groups and clusters. The mass distributions are centred, elongated and
+aligned with the measured optical properties of the galaxies present. We then
+draw a source from a plausible background population, of either galaxies (for
+the group or galaxy lenses) or quasars (for the galaxy-scale lenses). The
+source redshift, luminosity and size distributions are all chosen to match
+those observed, while the source abundance is artificially increased such that
+each potential lens has a high probability of having a source occur at a
+position that will lead to it being  highly magnified. Source galaxies are
+given plausible surface brightness profiles and ellipticities. We then compute
+the predicted multiple images of the source using the \gravlens ray-tracing
+code \citep{Keeton2000}.}
+
+\new{At this point, the distribution of lens and source properties are quite
+realistic. At this point, we chose to make several cuts, to reject sims that
+were likely to be difficult to spot. While this ensured the educational value
+of the sims when giving feedback, it meant that we should only {\it expect} to
+detect real lens candidates that also pass these cuts. Any real lenses
+candidates we find with properties outside the ranges of the sims may in some
+sense be considered bonuses, a product of the {\it imagination} of the crowd
+in extrapolating their understanding of gravitational lenses into a regime
+where they have not seen any before. In the CFHTLS project, the most important
+selection cuts were to only keep sims with a)  second brightest image brighter
+that $i = 23$ and b) magnification greater than 20 (\PaperTwo, Table 1).}
+
 
 When a volunteer begins classifying, they are initially shown training images at
 a frequency of two in five; these subjects are drawn at random from a pool
@@ -560,29 +618,83 @@ images for similar features.
 \label{sec:data:display}
 
 The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
-quality, and we chose to focus on this set (although the $u$ and $z$-band images
-were also available for perusal in Talk). We made colour composite PNG format
-images\footnote{The open source colour image composition code used in this work
-is available from \texttt{http://github.com/drphilmarshall/HumVI}} following the
-prescription of \citet{LuptonEtal2004} \citep[with extensions
-by]{WherryEtal2004}. Specifically, we first rescaled the pixel values of each
-channel image into flux units, and then applied an arcsinh stretch. The stretch
-parameters were optimized by visually inspecting a small randomly-selected
-sample of images, to ensure that the background noise was just visible,  and
-that the centres of bright, intermediate redshift galaxies were not saturated.
-The color scales were chosen to maximize the contrast between faint extended
-objects. These parameters were then fixed during the production of all the
-tiles, in order to allow straightforward comparison between one image and
-another, and for intuition to be built up about the appearance of stars and
-galaxies across the survey. Alternative algorithms, such as adjusting the
-stretch and scale dynamically according to, for example, the root-mean-square
-pixel value in each image, can lead to better presentation of bright objects,
-but in doing so they tend to hide the faint features in those images: we needed
-to optimize the detectability of these faint features.   Examples of CFHTLS
-training set images prepared in this way can be seen in the galleries of the
-previous section (Figures~\ref{fig:training-gallery:sims}
-and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of visualization parameters, to display a ``bluer'' image and a ``brighter'' image in the classification interface Quick Dashboard (\Sref{sec:design:interface}). The QD code performs the same image composition as just described, but dynamically on FITS images in the browser. These FITS images are also available for viewing in Talk, via the main Zooniverse Dashboard image display tool, which again offers the same stretch settings, as a starting point for image exploration.
+quality, and we chose to focus on this set (although the $u$ and $z$-band
+images were also available for perusal in Talk). \new{We made colour composite PNG
+format images
+following the prescription of \citet{LuptonEtal2004} \citep[with extensions
+by][and some particular choices of our own]{WherryEtal2004}, using the \humvi
+software.\footnote{The \humvi colour image composition code used in
+this work is open source and available from \texttt{http://github.com/drphilmarshall/HumVI}} Specifically, we
+first rescaled the pixel values of each image, in the notation of
+\citeauthor{LuptonEtal2004}) into flux units (``picomaggies,''), via the image
+AB zeropoint $m_0$ and the pixel value calibration factor $f$  given by
+$\log_{10}{f} = 0.4(30.0 - m_0)$. We then applied further aesthetic
+``scales'' $s_{i,r,g}$ before computing the intensity image $I$ and applying
+an arcsinh stretch. (The scales are re-normalized to sum to one.) Thus, the red
+($R$), green ($G$) and blue ($B$) channel images correspond to the CFHTLS $i$,
+$r$ and $g$-band images in the following way:
+\bea
+I & = & (i \cdot s_i + r \cdot s_r + g \cdot s_g), \notag \\
+R & = & i \cdot s_i \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}, \notag \\
+G & = & r \cdot s_r \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}, \notag \\
+B & = & g \cdot s_g \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}. \notag \\
+\eea
+We chose to allow the composite image formed from these channel images to
+saturate to white: any pixels in any of the channel images lying outside the
+range 0 to 1 was assigned the value 0 or 1 appropriately. This was not the
+recommendation of \citet{LuptonEtal2004}, but we found it to give very
+informative but also familiar-looking astronomical images.}
 
+\new{The non-linearity parameters $Q$ and $\alpha$ control the brightness and
+contrast of the images. We first tuned $\alpha$ (which acts as an additional
+scale factor) until the background noise was just visible. Then we tuned the
+colour scales $s$ to find a balance between exposing the low surface
+brightness blue features (important for lens spotting!), and having the noise
+appear to have equal red, green and blue components. Non-linearity sets in at
+about $1/(Q \alpha)$ in the  scaled intensity image: finally, tuning $Q$ at
+fixed $\alpha$ determines the appearance of bright galaxies, which we need to
+be suppressed enough to allow the low surface brightness features to show
+through, but not so much that they no longer looked like massive galaxies.}
+
+These parameters were then fixed during the production of all the tiles, in
+order to allow straightforward comparison between one image and another, and
+for intuition to be built up about the appearance of stars and galaxies across
+the survey. Alternative algorithms, such as adjusting the stretch and scale
+dynamically according to, for example, the root-mean-square pixel value in
+each image, can lead to better presentation of bright objects, but in doing so
+they tend to hide the faint features in those images: we needed to optimize
+the detectability of these faint features.   Examples of CFHTLS training set
+images prepared in this way can be seen in the galleries of the previous
+section (Figures~\ref{fig:training-gallery:sims}
+and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of
+visualization parameters, to display a ``bluer'' image and a ``brighter''
+image in the classification interface Quick Dashboard
+(\Sref{sec:design:interface}). The QD code performs the same image composition
+as just described, but dynamically on FITS images in the browser. These FITS
+images are also available for viewing in Talk, via the main Zooniverse
+Dashboard image display tool, which again offers the same stretch settings, as
+a starting point for image exploration. Our parameter choices are given in
+\Tref{tab:data:humvi}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{table}
+\begin{center}
+\caption{Example \humvi image display parameters, for the CFHTLS images.}
+\label{tab:data:humvi}
+\begin{tabular}{cccc}
+  \hline
+  \hline {Image} & Scales ${s_i,s_r,s_g}$ & $\alpha$ & $Q$ \\
+  \hline
+    ``Standard'' &    ${0.4,0.6,1.7}$     &   0.09   & 1.0 \\
+    ``Brighter'' &    ${0.4,0.6,1.7}$     &   0.17   & 1.0 \\
+       ``Bluer'' &    ${0.4,0.6,2.5}$     &   0.11   & 2.0 \\
+  \hline \hline
+\end{tabular}
+\medskip\\
+\end{center}
+\end{table}
+% Quck Dashboard code: https://github.com/zooniverse/Lens-Zoo/blob/vics82/app/controllers/quick_dashboard.coffee
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -737,23 +849,21 @@ classified for one week, with no retirement but a maximum classification
 number of 50 each. The number of subjects at \StageTwo was small enough that we
 did not need to retire any: instead, we simply collected classifications for a
 fixed period of time (about 4 weeks). Without the time pressure motivating the
-online analysis, we implemented an ``offline'' version of the analysis that
-performs a joint inference of all agent confusion matrix elements and subject
 probabilities simultaneously, for comparison. We describe how this differs
 from the online analysis in the appendix.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% PJM IS HERE.
-
 \section{Results}
 \label{sec:results}
 
-In this section we present our findings about the performance of the \SW
-system, in terms of the information  contributed by the crowd in
-\Sref{sec:results:crowd}, and the overall classifications of the training set
-that they made.
+In this section we present our findings about the performance of the \SW system,
+in terms of the information  contributed by the crowd in
+\Sref{sec:results:crowd}, the speed of the system, and the overall
+classifications of the training set that they made.
+
+% PJM IS HERE.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -764,66 +874,78 @@ that they made.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/all_skill_contribution_experience_education.png}
-\caption{Key properties and contributions of the \SW crowd. Plotted are the
-1-D and 2-D marginalized distributions for the logarithms of the
-properties of the agents described in the text. The \StageOne agents are shown
-in blue, the \StageTwo agents in orange.}
+\caption{Key properties and contributions of the \SW crowd. Plotted are the 1-D
+and 2-D smoothed marginalized distributions for  the logarithms of the
+properties of the agents described in the text. The  \StageOne agents are shown
+in blue, the \StageTwo agents in orange: the  smoothing scale for the \StageTwo
+curves was set slightly higher to counter the  higher shot noise. The contours
+contain 68\%, 95\% and 99\% of the distributions.}
 \label{fig:crowd:cornerplot}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 We define the following properties of the crowd, as characterised by their
-agents, and plot the distributions of their logarithms in
+agents, and plot their distributions in
 \Fref{fig:crowd:cornerplot}.
 %
 \begin{description}
 %
-\item{\noindent\bf ``Effort:''} The number of test images, $\effort$, classified by a
-volunteer. In \StageOne, the mean effort per agent was 263; in the shorter \StageTwo it was 81.
+\item{\noindent\bf ``Effort:''} The number of test images, $\effort$, classified
+by a volunteer. In \StageOne, the mean effort per agent was 263; in the shorter
+\StageTwo it was 81.
 %
 \item{\noindent\bf ``Experience:''} The number of training images, $\experience$,
 classified by a volunteer. In \StageOne, the mean experience per agent was 29;
-in \StageTwo (where the training image fequency was set higher) it was 34.
+in \StageTwo (where the training image frequency was set higher) it was 34.
 %
-\item{\noindent\bf ``Skill:''} The expectation value of the information gain,
-$\skill$
-should  the next subject classified have lens probability 0.5
-(\Aref{appendix:swap}),  in bits. Random classifiers have $\skill = 0.0$,
-perfect classifiers have $\skill = 1.0$. All agents start with $\skill = 0.0$;
-this increases as training subjects are classified, and the agent's estimates
-of its confusion matrix elements improve. In \StageOne, the mean skill per agent
-was 0.04 bits; in  \StageTwo it was 0.05.
+\item{\noindent\bf ``Skill:''} The expectation value of the information gained
+per classification (in bits) by that volunteer,  $\skill$ for subjects which
+have lens probability 0.5 (\Aref{appendix:swap}). Random classifiers have
+$\skill = 0.0$, while perfect classifiers have $\skill = 1.0$. All agents start
+with $\skill = 0.0$. The skill of  an agent increases as training subjects are
+classified, and the agent's estimates of its confusion matrix elements improve.
+In \StageOne, the mean skill per agent was 0.04 bits; in  \StageTwo it was 0.05.
 %
-\item{\noindent\bf ``Contribution:''} The integrated skill over a volunteer's test
-subject classification history, and represents the total  contribution to the
-project that volunteer (see the appendix for more discussion of this
-quantity). In \StageOne, the mean contribution per agent was 34.9 bits; in
-\StageTwo it was 33.5.
+\item{\noindent\bf ``Contribution:''} The integrated skill over a volunteer's
+{\it test subject} classification history, a quantity representative of the
+total contribution to the project made by that volunteer (see the appendix for
+more discussion of this quantity). The classifications of training images
+determine the skill, while the classification of test images determines
+contribution.  In \StageOne, the mean  contribution per agent was
+34.9 bits; in \StageTwo it was 33.5.
 %
-\item{\noindent\bf ``Information:''} The total information $\information$ generated by
-the  agent during the volunteer's classification activity. This quantity
-depends on the value of each subject's lens probability when that subject was
-presented to the volunteer (\Aref{appendix:swap}), and so there is an element
-of luck involved with this quantity: if you never see a high probability
-subject, it's hard to generate a large amount of information. You make your
-own luck by classifying more subjects.
+\item{\noindent\bf ``Information:''} The actual total information $\information$
+generated by the agent during the volunteer's classification activity. This
+quantity depends on the value of each subject's lens probability when that
+subject was presented to the volunteer (simply because information gain is
+defined in terms of posterior relative to prior probabilities,
+\Aref{appendix:swap}).  Because of this, we expect this quantity to be noisier
+than the ``contribution'' defined above.
 %
 \end{description}
 
 The leftmost column of \Fref{fig:crowd:cornerplot} shows how the last four of
-these properties depends on the effort expended by the volunteers. We see that
-experience is strongly correlated with effort (as training images are
-presented throughout each stage, albeit at decreasing frequency), and that
-this is also true for skill. In the second row of \Fref{fig:crowd:cornerplot}
-we see that while skills of greater than 0.1 can be attained after just a few
-training images, most agents of such low experience have significantly lower
-skill. The volunteers in question only classify a few subjects before leaving.
-However, at high values of experience and effort, the skill is \emph{always
-high}. There seem to be very few agents logging large numbers of
-classifications at low skill (although there are one or two exceptions): almost
-all high effort ``super-users'' have high skill. These two properties are
-reflected in both the contributions these volunteers make (third row) and the
-information they generate (fourth row).
+these properties depends on the effort expended by the volunteers. As expected,
+we see that experience is tightly correlated with effort, reflecting the design
+of training images being presented throughout each stage (albeit at decreasing
+frequency). We also see a strong correlation between effort and skill, which was
+hoped for but not guaranteed: the more images the volunteers see, the better
+able to contribute information they are.
+
+The effort distribution shows two peaks, suggestive of two types of
+participation.  The sharp spike at just a few images classified presumably
+corresponds to visitors who only classify a few subjects before leaving the site
+again. The broader hump contains people doing tens to hundreds of
+classifications: the skill vs.\ experience panel of \Fref{fig:crowd:cornerplot}
+shows this group to achieve a broad distribution of  skill, peaking at around
+0.05 but with a long tail to higher values.
+
+At high values of experience and effort, the skill is \emph{always high}. There
+seem to be very few agents logging large numbers of classifications at low skill
+(although there are one or two exceptions): almost all high effort
+``super-users'' have high skill. These two properties are reflected in both the
+contributions these volunteers make (third row) and the information they
+generate (fourth row).
 
 The distributions for the \StageTwo agents (orange) are qualitatively similar to
 those for the \StageOne agents (blue). Differences are: 1) the maximum effort
@@ -836,11 +958,11 @@ had higher probability.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.png}
-\caption{Narrow cumulative distributions of the contributions made by the
-agents: for example, 90\% of the \StageTwo contributions were made by the
-highest contributing  7\% of the crowd. The \StageOne agents are shown in blue,
-the \StageTwo agents in orange. ``Experienced volunteers'' classified 10 or more
-training subjects.}
+\caption{Cumulative distributions of the contributions made by the agents: 90\%
+of the contribution was made by the highest contributing 1\% of the crowd at
+\StageOne (blue), and the highest contributing  7\% of the crowd at \StageTwo
+(orange). The \StageOne agents are shown in blue, the \StageTwo agents in
+orange. ``Experienced volunteers'' classified 10 or more training subjects.}
 \label{fig:crowd:cumulplot}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -855,20 +977,18 @@ contribution.  At \StageTwo, where it was not possible to make as
 many classifications before running out of subjects, 7.2\% of the volunteers
 -- 141 people -- made 90\% of the contribution.
 
-However, it is not the case that only these small groups were capable of
-making this large contribution.
-% : 9118 volunteers were ``experienced'' in that
-% they had all classified at least 10 training images; the 375 highest
-% contributing volunteers make up just 4\% of this experienced volunteer pool.
-The cumulative distribution of agent skill is shown in
-\Fref{fig:crowd:cumulskillplot}: these distributions are significantly broader
-than the corresponding distributions of agent contribution in
-\Fref{fig:crowd:cumulplot}. The most skilled 20\% of agents possess only  79\%
-of the skill at \StageOne, and 77\% at \StageTwo. The inexperienced volunteers
-also possess a significant fraction of the skill: the most skillful 20\% of
-experienced volunteers (1824 people)  possess just 43\% of the total skill.
-The level of contribution made at \SW by experienced volunteers is largely a
-matter of choice (or perhaps, availability of time!).
+However, it is not the case that only these small groups were {\it capable} of
+making large contributions. The cumulative distribution of agent skill is shown
+in \Fref{fig:crowd:cumulskillplot}: these distributions are significantly
+broader than the corresponding distributions of agent contribution, in
+\Fref{fig:crowd:cumulplot}. The most skilled 20\% of agents only possess around
+80\% of the skill at each stage. The inexperienced volunteers also possess a
+significant fraction of the skill: the most skillful 20\% of experienced
+volunteers (1824 people)  possess just 43\% of the total skill. The breadth of
+the skill distributions suggests that  the high level of contribution made at
+\SW by experienced volunteers is largely a matter of choice (or perhaps,
+availability of time!). There were many other volunteers that  were skillful
+enough to make large contributions -- they just didn't classify as many images.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -891,8 +1011,25 @@ classified 10 or more training subjects.}
 How fast does the \SW crowd classify subjects? Each agent records the timestamp
 of each classification its volunteer makes; by measuring the time lags between
 successive classifications we can make estimates of the crowd's classification
-and contribution speed. We plot these two quantities for both \StageOne and \StageTwo in \Fref{fig:results:speed}, normalizing the speed and time axes to the
-respective totals. The fractional classification rates in each stage of the survey fall off in approximately the same way, despite the factor of nearly 20 difference in crowd size. \StageOne (consisting of $\sim430,000$ subjects) was completed in around 5000 hours (by some 37,000 participants), with classification rates in the first few days averaging at $\sim10^4$ per hour, stimulated by various forms of advertising (press releases, and emails to registered Zooniverse users). The asymptotic classification rate was $\sim10^3$ per hour. The average skill was found to be approximately constant over the lifetime of \StageOne, leading to a contribution rate that tracks closely the classification rate. (A 10\% increase in average skill was seen over the first 40 days, and a decrease of the same amount in the last 40 days -- not enough to cause a significant difference between classification and contribution rate behavior, but perhaps reflecting a learning period at the start and a decrease in participation late on.) \StageTwo (3700 subjects) was completed in around 600 hours by around 2000 participants, with classification rates starting at $~\sim2000$ per hour and decaying to $\sim100$ per hour.
+and contribution speed. We plot these two quantities for both \StageOne and
+\StageTwo in \Fref{fig:results:speed}, normalizing the speed and time axes to
+the respective totals. The fractional classification rates in each stage of the
+survey fall off in approximately the same way, despite the factor of nearly 20
+difference in crowd size. \StageOne (consisting of $\sim430,000$ subjects) was
+completed in around 5000 hours (by some 37,000 participants), with
+classification rates in the first few days averaging at $\sim10^4$ per hour.
+This was stimulated by various forms of advertising (press releases, and emails
+to registered Zooniverse users). The asymptotic classification rate was  around
+ten times lower, at $\sim10^3$ per hour. Interestingly, the average skill was
+found to be approximately constant over the lifetime of \StageOne, leading to a
+contribution rate that tracks closely the classification rate. (A 10\% increase
+in average skill was seen over the first 40 days, and a decrease of the same
+amount in the last 40 days -- not enough to cause a significant difference
+between classification and contribution rate behavior, but perhaps reflecting a
+learning period at the start and a decrease in participation late on.) \StageTwo
+(3700 subjects) was completed in around 600 hours by around 2000 participants,
+with classification rates starting at $~\sim2000$ per hour and decaying to
+$\sim100$ per hour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -902,12 +1039,16 @@ respective totals. The fractional classification rates in each stage of the surv
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The similarities between \StageOne and 2, suggest that these numbers could be scaled to estimate the speed of future \SW projects (or at least those following a similar blind search strategy). For example, the completion time for a \SW project could be approximated as
+The similarities between \StageOne and 2, suggest that these numbers could be
+scaled to estimate the speed of future \SW projects (or at least those following
+a similar blind search strategy). For example, the completion time for a \SW
+project could be approximated as
 \begin{equation}
     \tau \approx 18\,{\rm days} \left(\frac{10^4}{N_p}\right)
                                \left(\frac{N_s}{10^4}\right),
 \end{equation}
-where $N_s$ is the number of subjects to be classified, and $N_p$ is the number of volunteers in the crowd.
+where $N_s$ is the number of subjects to be classified, and $N_p$ is the number
+of volunteers in the crowd.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -919,39 +1060,43 @@ the training set images. At \StageOne, this set contains around 5712 simulated
 lenses, and 450 duds; at \StageTwo, we used 152 simulated lenses and 201 duds.
 \Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
 curves for CFHTLS \StageOne and \StageTwo. These plots show the true positive
-rate (TPR), the number of sims correctly detected divided by the total number of
-sims in the training set, and the false positive rate (FPR), the number of duds
-incorrectly detected  divided by total number of duds in the training set, both
+rate (TPR, the number of sims correctly detected divided by the total number of
+sims in the training set), and the false positive rate (FPR, the number of duds
+incorrectly detected  divided by the total number of duds in the training set), both
 for a given sample of detections defined by a particular probability threshold,
 which varies along the curves.  In both stages, these curves show that true
 positive rates of  around 90\% were achieved, at very low false positive rates.
+
 For comparison we show the results of an analysis where the classifications of
-training images were ignored, and none of the agents allowed to learn: they were
-instead assigned initial values of their confusion matrices of 0.75 for each
-element, which then remained constant. This emulates a very simple unweighted
-voting scheme, where all classifications are treated equally. In this case, the
-TPR remains under 80\% in \StageOne and 60\% in \StageTwo, thus quantifying  the
-benefit of including training images and allowing the agents to learn. The
-choice of initial confusion matrix is not very important: the same 0.75 initial
-values applied to normal, learning agents results in a slightly lower TPR than
-the default case, indicating that initializing the system less conservatively
-results in slightly worse performance.
+training images were ignored, and none of the agents allowed to learn: the
+agents were instead simply assigned initial values of their confusion matrices
+of 0.75 for each element, which then remained constant. This set-up emulates a
+very simple unweighted voting scheme, where all classifications are treated
+equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
+\StageTwo, thus quantifying  the benefit of including training images and
+allowing the agents to learn via their Bayesian updates.
+
+When the agents are allowed to update their confusion matrices, the choice of
+initial confusion matrix is not very important. The same 0.75 initial values
+applied to normal, learning agents resulted in only a slightly lower TPR than
+the default case, nevertheless indicating that initializing the system less
+conservatively results in slightly worse performance.
 
 The dot-dashed curves show the impact of the offline analysis. At \StageOne the
 results are very similar to the online version that was actually run (solid
 line). However, at \StageTwo there is marginal evidence of there being greater
-benefit to doing the analysis offline. Over 85\% TPR is achieved at zero FPR
-in the offline analysis , while if one is willing to accept a false positive
-rate of 5\%, the true positive rate rises to over 95\%, showing that some of
-the sims that were missed in the online analysis may be being recovered by
-doing the analysis offline. The same is true at \StageOne, but to a lower
-degree. Assuming Poisson statistics for the fluctuations in the numbers of
-recovered lenses, the uncertainty in the measured \StageTwo TPR values is around
-8\%, but the online and offline samples are highly correlated, such that the
-uncertainty on the difference between the ROC curves is somewhat less than
-this. Still, a larger validation set is needed to test these algorithmic
-choices more rigorously. At \StageOne, high TPR can be measured to better than
-1\%.
+benefit to doing the analysis offline (\Sref{sec:swap}, \Aref{appendix:swap}).
+Over 85\% TPR is achieved at zero FPR in the offline analysis , while if one is
+willing to accept a false positive rate of 5\%, the true positive rate rises to
+over 95\%, showing that some of the sims that were missed in the online analysis
+may be being recovered by doing the analysis offline. The same is true at
+\StageOne, but to a lesser extent. Assuming Poisson statistics for the
+fluctuations in the numbers of recovered lenses, the uncertainty in the measured
+\StageTwo TPR values is around 8\%, but the online and offline samples are
+highly correlated, such that the uncertainty on the difference between the ROC
+curves is somewhat less than this. Still, a larger validation set is needed to
+test these algorithmic choices more rigorously. At \StageOne, high TPR can be
+measured to better than 1\%.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
@@ -962,14 +1107,20 @@ choices more rigorously. At \StageOne, high TPR can be measured to better than
   \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
 \end{minipage}
 \caption{Receiver operating characteristic curves for the \SW system, using
-the CFHTLS training set. Left: \StageOne, right: \StageTwo.}
+the CFHTLS training set. Left: \StageOne, right: \StageTwo. Insets show a
+magnified view of the top lefthand corner of each plot. Linestyles illustrate
+the agent properties (initial confusion matrix elements, learning or not)
+discussed in the text, as well as the difference between the online and offline
+analyses. The \StageTwo sample was defined using the online \StageOne results
+(solid blue curve), while the offline analysis was chosen for the final
+\StageTwo results (dot-dashed orange curve). }
 \label{fig:results:sample:roc}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Adopting the online \StageOne analysis, and the offline \StageTwo analysis, we
 show in \Fref{fig:results:sample:CP} a plot of the more familiar (to
-astronomers) quantities completeness versus purity in
+astronomers) quantities of completeness versus purity, again for
 the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
 varies along the curves. Completeness is defined as the number of correctly
 detected sims divided by the total number of sims in the training set, while
@@ -988,38 +1139,38 @@ expected number of true positives. The sum of the true positives and the false
 positives gives the expected sample size; dividing the expected number of true
 positives by this sample size gives the purity. Note that the completeness is
 invariant to this transformation.
-
 The \StageOne curves are truncated by the retirement of subjects in this phase,
 which sets the minimum size of this sample. We see from the solid blue curve
 that over 90\% completeness was reached, albeit in a sample with around 20\%
-purity. To investigate the completeness to the three different types of lens
-in the training set, we repeat the same procedure, only now we consider only
-the detections of a certain kind of lens and of the non-lenses in the training
-set. We estimate the expected number of lenses and non-lens false positives by
-dividing the lens and dud sets into equal fractions.
+purity.
 
-The lensed quasar part of the training set yielded the highest
-completeness, suggesting that these were the easiest sims to spot. The lensed
-galaxies were recovered at understandably lowest completeness, although the
-wider image separation  lensing clusters were not very different. At \StageTwo,
-where no retirement was carried out, it was possible to reach 100\% purity:
-indeed, the knee of the curve is at just under 90\% completeness. However, the
-purity decreases rapidly if higher completeness than this is sought.
-Interestingly, the lensing clusters can be seen to pose problems for the
-system, with its curve turning over at just 60\% completeness.
+Does this performance level vary between the different types of gravitational
+lens? To investigate the completeness to the three different types of lens in
+the training set, we repeated the same procedure but now considering only the
+detections of a certain kind of lens and of the non-lenses in the training set.
+We estimate the expected number of lenses and non-lens false positives by
+dividing the lens and dud sets into equal fractions. The lensed quasar part of
+the training set yielded the highest completeness, suggesting that these were
+the easiest sims to spot. The lensed galaxies were recovered at the lowest
+completeness, likely due to the difficulty  of separating the lens and source
+galaxy light.
 
-The optimal sample in this simulated lens search experiment would have been
+At \StageTwo, where no retirement was carried out, it was possible to reach
+100\% purity: the knee of the curve is at just under 90\% completeness. However,
+the purity decreases rapidly if higher completeness than this is sought. The
+optimal sample in this simulated lens search experiment would have been
 constructed with a threshold value of $\pr(\LENS|C,T) > 0.47$. At 100\% purity
-and 89\% completeness, it would have contained around 89 lens candidates.
+and 90\% completeness, it would have contained around 89 lens candidates.
+
 % TP + FN ~ 2e-4 * 430000 ~ 100 ~ TP/C ; so TP ~ 89 candidates
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}
-\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity.png}
-\caption{Completeness-estimated purity curves for the \SW system, using
+\begin{figure}
+\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity_simple.png}
+\caption{Completeness-estimated purity curves for the \sw system, using
 the CFHTLS training set.}
 \label{fig:results:sample:CP}
-\end{figure*}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 

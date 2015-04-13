@@ -62,7 +62,7 @@ by the volunteers in a second  refinement stage. Analyzing the classification
 of the training set, we predict that the first stage alone should yield a
 sample that is C\% complete, while leading to the rejection of R\% of the
 initial target sample. Having divided the 150 square degree CFHTLS imaging
-survey into 430000 overlapping 70 by 70 arcminute tiles and displayed them on
+survey into 430000 overlapping 84 by 84 arcminute tiles and displayed them on
 the site, we were joined by 33000 volunteers who contributed X million image
 classifications over the course of N months. The sample was reduced to 3500
 \StageOne candidates; these were then refined to yield a sample of 1400
@@ -103,7 +103,7 @@ background objects due to the deflection of light by  massive foreground
 objects -- is a very powerful astrophysical tool, enabling a wide range of
 science projects. The image separations and distortions provide information
 about the mass distribution in the lens \citep[e.g.][]{AugerEtal2010,
-SonnenfeldEtal2012,SonnenfeldEtal2013}, including on sub-galactic scales
+SonnenfeldEtal2012,MoreEtal2012,SonnenfeldEtal2013}, including on sub-galactic scales
 \citep[e.g.][]{Dalal+Kochanek2002,VegettiEtal2010,HezavehEtal2013}. Any strong
 lens can provide magnification of a factor of 10 or more, providing a deeper,
 higher resolution view of the distant universe through these ``cosmic
@@ -118,8 +118,8 @@ In the last decade the number of these rare cosmic alignments known
 has increased by an order of magnitude, thanks to searches carried out in
 wide field surveys, such as
 CLASS \citep[e.g.]{BrowneEtal2003}, SDSS \citep[e.g.][]
-{BoltonEtal2006,AugerEtal2010b,TreuEtal2011,InadaEtal2012}, CFHTLS
-\citep[e.g.][]{MoreEtal2012,GavazziEtal2014}, Herschel
+{BoltonEtal2006,AugerEtal2010b,TreuEtal2011,InadaEtal2012,SBAS,SGAS,CASSOWARY},
+CFHTLS \citep[e.g.][]{MoreEtal2012,GavazziEtal2014}, Herschel
 \citep[][]{NegrelloEtal2014} and SPT \citep[e.g.][]{VieiraEtal2013}, among
 others.  As the number of known lenses has increased, new types have been
 discovered, leading to entirely new investigations. Compound lenses
@@ -141,7 +141,7 @@ approach is to search images already of sufficiently high resolution and color
 contrast, and confirm the systems as gravitational lenses by modeling the
 survey data themselves \citep[][]{MarshallEtal2009}. Several square degrees of
 HST images have been searched, yielding several tens of galaxy-scale lenses
-\citep[e.g.][]{MoustakasEtal2007,FaureEtal2008,Jackson2008,MoreEtal2012,
+\citep[e.g.][]{MoustakasEtal2007,FaureEtal2008,Jackson2008,MoreEtal2011,
 PawaseEtal2014}. Similarly, searches of over a hundred square degrees of CFHT
 Legacy Survey (CFHTLS) ground-based imaging, also with sub-arcsecond image quality,
 have revealed a smaller number of wider image separation group-scale systems
@@ -163,13 +163,12 @@ e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}, with visual inspection
 by teams of humans still required to narrow down the robotically-generated
 samples. In this approach, the image data may or may not be explicitly modelled
 by the robots as if it contained a gravitational lens, but the visual inspection
-can be thought of as a ``mental modeling'' step. Systems classified by an
-inspector to be good lens candidates are deemed as such because the features in
-the image can be explained by a model of what gravitational lenses do contained
-in the inspector's brain. The second approach simply cuts out the robot
-middleman: \citet{MoustakasEtal2007,FaureEtal2008,Jackson2008} and
-\citet{PawaseEtal2014} all performed successful, entirely visual searches for
-lenses in HST imaging.
+can be thought of as a ``mental modeling'' step.  An inspector who classifies an
+object as a lens candidate does so because the features in the image that they
+see can be explained by a model, contained in their brain, of what gravitational
+lenses do.  The second approach simply cuts out the robot middleman:
+\citet{MoustakasEtal2007,FaureEtal2008,Jackson2008} and \citet{PawaseEtal2014}
+all performed successful visual searches for lenses in HST imaging.
 
 Visual image inspection thus seems, at present, unavoidable at some level when
 searching for gravitational lenses. The technique has some drawbacks, however.
@@ -181,7 +180,7 @@ classification interface, a human might be able to inspect images at a rate of
 one astronomical object per second (provided the majority are indeed
 uninteresting). At $10^4$ massive galaxies, and 10 lenses, per square degree,
 visual lens searches in good quality imaging data are limited to a few square
-degrees per inspector per day (and less, if mre time is spent assessing difficult systems).
+degrees per inspector per day (and less, if more time is spent assessing difficult systems).
 Scaling to thousands of square degrees
 therefore means either robotically reducing the number of targets for
 inspection, or increasing the number of inspectors, or both.
@@ -202,12 +201,15 @@ decrease in the required team size.
 
 Systematic detection of rare astronomical objects by such ``crowd-sourced''
 visual inspection has recently been achieved by the online citizen science
-project \PH \citep{SchwambEtal2012}. \PH was designed to enable the discovery of
-transiting exoplanets in data taken by the Kepler satellite; a community of over
-200,000 inspectors from the general public found, after each undergoing a small
-amount of training, over 40 new exoplanet candidates, by visual inspection of
-the Kepler lightcurves that were presented in a custom web-based classification
-interface \citep{WangEtal2013}. The older \GZ morphological classification
+project \PH \citep{SchwambEtal2012}.
+
+\PH was designed to enable the discovery of transiting exoplanets in data taken
+by the Kepler satellite. A community of over 200,000 inspectors from the general
+public found, after each undergoing a small amount of training, over 40 new
+exoplanet candidates. They achived this   by visually inspecting the Kepler
+lightcurves that were presented in a custom web-based classification interface
+\citep{WangEtal2013}.
+The older \GZ morphological classification
 project \citep{LintottEtal2008} has also enabled the discovery of rare objects,
 via its flexible inspection interface and discussion forum
 \citep{LintottEtal2009}. Indeed, several of us (AV,CC,CM,EB,PM,TJ,LW) were
@@ -215,15 +217,16 @@ active in an informal \GZ gravitational lens search (Verma et al, in
 preparation), an experience which led to the present hypothesis that a
 systematic online visual lens search could be successful.
 
-In this paper, we describe the \SW project, an web-based system  conceived to
+In this paper, we describe the \SW project, a web-based system conceived to
 address the visual inspection problem in gravitational lens detection for future
-large surveys via crowd-sourcing. Implemented as a Zooniverse project, it is
-designed to provide a {\it gravitational lens discovery service} to survey teams
-looking for lenses in wide field imaging data. In a companion paper (More et al,
-in preparation, herafter \PaperTwo) we will present the new gravitational lenses
-discovered in our first, experimental, lens search, and begin to investigate the
-differences between lens detections made in \SW and those made with automated
-techniques. Here though, we simply try to answer the following questions:
+large surveys via crowd-sourcing. Implemented as a Zooniverse citizen science
+project, it is designed to provide a {\it gravitational lens discovery service}
+to survey teams looking for lenses in wide field imaging data. In a companion
+paper (More et al, in preparation, herafter \PaperTwo) we will present the new
+gravitational lenses discovered in our first lens search, and
+begin to investigate the differences between lens detections made in \SW and
+those made with automated techniques. Here though, we simply try to answer the
+following questions:
 
 \begin{itemize}
 
@@ -376,9 +379,9 @@ the volunteers  will be shown such training images. They are also informed
 that they will receive instant feedback about their performance after
 classifying (blind) any of these training subjects. Indeed, after a volunteer
 finishes marking a training subject and hits ``Finished marking,'' a pop-up
-message is generated, containing either positive feedback for a successful
+message is generated, containing either congratulations for a successful
 classification (for example, ``Well done! You spotted a simulated lens,'' as
-in \Fref{fig:screenshot}) or negative feedback for an unsuccessful one (for
+in \Fref{fig:screenshot}) or feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'').
 
 \new{Because we include a training set of images in amongst the survey ``test''

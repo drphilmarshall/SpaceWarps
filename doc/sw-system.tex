@@ -1233,7 +1233,9 @@ shown to the right of its image. Lefthand panels show the most common types of
 trajectories: short step random walks resulting from no high skill classifiers
 viewing the subject. The righthand panels show examples where higher skill
 classifiers have been involved, causing random walks with longer step lengths
-(top) and catastrophic mis-classifications (bottom right). Insets for the false
+(top) and catastrophic mis-classifications (bottom right). Note that both these
+subjects were {\it very nearly} detected but didn't quite reach the threshold
+set (marked by the blue dashed line). Insets for the false
 negatives show the lens feature. The inset for the lower righthand panel shows
 where most users believed a lens was located. There is no corresponding inset
 for the lower left panel because no particular feature stood out to users.
@@ -1251,9 +1253,11 @@ false positives, and their behaviour as they are classified using the online
 analysis trajectory plots introduced in \Sref{sec:swap}
 (\Fref{fig:swap:subject-trajectories}).
 \Fref{fig:discuss:performance:trajectories} shows 2 example simulated lenses
-that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \SW system, and 2 example
+that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \SW system (top row),
+and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
-0.95$) by the \SW system. While the final \StageTwo analysis was done offline,
+0.95$) by the \SW system (bottom row).
+While the final \StageTwo analysis was done offline,
 these trajectory plots still serve to illustrate the approximate
 classification histories of the subjects.
 
@@ -1266,29 +1270,28 @@ none are very confident about the presence of lensing, the subject follows a
 random walk down its trajectory plot. This can be seen in the top left panel
 of the figure.
 
-The false positives show similar behaviour, for example in the bottom
-lefthand panel of the figure. As well as subjects being ``unlucky'' in this
-way, there are two less common failure modes associated with mistakes made by
-higher skill users, illustrated in the righthand column of the figure. In the
-false negative subject shown in the top right-hand panel, several high skill
-classifiers update the subject upwards in log probability by some way each
-time, but other, comparable skill classifiers mis-classify the system to lower
-probability. If we had retired subjects after crossing a high probability
-detection threshold, this subject would have been correctly identified as a
-lens candidate; instead, it was kept in the system and eventually scattered
-down to retirement. The trajectory looks like a random walk, but with bigger
-steps. The bottom righthand panel shows an example of a final, apparently
-rare, failure mode: we see some short-step random walk behaviour, followed by
-a mis-classification by a very high skill ``expert'' classifier after 20
-classifications that promotes the subject to high probability.
+The false positives show similar behaviour, for example in the bottom lefthand
+panel of the figure. As well as subjects being ``unlucky'' in this way, there
+are two less common failure modes associated with mistakes made by higher skill
+users, illustrated in the righthand column of the figure. In the false negative
+subject shown in the top right-hand panel, several high skill classifiers update
+the subject upwards in log probability by some way each time, but other,
+comparable skill classifiers mis-classify the system to lower probability.   The
+trajectory looks like a random walk, but with bigger steps; this particular
+subject came very close to crossing the detection  threshold three times, but
+didn't quite make it. The bottom right-hand panel shows an example of a final,
+apparently rare, failure mode: we see some short-step random walk behaviour,
+followed by a mis-classification by a very high skill ``expert'' classifier
+after 20 classifications that promotes the subject to high probability.
 
 There are a number of places where we can address these problems and
 improve system performance: adding flexibility to the classification
 interface, educating the volunteers, assigning subjects for
 classification, and interpreting the classification data.
 
-We might wonder whether some of  the mistakes made by reasonably high skill
-classifiers could have been corrected by those classifiers themselves, had
+Some of  the mistakes made by reasonably high skill
+classifiers working at high speed
+could have perhaps been corrected by those classifiers themselves, had
 they had access to a ``go back'' option. While clearly enabling error
 reduction, we might worry about such a mechanism enabling classifiers to have
 a guess, then go and read the Talk discussion, and then return to the
@@ -1298,7 +1301,8 @@ not obvious that such correlations would necessarily lead to poorer system
 performance. This could be tested by presenting a fraction of the volunteers
 with a version of the site that actively suggested that they take this
 approach, and then tracking the relative performance of ``collaborative''
-classifications compared with independent ones. We leave this to further
+classifications compared with independent ones. We leave the exploration of
+this to further
 work.
 
 Mistakes by both high and low skill classifiers could be reduced by improving
@@ -1311,7 +1315,7 @@ experiment with providing greater training rates early on for all volunteers;
 the risk associated with this is that retention rates may drop if too few
 ``fresh'' test images are shown early on. Another way of improving the
 training could be to provide more information about what lenses do. In this
-project, the Spotter's Guide was always available on the site, but as a
+project, the Spotter's Guide, and the Science, FAQ and About pages were always available on the site, but as a
 passive background resource. We might consider providing more links to this
 guide in the feedback messages shown to the classifiers as they go -- or
 perhaps extending these messages to themselves include more explanations and

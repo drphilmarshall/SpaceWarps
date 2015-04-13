@@ -46,37 +46,23 @@
 
 \begin{abstract}
 
-We describe \SW, a novel gravitaional lens discovery service that
-yields samples of high purity and completeness through crowd-sourced
-visual inspection.
-Carefully
-produced color composite images are displayed to volunteers via a
+We describe \SW, a novel gravitaional lens discovery service that yields samples
+of high purity and completeness through crowd-sourced visual inspection.
+Carefully produced color composite images are displayed to volunteers via a
 classification interface which records their estimates of the positions of
 candidate lensed features. Simulated lenses, and expert-classified non-lenses,
 are inserted into the image stream at random intervals; this training set is
 used to give the volunteers feedback on their performance, and to estimate a
 dynamically-updated probability for any given image to contain a lens. Low
 probability systems are retired from the site periodically, concentrating the
-sample towards a set of candidates; this ``\StageOne'' set is then re-classified
-by the volunteers in a second  refinement stage. Analyzing the classification
-of the training set, we predict that the first stage alone should yield a
-sample that is C\% complete, while leading to the rejection of R\% of the
-initial target sample. Having divided the 150 square degree CFHTLS imaging
-survey into 430000 overlapping 84 by 84 arcminute tiles and displayed them on
-the site, we were joined by 33000 volunteers who contributed X million image
-classifications over the course of N months. The sample was reduced to 3500
-\StageOne candidates; these were then refined to yield a sample of 1400
-candidates rankable by their \StageTwo probability. We expect this sample to be
-X\% complete and Y\% pure at a threshold of 95\% classification probability.
-We find that, on average, and given the assumptions we make in our analysis,
-we need 9 classifications per image during the first stage, X in the second.
-We estimate the mean information contributed per person to be X bits, over a
-session lasting, on average, N classifications per volunteer, and present the
-highly skewed distributions of these quantities. We comment on the scalability
-of the \SW system to the wide field survey era, and its potential to operate
-beyond its design as a supervised classification system.
-
-\todo{Phil}{revisit abstract (\#29).}
+sample towards a set of candidates. Having divided the 171 square degree CFHTLS
+imaging survey into some 430,000 overlapping 84 by 84 arcminute tiles and
+displayed them on the site, we were joined by around 37,000 volunteers who
+contributed 10 million image classifications over the course of 8 months. The
+sample was reduced to 3300 \StageOne candidates; these were then refined to
+yield a sample of 90 \StageTwo detections, a sample we expect to be over 90\%
+complete and 20\% pure at a threshold of 95\% classification probability. We
+comment on the scalability of the \SW system to the wide field survey era.
 
 \end{abstract}
 

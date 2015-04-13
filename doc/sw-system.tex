@@ -1540,9 +1540,15 @@ nervous volunteer.
 \section{Conclusions}
 \label{sec:conclude}
 
-\todo{Phil}{write conclusions (\#45).}
-
-Summary of system.
+We have designed, implemented and tested a system for   detecting new strong
+gravitational lens candidates in wide field imaging surveys by crowd-sourced
+visual inspection. The \SW web-based classification interface presents carefully
+prepared color composite sky images to volunteers, who mark features they
+propose to  have been lensed. The participants receive ongoing training with a
+mixture of simulated lens and known-to-be-empty images, and we use this
+information to inform the automated interpretation of their markers. In our
+first lens search we simply divided the CFHTLS imaging into some 430,000 tiles,
+and collected over 10~million volunteer image classifications.
 
 % Questions we set ourselves in the introduction:
 % \begin{itemize}
@@ -1555,48 +1561,44 @@ Summary of system.
 % \item What can we learn about the scalability of the crowd-sourcing approach?
 % \end{itemize}
 
-Crowd-sourced gravitational lens detection works, in terms of the
-classification of the training set as described here, in the following
-specific ways:
+By analyzing the  classifications made of the training set, we conclude that
+gravitational lens detection by crowd-sourced visual inspection works,  and in
+the following specific ways:
 
 \begin{itemize}
 
-\item Participation (crowd size, activity rate) enabled project completion
+\item Participation levels were high (over 36,000 volunteers, contributing
+classifications at rates between $10^3$ and $10^4$ images per hour), suggesting
+that if this can be maintained, visual inspection of tens of thousands of images
+can be performed on timescales of a few weeks.
 
-\item Both \StageOne and \StageTwo achieved the required rejection rates
+\item Over the course of the two stages of the CFHTLS project, the
+set of images was reduced by a factor of $10^3$ (from a few hundred thousand to
+a few hundred), enough for an expert team to take over.
 
-\item Integrated humanpower = X (\StageOne) and Y (\StageTwo), cf hours taken by
-small team of experts
-
-\item Nightly processing is inefficient: more classifications were made than
-was necessary during peak participation. Need kafka...
-
-\item Retirement rate. False negatives: which sims were missed?
+\item The ``skill'' of the volunteers correlates strongly with the number of
+images they have classified.  Quantifying the ``contribution'' as the integrated
+skill over the test subjects  classified, we find that about 90\% of the
+contribution was made by a few  hundred volunteers -- but that the width of the
+skill distribution means that a  few thousand volunteers could have made
+comparable contributions, had they classified more images.
 
 \item The optimal true positive rate (completeness) and false positive rate in
-the training set were estimated to be TPR\% and FPR\% at \StageOne, assuming a
-detection threshold of xxx.
+the training set were estimated to be around $91--93\%$ and $<1\%$ (Stages 1 and
+2). This  FPR translates to a purity of 20\%.
 
-\item In the ``refinement'' \StageTwo, X\% of the \StageOne candidates were
-rejected (with P less than threshold), and the remainder assigned lens
-``probabilities.'' Ranking
-subjects by their \StageTwo lens probability gives an ROC curve for the system
-with X properties. The optimal true positive rate (completeness) and false
-positive rate in the training set were estimated as TPR\% and FPR\%;
-
-\item The lens-finding crowd shows some interesting properties, with
-consequences for future scalability
-
-\item The information comes predominantly from volunteers with agents with P =
-...
-
-\item The agents show a high mean information per classification, which
-increased/decreased with time; this does/doesn?t correlate with active crowd
-size, showing how the crowd changed over time...
+\item The simulated gravitational lenses that were missed were predominantly
+galaxy-scale lenses with faint blue galaxy sources, whose lensed features are
+difficult to distinguish from the light from the lens galaxy. We observed some
+additional scatter, with some simulated lenses accumulating low probability
+simply due to classification noise.
 
 \end{itemize}
 
-Sum up, end. \SW provides a lens candidate detection service, crowd-sourcing the
+In \PaperTwo we present the results of this CFHTLS lens search in more detail,
+in particular focusing on the detection of real lenses, and the comparison
+between \SW and various automated lens finding methods. In this paper  we have
+shown how \SW provides a lens candidate detection service, crowd-sourcing the
 time-consuming work of visually inspecting astronomical images for
 gravitationally-lensed features. We invite survey teams searching for lenses in
 their wide-field imaging data to contact us if they would like our help.

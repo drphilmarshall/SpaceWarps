@@ -859,17 +859,136 @@ from the online analysis in the appendix.
 \label{sec:results}
 
 In this section we present our findings about the performance of the \SW system,
-in terms of the information  contributed by the crowd in
-\Sref{sec:results:crowd}, the speed of the system, and the overall
-classifications of the training set that they made.
-
-% PJM IS HERE.
+in terms of the classification of the training set, the  information contributed
+by the crowd, and the speed at which the image set was classified.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
+\subsection{Sample Properties}
+\label{sec:results:sample}
+
+We first quantify the performance of the \SW system in terms of the recovery of
+the training set images. At \StageOne, this set contains around 5712 simulated
+lenses, and 450 duds; at \StageTwo, we used 152 simulated lenses and 201 duds.
+\Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
+curves for CFHTLS \StageOne and \StageTwo. These plots show the true positive
+rate (TPR, the number of sims correctly detected divided by the total number of
+sims in the training set), and the false positive rate (FPR, the number of duds
+incorrectly detected  divided by the total number of duds in the training set), both
+for a given sample of detections defined by a particular probability threshold,
+which varies along the curves.  In both stages, these curves show that true
+positive rates of  around 90\% were achieved, at very low false positive rates.
+
+For comparison we show the results of an analysis where the classifications of
+training images were ignored, and none of the agents allowed to learn: the
+agents were instead simply assigned initial values of their confusion matrices
+of 0.75 for each element, which then remained constant. This set-up emulates a
+very simple unweighted voting scheme, where all classifications are treated
+equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
+\StageTwo, thus quantifying  the benefit of including training images and
+allowing the agents to learn via their Bayesian updates.
+
+When the agents are allowed to update their confusion matrices, the choice of
+initial confusion matrix is not very important. The same 0.75 initial values
+applied to normal, learning agents resulted in only a slightly lower TPR than
+the default case, nevertheless indicating that initializing the system less
+conservatively results in slightly worse performance.
+
+The dot-dashed curves show the impact of the offline analysis. At \StageOne the
+results are very similar to the online version that was actually run (solid
+line). However, at \StageTwo there is marginal evidence of there being greater
+benefit to doing the analysis offline (\Sref{sec:swap}, \Aref{appendix:swap}).
+Over 85\% TPR is achieved at zero FPR in the offline analysis , while if one is
+willing to accept a false positive rate of 5\%, the true positive rate rises to
+over 95\%, showing that some of the sims that were missed in the online analysis
+may be being recovered by doing the analysis offline. The same is true at
+\StageOne, but to a lesser extent. Assuming Poisson statistics for the
+fluctuations in the numbers of recovered lenses, the uncertainty in the measured
+\StageTwo TPR values is around 8\%, but the online and offline samples are
+highly correlated, such that the uncertainty on the difference between the ROC
+curves is somewhat less than this. Still, a larger validation set is needed to
+test these algorithmic choices more rigorously. At \StageOne, high TPR can be
+measured to better than 1\%.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\begin{minipage}{0.45\linewidth}
+  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage1_ROC.png}
+\end{minipage}\hfill
+\begin{minipage}{0.45\linewidth}
+  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
+\end{minipage}
+\caption{Receiver operating characteristic curves for the \SW system, using
+the CFHTLS training set. Left: \StageOne, right: \StageTwo. Insets show a
+magnified view of the top lefthand corner of each plot. Linestyles illustrate
+the agent properties (initial confusion matrix elements, learning or not)
+discussed in the text, as well as the difference between the online and offline
+analyses. The \StageTwo sample was defined using the online \StageOne results
+(solid blue curve), while the offline analysis was chosen for the final
+\StageTwo results (dot-dashed orange curve). }
+\label{fig:results:sample:roc}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Adopting the online \StageOne analysis, and the offline \StageTwo analysis, we
+show in \Fref{fig:results:sample:CP} a plot of the more familiar (to
+astronomers) quantities of completeness versus purity, again for
+the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
+varies along the curves. Completeness is defined as the number of correctly
+detected sims divided by the total number of sims in the training set, while
+purity is the number of correct detections divided by the total number of
+detections.\footnote{The completeness is equivalent to the TPR and is also
+known elsewhere as the ``recall.''  The purity is also known as the
+``precision.''} If the training set samples from the same systems as the test
+set, then the completeness of the training set will be equivalent to the
+completeness of the test set. The purity depends on the proportion of sims to
+duds, and so the purity of the test set must be approximated by rescaling the
+training set to the expected proportion of lens systems to not-lens systems in
+the survey. First we compute the expected number of false positives by
+multiplying the FPR by the expected number of non-lenses in the survey. Then
+we multiply the TPR by the expected number of lenses in the survey, to get the
+expected number of true positives. The sum of the true positives and the false
+positives gives the expected sample size; dividing the expected number of true
+positives by this sample size gives the purity. Note that the completeness is
+invariant to this transformation.
+The \StageOne curves are truncated by the retirement of subjects in this phase,
+which sets the minimum size of this sample. We see from the solid blue curve
+that over 90\% completeness was reached, albeit in a sample with around 20\%
+purity.
+
+Does this performance level vary between the different types of gravitational
+lens? To investigate the completeness to the three different types of lens in
+the training set, we repeated the same procedure but now considering only the
+detections of a certain kind of lens and of the non-lenses in the training set.
+We estimate the expected number of lenses and non-lens false positives by
+dividing the lens and dud sets into equal fractions. The lensed quasar part of
+the training set yielded the highest completeness, suggesting that these were
+the easiest sims to spot. The lensed galaxies were recovered at the lowest
+completeness, likely due to the difficulty  of separating the lens and source
+galaxy light.
+
+At \StageTwo, where no retirement was carried out, it was possible to reach
+100\% purity: the knee of the curve is at just under 90\% completeness. However,
+the purity decreases rapidly if higher completeness than this is sought. The
+optimal sample in this simulated lens search experiment would have been
+constructed with a threshold value of $\pr(\LENS|C,T) > 0.47$. At 100\% purity
+and 90\% completeness, it would have contained around 89 lens candidates.
+
+% TP + FN ~ 2e-4 * 430000 ~ 100 ~ TP/C ; so TP ~ 89 candidates
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure}
+\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity_simple.png}
+\caption{Completeness-estimated purity curves for the \sw system, using
+the CFHTLS training set.}
+\label{fig:results:sample:CP}
+\end{figure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
 \subsection{Crowd Properties}
 \label{sec:results:crowd}
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
@@ -884,8 +1003,8 @@ contain 68\%, 95\% and 99\% of the distributions.}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-We define the following properties of the crowd, as characterised by their
-agents, and plot their distributions in
+To investigate the properties of the \sw crowd, as characterised by their
+agents, we define the following quantities and plot their distributions in
 \Fref{fig:crowd:cornerplot}.
 %
 \begin{description}
@@ -1051,127 +1170,6 @@ where $N_s$ is the number of subjects to be classified, and $N_p$ is the number
 of volunteers in the crowd.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-
-\subsection{Sample Properties}
-\label{sec:results:sample}
-
-We now quantify the performance of the \SW system in terms of the recovery of
-the training set images. At \StageOne, this set contains around 5712 simulated
-lenses, and 450 duds; at \StageTwo, we used 152 simulated lenses and 201 duds.
-\Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
-curves for CFHTLS \StageOne and \StageTwo. These plots show the true positive
-rate (TPR, the number of sims correctly detected divided by the total number of
-sims in the training set), and the false positive rate (FPR, the number of duds
-incorrectly detected  divided by the total number of duds in the training set), both
-for a given sample of detections defined by a particular probability threshold,
-which varies along the curves.  In both stages, these curves show that true
-positive rates of  around 90\% were achieved, at very low false positive rates.
-
-For comparison we show the results of an analysis where the classifications of
-training images were ignored, and none of the agents allowed to learn: the
-agents were instead simply assigned initial values of their confusion matrices
-of 0.75 for each element, which then remained constant. This set-up emulates a
-very simple unweighted voting scheme, where all classifications are treated
-equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
-\StageTwo, thus quantifying  the benefit of including training images and
-allowing the agents to learn via their Bayesian updates.
-
-When the agents are allowed to update their confusion matrices, the choice of
-initial confusion matrix is not very important. The same 0.75 initial values
-applied to normal, learning agents resulted in only a slightly lower TPR than
-the default case, nevertheless indicating that initializing the system less
-conservatively results in slightly worse performance.
-
-The dot-dashed curves show the impact of the offline analysis. At \StageOne the
-results are very similar to the online version that was actually run (solid
-line). However, at \StageTwo there is marginal evidence of there being greater
-benefit to doing the analysis offline (\Sref{sec:swap}, \Aref{appendix:swap}).
-Over 85\% TPR is achieved at zero FPR in the offline analysis , while if one is
-willing to accept a false positive rate of 5\%, the true positive rate rises to
-over 95\%, showing that some of the sims that were missed in the online analysis
-may be being recovered by doing the analysis offline. The same is true at
-\StageOne, but to a lesser extent. Assuming Poisson statistics for the
-fluctuations in the numbers of recovered lenses, the uncertainty in the measured
-\StageTwo TPR values is around 8\%, but the online and offline samples are
-highly correlated, such that the uncertainty on the difference between the ROC
-curves is somewhat less than this. Still, a larger validation set is needed to
-test these algorithmic choices more rigorously. At \StageOne, high TPR can be
-measured to better than 1\%.
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}
-\begin{minipage}{0.45\linewidth}
-  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage1_ROC.png}
-\end{minipage}\hfill
-\begin{minipage}{0.45\linewidth}
-  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
-\end{minipage}
-\caption{Receiver operating characteristic curves for the \SW system, using
-the CFHTLS training set. Left: \StageOne, right: \StageTwo. Insets show a
-magnified view of the top lefthand corner of each plot. Linestyles illustrate
-the agent properties (initial confusion matrix elements, learning or not)
-discussed in the text, as well as the difference between the online and offline
-analyses. The \StageTwo sample was defined using the online \StageOne results
-(solid blue curve), while the offline analysis was chosen for the final
-\StageTwo results (dot-dashed orange curve). }
-\label{fig:results:sample:roc}
-\end{figure*}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-Adopting the online \StageOne analysis, and the offline \StageTwo analysis, we
-show in \Fref{fig:results:sample:CP} a plot of the more familiar (to
-astronomers) quantities of completeness versus purity, again for
-the two stages. As in \Fref{fig:results:sample:roc}, the detection threshold
-varies along the curves. Completeness is defined as the number of correctly
-detected sims divided by the total number of sims in the training set, while
-purity is the number of correct detections divided by the total number of
-detections.\footnote{The completeness is equivalent to the TPR and is also
-known elsewhere as the ``recall.''  The purity is also known as the
-``precision.''} If the training set samples from the same systems as the test
-set, then the completeness of the training set will be equivalent to the
-completeness of the test set. The purity depends on the proportion of sims to
-duds, and so the purity of the test set must be approximated by rescaling the
-training set to the expected proportion of lens systems to not-lens systems in
-the survey. First we compute the expected number of false positives by
-multiplying the FPR by the expected number of non-lenses in the survey. Then
-we multiply the TPR by the expected number of lenses in the survey, to get the
-expected number of true positives. The sum of the true positives and the false
-positives gives the expected sample size; dividing the expected number of true
-positives by this sample size gives the purity. Note that the completeness is
-invariant to this transformation.
-The \StageOne curves are truncated by the retirement of subjects in this phase,
-which sets the minimum size of this sample. We see from the solid blue curve
-that over 90\% completeness was reached, albeit in a sample with around 20\%
-purity.
-
-Does this performance level vary between the different types of gravitational
-lens? To investigate the completeness to the three different types of lens in
-the training set, we repeated the same procedure but now considering only the
-detections of a certain kind of lens and of the non-lenses in the training set.
-We estimate the expected number of lenses and non-lens false positives by
-dividing the lens and dud sets into equal fractions. The lensed quasar part of
-the training set yielded the highest completeness, suggesting that these were
-the easiest sims to spot. The lensed galaxies were recovered at the lowest
-completeness, likely due to the difficulty  of separating the lens and source
-galaxy light.
-
-At \StageTwo, where no retirement was carried out, it was possible to reach
-100\% purity: the knee of the curve is at just under 90\% completeness. However,
-the purity decreases rapidly if higher completeness than this is sought. The
-optimal sample in this simulated lens search experiment would have been
-constructed with a threshold value of $\pr(\LENS|C,T) > 0.47$. At 100\% purity
-and 90\% completeness, it would have contained around 89 lens candidates.
-
-% TP + FN ~ 2e-4 * 430000 ~ 100 ~ TP/C ; so TP ~ 89 candidates
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity_simple.png}
-\caption{Completeness-estimated purity curves for the \sw system, using
-the CFHTLS training set.}
-\label{fig:results:sample:CP}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

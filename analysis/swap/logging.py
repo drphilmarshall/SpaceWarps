@@ -24,7 +24,7 @@ from subject import Ntrajectory
 
     AUTHORS
       This file is part of the Space Warps project, and is distributed 
-      under the GPL v2 by the Space Warps Science Team.
+      under the MIT license by the Space Warps Science Team.
       http://spacewarps.org/
 
     HISTORY

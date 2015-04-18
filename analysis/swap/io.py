@@ -32,7 +32,7 @@ import os,cPickle,numpy as np
 
     AUTHORS
       This file is part of the Space Warps project, and is distributed
-      under the GPL v2 by the Space Warps Science Team.
+      under the MIT license by the Space Warps Science Team.
       http://spacewarps.org/
 
       SWAP io is modelled on that written for the
@@ -227,7 +227,7 @@ def write_config(filename, pars):
 # Name : Value pair to be read into the parameters dictionary.
 #
 # This file is part of the Space Warps project, and is distributed
-# under the GPL v2 by the Space Warps Science Team.
+# under the MIT license by the Space Warps Science Team.
 # http://spacewarps.org/
 #
 # SWAP configuration is modelled on that written for the

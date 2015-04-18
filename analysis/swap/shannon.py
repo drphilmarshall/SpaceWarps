@@ -23,7 +23,7 @@ AUTHORS
   during the Citizen Science in Astronomy Workshop at ASIAA, Taipei, 
   in March 2014, hosted by Meg Schwamb. 
   This file is part of the Space Warps project, which is distributed 
-  under the GPL v2 by the Space Warps Science Team.
+  under the MIT license by the Space Warps Science Team.
   http://spacewarps.org/
 
 HISTORY

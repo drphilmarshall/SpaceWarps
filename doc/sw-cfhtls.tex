@@ -106,7 +106,7 @@ lenses are rare since a foreground massive object needs to be
 sufficiently aligned with a distant background source to produce
 multiple images. Nevertheless, systematic lens searches have led to the
 discovery of over 500 lenses till
-date\footnote{http://masterlens.astro.utah.edu}.
+date\footnote{http://admin.masterlens.org/index.php}.
 
 The search for gravitational lenses is a needle-in-a-haystack problem.
 Efficient automated methods are imperative to find a reasonably complete
@@ -190,10 +190,10 @@ has a 1~deg$^2$ field-of-view and a pixel size of 0.186\arcsec
 \citep{Gwyn2012}. The \cfhtls \textsc{WIDE} covers a total
 non-overlapping area of 150~deg$^2$ on the sky and consists of four
 fields W1, W2, W3 and W4. The field W1 has the largest sky coverage of
-63.65~deg$^2$. The fields W2 and W4 have similar sky coverages of
-20.32~deg$^2$ and 20.02~deg$^2$, respectively\footnote{These numbers are
-estimated from http://terapix.iap.fr/cplt/table\_syn\_T0006.html}.  The
-field W3 has a sky coverage of 42.87~deg$^2$ and is more than twice as
+63.7~deg$^2$. The fields W2 and W4 have similar sky coverages of
+22.6~deg$^2$ and 23.3~deg$^2$, respectively\footnote{These numbers are
+estimated from http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}.  The
+field W3 has a sky coverage of 44.2~deg$^2$ and is more than twice as
 large as W2 and W4.
 
 The \cfhtls imaging is very homogeneous and has good image quality. Most
@@ -204,7 +204,7 @@ in the $g$ band is 0.78\arcsec. The zero point to convert flux to AB
 magnitude for all bands is 30. These characteristics make \cfhtls ideal
 to do visual inspection for finding lenses.  We use the stacked images
 from the final T0007 release taken from the Terapix
-website\footnote{{http://terapix.iap.fr/cplt/T0006-doc.pdf}} for this
+website\footnote{{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}} for this
 work.
 
 We note that the \cfhtls is a niche survey with a unique combination of wide
@@ -253,7 +253,7 @@ because more massive systems produce arcs or lensed images with large image
 separation from the lensing galaxy which are easier to detect compared to the
 galaxy-scales. In the absence of a large systematically followed up
 verified sample of candidates, we choose the most promising 26 systems
-as our bonafide lens sample from the \cfhtls WIDE. Also, the total
+as our bona fide lens sample from the \cfhtls WIDE. Also, the total
 number of lens candidates is 108 from the \cfhtls WIDE alone. 
 
 In \citet{Elyiv2013}, the authors visually inspected a sample of 5500 optical
@@ -264,7 +264,7 @@ of which 3 candidates are found to be promising.
 
 The \rf \citep{Gavazzi2014} was used for finding compact rings or arcs
 around centers of isolated and massive early-type galaxies. The \rf
-subtracts the PSF-matched $i$-band images from the $g$-band images, and
+subtracts the point spread function (PSF)-matched $i$-band images from the $g$-band images, and
 looks for excess flux in the bluer $g$-band. An object detector measures
 the properties of these residual blue features, and candidates which
 meet the length-width ratio and tangential alignment criteria are then
@@ -292,7 +292,7 @@ estimate completeness and purity of their robotic search. They found 29
 candidates with the robotic search alone and 41 candidates through pure
 visual inspection some of which are known from previous searches. Most
 of these candidates are medium-low
-probability\footnote{http://www.ita.uni-heidelberg.de/˜maturi/Public/arcs}.
+probability\footnote{http://www.ita.uni-heidelberg.de/\~maturi/Public/arcs}.
 
 The \rf and the \af searches are the only searches that make use of a
 lens finding algorithm and that has been run on the entire \cfhtls
@@ -519,25 +519,29 @@ source randomly for which the flux of the second brightest lensed image and the
 total magnification of all lensed images meet the thresholds given
 in Table~\ref{tab:thresh}.
 
-Since we want to produce realistic looking lens systems, we simulate lenses in
-each of the five \cfhtls~filters. The colors of the background galaxies are drawn
-randomly from the photometric CFHTLenS catalog
-\citep{Hildebrandt2012,Erben2013}.  Similarly, we use a quasar catalog from the
-SDSS Data Release 9 \citep{Paris2012} from which colors are drawn to simulate
-quasar lenses.  Next, we assume deVaucoleur's profile to account for the size
-and shape of the galaxies. The ellipticity and the position angle (PA) are drawn
-randomly from within the range given in Table~\ref{tab:thresh}. The effective
-radius of the galaxy is estimated from the Luminosity$-$size relation
-\citep{Bernardi2003} (with a redshift scaling, to account for size
-evolution) given by
+Since we want to produce realistic looking lens systems, we simulate
+lenses in each of the five \cfhtls~filters. The colors of the background
+galaxies are drawn randomly from the photometric CFHTLenS catalog
+\citep{Hildebrandt2012,Erben2013}.  Similarly, we use a quasar catalog
+from the SDSS Data Release 9 \citep{Paris2012} from which colors are
+drawn to simulate quasar lenses. Next, we assumed a Gaussian
+profile\footnote{This was due to an oversight. We intend to use either
+an exponential or de Vaucouleurs' profile.} for
+the galaxies. The ellipticity and the position angle (PA) are drawn
+randomly from within the range given in Table~\ref{tab:thresh}. The
+effective radius of the galaxy is estimated from the Luminosity$-$size
+relation \citep{Bernardi2003} (with a redshift scaling, to account for
+size evolution) given by
 \be
 R_{\rm eff}= 10^{0.52} \frac{L_r^{2/3}}{{(1+z_s)}^2}
 \ee
-where $L_r=L_s/10^{10.2}$. On the other hand, quasars are assumed to follow a
-Gaussian profile where the full-width-at-half-maximum is equated to that of the median seeing for
-every filter. The median seeing values are taken from Table 4 of the official
-Terapix T0007 release explanatory document \footnote{
-    http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}.
+where $L_r=L_s/10^{10.2}$. On the other hand, quasars are assumed to be
+point sources and the PSF, with which quasars are convolved, is assumed
+to have a Gaussian profile. The full-width-at-half-maximum of PSF is
+equated to that of the median seeing for every filter. The median seeing
+values are taken from Table 4 of the official Terapix T0007 release
+explanatory document \footnote{
+http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}.
 
 Once all the parameters are determined for the lens and source models, we once
 again use \gravlens to generate simulated lensed images.  After accounting for the shot
@@ -553,7 +557,7 @@ galaxies of groups-scale lenses which are described in the following section.
 \begin{center}
 \includegraphics[scale=1.2]{sw-cfhtls-figs/distrib_remu.pdf}
 \caption{ \label{fig:remudist}
-Einstein radius distribution for all types of lenses. The dashed-dotted (blue)
+Einstein radius distribution for all types of lenses. The solid (blue)
 curves show the theoretical prediction assuming an SIS model at galaxy-scales
 and a total (NFW+Hernquist) model at groups-scales taken from \citep{More2012}.
 }
@@ -672,16 +676,15 @@ of the \sw project. The statistical properties of the lens sample are
 expected to be similar to real lens samples.
 
 In \Fref{fig:remudist}, we show the Einstein radius distribution for the
-galaxy-scale (dashed for background quasars and dotted for background galaxies)
-and groups-scale simulated lenses. For comparison, we give the expected
-distributions (blue dashed-dotted curves) for an SIS like density profile at
-galaxy-scales and an NFW+Hernquist profile at groups-scales. The
-theoretical curves are taken from \citet{More2012} wherein the models are
-explained in detail. We note that the model we adopt at groups-scale also
-includes SIS or SIE components for the group members unlike the theoretical
-prediction. The theoretical curves have arbitrary normalizations. We
-also show the distribution of the total magnification for all three
-samples.
+galaxy-scale and groups-scale simulated lenses. For comparison, we give
+the expected distributions (blue solid curves) for an SIS like density
+profile at galaxy-scales and an NFW+Hernquist profile at groups-scales.
+The theoretical curves are taken from \citet{More2012} wherein the
+models are explained in detail. We note that the model we adopt at
+groups-scale also includes SIS or SIE components for the group members
+unlike the theoretical prediction. The theoretical curves have arbitrary
+normalizations. We also show the distribution of the total magnification
+for all three samples.
 
 Next, we consider the redshift, magnitude and ellipticity distributions
 of the lensing galaxies as shown in \Fref{fig:lensprop}. For reference,
@@ -733,7 +736,7 @@ unlikely to act as gravitational lenses. Hence, some such instances
 do not appear convincing or the lensed images do not have the expected
 configuration or image separations.
 
-We also use a single Sersic component to describe the light profiles of
+We also use a single component to describe the light profiles of
 background galaxies. This is clearly not the most accurate description for
 galaxies, especially, star-forming galaxies which form a significant fraction
 of the lensed galaxy population. Star-forming galaxies have complex structures
@@ -1345,7 +1348,7 @@ The \af code calculates second order brightness moments around every
 pixel to decide if the distribution of flux is elongated in some
 direction in order to detect elongated arc-like objects. An elongation
 estimator is assigned to every pixel. All pixels with a value of the
-elongation stimator above a certain threshold are connected to form the arc
+elongation estimator above a certain threshold are connected to form the arc
 feature. This is called the segmentation of the arc candidate. Subsequently, arc
 properties such as the area, mean flux, length and curvature are
 determined. We relax the threshold at the segmentation stage and also relax

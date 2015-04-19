@@ -48,15 +48,16 @@
 
 We describe \SW, a novel gravitaional lens discovery service that yields samples
 of high purity and completeness through crowd-sourced visual inspection.
-Carefully produced color composite images are displayed to volunteers via a
+Carefully produced colour composite images are displayed to volunteers via a
 classification interface which records their estimates of the positions of
 candidate lensed features. Simulated lenses, and expert-classified non-lenses,
 are inserted into the image stream at random intervals; this training set is
 used to give the volunteers feedback on their performance, and to estimate a
 dynamically-updated probability for any given image to contain a lens. Low
 probability systems are retired from the site periodically, concentrating the
-sample towards a set of candidates. Having divided the 171 square degree CFHTLS
-imaging survey into some 430,000 overlapping 84 by 84 arcminute tiles and
+sample towards a set of candidates. Having divided the 171 square degree
+Canada-France-Hawaii Telescope Legacy Survey (\cfhtls)
+imaging survey into some 430,000 overlapping 80 by 80 arcsecond tiles and
 displayed them on the site, we were joined by around 37,000 volunteers who
 contributed 10 million image classifications over the course of 8 months. The
 sample was reduced to 3300 \StageOne candidates; these were then refined to
@@ -104,13 +105,14 @@ In the last decade the number of these rare cosmic alignments known
 has increased by an order of magnitude, thanks to searches carried out in
 wide field surveys, such as
 CLASS \citep[e.g.]{BrowneEtal2003}, SDSS \citep[e.g.][]
-{BoltonEtal2006,AugerEtal2010b,TreuEtal2011,InadaEtal2012,SBAS,SGAS,CASSOWARY},
-CFHTLS \citep[e.g.][]{MoreEtal2012,GavazziEtal2014}, Herschel
+{BoltonEtal2006,AugerEtal2010b,TreuEtal2011,InadaEtal2012,
+HennawiEtal2008,BelokurovEtal2009,DiehlEtal2009,FurlanettoEtal2013},
+\cfhtls \citep[e.g.][]{MoreEtal2012,GavazziEtal2014}, Herschel
 \citep[][]{NegrelloEtal2014} and SPT \citep[e.g.][]{VieiraEtal2013}, among
 others.  As the number of known lenses has increased, new types have been
 discovered, leading to entirely new investigations. Compound lenses
 \citep{GavazziEtal2008,CollettEtal2012} and lensed supernovae
-\citep{QuimbyEtal2014,KellyEtal2014} are good examples of this.
+\citep{QuimbyEtal2014,KellyEtal2015} are good examples of this.
 
 % Problem of rarity. Imaging surveys. Problem of purity/false positives.
 % Review of progress to date. Methods in SL2S, SQLS. Contrast with SLACS.
@@ -123,13 +125,13 @@ same optical spectrum \citep[e.g.][]{BoltonEtal2004}, or the strong
 waveband \citep[e.g.][]{NegrelloEtal2010}. Such searches have to yield pure samples,
 because they require expensive high resolution imaging follow-up; consequently
 they have so far produced yields in the tens to hundreds. An alternative
-approach is to search images already of sufficiently high resolution and color
+approach is to search images already of sufficiently high resolution and colour
 contrast, and confirm the systems as gravitational lenses by modeling the
 survey data themselves \citep[][]{MarshallEtal2009}. Several square degrees of
 HST images have been searched, yielding several tens of galaxy-scale lenses
 \citep[e.g.][]{MoustakasEtal2007,FaureEtal2008,Jackson2008,MoreEtal2011,
 PawaseEtal2014}. Similarly, searches of over a hundred square degrees of CFHT
-Legacy Survey (CFHTLS) ground-based imaging, also with sub-arcsecond image quality,
+Legacy Survey (\cfhtls) ground-based imaging, also with sub-arcsecond image quality,
 have revealed a smaller number of wider image separation group-scale systems
 \citep[e.g.][]{CabanacEtal2007,MoreEtal2012}. Detecting galaxy-scale lenses
 from the ground is hard, but feasible albeit with lower efficiency and requiring
@@ -385,13 +387,13 @@ inspection in the \sw interface needs to come with its own training set.
 
 Second, the lensed features themselves must be realistic; if they did not
 resemble real lenses, we could not expect to find real lenses in the test
-images. The details of how we generated the sims for the CFHTLS project are
+images. The details of how we generated the sims for the \cfhtls project are
 given in \PaperTwo, where we also carry out performance tests relative to real
 lens candidates in the survey fields. Here, we merely note the following
 aspects to place this paper's results in context.
 
-We start by selecting massive galaxies and groups in the CFHTLS catalogs,
-by color, brightness and photometric redshift. We then assign plausible mass
+We start by selecting massive galaxies and groups in the \cfhtls catalogs,
+by colour, brightness and photometric redshift. We then assign plausible mass
 distributions to these ``potential lenses:'' a singular isothermal ellipsoid
 model for each massive galaxy, and an additional NFW profile dark matter halo
 for groups and clusters. The mass distributions are centred, elongated and
@@ -414,7 +416,7 @@ only expect to detect real lens candidates that also pass these cuts. Any real
 lens candidates we ﬁnd with properties outside the ranges of the sims, may in
 some sense be considered bonuses, a product of the {\it imagination} of the
 crowd in extrapolating their understanding of gravitational lenses into a regime
-where they have not seen any before. In the CFHTLS project, the most important
+where they have not seen any before. In the \cfhtls project, the most important
 selection cuts were to only keep sims with a)  second brightest image brighter
 that $i = 23$ and b) total combined image magnitude brighter than 19--20
 (\PaperTwo, Table~1). The combination of these two cuts results in a sample of
@@ -468,7 +470,7 @@ and the task set.
 \subsection{Staged Classification}
 \label{sec:design:stages}
 
-We now describe briefly the two-stage strategy that was employed in the CFHTLS
+We now describe briefly the two-stage strategy that was employed in the \cfhtls
 project: initial classification (involving the rejection of very large numbers
 of non-lenses), and refinement (to further narrow down the sample). The web
 application was reconfigured between the two stages, to assist in their
@@ -503,17 +505,17 @@ types of object to appear in the \StageOne candidate list. The training sims for
 
 \subsubsection{\StageTwo: Refinement}
 
-The design of the \StageOne classification task, and its training set, should lead
-to sample of lens candidates that has high completeness but may have low purity.
-To refine this sample to higher purity, we need to reject more non-lenses, which
-means providing the volunteers with a more realistic and challenging training
-set as they re-classify it. The more demanding \StageTwo training set was
-generated as follows. The \StageTwo duds were selected from the image pool by at
-least one of three of us  (AV, AM and PM) as being a potential false positive,
-while the \StageTwo sims were chosen to be a subset of \StageOne sims, none of which
-were deemed ``obvious'' by the same expert classifiers.
-\Fref{fig:training:gallery} shows some example images from the resulting CFHTLS
-\StageTwo training set.
+The design of the \StageOne classification task, and its training set, should
+lead to sample of lens candidates that has high completeness but may have low
+purity. To refine this sample to higher purity, we need to reject more
+non-lenses, which means providing the volunteers with a more realistic and
+challenging training set as they re-classify it. The more demanding \StageTwo
+training set was generated as follows. The \StageTwo duds were selected from the
+image pool by at least one of three of us  (AV, AM and PM) as being a potential
+false positive, while the \StageTwo sims were chosen to be a subset of \StageOne
+sims, none of which were deemed ``obvious'' by the same expert classifiers.
+Figures~\ref{fig:training-gallery:sims} and~\ref{fig:training-gallery:duds}
+show some example images from the resulting \cfhtls \StageTwo training set.
 
 %%% Sims and Duds from Stage2
 
@@ -556,7 +558,7 @@ gravitational lenses.} \label{fig:training-gallery:duds}
 
 We also attempted to encourage discernment by changing the look and feel of
 the app, slowing down the arrival of new images, and switching the background
-color to bright orange to make it clear that a different task was being set.
+colour to bright orange to make it clear that a different task was being set.
 The frequency with which training images were shown was fixed at 1 in 3.
 Finally, the Spotter's Guide was upgraded to include more examples
 of various possible false positives, divided into sub-classes.
@@ -577,7 +579,8 @@ general description and illustrations of the \SW system.
 \subsection{The CFHT Legacy Survey}
 \label{sec:data:CFHTLS}
 
-The CFHT Legacy Survey \citep[CFHTLS,][]{CFHTLS} covered 171 square degrees of
+The CFHT Legacy Survey\footnote{\texttt{http://www.cfht.hawaii.edu/Science/CFHTLS/}}
+\citep[\cfhtls,][]{Gwyn2012} covered 171 square degrees of
 approximately equatorial sky, in four patches distributed in right ascension.
 With high and homogeneous image quality (the mean seeing in the $g$-band is
 0.78''), and reaching limiting magnitudes of around 25 across the $ugriz$ filter
@@ -586,14 +589,14 @@ galaxy and group scales
 \citep{GavazziEtal2014,SonnenfeldEtal13,CabanacEtal2007,MoreEtal2012}. The
 quality of the data, combined with the presence of these comparison ``known
 lens'' samples, makes this a natural choice against which to develop and test
-the \SW system. The CFHTLS is also well-representative of the data quality
+the \SW system. The \cfhtls is also well-representative of the data quality
 expected from several next-generation sky surveys, such as DES, KiDS, HSC and
 LSST.
 
 In order to investigate the completeness of the previous, semi-automated, lens
-searches in the CFHTLS area, we designed a ``blind search.'' We divided the
+searches in the \cfhtls area, we designed a ``blind search.'' We divided the
 mosaiced images into some 430,000 equal size, overlapping tiles, approximately
-70~arcsec on a side. We refer to these images as ``test images'' (as opposed to
+80~arcsec on a side. We refer to these images as ``test images'' (as opposed to
 ``training images''). In future, larger area projects we expect to implement the
 rather different strategy of producing image tiles centred on particular
 pre-selected ``targets,'' to make for a more efficient (but less complete)
@@ -608,7 +611,7 @@ images for similar features.
 \subsection{Image Presentation}
 \label{sec:data:display}
 
-The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
+The \cfhtls $g$, $r$ and $i$-band images have the greatest depth and best image
 quality, and we chose to focus on this set (although the $u$ and $z$-band images
 were also available for perusal in Talk). We made colour composite PNG
 format images following the prescription of \citet{LuptonEtal2004} \citep[with
@@ -623,7 +626,7 @@ We then multiplied these calibrated images by further aesthetic ``scales''
 $s_{i,r,g}$ before computing the total intensity image $I$ and applying an
 arcsinh stretch. (The scales are re-normalized to sum to one on input.) Thus,
 the red ($R$), green ($G$) and blue ($B$) channel images correspond to the
-CFHTLS $i$, $r$ and $g$-band images in the following way:
+\cfhtls $i$, $r$ and $g$-band images in the following way:
 \bea
 I & = & (i \cdot s_i + r \cdot s_r + g \cdot s_g), \notag \\
 R & = & i \cdot s_i \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}, \notag \\
@@ -654,7 +657,7 @@ the survey. Alternative algorithms, such as adjusting the stretch and scale
 dynamically according to, for example, the root-mean-square pixel value in
 each image, can lead to better presentation of bright objects, but in doing so
 they tend to hide the faint features in those images: we needed to optimize
-the detectability of these faint features.   Examples of CFHTLS training set
+the detectability of these faint features.   Examples of \cfhtls training set
 images prepared in this way can be seen in the galleries of the previous
 section (Figures~\ref{fig:training-gallery:sims}
 and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of
@@ -670,7 +673,7 @@ a starting point for image exploration. Our parameter choices are given in
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}
 \begin{center}
-\caption{Example \humvi image display parameters, for the CFHTLS images.}
+\caption{Example \humvi image display parameters, for the \cfhtls images.}
 \label{tab:data:humvi}
 \begin{tabular}{cccc}
   \hline
@@ -695,7 +698,7 @@ a starting point for image exploration. Our parameter choices are given in
 Having described the classification interface, the training images and the
 test images,  we now outline our methodology for interpreting the interactions
 of the volunteers with the identification interface, and then describe how we
-applied this methodology in the two classification stages in the CFHTLS
+applied this methodology in the two classification stages in the \cfhtls
 project in the \SW Analysis Pipeline (SWAP) code.\footnote{The open source
 SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
@@ -773,7 +776,7 @@ the background shows the distribution of effort.}
 
 \Fref{fig:swap:agent-probabilities} shows the confusion matrix elements of 200
 randomly-selected agents, as they were on a particular day towards the end of
-the CFHTLS project. Many volunteers classify  only a small number of images, and
+the \cfhtls project. Many volunteers classify  only a small number of images, and
 so their agents' confusion matrix elements remain close to their initial values
 of (0.5,0.5). As more images are classified (shown by the yellow point size),
 the agents' matrix elements tend to move towards higher values, as the
@@ -803,7 +806,7 @@ threshold.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-During \StageOne classification of the CFHTLS images, we assigned a prior
+During \StageOne classification of the \cfhtls images, we assigned a prior
 probability for each image to contain a lens of $2\times10^{-4}$, based on a
 rough estimate of the number of expected lenses in the survey, and the fraction
 of the survey area covered by each image. We then assigned two values of the
@@ -862,7 +865,7 @@ We first quantify the performance of the \SW system in terms of the recovery of
 the training set images. At \StageOne, this set contains around 5712 simulated
 lenses, and 450 duds; at \StageTwo, we used 152 simulated lenses and 201 duds.
 \Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
-curves for CFHTLS \StageOne and \StageTwo. These plots show the true positive
+curves for \cfhtls \StageOne and \StageTwo. These plots show the true positive
 rate (TPR, the number of sims correctly detected divided by the total number of
 sims in the training set), and the false positive rate (FPR, the number of duds
 incorrectly detected  divided by the total number of duds in the training set), both
@@ -910,7 +913,7 @@ measured to better than 1\%.
   \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.png}
 \end{minipage}
 \caption{Receiver operating characteristic curves for the \SW system, using
-the CFHTLS training set. Left: \StageOne, right: \StageTwo. Insets show a
+the \cfhtls training set. Left: \StageOne, right: \StageTwo. Insets show a
 magnified view of the top lefthand corner of each plot. Linestyles illustrate
 the agent properties (initial confusion matrix elements, learning or not)
 discussed in the text, as well as the difference between the online and offline
@@ -971,7 +974,7 @@ and 90\% completeness, it would have contained around 89 lens candidates.
 \begin{figure}
 \centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity_simple.png}
 \caption{Completeness-estimated purity curves for the \sw system, using
-the CFHTLS training set.}
+the \cfhtls training set.}
 \label{fig:results:sample:CP}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1144,7 +1147,7 @@ $\sim100$ per hour.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=\linewidth]{sw-system-figs/rate_classification.png}
-\caption{Fractional classification rate in the \SW CFHTLS survey.}
+\caption{Fractional classification rate in the \SW \cfhtls survey.}
 \label{fig:results:speed}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1217,7 +1220,7 @@ categories, performance, efficiency and capacity.
 \end{minipage}
 \caption{Illustrative examples of
 false negatives (blue) and false positives (red) from the classification of
-the \SW CFHTLS training set. The trajectory plot for each of the 4 subjects is
+the \SW \cfhtls training set. The trajectory plot for each of the 4 subjects is
 shown to the right of its image. Lefthand panels show the most common types of
 trajectories: short step random walks resulting from no high skill classifiers
 viewing the subject. The righthand panels show examples where higher skill
@@ -1364,7 +1367,7 @@ One might also consider looking at
 introducing more conditional dependences in the confusion matrix elements, to
 allow for some classifiers having greater skill in spotting one type of lens
 than another, or, more generally, as a function of lens property (such as
-color, brightness, and image separation). In the current model, all agents are
+colour, brightness, and image separation). In the current model, all agents are
 considered to be completely independent, whereas in fact we might expect there
 to be significant clustering of the confusion matrix elements. A hierarchical
 model for the crowd, with hyper-parameters describing the distribution of
@@ -1417,7 +1420,7 @@ is an interesting challenge for future work.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table*}
 \begin{center}
-\caption{Total crowd and subject sample properties from the CFHTLS project.}
+\caption{Total crowd and subject sample properties from the \cfhtls project.}
 \label{tab:crowd:contributions}
 \begin{tabular}{cccccccc}
   \hline
@@ -1441,7 +1444,7 @@ is an interesting challenge for future work.
 
 
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
-information generated in both \StageOne and 2 of the CFHTLS project, with the
+information generated in both \StageOne and 2 of the \cfhtls project, with the
 total numbers of agents and subjects for comparison.   These numbers allow us
 to quantify the efficiency of the system.
 
@@ -1532,11 +1535,11 @@ nervous volunteer.
 We have designed, implemented and tested a system for   detecting new strong
 gravitational lens candidates in wide field imaging surveys by crowd-sourced
 visual inspection. The \SW web-based classification interface presents carefully
-prepared color composite sky images to volunteers, who mark features they
+prepared colour composite sky images to volunteers, who mark features they
 propose to  have been lensed. The participants receive ongoing training with a
 mixture of simulated lens and known-to-be-empty images, and we use this
 information to inform the automated interpretation of their markers. In our
-first lens search we simply divided the CFHTLS imaging into some 430,000 tiles,
+first lens search we simply divided the \cfhtls imaging into some 430,000 tiles,
 and collected over 10~million volunteer image classifications.
 
 % Questions we set ourselves in the introduction:
@@ -1561,7 +1564,7 @@ classifications at rates between $10^3$ and $10^4$ images per hour), suggesting
 that if this can be maintained, visual inspection of tens of thousands of images
 can be performed on timescales of a few weeks.
 
-\item Over the course of the two stages of the CFHTLS project, the
+\item Over the course of the two stages of the \cfhtls project, the
 set of images was reduced by a factor of $10^3$ (from a few hundred thousand to
 a few hundred), enough for an expert team to take over.
 
@@ -1584,7 +1587,7 @@ simply due to classification noise.
 
 \end{itemize}
 
-In \PaperTwo we present the results of this CFHTLS lens search in more detail,
+In \PaperTwo we present the results of this \cfhtls lens search in more detail,
 in particular focusing on the detection of real lenses, and the comparison
 between \SW and various automated lens finding methods. In this paper  we have
 shown how \SW provides a lens candidate detection service, crowd-sourcing the
@@ -1697,7 +1700,7 @@ prior probability that it is (or contains) a lens is
 \be
   \pr(\LENS) = p_0
 \ee
-where we have to assign a value for $p_0$. In the CFHTLS, we might expect
+where we have to assign a value for $p_0$. In the \cfhtls, we might expect
 something like 100 lenses in 430,000 images, so $p_0 = 2\times10^{-4}$
 is a reasonable estimate. The volunteer then makes a classification $C_k$
 ($= \saidLENS$ or $\saidNOT$).
@@ -1865,7 +1868,7 @@ against false positives. Anyone who classifies more than one image (by
 progressing beyond the tutorial) makes a non-zero information
 contribution to the project.
 
-The total information generated during the CFHTLS project is shown in
+The total information generated during the \cfhtls project is shown in
 \Tref{tab:crowd:contributions}. Interpreting these numbers is not easy, but we
 might do the following. Dividing this by the amount of information it takes to
 classify a \SW subject all the way to the detection threshold (lens

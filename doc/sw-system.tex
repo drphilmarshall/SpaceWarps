@@ -609,21 +609,21 @@ images for similar features.
 \label{sec:data:display}
 
 The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
-quality, and we chose to focus on this set (although the $u$ and $z$-band
-images were also available for perusal in Talk). \new{We made colour composite PNG
-format images
-following the prescription of \citet{LuptonEtal2004} \citep[with extensions
-by][and some particular choices of our own]{WherryEtal2004}, using the \humvi
-software.\footnote{The \humvi colour image composition code used in
-this work is open source and available from \texttt{http://github.com/drphilmarshall/HumVI}} Specifically, we
-first rescaled the pixel values of each image, in the notation of
-\citeauthor{LuptonEtal2004}) into flux units (``picomaggies,''), via the image
-AB zeropoint $m_0$ and the pixel value calibration factor $f$  given by
-$\log_{10}{f} = 0.4(30.0 - m_0)$. We then applied further aesthetic
-``scales'' $s_{i,r,g}$ before computing the intensity image $I$ and applying
-an arcsinh stretch. (The scales are re-normalized to sum to one.) Thus, the red
-($R$), green ($G$) and blue ($B$) channel images correspond to the CFHTLS $i$,
-$r$ and $g$-band images in the following way:
+quality, and we chose to focus on this set (although the $u$ and $z$-band images
+were also available for perusal in Talk). \new{We made colour composite PNG
+format images following the prescription of \citet{LuptonEtal2004} \citep[with
+extensions by][and some particular choices of our own]{WherryEtal2004}, using
+the \humvi software.\footnote{The \humvi colour image composition code used in
+this work is open source and available from
+\texttt{http://github.com/drphilmarshall/HumVI}} Specifically, we first rescaled
+the pixel values of each image, in the notation of \citeauthor{LuptonEtal2004},
+into flux units (``picomaggies,''), via the image AB zeropoint $m_0$ and the
+pixel value calibration factor $f$  given by $\log_{10}{f} = 0.4(30.0 - m_0)$.
+We then multiplied these calibrated images by further aesthetic ``scales''
+$s_{i,r,g}$ before computing the total intensity image $I$ and applying an
+arcsinh stretch. (The scales are re-normalized to sum to one on input.) Thus,
+the red ($R$), green ($G$) and blue ($B$) channel images correspond to the
+CFHTLS $i$, $r$ and $g$-band images in the following way:
 \bea
 I & = & (i \cdot s_i + r \cdot s_r + g \cdot s_g), \notag \\
 R & = & i \cdot s_i \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{Q \cdot I}, \notag \\
@@ -633,7 +633,7 @@ B & = & g \cdot s_g \cdot \frac{{\rm asinh}\left(\alpha \cdot Q \cdot I\right)}{
 We chose to allow the composite image formed from these channel images to
 saturate to white: any pixels in any of the channel images lying outside the
 range 0 to 1 was assigned the value 0 or 1 appropriately. This was not the
-recommendation of \citet{LuptonEtal2004}, but we found it to give very
+recommendation of \citet{LuptonEtal2004}, but we found it to still give very
 informative but also familiar-looking astronomical images.}
 
 \new{The non-linearity parameters $Q$ and $\alpha$ control the brightness and

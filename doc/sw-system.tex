@@ -371,8 +371,8 @@ classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'').
 
-\new{Because we include a training set of images in amongst the survey ``test''
-images in this way, \sw can be viewed as a {\it supervised learning} system.
+Because we include a training set of images in amongst the survey ``test''
+images, \sw can be viewed as a {\it supervised learning} system.
 Consequently, we should expect to find lens candidates that look like the sims
 that we put in the training set, and so the design of this training set is
 quite important. The training images must look realistic, in two ways. First,
@@ -381,16 +381,16 @@ other survey images -- otherwise they could be identified as training images
 without the volunteer learning anything about what lenses look like. For this
 reason, we make the sims by {\it adding in} simulated lensed features to real
 images drawn from the survey. It also means that each dataset presented for
-inspection in the \sw interface needs to come with its own training set.}
+inspection in the \sw interface needs to come with its own training set.
 
-\new{Second, the lensed features themselves must be realistic; if they did not
+Second, the lensed features themselves must be realistic; if they did not
 resemble real lenses, we could not expect to find real lenses in the test
 images. The details of how we generated the sims for the CFHTLS project are
 given in \PaperTwo, where we also carry out performance tests relative to real
 lens candidates in the survey fields. Here, we merely note the following
-aspects to place this paper's results in context.}
+aspects to place this paper's results in context.
 
-\new{We start by selecting massive galaxies and groups in the CFHTLS catalogs,
+We start by selecting massive galaxies and groups in the CFHTLS catalogs,
 by color, brightness and photometric redshift. We then assign plausible mass
 distributions to these ``potential lenses:'' a singular isothermal ellipsoid
 model for each massive galaxy, and an additional NFW profile dark matter halo
@@ -404,7 +404,7 @@ each potential lens has a high probability of having a source occur at a
 position that will lead to it being  highly magnified. Source galaxies are
 given plausible surface brightness profiles and ellipticities. We then compute
 the predicted multiple images of the source using the \gravlens ray-tracing
-code \citep{Keeton2000}.}
+code \citep{Keeton2000}.
 
 At this point, the distribution of lens and source properties are quite
 realistic. We then chose to make cuts of the simulated lens pool, in order to
@@ -417,7 +417,7 @@ crowd in extrapolating their understanding of gravitational lenses into a regime
 where they have not seen any before. In the CFHTLS project, the most important
 selection cuts were to only keep sims with a)  second brightest image brighter
 that $i = 23$ and b) total combined image magnitude brighter than 19--20
-(\PaperTwo, Table~1).} The combination of these two cuts results in a sample of
+(\PaperTwo, Table~1). The combination of these two cuts results in a sample of
 visible lensed image configurations.
 
 When a volunteer begins classifying, they are initially shown training images at
@@ -610,7 +610,7 @@ images for similar features.
 
 The CFHTLS $g$, $r$ and $i$-band images have the greatest depth and best image
 quality, and we chose to focus on this set (although the $u$ and $z$-band images
-were also available for perusal in Talk). \new{We made colour composite PNG
+were also available for perusal in Talk). We made colour composite PNG
 format images following the prescription of \citet{LuptonEtal2004} \citep[with
 extensions by][and some particular choices of our own]{WherryEtal2004}, using
 the \humvi software.\footnote{The \humvi colour image composition code used in
@@ -634,9 +634,9 @@ We chose to allow the composite image formed from these channel images to
 saturate to white: any pixels in any of the channel images lying outside the
 range 0 to 1 was assigned the value 0 or 1 appropriately. This was not the
 recommendation of \citet{LuptonEtal2004}, but we found it to still give very
-informative but also familiar-looking astronomical images.}
+informative but also familiar-looking astronomical images.
 
-\new{The non-linearity parameters $Q$ and $\alpha$ control the brightness and
+The non-linearity parameters $Q$ and $\alpha$ control the brightness and
 contrast of the images. We first tuned $\alpha$ (which acts as an additional
 scale factor) until the background noise was just visible. Then we tuned the
 colour scales $s$ to find a balance between exposing the low surface
@@ -645,7 +645,7 @@ appear to have equal red, green and blue components. Non-linearity sets in at
 about $1/(Q \alpha)$ in the  scaled intensity image: finally, tuning $Q$ at
 fixed $\alpha$ determines the appearance of bright galaxies, which we need to
 be suppressed enough to allow the low surface brightness features to show
-through, but not so much that they no longer looked like massive galaxies.}
+through, but not so much that they no longer looked like massive galaxies.
 
 These parameters were then fixed during the production of all the tiles, in
 order to allow straightforward comparison between one image and another, and

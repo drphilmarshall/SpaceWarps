@@ -747,17 +747,17 @@ The details of how the lens probabilities are calculated are given in
 \begin{itemize}
 
 \item Each volunteer is assigned a simple software agent, characterised by a
-confusion matrix. The two independent elements of this matrix are the
+confusion matrix~$\CM$. The two independent elements of this matrix are the
 probabilities, as estimated by the agent, that the volunteer is going to be 1)
 correct when they report that an image contains a lens when it really does
-contain a lens, $\pr(\saidLENS|\LENS,T)$, and 2) correct when they report that
+contain a lens, $\PL = \pr(\saidLENS|\LENS,T)$, and 2) correct when they report that
 an image does not contain a lens when it really doesn't contain a lens,
-$\pr(\saidNOT|\LENS,T)$.
+$\PD = \pr(\saidNOT|\NOT,T)$.
 
 \item Each agent updates its confusion matrix elements based on the number of
 times its volunteer has been right in each way (about both the sims and the
 duds) while classifying subjects from the training set, accounting for noise
-early on due to small number statistics: $T$ is the set of all training images
+early on due to small number statistics: $T$~is the set of all training images
 seen to date.
 
 \item Each agent uses its confusion matrices to update, via Bayes' theorem,
@@ -781,14 +781,14 @@ agent-perceived ``skill.''}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
-\caption{Typical \SW agent histories. The ``skill'' of the  same 200 random
-agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
-of the number  of subjects classified (``effort''). The yellow histogram in
-the background shows the distribution of effort.}
-\label{fig:swap:agent-histories}
-\end{figure}
+%\begin{figure}
+%\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
+%\caption{Typical \SW agent histories. The ``skill'' of the  same 200 random
+%agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
+%of the number  of subjects classified (``effort''). The yellow histogram in
+%the background shows the distribution of effort.}
+%\label{fig:swap:agent-histories}
+%\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Fref{fig:swap:agent-probabilities} shows the confusion matrix elements of 200
@@ -796,14 +796,16 @@ randomly-selected agents, as they were on a particular day towards the end of
 the \cfhtls project. Many volunteers classify  only a small number of images, and
 so their agents' confusion matrix elements remain close to their initial values
 of (0.5,0.5). As more images are classified (shown by the yellow point size),
-the agents' matrix elements tend to move towards higher values, as the
+the agents' matrix elements tend to move towards higher values, partly as the
 volunteers attain greater skill levels (green point sizes, see
-\Sref{sec:results} below) and the agent learns more about them. In this
-quadrant, the agents perceive their volunteers to be ``astute.'' This trend is
-more clearly seen in \Fref{fig:swap:agent-histories}, which shows the skill of
-the same sample of agents as the number of images classified increases. The
-histogram shows the distribution of classification number: a long tail to very
-high ``effort'' can be seen.
+\Sref{sec:results} below) but mostly as
+the agent learns more about them. In this upper
+right-hand quadrant, the agents perceive their volunteers to be ``astute.''
+
+%\Fref{fig:swap:agent-histories} shows the ``skill'' (\Sref{sec:results:crowd})
+%of the same small sample of agents evolving as their volunteers classify images.
+%The underlying histogram shows the distribution of classification number: a long
+%tail to very high ``effort'' can be seen.
 
 In \Sref{sec:results} below, we define several quantities based on the
 probabilities listed above that serve to quantify the performance of the crowd
@@ -814,11 +816,13 @@ as a function of $\pr(\LENS|C,T)$ threshold.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_trajectories.png}
-\caption{Typical \SW \StageOne subject trajectories. Subjects drift downwards in
-the top panel as they are classified, while being nudged left and right by the
-agents as they interpret the volunteers input. The dotted vertical lines show
-(left to right) the retirement threshold, prior probability, and the detection
-threshold.}
+\caption{Typical \SW \StageOne subject trajectories. Top: 200 randomly-selected
+subjects drift downwards as they are classified, while being nudged left and
+right in probability by the agents as they interpret the volunteers input. The
+dotted vertical lines show (left to right) the retirement threshold, prior
+probability, and the detection threshold. Different colours denote the different
+kinds of subject. Bottom panel: histograms of all the subject probabilities
+computed to date, sub-divided by subject kind.}
 \label{fig:swap:subject-trajectories}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -832,9 +836,9 @@ images' posterior probability, $\pr(\LENS|C,T)$, to define ``detection'' and
 symmetrically in the logarithm of probability), $10^{-7}$. Subjects that
 attained probability of less than the rejection threshold were scheduled for
 retirement and subsequently ignored by the analysis code. Subjects crossing the
-detection threshold were not retired from the website, but instead left in the
-system so that more volunteers could see them (and continue to update their
-probabilities). The progress of the subjects is illustrated in
+detection threshold were also subsequently ignore, but they were not
+retired from the website, just so that more volunteers could see them.
+The progress of the subjects is illustrated in
 \Fref{fig:swap:subject-trajectories}. Subjects appear on this plot at the tip of
 the arrow, at zero classifications and prior probability; they then drift
 downwards as they are classified by the crowd, with each agent applying the
@@ -1003,12 +1007,11 @@ the \cfhtls training set.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/all_skill_contribution_experience_education.png}
-\caption{Key properties and contributions of the \SW crowd. Plotted are the 1-D
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/all_skill_contribution_experience_education.pdf}
+\caption{Key properties and contributions of the \SW \StageOne crowd.
+Plotted are the 1-D
 and 2-D smoothed marginalized distributions for  the logarithms of the
-properties of the agents described in the text. The  \StageOne agents are shown
-in blue, the \StageTwo agents in orange: the  smoothing scale for the \StageTwo
-curves was set slightly higher to counter the  higher shot noise. The contours
+properties of the agents described in the text. The contours
 contain 68\%, 95\% and 99\% of the distributions.}
 \label{fig:crowd:cornerplot}
 \end{figure*}
@@ -1029,12 +1032,14 @@ classified by a volunteer. In \StageOne, the mean experience per agent was 29;
 in \StageTwo (where the training image frequency was set higher) it was 34.
 %
 \item{\noindent\bf ``Skill:''} The expectation value of the information gained
-per classification (in bits) by that volunteer,  $\skill$ for subjects which
+per classification (in bits) by that volunteer,  $\skill$, for subjects which
 have lens probability 0.5 (\Aref{appendix:swap}). Random classifiers have
-$\skill = 0.0$, while perfect classifiers have $\skill = 1.0$. All agents start
-with $\skill = 0.0$. The skill of  an agent increases as training subjects are
+$\skill = 0.0$~bits, while perfect classifiers have $\skill = 1.0$~bit.
+All agents start
+with $\skill = 0.0$~bits. The skill of  an agent increases as training subjects are
 classified, and the agent's estimates of its confusion matrix elements improve.
-In \StageOne, the mean skill per agent was 0.04 bits; in  \StageTwo it was 0.05.
+In \StageOne, the mean skill per agent was 0.04 bits; in  \StageTwo it was
+0.05~bits.
 %
 \item{\noindent\bf ``Contribution:''} The integrated skill over a volunteer's
 {\it test subject} classification history, a quantity representative of the
@@ -1087,7 +1092,7 @@ had higher probability.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.png}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.pdf}
 \caption{Cumulative distributions of the contributions made by the agents: 90\%
 of the contribution was made by the highest contributing 1\% of the crowd at
 \StageOne (blue), and the highest contributing  7\% of the crowd at \StageTwo
@@ -1122,7 +1127,7 @@ enough to make large contributions -- they just didn't classify as many images.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_skill_cumul.png}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_skill_cumul.pdf}
 \caption{Broad cumulative distributions of agent skill:
 the most skilled 20\% of the crowd only possess 79\% of the skill at \StageOne.
 The \StageOne agents
@@ -1336,13 +1341,11 @@ is under development.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.png}
+\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.pdf}
 \caption{\StageTwo classifier skill, as a function of their \StageOne skill.
 Veterans from \StageOne  are shown in blue, while new volunteers are shown in
-orange. Point size is proportional to the number of \StageTwo classifications
-made, while dashed lines are drawn at the mean values for each sample.
-Restricting \StageTwo to classifiers with high \StageOne skill could reduce the
-noise in the system.}
+orange. Point size is proportional to the total contribution made,
+while dashed lines are drawn at the mean values for each sample.}
 \label{fig:discuss:performance:stage1vstage2}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

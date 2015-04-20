@@ -36,8 +36,8 @@ def make_crowd_plots(argv):
         make_crowd_plots
 
     PURPOSE
-        Given stage1 and stage2 bureau pickles, this script produces the 
-        4 plots currently planned for the crowd section of the SW system 
+        Given stage1 and stage2 bureau pickles, this script produces the
+        4 plots currently planned for the crowd section of the SW system
         paper.
 
     COMMENTS
@@ -127,7 +127,7 @@ def make_crowd_plots(argv):
     effort = []
     information = []
     early_skill = []
-    
+
     final_skill_all = []
     contribution_all = []
     experience_all = []
@@ -175,16 +175,16 @@ def make_crowd_plots(argv):
     experience2 = []
     effort2 = []
     information2 = []
-    
+
     # stage 1 skill of stage 2 classifiers:
     final_skill1 = []
-    
+
     final_skill_all2 = []
     contribution_all2 = []
     experience_all2 = []
     effort_all2 = []
     information_all2 = []
-    
+
     new_s2_contribution = []
     new_s2_skill = []
     new_s2_effort = []
@@ -214,7 +214,7 @@ def make_crowd_plots(argv):
 
         oldagent = bureau1.member[ID]
         final_skill1.append(oldagent.traininghistory['Skill'][-1])
-        
+
 
     experience2 = np.array(experience2)
     effort2 = np.array(effort2)
@@ -241,10 +241,10 @@ def make_crowd_plots(argv):
     # ------------------------------------------------------------------
 
     # Plot 1.1 and 1.2: cumulative distributions of contribution and skill
-    
+
     # 1.1 Contribution
-    
-    plt.figure(figsize=(10,8))
+
+    plt.figure(figsize=(10,8),dpi=300)
 
     # All Stage 1 volunteers:
     cumulativecontribution1_all = np.cumsum(np.sort(contribution_all)[::-1])
@@ -291,14 +291,15 @@ def make_crowd_plots(argv):
     plt.xlim(0.0, 0.21)
     plt.ylim(0.0, 1.0)
     plt.legend(loc='lower right')
-    pngfile = output_directory+'crowd_contrib_cumul.png'
+    # pngfile = output_directory+'crowd_contrib_cumul.png'
+    pngfile = output_directory+'crowd_contrib_cumul.pdf'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: cumulative contribution plot saved to "+pngfile
 
 
     # 1.2 Skill
-    
-    plt.figure(figsize=(10,8))
+
+    plt.figure(figsize=(10,8),dpi=300)
 
     # All Stage 1 volunteers:
     cumulativeskill1_all = np.cumsum(np.sort(final_skill_all)[::-1])
@@ -341,7 +342,8 @@ def make_crowd_plots(argv):
     plt.xlim(0.0, 0.21)
     plt.ylim(0.0, 1.0)
     plt.legend(loc='upper left')
-    pngfile = output_directory+'crowd_skill_cumul.png'
+    # pngfile = output_directory+'crowd_skill_cumul.png'
+    pngfile = output_directory+'crowd_skill_cumul.pdf'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: cumulative skill plot saved to "+pngfile
 
@@ -358,7 +360,7 @@ def make_crowd_plots(argv):
     print "make_crowd_plots: the",Nprodigies,"-",phr(100*Nprodigies/N),"% - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of",phr(mean_prodigies_skill,ndp=2)
     print "make_crowd_plots: with",phr(100*Ngood_prodigies/Nprodigies),"% of them remaining at skill 0.05 or higher"
 
-    plt.figure(figsize=(10,8))
+    plt.figure(figsize=(10,8),dpi=300)
     plt.xlim(-0.02,0.25)
     plt.ylim(-0.02,0.8)
     plt.xlabel('Early Skill, $\langle I \\rangle_{j<10}$ / bits')
@@ -369,7 +371,8 @@ def make_crowd_plots(argv):
     plt.scatter(early_skill,final_skill,s=size,color='blue',alpha=0.4)
     plt.plot((0.1, 0.1), (0.05, 0.8),color='black',ls='--')
     plt.plot((0.1, 0.25), (0.05, 0.05),color='black',ls='--')
-    pngfile = output_directory+'early_vs_final_skill.png'
+    # pngfile = output_directory+'early_vs_final_skill.png'
+    pngfile = output_directory+'early_vs_final_skill.pdf'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: skill-skill plot saved to "+pngfile
 
@@ -404,11 +407,14 @@ def make_crowd_plots(argv):
 
     np.savetxt(output_directory+'volunteer_analysis2.cpt', X, header=comment)
 
-    pngfile = output_directory+'all_skill_contribution_experience_education.png'
+    # pngfile = output_directory+'all_skill_contribution_experience_education.png'
+    pngfile = output_directory+'all_skill_contribution_experience_education.pdf'
+
     input1 = output_directory+'volunteer_analysis1.cpt,blue,shaded'
     input2 = output_directory+'volunteer_analysis2.cpt,orange,shaded'
 
-    call([cornerplotter_path,'-o',pngfile,input1,input2])
+    # call([cornerplotter_path,'-o',pngfile,input1,input2])
+    call([cornerplotter_path,'-o',pngfile,input1])
 
     print "make_crowd_plots: corner plot saved to "+pngfile
 
@@ -419,7 +425,7 @@ def make_crowd_plots(argv):
     # PJM: updated 2014-09-03 to show stage 1 vs 2 skill, point size shows effort.
 
     # plt.figure(figsize=(10,8))
-    plt.figure(figsize=(8,8))
+    plt.figure(figsize=(8,8),dpi=300)
     # plt.xlim(-10.0,895.0)
     plt.xlim(-0.02,0.85)
     plt.ylim(-0.02,0.85)
@@ -427,17 +433,17 @@ def make_crowd_plots(argv):
     plt.xlabel('Stage 1 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
     plt.ylabel('Stage 2 Skill $\langle I \\rangle_{j=N_{\\rm T}}$ / bits')
 
-    size = 0.5*effort2
+    # size = 0.5*effort2
     # size = 20 + 10*information2
-    # size = 20 + 10*contribution2
+    size = 10 + 5*contribution2
     # plt.scatter(contribution2, final_skill2, s=size, color='blue', alpha=0.4)
     # plt.scatter(contribution2, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
     plt.scatter(final_skill1, final_skill2, s=size, color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
     # plt.scatter(final_skill1, final_skill2,         color='blue', alpha=0.4, label='Veteran volunteers from Stage 1')
-    
-    size = 0.5*new_s2_effort
+
+    # size = 0.5*new_s2_effort
     # size = 20 + 10*new_s2_information
-    # size = 20 + 10*new_s2_contribution
+    size = 10 + 5*new_s2_contribution
     # plt.scatter(new_s2_contribution, new_s2_skill,s = size, color='#FFA500', alpha=0.4)
     # plt.scatter(new_s2_contribution, new_s2_skill,          color='#FFA500', alpha=0.4, label='New Stage 2 volunteers')
     new_s1_skill = new_s2_skill.copy()*0.0 # All had zero skill at stage 1, because they didn't show up!
@@ -457,7 +463,7 @@ def make_crowd_plots(argv):
     l = plt.axhline(y=y0,color='blue',ls='--')
     print "make_crowd_plots: ",Nvets,"stage 1 veteran users (",phr(100*Nvets/N),"% of the total) made",phr(100*totalvets/total),"% of the contribution"
     print "make_crowd_plots: the average stage 1 veteran had skill1, skill2, contribution, effort = ",phr(x0,ndp=2),phr(y0,ndp=2),phr(w0),int(z0)
-    
+
     x0,y0,w0,z0 = np.mean(new_s1_skill),np.mean(new_s2_skill),np.mean(new_s2_contribution),np.mean(new_s2_effort)
     l = plt.axvline(x=x0,color='#FFA500',ls='--')
     l = plt.axhline(y=y0,color='#FFA500',ls='--')
@@ -467,8 +473,9 @@ def make_crowd_plots(argv):
     lgnd = plt.legend(loc='upper right')
     lgnd.legendHandles[0]._sizes = [30]
     lgnd.legendHandles[1]._sizes = [30]
-    
-    pngfile = output_directory+'stage2_veteran_contribution.png'
+
+    # pngfile = output_directory+'stage2_veteran_contribution.png'
+    pngfile = output_directory+'stage2_veteran_contribution.pdf'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: newbies vs veterans plot saved to "+pngfile
 
@@ -487,7 +494,7 @@ def phr(x,ndp=1):
 
 # ======================================================================
 
-if __name__ == '__main__': 
+if __name__ == '__main__':
     make_crowd_plots(sys.argv[1:])
 
 # ======================================================================

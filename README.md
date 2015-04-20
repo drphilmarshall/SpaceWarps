@@ -7,8 +7,8 @@ being developed by the science team.
 
 Two papers on the first dataset we searched for lenses, the CFHTLS, are being prepared:
 
-* [Marshall et al 2015, in prep: Crowd-sourcing the Discovery of Gravitational Lenses](https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-system.pdf)
-* [More et al 2015, in prep: Results from CFHTLS](https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-cfhtls.pdf)
+* [Marshall et al 2015, in prep: *"Space Warps: Crowd-sourcing the Discovery of Gravitational Lenses"*](https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-system.pdf)
+* [More et al 2015, in prep: *"Space Warps: New Gravitational Lens Candidates from the CFHTLS Discovered through Citizen Science"*](https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-cfhtls.pdf)
 
 The web app itself is being developed [here](https://github.com/zooniverse/Lens-Zoo) as part of the [Zooniverse](http://zooniverse.org) project. If you are interested in building a site like Space Warps using Zooniverse techology, keep an eye on their website or drop them a line.
 

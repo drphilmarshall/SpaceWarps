@@ -374,16 +374,18 @@ in \Fref{fig:screenshot}) or feedback for an unsuccessful one (for
 example, ``There is no gravitational lens in this field!'').
 
 Because we include a training set of images in amongst the survey ``test''
-images, \sw can be viewed as a {\it supervised learning} system.
-Consequently, we should expect to find lens candidates that look like the sims
-that we put in the training set, and so the design of this training set is
-quite important. The training images must look realistic, in two ways. First,
-apart from the simulated lenses they contain, they must look like all the
-other survey images -- otherwise they could be identified as training images
-without the volunteer learning anything about what lenses look like. For this
-reason, we make the sims by {\it adding in} simulated lensed features to real
-images drawn from the survey. It also means that each dataset presented for
-inspection in the \sw interface needs to come with its own training set.
+images, \sw can be viewed as a {\it supervised learning} system. Consequently,
+we should expect to find lens candidates that look like the sims that we put in
+the training set, and so the design of this training set is quite important. The
+training images must look realistic, in two ways. First, apart from the
+simulated lenses they contain, they must look like all the other survey images --
+otherwise they could be identified as training images without the volunteer
+learning anything about what lenses look like. For this reason, we make the sims
+by {\it adding in} simulated lensed features to real images drawn from the
+survey, and we make the duds by simply inspecting and choosing from a small
+sample of randomly-selected survey images. It also means that each dataset
+presented for inspection in the \sw interface needs to come with its own
+training set.
 
 Second, the lensed features themselves must be realistic; if they did not
 resemble real lenses, we could not expect to find real lenses in the test
@@ -447,19 +449,18 @@ below).
 \subsubsection{Spotter's Guide}
 \label{sec:design:training:guide}
 
-The instant feedback provides real-time educational responses to the
-volunteers as they start classifying; as well as this dynamic system, \SW
-provides a static reference work for volunteers to consult when in doubt about
-how to perform the task. This ``Spotter's Guide'' is a set of webpages showing
-example lenses, both real and simulated, and also some common false positives,
-drawn from the pool of survey images. The non-lenses were identified by three
-of us (AV, AM and PM) while inspecting a small set of survey images in order
-to define the ``dud'' training images (\Sref{sec:design:stages}). For easy reference, the lenses are
+The instant feedback provides real-time educational responses to the volunteers
+as they start classifying; as well as this dynamic system, \SW provides a static
+reference work for volunteers to consult when in doubt about how to perform the
+task. This ``Spotter's Guide'' is a set of webpages showing example lenses, both
+real and simulated, and also some common false positives, drawn from the pool of
+survey images. The false positives were identified during the selction of the
+``dud'' training images (previous section). For easy reference, the lenses are
 divided by type (for example, ``lensed galaxies,'' ``lensed quasars'' and
 ``cluster lenses''), as are the false positives (for example, ``Rings and
 Spirals,'' ``Mergers,'' ``Artifacts'' and so on). The example images are
-accompanied by explanatory text. The Spotter's Guide is reached via a button
-on the left hand side, or the hyperlinked thumbnail images of the ``Quick
+accompanied by explanatory text. The Spotter's Guide is reached via a button on
+the left hand side, or the hyperlinked thumbnail images of the ``Quick
 Reference'' provided on the right hand side, of the classification interface.
 
 Most of the text of the Spotter's Guide focuses on what kinds of image features
@@ -497,16 +498,16 @@ candidates in \StageOne is truly a community effort: to detect a lens candidate,
 many non-lenses must first be rejected, and several classifications by different inspectors are needed in either case.
 
 The \StageOne training set was chosen to be quite clear cut, in order to err on
-the side of inclusivity, and so ensure high completeness. We selected the
-training duds by visual inspection, discarding anything that could be considered
-a lens candidate (see \Sref{sec:design:training:guide}): this meant that objects
-that look similar to lenses, such as galaxy mergers, tidal tails and spiral
-arms, pairs of blue stars and so on, were specifically excluded from the
-training set, and so we expect some of those types of object to appear in the
-\StageOne candidate list. The training sims for \StageOne were also selected to
-be relatively straightforward to spot, as we sought a balance between
-sensitivity to faint or difficult lenses, and the need to educate the volunteers
-in what gravitational lenses look like. We return to this balance below.
+the side of inclusivity, and so ensure high completeness. When defining the
+training duds we discarded anything that could be considered a lens candidate
+(see \Sref{sec:design:training:guide}): this meant that objects that look
+similar to lenses, such as galaxy mergers, tidal tails and spiral arms, pairs of
+blue stars and so on, were specifically excluded from the training set, and
+therefore we expect some of those types of object to appear in the \StageOne
+candidate list. The training sims for \StageOne were also selected to be
+relatively straightforward to spot, as we sought a balance between sensitivity
+to faint or difficult lenses, and the need to educate the volunteers in what
+gravitational lenses look like. We return to this balance below.
 
 
 \subsubsection{\StageTwo: Refinement}
@@ -516,12 +517,13 @@ lead to sample of lens candidates that has high completeness but may have low
 purity. To refine this sample to higher purity, we need to reject more
 non-lenses, which means providing the volunteers with a more realistic and
 challenging training set as they re-classify it. The more demanding \StageTwo
-training set was generated as follows. The \StageTwo duds were again selected
-from the image pool by visual inspection as being a potential false positive,
-while the \StageTwo sims were chosen to be a subset of the \StageOne sims, none
-of which were deemed ``obvious'' by the same expert classifiers. This meant that
-the \StageTwo sims were had fainter and less well-separated image features than
-in the \StageOne training set.  Figures~\ref{fig:training-gallery:sims}
+training set was generated as follows. \new{The \StageTwo duds were selected
+from a small random subset of the \StageOne candidates (i.e., the \StageTwo duds
+were expert-defined \StageOne false positive detections),} while the \StageTwo
+sims were chosen to be a subset of the \StageOne sims, none of which were deemed
+``obvious'' by the same expert classifiers. This meant that the \StageTwo sims
+had fainter and less well-separated image features than in the \StageOne
+training set.  Figures~\ref{fig:training-gallery:sims}
 and~\ref{fig:training-gallery:duds} show some example images from the resulting
 \cfhtls \StageTwo training set.
 

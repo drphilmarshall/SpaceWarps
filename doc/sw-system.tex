@@ -714,16 +714,18 @@ SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
 Each classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs, a timestamp and the classification results (the image
-pixel-coordinate positions of every marker placed).  The ``category'' of subject --
-whether it is a ``training'' subject (a simulated lens or a known non-lens) or a
-``test'' subject (an unseen image drawn from the survey) -- is also recorded.
-For training subjects, we also store the ``kind'' of the subject as
-a lens (``sim''), or a non-lens (``dud''), and also the ``flavor'' of lens
-object if one is present in the image (``lensed galaxy'', ``lensed quasar'' or
-``cluster lens'').  This classification is used to provide instant feedback, but
-is also the basic measurement used in a probabilistic classification of every
-subject based on all image views to date.
+(anonymous) volunteer IDs (their Zooniverse usernames), a timestamp and the
+classification results (the image pixel-coordinate positions of every marker
+placed).  The ``category'' of subject -- whether it is a ``training'' subject (a
+simulated lens or a known non-lens) or a ``test'' subject (an unseen image drawn
+from the survey) -- is also recorded. For training subjects, we also store the
+``kind'' of the subject as a lens (``sim''), or a non-lens (``dud''), and also
+the ``flavor'' of lens object if one is present in the image (``lensed galaxy'',
+``lensed quasar'' or ``cluster lens'').  This classification is used to provide
+instant feedback, but is also the basic measurement used in a probabilistic
+classification of every subject based on all image views to date.  Not all
+volunteers register with the Zooniverse (although all are prompted to do so);
+in these cases we record their IP addresses as substitute IDs.
 
 While the \SW web app is live, and classifications are being made, we perform an
 online analysis of the classifications,  updating a probabilistic model of every

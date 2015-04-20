@@ -288,7 +288,7 @@ from \texttt{https://github.com/zooniverse/Lens-Zoo}. The project was renamed du
 The focus of the CI is a
 large display of a pre-prepared PNG image of the ``subject'' being inspected.
 When the image is clicked on by the volunteer, a marker symbol appears where the
-pointer was. Several markers can be placed.
+pointer was. Several markers can be placed, and they can be removed by the user if, for example, they change their mind.
 
 The next image moves rapidly in from a queue formed at the right hand side of
 the screen when the ``Finished marking'' button is pressed. Gravitational lenses
@@ -298,7 +298,7 @@ images to be pre-loaded while the volunteer is classifying the current subject,
 and the rapid movement is designed to encourage volunteers to classify rapidly.
 After each classification, the positions of the markers are written out to the
 classification database, in an entry that also stores the ID of the subject, the
-username (or IP address) of the volunteer, a timestamp and some other metadata.
+username (or IP address if the user is not logged in) of the volunteer, a timestamp and some other metadata.
 
 For the more interesting subjects, the CI offers two features that  enable
 further investigation of the subjects. The first is the ``Quick Dashboard''

@@ -1152,18 +1152,22 @@ initial confusion matrix is not very important: the same 0.75 initial values
 applied to normal, learning agents resulted in only a slightly lower TPR than
 the default case.
 
-The dot-dashed curves show the impact of the offline analysis. At \StageOne the
+The dot-dashed curves show the results from the offline analysis. At \StageOne the
 results are very similar to the online version that was actually run (solid
 line). However, at \StageTwo there is marginal evidence of there being greater
 benefit to doing the analysis offline (\Sref{sec:swap:offline}).
 Over 85\% TPR is achieved at zero FPR in the offline analysis , while if one is
 willing to accept a false positive rate of 5\%, the true positive rate rises to
 over 95\%, showing that some of the sims that were missed in the online analysis
-may be being recovered by doing the analysis offline. The same is true at
-\StageOne, but to a lesser extent. Assuming Poisson statistics for the
+may be being recovered by doing the analysis offline. (The same is true at
+\StageOne, but to a lesser extent.) One interpretation for this result (if it holds up)
+would be that the offline analysis, by using each agent's entire history, is
+making less noisy probability estimates.
+
+Assuming Poisson statistics for the
 fluctuations in the numbers of recovered lenses, the uncertainty in the measured
 \StageTwo TPR values is around 8\%, but the online and offline samples are
-highly correlated, such that the uncertainty on the difference between the ROC
+highly correlated, such that the uncertainty on the {\it difference} between the ROC
 curves is somewhat less than this. Still, a larger validation set is needed to
 test these algorithmic choices more rigorously. At \StageOne, high TPR can be
 measured to better than 1\%.
@@ -1646,14 +1650,18 @@ their agents' skill could alleviate this issue.
 %was at (since \StageTwo requires more careful attention).
 This is something we plan to experiment with in future.
 
-Finally, there could be some performance gains to be made by improving the
-SWAP agent model, or its implementation. Low skill is typically a result  of
+Finally, there could be some performance gains to be made by improving the SWAP
+agent model, or its implementation. Low skill is typically a result  of
 inexperience (\Sref{sec:results:crowd}), but it could be the agent that is
-inexperienced as well as the classifier or its agent. In a future paper we
-plan to investigate the use of the test images as well as the training images
-in accelerating the agent's learning (Davis et al, in preparation). We also
-plan to investigate the use of offline analysis at \StageOne, for the same
-reason (see also \Sref{sec:discuss:efficiency} below.)
+inexperienced as well as the classifier or its agent. In a future paper we plan
+to investigate the use of the test images as well as the training images in
+accelerating the agent's learning (Davis et al, in preparation). We also plan to
+investigate the use of offline analysis at \StageOne, partly for the same reason
+(see also \Sref{sec:discuss:efficiency} below.) Given the above findings  about
+the effects of noise in the SWAP system, we are also motivated to explore
+further the possible noise-reducing effects of the doing the analysis offline
+(\Sref{sec:results:sample}).
+
 One might also consider looking at
 introducing more conditional dependences in the confusion matrix elements, to
 allow for some classifiers having greater skill in spotting one type of lens

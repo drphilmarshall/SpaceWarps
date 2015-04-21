@@ -3,6 +3,20 @@
 import os, glob
 
 # ======================================================================
+# Global parameters:
+
+# Limits to subject probability (cannot go over 1 anyway):
+pmin,pmax = 2e-8,1.1
+
+# Plotting limits for no. of classifications (per subject):
+Ncmin,Ncmax = 0.2,60
+
+# Limits to confusion matrix elements - the volunteers are only human:
+PDmax,PLmax = 0.99,0.99
+PDmin,PLmin = 0.01,0.01
+Imax = 0.919
+
+# ======================================================================
 
 class Configuration(object):
     """
@@ -29,7 +43,7 @@ class Configuration(object):
 
     AUTHORS
       This file is part of the Space Warps project, and is distributed 
-      under the GPL v2 by the Space Warps Science Team.
+      under the MIT license by the Space Warps Science Team.
       http://spacewarps.org/
 
       SWAP configuration is modelled on that written for the
@@ -54,15 +68,20 @@ class Configuration(object):
     def read(self):
         thisfile = open(self.file)
         for line in thisfile:
-            # Ignore empty lines and comments:
+            # Ignore truly empty lines and comments:
             if line[0:2] == '\n': continue
             if line[0] == '#': continue
             line.strip()
             line = line.split('#')[0]
-            # Remove whitespace and interpret Name:Value pairs:
+            # Remove whitespace:
             line = ''.join(line.split())
+            # Ignore lines without colons:
+            if ':' not in line: continue
+            # Interpret remaining lines, which contain Name:Value pairs:
             line = line.split(':')
-            Name, Value = line[0], line[1]
+            Name, Value = line[0], ':'.join(line[1:])
+            # NB. We have to cope with strings that themselves contain 
+            # colons - like timestamps.
             self.parameters[Name] = Value
         thisfile.close()
         return
@@ -79,32 +98,15 @@ class Configuration(object):
                 self.parameters[key] = float(self.parameters[key])
             except ValueError:
                 pass
-                
-#         # Integers:
+                            
+            # Certain strings are special:
+            if self.parameters[key] == 'False': 
+                self.parameters[key] = False
+            elif self.parameters[key] == 'True': 
+                self.parameters[key] = True
+            elif self.parameters[key] == 'None': 
+                self.parameters[key] = None
 
-#         intkeys = ['NCalibrationLightcones','NRealisations']
-#         for key in intkeys:
-#             self.parameters[key] = int(self.parameters[key])
-
-#         # Now sort out filenames etc:
-#         pathkeys = ['CalibrationCatalogs', 'CalibrationKappamaps',
-#                     'ObservedCatalog', 'CalibrationFolder', 'HMFfile']
-#         for key in pathkeys:
-#             paths = self.parameters[key]
-#             # Expand environment variables (eg $PANGLOSS_DIR)
-#             paths = os.path.expandvars(paths)
-#             # Expand wildcards - glob returns [] if no files found...
-#             found = glob.glob(paths)
-#             if len(found) > 0: paths = found
-#             # Make sure all paths are lists, for consistency:
-#             if len(paths[0]) == 1: paths = [paths]
-#             # Replace parameters:
-#             self.parameters[key] = paths
-# 
-#         # Calibration catalogs and kappa maps must come in pairs...
-#         assert len(self.parameters['CalibrationCatalogs']) == \
-#                len(self.parameters['CalibrationKappamaps'])
-            
         return
 
     # ------------------------------------------------------------------

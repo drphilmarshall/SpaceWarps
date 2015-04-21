@@ -1,0 +1,65 @@
+Real Lenses:
+
+Gallery: beautiful !
+
+Lensed galaxies: I thought red arcs were from "nearby galaxies" z=0.6 and red quasars produce star-like images.
+To avoid confusion about which image is being talked about, can you put an arrow
+? at the beginning of the paragraph, pointing up to the image that is being discussed.last line: "Above are some examples of how the edge-on lens systems look like" change "how" to "what"
+I had to go back and look to see if the image below or above was being discussed.
+
+Lensed quasars:
+"with two images very close together." to "with two of the quad images very close together"
+Remove white dividing lines? 
+
+Group lenses:
+lovely !
+
+False Positives: Good.
+
+Star-forming galaxies:
+Good examples, thank you.
+typo "The ring arounf the core"  to around
+red star-forming galaxies typo  "The ed objects either side may be stars or neighbouring galaxies" ed to red
+
+The red galaxies that we see are a reasonable size on the image. Tiny red objects on the image can't be massive red galaxies, because if the galaxy was more distant, the light from it would get red-shifted and our telescope is unable to see infrared light.
+
+Loners:
+needed these examples, too.
+
+Lightweights
+excellent
+
+Mergers and Neighbours
+"that aren't physically associated to each other, but are simply next to each other can look"
+change location of comma to make it read better
+that aren't physically associated to each other but are simply next to each other, can look 
+
+"Here you see a yellow galaxy with a coupld of small neighbours. One of the neighbours is blue, and the other is a similar colour to the main"
+I have a hard time seeing the blue neighbors, can you pick a different example?
+typo "couple"
+
+Stars
+Here is what I really like! Labels! I could have done with that at the beginning.
+In the last image, there is a blue star with black specks. Say that it is an overloaded sensor.
+emmanating typo emanating
+
+Artifacts
+Moderators need this. People don't look in the posts or blogs. It needs to be in the Spotter's Guide.
+The same topics keep coming up, and I'm sure people don't like making beginner mistakes.
+
+satellite, asteroids and moving objects
+overlapping star not a supernova (I did this in my first day in Galaxy Zoo, I am so embarrassed to say)
+what is the funny red/green/blue speck? ( cosmic ray hit)
+black holes are not visible in the images, nor are galactic jets, and the topic keeps coming up.
+edges, as was mentioned
+The images are heavily processed, and software errors sometimes produce weird effects.
+
+http://talk.spacewarps.org/#/boards/BSW0000004/discussions/DSW000047b  Artifacts of red, green or blue: satellites, asteroids, meteors, cosmic ray hits, variable stars
+http://talk.spacewarps.org/#/subjects/ASW00000pw funny green spot
+http://talk.spacewarps.org/#/subjects/ASW0004o6h black square
+http://talk.spacewarps.org/#/subjects/ASW0004o6h poorly stacked image
+http://talk.spacewarps.org/#/subjects/ASW0000tqz "jet" is a dustlane
+
+Do we need a page on how to use Tools?
+
+Great job that you have done, Christine

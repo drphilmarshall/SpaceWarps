@@ -31,14 +31,22 @@
 \def\Eref#1{Equation~\ref{#1}\xspace}
 \def\Aref#1{Appendix~\ref{#1}\xspace}
 
+\newcommand{\PaperOne}{Paper~I\xspace}
+\newcommand{\PaperTwo}{Paper~II\xspace}
+
+\newcommand{\StageOne}{Stage~I\xspace}
+\newcommand{\StageTwo}{Stage~II\xspace}
+
 % UNITS
-\newcommand{\kms}{\ifmmode  \,\rm km\,s^{-1} \else $\,\rm km\,s^{-1}  $ \fi }
-\newcommand{\kpc}{\ifmmode  {\rm kpc}  \else ${\rm  kpc}$ \fi  }  
-\newcommand{\pc}{\ifmmode  {\rm pc}  \else ${\rm pc}$ \fi  }  
-\newcommand{\Msun}{\ifmmode {\rm M_{\odot}} \else ${\rm M_{\odot}}$ \fi} 
-\newcommand{\Zsun}{\ifmmode {\rm Z_{\odot}} \else ${\rm Z_{\odot}}$ \fi} 
-\newcommand{\yr}{\ifmmode yr^{-1} \else $yr^{-1}$ \fi} 
-\newcommand{\hMsun}{\ifmmode h^{-1}\,\rm M_{\odot} \else $h^{-1}\,\rm M_{\odot}$ \fi}
+\newcommand{\kms}{\ifmmode  \,\rm km\,s^{-1} \else $\,\rm km\,s^{-1}  $
+\fi }
+\newcommand{\kpc}{\ifmmode  {\rm kpc}  \else ${\rm  kpc}$ \fi  }
+\newcommand{\pc}{\ifmmode  {\rm pc}  \else ${\rm pc}$ \fi  }
+\newcommand{\Msun}{\ifmmode {\rm M_{\odot}} \else ${\rm M_{\odot}}$ \fi}
+\newcommand{\Zsun}{\ifmmode {\rm Z_{\odot}} \else ${\rm Z_{\odot}}$ \fi}
+\newcommand{\yr}{\ifmmode yr^{-1} \else $yr^{-1}$ \fi}
+\newcommand{\hMsun}{\ifmmode h^{-1}\,\rm M_{\odot} \else $h^{-1}\,\rm
+M_{\odot}$ \fi}
 
 % COSMOLOGY
 \newcommand{\LCDM}{$\Lambda{\rm CDM}$}
@@ -62,8 +70,17 @@
 \def\Letters{{\small\sc Letters}\xspace}
 \def\Letter{{\small\sc Letter}\xspace}
 \def\Dashboard{{\small\sc Dashboard}\xspace}
-\def\cfhtls{{\it CFHTLS}\xspace}
+\def\cfhtls{{CFHTLS}\xspace}
 \def\python{{\sc python}\xspace}
+\def\gravlens{{\sc gravlens}\xspace}
+\def\fitsjs{{\sc fitsjs}\xspace}
+\def\humvi{{\sc HumVI}\xspace}
+\def\af{{\sc ArcFinder}\xspace}
+\def\AF{{\sc ArcFinder}\xspace}
+\def\rf{{\sc RingFinder}\xspace}
+\def\RF{{\sc RingFinder}\xspace}
+\def\PH{{\sc Planet\,Hunters}\xspace}
+\def\GZ{{\sc Galaxy\,Zoo}\xspace}
 
 % TABLES:
 \newcommand\nodata{ ~$\cdots$~ }%
@@ -72,19 +89,32 @@
 \def\pr{{\rm Pr}}
 \def\data{{\mathbf{d}}}
 \def\datap{{\mathbf{d}^{\rm p}}}
+\def\training{{\mathbf{d}^{\rm t}}}
+\def\trainingk{{\mathbf{d}^{\rm t}_k}}
 \def\datai{d_i}
 \def\datapi{d^{\rm p}_i}
 \def\LENS{{\rm LENS}}
 \def\saidLENS{{\rm ``LENS"}}
 \def\NOT{{\rm NOT}}
 \def\saidNOT{{\rm ``NOT"}}
+\def\CM{\mathcal{M}}
+\def\PL{\CM_{LL}}
+\def\PD{\CM_{NN}}
+
+% AGENT/SAMPLE BUREAUCRACY
+\def\effort{N_{\rm C}}
+\def\thiseffort{N_{{\rm C},k}}
+\def\experience{N_{\rm T}}
+\def\skill{{\langle \Delta I \rangle_{0.5}}}
+\def\contribution{\skill^{\rm total}}
+\def\information{\Delta I}
+\def\Ns{J} % Number of subjects
+\def\Nv{K} % Number of volunteers
+\def\Ncands{N_{\rm det}} % Number of detected candidates
 
 % COMMENTING
 \usepackage[usenames]{color}
-\newcommand{\question}[2]{\textcolor{orange}{\bf QUESTION (#1): #2}}
-\newcommand{\flag}[2]{\textcolor{red}{\bf QUESTION (#1): #2}}
-% \newcommand{\comment}[2]{\textcolor{blue}{\bf COMMENT (#1): #2}}
-\newcommand{\new}[1]{{\bf #1}}
-
-% RESULTS
-\def\Ncollaboration{XXX}
+\newcommand{\question}[2]{\textcolor{red}{Question from #1: #2}}
+\newcommand{\flag}[2]{\textcolor{red}{Comment from #1: #2}}
+\newcommand{\todo}[2]{\textcolor{red}{\bf To Do: #1: #2}}
+\newcommand{\new}[1]{\textcolor{blue}{#1}}

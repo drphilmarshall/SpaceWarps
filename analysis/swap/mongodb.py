@@ -1,9 +1,22 @@
+"""
+TODO:
+    Save the whole list of clicks!
+"""
+
 # ======================================================================
 
 import numpy as np
-import os,sys,subprocess,datetime
-from pymongo import MongoClient
+import os,sys,datetime
 
+try: from pymongo import MongoClient
+except:
+    print "MongoDB: pymongo is not installed. You can still --practise though"
+    # sys.exit()
+
+# Hard-coded for all Space Warps datasets:
+testGroup = '5154a3783ae74086ab000001'
+trainingGroup = '5154a3783ae74086ab000002'
+    
 # ======================================================================
 
 class MongoDB(object):
@@ -23,9 +36,8 @@ class MongoDB(object):
         mongorestore spacewarps-2013-04-06_20-07-28
         mongod --dbpath . &
         
-        pymongo can be obtained by pip install.
         This sequence is carried out by the MongoDB class itself, via a 
-        system call.
+        system call. pymongo can be obtained by pip install.
         
         Basic operation is to define a "classification" tuple, that 
         contains all the information needed by a probabilistic online 
@@ -42,65 +54,256 @@ class MongoDB(object):
         ToyDB.get_classification()
         
     BUGS
-
+        - groupIds are hard-coded, and so could go wrong any time.
+        - arc hits in sim subjects are not yet recorded.
+        
     AUTHOR
       This file is part of the Space Warps project, and is distributed 
-      under the GPL v2 by the Space Warps Science Team.
+      under the MIT license by the Space Warps Science Team.
       http://spacewarps.org/
 
     HISTORY
-      2013-04-18  Started Marshall (Oxford)
+      2013-04-18  Started: Marshall (Oxford)
+      2013-04-23  Correct Mongo calls supplied: Kapadia (Adler) 
     """
 
 # ----------------------------------------------------------------------------
 
-    def __init__(self,dumpname=None):
-
-        self.dumpname = dumpname
-       
-        # Keep a record of what goes on:
-        self.logfilename = os.getcwd()+'/'+self.dumpname+'.log'
-        self.logfile = open(self.logfilename,"w")
-        
-        # Start the Mongo server in the background:
-        subprocess.call(["mongorestore",self.dumpname],stdout=self.logfile,stderr=self.logfile)
-        os.chdir(self.dumpname)
-        self.cleanup()
-        self.process = subprocess.Popen(["mongod","--dbpath","."],stdout=self.logfile,stderr=self.logfile)
-        
-        # Check everything is working:
-        if self.process.poll() == None: print "MongoDB: server is up and running"
+    def __init__(self):
         
         # Connect to the Mongo:
-        self.client = MongoClient('localhost', 27017)
-        self.db = self.client['ouroboros_staging']
+        try: self.client = MongoClient('localhost', 27017)
+        except: 
+            print "MongoDB: couldn't connect to the Mongo"
+            print "MongoDB: try doing something like this, in the mongo directory but in a separate shell:"
+            print "  mongod --dbpath . &"
+            sys.exit()
+        
+        try: self.db = self.client['ouroboros_staging']
+        except: 
+            print "MongoDB: couldn't find a DB called ouroboros_staging"
+            print "MongoDB: did your mongorestore work correctly?"
+            sys.exit()
 
+        # Set up tables of subjects, and classifications: 
         self.subjects = self.db['spacewarp_subjects']
         self.classifications = self.db['spacewarp_classifications']
-
-        # for subject in self.subjects.find():
-        #   print subject
-
-        # for classification in self.classifications.find():
-        #   print classification['annotations']
         
-        return
+        return None
 
 # ----------------------------------------------------------------------------
-# # Return a tuple of the key quantities:
-# 
-#     def get_classification(self,i):
-#         
-#         C = self.classifications[i]    
-#         
-#         return C['Name'],C['ID'],C['category'],C['result'],C['kind']
-# 
+# Return a batch of classifications, defined by a time range - either 
+# claasifications made 'since' t, or classifications made 'before' t:
+
+    def find(self,word,t):
+
+       if word == 'since':
+            batch = self.classifications.find({'updated_at': {"$gt": t}},timeout=False)
+       
+       elif word == 'before':
+            batch = self.classifications.find({'updated_at': {"$lt": t}},timeout=False)
+       
+       else:
+           print "MongoDB: error, cannot find classifications '"+word+"' "+str(t)
+
+       return batch
+
+# ----------------------------------------------------------------------------
+# Return a tuple of the key quantities, given a cursor pointing to a 
+# record in the classifications table:
+
+    def digest(self,classification,survey,method=False):
+        
+        # When was this classification made?
+        t = classification['updated_at']
+        
+        # Who made the classification?
+        
+        # The classification will be identified by either the user_id or
+        # the user_ip.  The value will be abstracted into the variable
+        # Name.
+        
+        # Not all records have all keys.  For instance, classifications 
+        # from anonymous users will not have a user_id key. We must 
+        # check that the key exists, and if so, get the value.
+        
+        if classification.has_key('user_id'):
+            Name = classification['user_id']
+        
+        else:
+            # If there is no user_id, get the ip address...
+            # I think we're safe with user_ip.  All records should have 
+            # this field. Check the key if you're worried. 
+            Name = classification['user_ip']
+        
+        # Pull out the subject that was classified. Note that by default
+        # Zooniverse subjects are stored as lists, because they can 
+        # oontain multiple images. 
+        
+        subjects = classification['subjects']
+        
+        # Ignore the empty lists (eg the first tutorial subject...)
+        if len(subjects) == 0:
+            return None
+        
+        # Get the subject ID, and also its Zooniverse ID:
+        for subject in subjects:
+            ID = subject['id']
+            ZooID = subject['zooniverse_id']
+        
+        # Pull out the annotations and get the stage the classification was made at:
+        annotations = classification['annotations']
+        
+        classification_stage = 1
+        for annotation in annotations:
+            if annotation.has_key('stage'):
+                classification_stage = annotation['stage']
+        
+        # Also get the survey name!
+        project = "CFHTLS"
+        for annotation in annotations:
+            if annotation.has_key('project'):
+                project = annotation['project']
+        
+        # Check project: ignore this classification by returning None 
+        # if classification is from a different project:
+        if project != survey:
+            # print "Fail! A classification from "+project+" ( != "+survey+" ), stage = ",classification_stage
+            return None
+        # else:
+            # Success! A classification from "+project+" ( = "+survey+" ), stage = ",classification_stage
+        
+        # Now pull the subject itself from the subject table:
+        subject = self.subjects.find_one({'_id': ID},timeout=False)
+        
+        # Was it a training subject or a test subject?
+        if subject.has_key('group_id'):
+            groupId = subject['group_id']
+        else:
+            # Subject is tutorial and has no group id:
+            return None
+        
+        subject_metadata = subject['metadata']        
+        
+        # Check subject stage:
+        # if subject_metadata.has_key('stage2'):
+        #     if classification_stage == 1: 
+        #         # This happens when the data is uploaded, but the site has
+        #         # not been taken down... Need to ignore these classifications!
+        #         # print "WARNING: classification labelled stage 1, while subject is stage 2!"
+        #         return None
+        
+        # PJM: The above code causes a bug when SWAP is re-run on stage 1 later on!
+        # Commented out, and moved to using timestamps rigorously to delineate 
+        # stage 1 and stage 2, as well as checking classification stage, that is.
+       
+        
+        # What kind of subject was it? Training or test? A sim or a dud?
+        # PJM 2014-08-21 And what flavor of sim is it?
+        kind = ''
+        if str(groupId) == trainingGroup:
+            category = 'training'
+            things = subject_metadata['training']
+            # things is either a list of dictionaries, or in beta, a 
+            # single dictionary:
+            if type(things) == list:
+                thing = things[0]
+            else:
+                thing = things
+            flavor = thing['type']
+            if (flavor == 'lensing cluster' \
+               or flavor == 'lensed galaxy' \
+               or flavor == 'lensed quasar'):
+                kind = 'sim'
+            else:
+                kind = 'dud'
+                flavor = 'dud'
+        else: # It's a test subject:
+            category = 'test'
+            kind = 'test'
+            flavor = 'test'
+                
+        # What's the URL of this image?
+        if subject.has_key('location'):
+            things = subject['location']
+            location = things['standard']
+        else:
+            location = None
+        
+        
+        # What did the volunteer say about this subject?
+
+        # For sims, we really we want to know if the volunteer hit the 
+        # arcs - but this is not yet stored in the database 
+        # (issued 2013-04-23). For now, treat sims by just saying that 
+        # any number of markers placed constitutes a hit.
+        
+        # NB: Not every annotation has an associated coordinate 
+        # (e.g. x, y) - tutorials fail this criterion.
+
+        N_markers = 0
+        simFound = False
+        # CPD 31.5.14: added annotation values
+        annotation_x = []
+        annotation_y = []
+        for annotation in annotations:
+            if annotation.has_key('x'): 
+                N_markers += 1
+                if len(annotation['x']) > 0:
+                    annotation_x.append(float(annotation['x']))
+                    annotation_y.append(float(annotation['y']))
+
+        
+        # Detect whether sim was found or not:
+        if kind == 'sim':
+            if method:
+                # Use the marker positions!
+                for annotation in annotations:
+                    if annotation.has_key('simFound'):
+                        string = annotation['simFound']
+                        if string == 'true': simFound = True
+            else:
+                if N_markers > 0: simFound = True
+        
+        # Now turn indicators into results:
+        if kind == 'sim':
+            if simFound:
+                result = 'LENS'
+            else:
+                result = 'NOT'
+              
+        elif kind == 'test' or kind == 'dud':
+            if N_markers == 0:
+                result = 'NOT'
+            else:
+                result = 'LENS'
+        
+        # And finally, what's the truth about this subject?
+        if kind == 'sim':
+            truth = 'LENS'
+        elif kind == 'dud':
+            truth = 'NOT'
+        else:    
+            truth = 'UNKNOWN'
+          
+        # Testing to see what people do:
+        # print "In db.digest: kind,N_markers,simFound,result,truth = ",kind,N_markers,simFound,result,truth
+        
+        # Check we got all 10 items:            
+        items = t.strftime('%Y-%m-%d_%H:%M:%S'),str(Name),str(ID),str(ZooID),category,kind,flavor,result,truth,str(location),str(classification_stage),str(annotation_x),str(annotation_y)
+        if len(items) != 13: print "MongoDB: digest failed: ",items[:] 
+
+                         
+        return items[:]
+
+
 # ----------------------------------------------------------------------------
 # Return the size of the classification table:
 
     def size(self):
-        
-        return len(self.classifications)
+        # BUG: I don't actually know how to return the length of the 
+        # classification table...
+        return 1e5
         
 # ----------------------------------------------------------------------------
 
@@ -130,54 +333,54 @@ class MongoDB(object):
         return
 
 # ======================================================================
-# None of this code works. It's just to show Amit what I want to do!
 
 if __name__ == '__main__':
-
-    m = MongoDB('spacewarps-2013-04-06_20-07-28')
-
-    # Get a batch of classifications between t1 and t2:
     
-    t1 = datetime.datetime(2013, 4, 4, 20, 33, 45, 0)
-    t2 = datetime.datetime(2013, 4, 5, 20, 33, 45, 0)
-    batch = m.classifications.find(updated_at > t1 and updated_at < t2)
-        
+    db = MongoDB()
+    
+    # Select all classifications that were made before t1.  
+    # Note the greater than operator "$gt".
+    # Batch is a cursor, it does not read anything into memory yet.
+    # Make sure we catch them all!
+    t1 = datetime.datetime(1978, 2, 28, 12,0, 0, 0)
+
+    batch = db.find('since',t1)
+
+    # How many did we get?
+    total = db.classifications.count()
+    print "Whoah! Found ",total," classifications!"
+    print "Here's the last one:"
+    for classification in db.classifications.find(timeout=False).skip(total-1).limit(1):
+        items = db.digest(classification)
+        print items[:]
+    
+    print "Reading them all one by one, just for fun:"
+    
+    # Now, loop over classifications, digesting them.
+    
+    # Batch has a next() method, which returns the subsequent
+    # record, or we can execute a for loop as follows:
+    count = 0
     for classification in batch:
         
-        # Who made the classification?
-        Name = classification['user_id']
-        # If there is no user_id, get the ip address...
+        items = db.digest(classification)
         
-        # Pull out the subject that was classified:
-        ID = classification['subject_id']
-        subject = m.subjects.find_one(subject_id == ID)
+        if count == total: print classification
         
-        # Was it a training subject or a test subject?
-        category = subject['category']
-        
-        if category == 'training':
-            # Was it a sim or a dud?
-            kind = subject['kind']
-        
-        # What was the result of the classification?
-        if category == 'training':
-            if kind == 'sim':
-                # Did the user hit the arcs?
-                success = classification['hit_arcs'] # True or False?
-                if success: result = 'LENS'
-                else: result = 'NOT'
-            else:
-                # Did the user make no annotations?
-                success = classification['skipped'] # True or False?
-                if success: result = 'NOT'
-                else: result = 'LENS'
-        
-        else: 
-            foundsomething = (len(annotations) > 0) # True or False?
-            if foundsomething: result = 'LENS'
-            else: result = 'NOT'
-        
-        print Name,ID,category,result,kind
-        
+        # Check we got all 9 items:            
+        if items is not None:
+            if len(items) != 9: 
+                print "oops! ",items[:]
+            else:    
+                # Count classifications
+                count += 1
+                
+        if np.mod(count,int(total/80.0)) == 0: 
+            sys.stdout.write('.')
+            sys.stdout.flush()
+           
+                   
+    # Good! Whole database dealt with.
+    print "Counted ",count," classifications, that each look like:"
+    print items[:]
     
-    m.terminate()

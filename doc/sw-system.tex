@@ -743,8 +743,8 @@ thresholds in this lens probability then allows us to make good decisions about
 whether or not to retire a subject from the system, in order to focus attention
 on new images.
 
-The details of how the lens probabilities are calculated are given in
-\Aref{appendix:swap}. In summary:
+The details of how the lens probabilities are calculated are given below.
+In summary:
 \begin{itemize}
 
 \item Each volunteer is assigned a simple software agent, characterised by a
@@ -767,6 +767,248 @@ $\pr(\LENS|C,T)$, when that image is classified by its volunteer. ($C$ is the
 set of all classifications made of this subject.)
 
 \end{itemize}
+
+For a detailed derivation of this analysis pipeline, please continue reading
+through \Sref{sec:swap:details} below. Alternatively, \Sref{sec:swap:practicalities}
+contains illustrations of the calculation.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{SWAP: the \SW Analysis Pipeline}
+\label{sec:swap:details}
+
+Our aim is to enable the construction of a sample of good lens candidates.
+Since we aspire to making logical  decisions, we define a  ``good candidate''
+as one which has a high posterior probability of being a lens, given the data:
+$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data~$\data$
+in our case are the pixel values of a colour image. However, we can greatly
+compress these complex, noisy sets of data by asking each volunteer what they
+think about them. A complete  classification in \SW consists of a set of
+Marker positions, or none at all. The null set encodes the statement from
+the volunteer that the image in question is $\saidNOT$ a lens, while the
+placement of any  Markers indicates that the volunteer considers this image to
+contain a $\saidLENS$.  We simplify the problem by only using the Marker
+positions to assess whether the volunteer  correctly assigned the
+classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
+the training set of subjects.
+
+How should we model these compressed data? The circumstances of each
+classification are quite complex, as are the human classifiers in general: the
+volunteers learn more about the problem as they go, but also inevitably make
+occasional mistakes (especially when classifying at high speed).
+To cope with this uncertainty, we assign a
+simple software {\it agent} to partner each volunteer. The agent's task is to
+interpret their volunteer's classification data as best it can, using a model
+that makes a number of necessary approximations. These interpretations will
+then include uncertainty arising as a result of the volunteer's efforts and
+also the agent's approximations, but they will have two important redeeming
+features. First, the interpretations will be quantitative (where before they
+were qualititative),  and thus will be useful in decision-making. Second, the
+agent will be able to predict, using its model, the probability of a test
+subject being a $\LENS$, given both its volunteer's classification, and its
+volunteer's experience. In this section we describe how these agents work,
+and other aspects of the \SW analysis pipeline (SWAP).
+
+
+\subsection{Agents and their Confusion Matrices}
+\label{sec:swap:details:probabilities}
+
+Each agent assumes that the probability of a volunteer recognising any given
+simulated lens as a lens is some number, $\pr(\saidLENS|\LENS,\training)$, that
+depends only on what the volunteer is currently looking at, and all the
+previous training subjects they have seen (and not on what type of lens it is,
+how faint it is, what time it is, \etc). Likewise, it also assumes that the
+probability of a volunteer recognising any given dud image as a dud is some
+other number, $\pr(\saidNOT|\NOT,\training)$, that also depends only on what the volunteer is currently looking at, and all the
+previous training subjects they have seen. These two probabilities define a
+2 by 2 ``confusion matrix,'' which the agent updates, every time a
+volunteer classifies a training subject, using the following
+very simple estimate:
+\be
+  \pr(``X"|X,\training) \approx \frac{N_{``X"}}{N_X}.
+  \label{eq:app:fraction}
+\ee
+Here, $X$ stands for the true classification of the subject, \ie either
+$\LENS$ or $\NOT$, while $``X''$ is the corresponding classification
+made by the volunteer on viewing the subject. $N_X$ is the number of
+lenses the volunteer has been shown, while $N_{``X"}$ is the number of
+times the volunteer got their classifications of this type of training subject
+right. $\training$ stands for all
+$N_{\LENS} + N_{\NOT}$ training data that the agent has heard about to
+date.
+
+The full confusion matrix of the $k^{\rm th}$ volunteer's agent is therefore:
+\begin{align}
+  \CM^k &=
+  \begin{bmatrix}
+    \pr(\saidLENS|\NOT,\trainingk) & \pr(\saidLENS|\LENS,\trainingk) \\
+    \pr(\saidNOT |\NOT,\trainingk) & \pr(\saidNOT |\LENS,\trainingk)
+  \end{bmatrix}, \notag \\
+        &=
+  \begin{bmatrix}
+    \CM_{LN} & \CM_{LL} \\
+    \CM_{NN} & \CM_{NL}
+  \end{bmatrix}^k.
+  \label{eq:confmat}
+\end{align}
+Note that these probabilities are normalized, such that
+$\pr(\saidNOT |\NOT) = 1 - \pr(\saidLENS|\NOT)$.
+
+Now, when this volunteer views a test subject,
+it is this confusion matrix that will allow their agent to update the
+probability of that test subject being a $\LENS$. Let us suppose that
+this subject has never been seen before: the agent assigns a
+prior probability that it is (or contains) a lens is
+\be
+  \pr(\LENS) = p_0
+\ee
+where we have to assign a value for $p_0$. In the \cfhtls, we might expect
+something like 100 lenses in 430,000 images, so $p_0 = 2\times10^{-4}$
+is a reasonable estimate. The volunteer then makes a classification $C_k$
+($= \saidLENS$ or $\saidNOT$).
+We can apply Bayes' Theorem to derive how the agent should
+update this prior probability into a posterior one using this new information:
+\begin{align}
+  \label{eq:app:first}
+  & \pr(\LENS|C_k,\trainingk) = \\
+  & \frac{\pr(C_k|\LENS,\trainingk)\cdot\pr(\LENS)}
+{\left[ \pr(C_k|\LENS,\trainingk)\cdot\pr(\LENS) + \pr(C_k|\NOT,\trainingk)\cdot\pr(\NOT) \right]},
+  \notag
+\end{align}
+which can be evaluated numerically using the elements of the confusion
+matrix.
+
+
+\subsubsection{Examples}
+\label{sec:swap:details:examples}
+
+Suppose we have a volunteer who is always right about the true
+nature of a training subject.
+Their agent's confusion matrix would be
+\be
+  \CM^{\rm perfect} =
+  \begin{bmatrix}
+    0.0 & 1.0 \\
+    1.0 & 0.0
+  \end{bmatrix}.
+\ee
+On being given a fresh subject that actually is a $\LENS$, this hypothetical
+volunteer would submit $C = \saidLENS$.  Their agent would then calculate the
+posterior probability for the subject being a $LENS$ to be
+\begin{align}
+  \pr(\LENS|\saidLENS,\trainingk) &= \frac{1.0 \cdot p_0}
+           {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
+   &= 1.0,
+\end{align}
+as we might expect for such a {\it perfect} classifier.  Meanwhile, a
+hypothetical volunteer who (for some reason) wilfully always submits the wrong
+classification would have an agent with the column-swapped confusion matrix
+\be
+  \CM^{\rm obtuse} =
+  \begin{bmatrix}
+    1.0 & 0.0 \\
+    0.0 & 1.0
+  \end{bmatrix},
+\ee
+and would submit $C = \saidNOT$ for this subject. However, such a volunteer
+would nevertheless be submitting useful information, since given the above
+confusion matrix, their agent would calculate
+\begin{align}
+  \pr(\LENS|\saidNOT,T_k) &= \frac{1.0 \cdot p_0}
+           {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
+   &= 1.0.
+\end{align}
+{\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones, because
+the agents know to trust the opposite of their classifications.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Online SWAP: Updating the Subject Probabilities}
+\label{sec:swap:online}
+
+Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
+subject just classified by the $k^{\rm th}$ volunteer. We can generalise
+\Eref{eq:app:first} by replacing the prior probability with the current
+posterior probability:
+\begin{align}
+  \label{eq:app:update}
+  \pr(\LENS & |C_{k+1},\training_{k+1},\data) = \\
+  & \frac{1}{Z} \pr(C_{k+1}|\LENS,\training_{k+1}) \cdot \pr(\LENS|\data) \\ \notag
+{\rm where}\;\; Z = & \pr(C_{k+1}|\LENS,\training_{k+1})\cdot\pr(\LENS|\data) \\ \notag
+      & + \pr(C_{k+1}|\NOT,\training_{k+1})\cdot\pr(\NOT|\data), \notag
+\end{align}
+and $\data = \{C_k,\trainingk\}$ is the set of all previous
+classifications, and the set of training subjects seen by each of those
+volunteers.
+$\pr(\LENS|\data)$ is the fundamental property of each test subject that
+we are trying to infer. We track $\pr(\LENS|\data)$ as a function of time,
+and by comparing it to a lower or upper thresholds, make decisions about
+whether to retire the subject from the classification interface or
+promote it in \Talk, respectively.
+
+Finally, the confusion matrix obtained from the application of
+\Eref{eq:app:fraction} has some inherent noise which reduces as the
+number of training subjects classified by the agent's volunteer
+increases. For simplicity, the discussion has thus far assumed the case
+when the confusion matrix is known perfectly; in practice, we allow for
+uncertainty in the agent confusion matrices by averaging over a small
+number of samples drawn from Binomial distributions characterised by the
+matrix elements $\pr(C_k|\LENS,\trainingk)$ and  $\pr(C_k|\NOT,\trainingk)$. The
+associated standard deviation in the estimated subject probability
+provides an error bar for this quantity.
+
+In \Sref{sec:results} and \Aref{appendix:swap} below, we define several
+quantities based on the probabilities listed above that serve to quantify the
+performance of the crowd in terms of the information they provide via their
+classifications, and report on the performance of the system in returning a
+sample of lens candidates as a function of $\pr(\LENS|C,T)$ threshold.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Offline SWAP}
+\label{sec:swap:offline}
+
+The probabilistic model described above does not need to be implemented as an
+online inference. Indeed, it might be more appropriate to perform the inference
+of all agent confusion matrix elements and subject probabilities simultaneously.
+Such a joint analysis would implement in full the agents' basic model assumption
+that their volunteers have innate and unchanging talent for lens spotting, that
+is parameterised by two constant confusion matrix elements which simply need to
+be inferred given the data.
+
+We refer to this alternative calculation as ``offline'' analysis, because it
+does not need to be carried out one classification at a time (and hence can be
+done at any time after the data is collected). Note that in this offline
+inference, the effect will be that of applying the time-averaged confusion
+matrices to each classification,  rather than a set that evolves as the agents
+(and in the real world, the volunteers) learn. This will mean  that the early
+classifications will effectively not be downweighted as a result of the agent's
+ignorance. On the other hand, this ignorance could also have provided some
+conservatism, reducing the noise due to early classifications if they are
+unreliable. Whether or not an offline analysis out-performs an online one is a
+matter for experiment.
+
+The mechanics of how we carry out the offline inference  will be presented
+elsewhere (Davis et al, in preparation). Here we briefly note that the procedure
+is to maximize the joint posterior probability distribution for all the model
+parameters (some 74,000 confusion matrix elements and 430,000 subject
+probabilities) with a simple expectation-maximisation algorithm. This takes
+approximately the same CPU time as the \StageTwo online analysis, because no
+matrix inversions are required in the algorithm. The algorithm scales well, and
+is actually faster than the online analysis with the larger \StageOne dataset.
+The expectation-maximisation algorithm is robust to initial starting parameters
+in, e.g., initial agent confusion matrix elements and Subject probabilities. The
+difference in performance between the online and offline analyses is presented
+in  \Sref{sec:results:sample} below.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Practicalities}
+\label{sec:swap:practicalities}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -793,9 +1035,9 @@ agent-perceived ``skill.''}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Fref{fig:swap:agent-probabilities} shows the confusion matrix elements of 200
-randomly-selected agents, as they were on a particular day towards the end of
-the \cfhtls project. Many volunteers classify  only a small number of images, and
-so their agents' confusion matrix elements remain close to their initial values
+randomly-selected agents, as they were on a particular day during the
+\StageOne online analysis. Many volunteers classify  only a small number of images, and
+so their agents' confusion matrix elements have remained close to their initial values
 of (0.5,0.5). As more images are classified (shown by the yellow point size),
 the agents' matrix elements tend to move towards higher values, partly as the
 volunteers attain greater skill levels (green point sizes, see
@@ -808,11 +1050,6 @@ right-hand quadrant, the agents perceive their volunteers to be ``astute.''
 %The underlying histogram shows the distribution of classification number: a long
 %tail to very high ``effort'' can be seen.
 
-In \Sref{sec:results} below, we define several quantities based on the
-probabilities listed above that serve to quantify the performance of the crowd
-in terms of the information they provide via their classifications, and report
-on the performance of the system in returning a sample of lens candidates
-as a function of $\pr(\LENS|C,T)$ threshold.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -837,7 +1074,7 @@ images' posterior probability, $\pr(\LENS|C,T)$, to define ``detection'' and
 symmetrically in the logarithm of probability), $10^{-7}$. Subjects that
 attained probability of less than the rejection threshold were scheduled for
 retirement and subsequently ignored by the analysis code. Subjects crossing the
-detection threshold were also subsequently ignore, but they were not
+detection threshold were also subsequently ignored, but they were not
 retired from the website, just so that more volunteers could see them.
 The progress of the subjects is illustrated in
 \Fref{fig:swap:subject-trajectories}. Subjects appear on this plot at the tip of
@@ -847,7 +1084,8 @@ appropriate kick in probability based on what it hears its volunteer say.
 Encouragingly, sims (blue) tend to end up with high probability, while duds
 (red) pile up at low probability; test subjects (black) mostly drift to low
 probability, but some go the other way. The latter will help make up the
-candidate sample. As this plot shows, around 10 classifications are typically required for a subject to reach the retirement (or detection) threshold.
+candidate sample. As this plot shows, around 10 classifications are typically
+required for a subject to reach the retirement (or detection) threshold.
 
 The analysis code was run every night during the project, and subjects retired
 in batches after its completion. This introduced some inefficiency, because
@@ -857,16 +1095,18 @@ As subjects were retired from the site, more subjects were activated. In this
 way, the volunteers who down-voted images for not containing any lensed
 features enabled new images to be shown to other members of the community.
 
-When all the subjects had either been retired, or classified around 10 times
-or more, the web app was paused and reconfigured for \StageTwo. The sample of
+When all the subjects had either been retired, or classified around 10 times or
+more, the web app was paused and reconfigured for \StageTwo. The sample of
 subjects classified during \StageTwo was selected to be all those that passed
 the detection threshold ($\pr(\LENS|C,T) > 0.95$) at \StageOne. These were
-classified for one week, with no retirement but a maximum classification
-number of 50 each. The number of subjects at \StageTwo was small enough that we
-did not need to retire any: instead, we simply collected classifications for a
-fixed period of time (about 4 weeks). Without the time pressure motivating the
-probabilities simultaneously, for comparison. We describe how this differs
-from the online analysis in the appendix.
+classified for one week, with no retirement but a maximum classification number
+of 50 each. The number of subjects at \StageTwo was small enough that we did not
+need to retire any: instead, we simply collected classifications for a fixed
+period of time (about 4 weeks). Without the time pressure motivating the online
+calculation of \StageOne, we carried out an offline analysis
+(\Sref{sec:swap:offline} above) of the  \StageTwo classifications, for
+comparison and as we will see in the next section, improving the pipeline
+performance.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -913,7 +1153,7 @@ the default case.
 The dot-dashed curves show the impact of the offline analysis. At \StageOne the
 results are very similar to the online version that was actually run (solid
 line). However, at \StageTwo there is marginal evidence of there being greater
-benefit to doing the analysis offline (\Sref{sec:swap}, \Aref{appendix:swap}).
+benefit to doing the analysis offline (\Sref{sec:swap:offline}).
 Over 85\% TPR is achieved at zero FPR in the offline analysis , while if one is
 willing to accept a false positive rate of 5\%, the true positive rate rises to
 over 95\%, showing that some of the sims that were missed in the online analysis
@@ -1050,7 +1290,7 @@ In \StageOne, the mean skill per agent was 0.04 bits; in  \StageTwo it was
 %
 \item{\noindent\bf ``Contribution:''} This is the integrated skill over a volunteer's
 {\it test subject} classification history, a quantity representative of the
-total contribution to the project made by that volunteer (see the appendix for
+total contribution to the project made by that volunteer (see \Aref{appendix:swap} for
 more discussion of this quantity). The classifications of training images
 determine the skill, while the classification of test images determines
 contribution.  In \StageOne, the mean  contribution per agent was
@@ -1678,179 +1918,8 @@ financial support of the workshop ``Citizen Science in Astronomy'' in March
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Probabilistic Classification Analysis}
+\section{Information Gain per Classification, Agent ``Skill'' and ``Contribution''}
 \label{appendix:swap}
-
-Our aim is to enable the construction of a sample of good lens candidates.
-Since we aspire to making logical  decisions, we define a  ``good candidate''
-as one which has a high posterior probability of being a lens, given the data:
-$\pr(\LENS|\data)$. Our problem is to approximate this probability. The data~$\data$
-in our case are the pixel values of a colour image. However, we can greatly
-compress these complex, noisy sets of data by asking each volunteer what they
-think about them. A complete  classification in \SW consists of a set of
-Marker positions, or none at all. The null set encodes the statement from
-the volunteer that the image in question is $\saidNOT$ a lens, while the
-placement of any  Markers indicates that the volunteer considers this image to
-contain a $\saidLENS$.  We simplify the problem by only using the Marker
-positions to assess whether the volunteer  correctly assigned the
-classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
-the training set of subjects.
-
-How should we model these compressed data? The circumstances of each
-classification are quite complex, as are the human classifiers in general: the
-volunteers learn more about the problem as they go, but also inevitably make
-occasional mistakes (especially when classifying at high speed).
-To cope with this uncertainty, we assign a
-simple software {\it agent} to partner each volunteer. The agent's task is to
-interpret their volunteer's classification data as best it can, using a model
-that makes a number of necessary approximations. These interpretations will
-then include uncertainty arising as a result of the volunteer's efforts and
-also the agent's approximations, but they will have two important redeeming
-features. First, the interpretations will be quantitative (where before they
-were qualititative),  and thus will be useful in decision-making. Second, the
-agent will be able to predict, using its model, the probability of a test
-subject being a $\LENS$, given both its volunteer's classification, and its
-volunteer's experience. In this appendix we describe how these agents work,
-and other aspects of the \SW analysis pipeline (SWAP).
-
-
-\subsection{Agents and their Confusion Matrices}
-\label{appendix:swap:probabilities}
-
-Each agent assumes that the probability of a volunteer recognising any given
-simulated lens as a lens is some number, $\pr(\saidLENS|\LENS,\training)$, that
-depends only on what the volunteer is currently looking at, and all the
-previous training subjects they have seen (and not on what type of lens it is,
-how faint it is, what time it is, \etc). Likewise, it also assumes that the
-probability of a volunteer recognising any given dud image as a dud is some
-other number, $\pr(\saidNOT|\NOT,\training)$, that also depends only on what the volunteer is currently looking at, and all the
-previous training subjects they have seen. These two probabilities define a
-2 by 2 ``confusion matrix,'' which the agent updates, every time a
-volunteer classifies a training subject, using the following
-very simple estimate:
-\be
-  \pr(``X"|X,\training) \approx \frac{N_{``X"}}{N_X}.
-  \label{eq:app:fraction}
-\ee
-Here, $X$ stands for the true classification of the subject, \ie either
-$\LENS$ or $\NOT$, while $``X''$ is the corresponding classification
-made by the volunteer on viewing the subject. $N_X$ is the number of
-lenses the volunteer has been shown, while $N_{``X"}$ is the number of
-times the volunteer got their classifications of this type of training subject
-right. $\training$ stands for all
-$N_{\LENS} + N_{\NOT}$ training data that the agent has heard about to
-date.
-
-The full confusion matrix of the $k^{\rm th}$ volunteer's agent is therefore:
-\begin{align}
-  \CM^k &=
-  \begin{bmatrix}
-    \pr(\saidLENS|\NOT,\trainingk) & \pr(\saidLENS|\LENS,\trainingk) \\
-    \pr(\saidNOT |\NOT,\trainingk) & \pr(\saidNOT |\LENS,\trainingk)
-  \end{bmatrix}, \notag \\
-        &=
-  \begin{bmatrix}
-    \CM_{LN} & \CM_{LL} \\
-    \CM_{NN} & \CM_{NL}
-  \end{bmatrix}^k.
-  \label{eq:confmat}
-\end{align}
-Note that these probabilities are normalized, such that
-$\pr(\saidNOT |\NOT) = 1 - \pr(\saidLENS|\NOT)$.
-
-Now, when this volunteer views a test subject,
-it is this confusion matrix that will allow their agent to update the
-probability of that test subject being a $\LENS$. Let us suppose that
-this subject has never been seen before: the agent assigns a
-prior probability that it is (or contains) a lens is
-\be
-  \pr(\LENS) = p_0
-\ee
-where we have to assign a value for $p_0$. In the \cfhtls, we might expect
-something like 100 lenses in 430,000 images, so $p_0 = 2\times10^{-4}$
-is a reasonable estimate. The volunteer then makes a classification $C_k$
-($= \saidLENS$ or $\saidNOT$).
-We can apply Bayes' Theorem to derive how the agent should
-update this prior probability into a posterior one using this new information:
-\begin{align}
-  \label{eq:app:first}
-  & \pr(\LENS|C_k,\trainingk) = \\
-  & \frac{\pr(C_k|\LENS,\trainingk)\cdot\pr(\LENS)}
-{\left[ \pr(C_k|\LENS,\trainingk)\cdot\pr(\LENS) + \pr(C_k|\NOT,\trainingk)\cdot\pr(\NOT) \right]},
-  \notag
-\end{align}
-which can be evaluated numerically using the elements of the confusion
-matrix.
-
-\subsection{Examples}
-\label{appendix:swap:examples}
-
-Suppose we have a volunteer who is always right about the true
-nature of a training subject.
-Their agent's confusion matrix would be
-\be
-  \CM^{\rm perfect} =
-  \begin{bmatrix}
-    0.0 & 1.0 \\
-    1.0 & 0.0
-  \end{bmatrix}.
-\ee
-On being given a fresh subject that actually is a $\LENS$, this hypothetical
-volunteer would submit $C = \saidLENS$.  Their agent would then calculate the
-posterior probability for the subject being a $LENS$ to be
-\begin{align}
-  \pr(\LENS|\saidLENS,\trainingk) &= \frac{1.0 \cdot p_0}
-           {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
-   &= 1.0,
-\end{align}
-as we might expect for such a {\it perfect} classifier.  Meanwhile, a
-hypothetical volunteer who (for some reason) wilfully always submits the wrong
-classification would have an agent with the column-swapped confusion matrix
-\be
-  \CM^{\rm obtuse} =
-  \begin{bmatrix}
-    1.0 & 0.0 \\
-    0.0 & 1.0
-  \end{bmatrix},
-\ee
-and would submit $C = \saidNOT$ for this subject. However, such a volunteer
-would nevertheless be submitting useful information, since given the above
-confusion matrix, their agent would calculate
-\begin{align}
-  \pr(\LENS|\saidNOT,T_k) &= \frac{1.0 \cdot p_0}
-           {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
-   &= 1.0.
-\end{align}
-{\it Obtuse} classifiers turn out to be as helpful as {\it perfect} ones, because
-the agents know to trust the opposite of their classifications.
-
-
-\subsection{Online SWAP: Updating the Subject Probabilities}
-\label{appendix:swap:examples}
-
-Suppose the $k+1^{\rm th}$ volunteer now submits a classification, on the same
-subject just classified by the $k^{\rm th}$ volunteer. We can generalise
-\Eref{eq:app:first} by replacing the prior probability with the current
-posterior probability:
-\begin{align}
-  \label{eq:app:update}
-  \pr(\LENS & |C_{k+1},\training_{k+1},\data) = \\
-  & \frac{1}{Z} \pr(C_{k+1}|\LENS,\training_{k+1}) \cdot \pr(\LENS|\data) \\ \notag
-{\rm where}\;\; Z = & \pr(C_{k+1}|\LENS,\training_{k+1})\cdot\pr(\LENS|\data) \\ \notag
-      & + \pr(C_{k+1}|\NOT,\training_{k+1})\cdot\pr(\NOT|\data), \notag
-\end{align}
-and $\data = \{C_k,\trainingk\}$ is the set of all previous
-classifications, and the set of training subjects seen by each of those
-volunteers.
-$\pr(\LENS|\data)$ is the fundamental property of each test subject that
-we are trying to infer. We track $\pr(\LENS|\data)$ as a function of time,
-and by comparing it to a lower or upper thresholds, make decisions about
-whether to retire the subject from the classification interface or
-promote it in \Talk, respectively.
-
-
-\subsection{Information Gain per Classification, Agent ``Skill'' and ``Contribution''}
-\label{appendix:swap:examples}
 
 With an agent's confusion matrix in hand we can compute the
 \emph{information} generated in any given classification. This will
@@ -1946,84 +2015,6 @@ column 7 of the table.
 % The uncertainty in the interpretation of the total
 % information generated provides some justification for our focus on the
 % expected information gain as a measure of volunteer contribution.
-
-
-\subsection{Uncertainty in the Agent Confusion Matrices}
-\label{appendix:swap:uncertainty}
-
-Finally, the confusion matrix obtained from the application of
-\Eref{eq:app:fraction} has some inherent noise which reduces as the
-number of training subjects classified by the agent's volunteer
-increases. For simplicity, the discussion has thus far assumed the case
-when the confusion matrix is known perfectly; in practice, we allow for
-uncertainty in the agent confusion matrices by averaging over a small
-number of samples drawn from Binomial distributions characterised by the
-matrix elements $\pr(C_k|\LENS,\trainingk)$ and  $\pr(C_k|\NOT,\trainingk)$. The
-associated standard deviation in the estimated subject probability
-provides an error bar for this quantity.
-
-% For ease of notation, we will denote $\pr(C_k|\LENS,T_k)\equiv p_L$ and
-% $\pr(C_k|\NOT,T_k)\equiv p_N$. In reality, there is a probability distribution
-% for both $p_L$ and $p_N$. Let $p_0$ be the prior probability of the subject
-% being a lens. Then the posterior probability, $p_0'$ of the subject being a
-% lens after the classification $C_k$ is
-% \be
-%   \label{eq:app:sec}
-% p_0' = \frac{p_L p_0}{\left[ p_L p_0 + p_N (1- p_0) \right]},
-% \ee
-% The posterior probability distribution $p_0'$ can be obtained by marginalizing
-% over the probability distributions of $p_L$, $p_N$ and the prior probability
-% distribution $p_0$ such that,
-% \be
-% P(p_0') = \int p_0' P(p_L) P(p_N) P(p_0) dp_L dp_N dp_0\,.
-% \ee
-% This marginalization is not analytically tractable. Therefore, we have
-% implemented the following Monte-Carlo solution for this problem.
-%
-
-%Finally, we also need to update the confusion matrix of an agent and obtain the
-%variance on each element of the matrix, once a training subject has been
-%classified. We would like to derive the posterior probability of the
-%probability elements $p_1$ and $p_2$ given their prior probabilities. For this
-%purpose, we can again make use of Bayes' theorem,
-%\begin{equation}
-%P(p_x'|N_{"X"},N_X,T) = \frac{P(N_{``X"}|p_x',N_X,T) P(p_x'|N_X,T)}{\sum_{N_{``X"}} P(N_{``X"}|p_x',N_X,T) P(p_x'|N_X,T)}
-%\end{equation}
-%Here, $P(N_{``X"}|p_x',N_X,T)$ is a binomial distribution, although this is not
-%true strictly speaking given that our agents are learning and the values of the
-%confusion matrix are moving. Modelling the learning curve of our users is yet
-%another complicated extension we could think about.
-
-
-\subsection{Offline SWAP}
-\label{appendix:swap:offline}
-
-The probabilistic model described above does not need to be implemented as an
-online inference. Indeed, it might be more appropriate to perform the inference
-of all agent confusion matrix elements and Subject probabilities
-simultaneously, so that the early classifications are not effectively
-downweighted as a result of the agent's ignorance. It might also be that this
-ignorance builds in some conservatism to the system, reducing the noise due
-the early classifications if they are unreliable. In the joint analysis, the
-basic assumption that is built into the agents, that their volunteers
-have innate and unchanging talent for lens spotting parameterised by two
-constant confusion matrix elements which simply need to be inferred given the
-data, is implemented in full. The effect is that of applying the time-averaged
-confusion matrices, rather than one that evolves as the agents (and in the
-real world, the volunteers) learn.
-
-The mathematics of the offline inference are presented elsewhere (in
-preparation). Here we briefly note that we maximize the joint posterior
-probability distribution for all the model parameters (some 66,000 confusion
-matrix elements and 430,000 subject probabilities) with a simple
-expectation-maximisation algorithm. This procedure takes approximately the
-same CPU time as the \StageTwo online analysis, because no matrix inversions are
-required in the algorithm. The algorithm scales well and is actually faster
-than the online analysis with the larger \StageOne dataset. The
-expectation-maximisation algorithm is robust to initial starting parameters
-in, e.g., initial agent confusion matrix elements and Subject probabilities.
-The plots in \Sref{sec:results:sample} show the difference in performance
-between the online and offline analyses.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

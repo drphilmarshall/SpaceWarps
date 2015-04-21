@@ -50,7 +50,7 @@ We describe \SW, a novel gravitaional lens discovery service that yields samples
 of high purity and completeness through crowd-sourced visual inspection.
 Carefully produced colour composite images are displayed to volunteers via a
 classification interface which records their estimates of the positions of
-candidate lensed features. Simulated lenses, and expert-classified non-lenses,
+candidate lensed features. Simulated lenses, and expert-classified images which lack lenses,
 are inserted into the image stream at random intervals; this training set is
 used to give the volunteers feedback on their performance, and to estimate a
 dynamically-updated probability for any given image to contain a lens. Low
@@ -124,7 +124,7 @@ same optical spectrum \citep[e.g.][]{BoltonEtal2004}, or the strong
 ``magnification bias'' towards detecting strongly-lensed sources in the sub-mm
 waveband \citep[e.g.][]{NegrelloEtal2010}. Such searches have to yield pure samples,
 because they require expensive high resolution imaging follow-up; consequently
-they have so far produced yields in the tens to hundreds. An alternative
+they have so far produced yields of only tens to hundreds of lenses. An alternative
 approach is to search images already of sufficiently high resolution and colour
 contrast, and confirm the systems as gravitational lenses by modeling the
 survey data themselves \citep[][]{MarshallEtal2009}. Several square degrees of
@@ -207,7 +207,7 @@ systematic online visual lens search could be successful.
 
 In this paper, we describe the \SW project, a web-based system conceived to
 address the visual inspection problem in gravitational lens detection for future
-large surveys via crowd-sourcing. Implemented as a Zooniverse citizen science
+large surveys via crowd-sourcing. Implemented as a Zooniverse \citep{SimpsonEtal2014} citizen science
 project, it is designed to provide a {\it gravitational lens discovery service}
 to survey teams looking for lenses in wide field imaging data. In a companion
 paper (More et al, in preparation, herafter \PaperTwo) we will present the new
@@ -288,7 +288,7 @@ from \texttt{https://github.com/zooniverse/Lens-Zoo}. The project was renamed du
 The focus of the CI is a
 large display of a pre-prepared PNG image of the ``subject'' being inspected.
 When the image is clicked on by the volunteer, a marker symbol appears where the
-pointer was. Several markers can be placed.
+pointer was. Several markers can be placed, and they can be removed by the user if, for example, they change their mind.
 
 The next image moves rapidly in from a queue formed at the right hand side of
 the screen when the ``Finished marking'' button is pressed. Gravitational lenses
@@ -298,7 +298,7 @@ images to be pre-loaded while the volunteer is classifying the current subject,
 and the rapid movement is designed to encourage volunteers to classify rapidly.
 After each classification, the positions of the markers are written out to the
 classification database, in an entry that also stores the ID of the subject, the
-username (or IP address) of the volunteer, a timestamp and some other metadata.
+username (or IP address if the user is not logged in) of the volunteer, a timestamp and some other metadata.
 
 For the more interesting subjects, the CI offers two features that  enable
 further investigation of the subjects. The first is the ``Quick Dashboard''
@@ -309,7 +309,7 @@ small features. Markers can be placed in the Quick Dashboard just the same as
 in the main CI image viewer. The second is a link to that subject's page in
 the project discussion forum, \texttt{http://talk.spacewarps.org} (known as
 ``Talk''). Here, volunteers can discuss the features they have seen either
-before they submit their classification, or after, if they ``favorite'' the
+before they submit their classification, or after, if they ``favourite'' the
 subject. There is no ``back'' button: each volunteer may only classify a given
 subject once. However, the presence of an option to see what others think
 about any given subject before submitting your own classification means that
@@ -414,9 +414,10 @@ At this point, the distribution of lens and source properties are quite
 realistic. We then chose to make cuts of the simulated lens pool, in order to
 reject sims that were likely to be diﬃcult to spot. While this ensured the
 educational value of the sims when feedback was given, it meant that we should
-only expect to detect real lens candidates that also pass these cuts. Any real
+only expect to detect real lens candidates that also pass these cuts. Indeed, for traditional machine learning or computer vision implementations then this would be a constraint, but human classifiers are capable of going beyond their training; Geach et al., for example (REF????) report the discovery of a red lens by volunteers who had only been trained on blue examples. This ability to go beyond training is a key advantage of human classifiers, and
+any real
 lens candidates we ﬁnd with properties outside the ranges of the sims, may in
-some sense be considered bonuses, a product of the {\it imagination} of the
+this sense be considered bonuses, a product of the {\it imagination} of the
 crowd in extrapolating their understanding of gravitational lenses into a regime
 where they have not seen any before. In the \cfhtls project, the most important
 selection cuts were to only keep sims with a) second brightest image brighter
@@ -720,16 +721,16 @@ SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
 Each classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs (their Zooniverse usernames), a timestamp and the
-classification results (the image pixel-coordinate positions of every marker
-placed).  The ``category'' of subject -- whether it is a ``training'' subject (a
-simulated lens or a known non-lens) or a ``test'' subject (an unseen image drawn
-from the survey) -- is also recorded. For training subjects, we also store the
-``kind'' of the subject as a lens (``sim''), or a non-lens (``dud''), and also
-the ``flavor'' of lens object if one is present in the image (``lensed galaxy'',
-``lensed quasar'' or ``cluster lens'').  This classification is used to provide
-instant feedback, but is also the basic measurement used in a probabilistic
-classification of every subject based on all image views to date.  Not all
+(anonymous) volunteer IDs, a timestamp and the classification results (the image
+pixel-coordinate positions of every marker placed).  The ``category'' of subject --
+whether it is a ``training'' subject (a simulated lens or a known non-lens) or a
+``test'' subject (an unseen image drawn from the survey) -- is also recorded.
+For training subjects, we also store the ``kind'' of the subject as
+a lens (``sim''), or a non-lens (``dud''), and also the ``flavour'' of lens
+object if one is present in the image (``lensed galaxy'', ``lensed quasar'' or
+``cluster lens'').  This classification is used to provide instant feedback, but
+is also the basic measurement used in a probabilistic classification of every
+subject based on all image views to date. Not all
 volunteers register with the Zooniverse (although all are prompted to do so);
 in these cases we record their IP addresses as substitute IDs.
 
@@ -1292,7 +1293,7 @@ In \StageOne, the mean skill per agent was 0.04 bits; in  \StageTwo it was
 {\it test subject} classification history, a quantity representative of the
 total contribution to the project made by that volunteer (see \Aref{appendix:swap} for
 more discussion of this quantity). The classifications of training images
-determine the skill, while the classification of test images determines
+allow us to estimate the skill, while the classification of test images determines
 contribution.  In \StageOne, the mean  contribution per agent was
 34.9 bits; in \StageTwo it was 33.5.
 %
@@ -1336,7 +1337,7 @@ seem to be very few agents logging large numbers of classifications at low
 skill: {\it almost all high effort
 ``super-users'' have high skill.} These two properties are reflected in both the
 contributions these volunteers make (third row) and the information they
-generate (fourth row).
+generate (fourth row), and we suggest that this would be a useful metric for determining 'well-designed' implementations of citizen science projects.
 
 We found that the distributions for the \StageTwo agents to be qualitatively
 very similar to those for the \StageOne agents. The differences are: 1) the
@@ -1546,13 +1547,13 @@ these trajectory plots still serve to illustrate the approximate
 classification histories of the subjects.
 
 In some cases the rejection of the false negatives is understandable: the
-lensed features are faint, or in some cases, somewhat unrealistic as lenses.
+lensed features are faint, or in some cases, appear somewhat unrealistic compared to real lenses.
 However, in other cases a reasonably obvious lens was passed over.  This
 mainly seems to be due to noise in the system: when only low-skill classifiers
 view a subject, all the updates to its posterior probability are small, and if
 none are very confident about the presence of lensing, the subject follows a
 random walk down its trajectory plot. This can be seen in the top left panel
-of the figure.
+of Figure \Fref{fig:discuss:performance:trajectories}.
 
 The false positives show similar behaviour, for example in the bottom lefthand
 panel of the figure. As well as subjects being ``unlucky'' in this way, there
@@ -1582,7 +1583,7 @@ a guess, then go and read the \Talk discussion, and then return to the
 classification interface to change their mind to agree with the forum. In
 fact, this is already possible on the current interface -- and indeed, it is
 not obvious that such correlations would necessarily lead to poorer system
-performance. This could be tested by presenting a fraction of the volunteers
+performance. There may well also be effects on user confidence; it may be that encouraging this sort of checking would result in increased and not necessarily productive caution. This could be tested by presenting a fraction of the volunteers
 with a version of the site that actively suggested that they take this
 approach, and then tracking the relative performance of ``collaborative''
 classifications compared with independent ones. We leave the exploration of

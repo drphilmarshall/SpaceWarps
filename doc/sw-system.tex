@@ -18,6 +18,8 @@
 \usepackage{amsmath}
 \usepackage{epsfig}
 
+\graphicspath{{./}{sw-system-figs/}{sw-system-figs/gallery/}}
+
 % Macros:
 \input{macros.tex}
 \input{addresses.tex}
@@ -46,14 +48,15 @@
 
 \begin{abstract}
 
-We describe \SW, a novel gravitaional lens discovery service that yields samples
+We describe \SW, a novel gravitational lens discovery service that yields samples
 of high purity and completeness through crowd-sourced visual inspection.
 Carefully produced colour composite images are displayed to volunteers via a
 classification interface which records their estimates of the positions of
 candidate lensed features. Simulated lenses, and expert-classified images which lack lenses,
 are inserted into the image stream at random intervals; this training set is
-used to give the volunteers feedback on their performance, and to estimate a
-dynamically-updated probability for any given image to contain a lens. Low
+used to give the volunteers feedback on their performance, as well as to
+calibrate it in order to allow dynamical updates to the probability of any image
+they classify to contain a lens. Low
 probability systems are retired from the site periodically, concentrating the
 sample towards a set of candidates. Having divided 160 square degrees of
 Canada-France-Hawaii Telescope Legacy Survey (\cfhtls)
@@ -267,7 +270,7 @@ interactions between the two.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/sw-screengrab-marker+feedback.png}
+\centering\includegraphics[width=0.9\linewidth]{sw-screengrab-marker+feedback.png}
 \caption{Screenshot of the \SW classification interface.}
 \label{fig:screenshot}
 \end{figure*}
@@ -411,14 +414,14 @@ code \citep{Keeton2000}.
 
 At this point, the distribution of lens and source properties are quite
 realistic. We then chose to make cuts of the simulated lens pool, in order to
-reject sims that were likely to be diﬃcult to spot. While this ensured the
+reject sims that were likely to be difficult to spot. While this ensured the
 educational value of the sims when feedback was given, it meant that we should
 only expect to detect real lens candidates that also pass these cuts. Indeed, for traditional machine learning or computer vision implementations then this would be a constraint, but human classifiers are capable of going beyond their training; Geach et al., for example (REF????) report the discovery of a red lens by volunteers who had only been trained on blue examples. This ability to go beyond training is a key advantage of human classifiers, and
 any real
-lens candidates we ﬁnd with properties outside the ranges of the sims, may in
+lens candidates we find with properties outside the ranges of the sims, may in
 this sense be considered bonuses, a product of the {\it imagination} of the
 crowd in extrapolating their understanding of gravitational lenses into a regime
-where they have not seen any before. In the \cfhtls project, the most important
+that they have not been trained for. In the \cfhtls project, the most important
 selection cuts were to only keep sims with a) second brightest image brighter
 that $i = 23$ and b) total combined image magnitude fainter than 19--20
 (\PaperTwo, Table~1). The combination of these two cuts results in a sample of
@@ -454,7 +457,7 @@ as they start classifying; as well as this dynamic system, \SW provides a static
 reference work for volunteers to consult when in doubt about how to perform the
 task. This ``Spotter's Guide'' is a set of webpages showing example lenses, both
 real and simulated, and also some common false positives, drawn from the pool of
-survey images. The false positives were identified during the selction of the
+survey images. The false positives were identified during the selection of the
 ``dud'' training images (previous section). For easy reference, the lenses are
 divided by type (for example, ``lensed galaxies,'' ``lensed quasars'' and
 ``cluster lenses''), as are the false positives (for example, ``Rings and
@@ -532,16 +535,16 @@ and~\ref{fig:training-gallery:duds} show some example images from the resulting
 
 \begin{figure*}%[!ht]
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/4.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=4.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/5.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=5.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/6.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=6.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/7.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=7.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \caption{Typical \SW ``sims'' from the \StageTwo training set. The top right-hand corner insets indicate the
 location of the simulated lens in each of these training images. Users needed to
@@ -551,16 +554,16 @@ click on these specific features in order to make a correct classification.}
 
 \begin{figure*}%[!ht]
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/0_ASW0009dgn.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=0_ASW0009dgn.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/1_ASW0009dgo.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=1_ASW0009dgo.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/2_ASW0009dgy.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=2_ASW0009dgy.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \begin{minipage}[b]{0.24\linewidth}
-\centering\epsfig{file=sw-system-figs/gallery/3_ASW0009dh0.png,width=\linewidth,angle=0,clip=}
+\centering\epsfig{file=3_ASW0009dh0.png,width=\linewidth,angle=0,clip=}
 \end{minipage} \hfill
 \caption{Typical \SW ``duds'' from the \StageTwo training set. All of these
 subjects were correctly classified by the community as not likely to contain
@@ -608,10 +611,10 @@ LSST.
 
 In order to investigate the completeness of the previous, semi-automated, lens
 searches in the \cfhtls area, we designed a ``blind search.'' We divided the
-mosaiced images into some 430,000 equal size, overlapping tiles, approximately
+\cfhtls pointings into some 430,000 equal size, overlapping tiles, approximately
 84~arcsec on a side. We refer to these images as ``test images.'' The ``training
 images'' were derived from a small subset of these, as  discussed above. In
-future, larger area, projects we expect to implement the somewhat different
+future, larger area, projects we expect to implement a somewhat different
 strategy of producing image tiles centred on particular pre-selected
 ``targets,'' which might make for a more efficient (if less complete) survey.
 However, we do not expect the performance of citizen image inspectors to change
@@ -1012,7 +1015,7 @@ in  \Sref{sec:results:sample} below.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_probabilities.png}
+\centering\includegraphics[width=0.9\linewidth]{CFHTLS_2013-10-29_10:16:35_probabilities.png}
 \caption{Typical \SW agent confusion matrix elements. At a particular
 snapshot, 200 randomly-selected agents are shown distributed over the unit plane, with a
 tendency to move towards the ``astute'' region in the upper right hand
@@ -1025,7 +1028,7 @@ agent-perceived ``skill'' (\Aref{appendix:swap}).}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\begin{figure}
-%\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_histories.png}
+%\centering\includegraphics[width=0.9\linewidth]{CFHTLS_2013-10-29_10:16:35_histories.png}
 %\caption{Typical \SW agent histories. The ``skill'' of the  same 200 random
 %agents  as in \Fref{fig:swap:agent-probabilities} is plotted in green as a function
 %of the number  of subjects classified (``effort''). The yellow histogram in
@@ -1053,7 +1056,7 @@ right-hand quadrant, the agents perceive their volunteers to be ``astute.''
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/CFHTLS_2013-10-29_10:16:35_trajectories.png}
+\centering\includegraphics[width=0.9\linewidth]{CFHTLS_2013-10-29_10:16:35_trajectories.png}
 \caption{Typical \SW \StageOne subject trajectories. Top: 200 randomly-selected
 subjects drift downwards as they are classified, while being nudged left and
 right in probability by the agents as they interpret the volunteers input. The
@@ -1175,10 +1178,10 @@ measured to better than 1\%.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
 \begin{minipage}{0.45\linewidth}
-  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage1_ROC.pdf}
+  \centering\includegraphics[width=\linewidth]{stage1_ROC.pdf}
 \end{minipage}\hfill
 \begin{minipage}{0.45\linewidth}
-  \centering\includegraphics[width=\linewidth]{sw-system-figs/stage2_ROC.pdf}
+  \centering\includegraphics[width=\linewidth]{stage2_ROC.pdf}
 \end{minipage}
 \caption{Receiver operating characteristic curves for the \SW system, using
 the \cfhtls training set. Left: \StageOne, right: \StageTwo. Insets show a
@@ -1244,7 +1247,7 @@ result.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=\linewidth]{sw-system-figs/completeness_purity_simple.pdf}
+\centering\includegraphics[width=\linewidth]{completeness_purity_simple.pdf}
 \caption{Completeness-estimated purity curves for the \sw system, using
 the \cfhtls training set.}
 \label{fig:results:sample:CP}
@@ -1258,7 +1261,7 @@ the \cfhtls training set.}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/all_skill_contribution_experience_education.pdf}
+\centering\includegraphics[width=0.9\linewidth]{all_skill_contribution_experience_education.pdf}
 \caption{Key properties and contributions of the \SW \StageOne crowd.
 Plotted are the 1-D
 and 2-D smoothed marginalized distributions for  the logarithms of the
@@ -1353,7 +1356,7 @@ probability.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_contrib_cumul.pdf}
+\centering\includegraphics[width=0.9\linewidth]{crowd_contrib_cumul.pdf}
 \caption{Cumulative distributions of the contributions made by the agents: 90\%
 of the contribution was made by the highest contributing 1\% of the crowd at
 \StageOne (blue), and the highest contributing  7\% of the crowd at \StageTwo
@@ -1394,7 +1397,7 @@ images.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/crowd_skill_cumul.pdf}
+\centering\includegraphics[width=0.9\linewidth]{crowd_skill_cumul.pdf}
 \caption{Broad cumulative distributions of agent skill:
 the most skilled 20\% of the crowd only possess around 80\% of the skill,
 at \StageOne. The \StageOne agents
@@ -1436,7 +1439,7 @@ $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=\linewidth]{sw-system-figs/rate_classification.pdf}
+\centering\includegraphics[width=\linewidth]{rate_classification.pdf}
 \caption{Fractional classification rate in the \SW \cfhtls survey. Fractional classification rate is the number
 of classifications per unit time, divided by the final total number of
 classifications. Fractional survey time is the time elapsed since the beginning
@@ -1478,18 +1481,18 @@ categories, performance, efficiency and capacity.
 \begin{minipage}{\linewidth}
   \begin{minipage}[t]{0.47\linewidth}
     \begin{minipage}{0.46\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0008wyp_gri.png}
+      \centering\includegraphics[width=\linewidth]{ASW0008wyp_gri.png}
     \end{minipage}\hfill
     \begin{minipage}{0.50\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0008wyp_stage2_trajectory.png}
+      \centering\includegraphics[width=\linewidth]{ASW0008wyp_stage2_trajectory.png}
     \end{minipage}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.47\linewidth}
     \begin{minipage}{0.46\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0006rkx_gri.png}
+      \centering\includegraphics[width=\linewidth]{ASW0006rkx_gri.png}
     \end{minipage}\hfill
     \begin{minipage}{0.50\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0006rkx_stage1_trajectory.png}
+      \centering\includegraphics[width=\linewidth]{ASW0006rkx_stage1_trajectory.png}
     \end{minipage}
   \end{minipage}
 \end{minipage}
@@ -1499,18 +1502,18 @@ categories, performance, efficiency and capacity.
 \begin{minipage}{\linewidth}
   \begin{minipage}[t]{0.47\linewidth}
     \begin{minipage}{0.46\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0000fgj_gri.png}
+      \centering\includegraphics[width=\linewidth]{ASW0000fgj_gri.png}
     \end{minipage}\hfill
     \begin{minipage}{0.50\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0000fgj_stage1_trajectory.png}
+      \centering\includegraphics[width=\linewidth]{ASW0000fgj_stage1_trajectory.png}
     \end{minipage}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.47\linewidth}
     \begin{minipage}{0.46\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0003j2s_gri.png}
+      \centering\includegraphics[width=\linewidth]{ASW0003j2s_gri.png}
     \end{minipage}\hfill
     \begin{minipage}{0.50\linewidth}
-      \centering\includegraphics[width=\linewidth]{sw-system-figs/ASW0003j2s_stage1_trajectory.png}
+      \centering\includegraphics[width=\linewidth]{ASW0003j2s_stage1_trajectory.png}
     \end{minipage}
   \end{minipage}
 \end{minipage}
@@ -1611,7 +1614,7 @@ like. Such a tool is under development.\footnote{\texttt{http://slowe.github.io/
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
-\centering\includegraphics[width=0.9\linewidth]{sw-system-figs/stage2_veteran_contribution.pdf}
+\centering\includegraphics[width=0.9\linewidth]{stage2_veteran_contribution.pdf}
 \caption{\StageTwo classifier skill, as a function of their \StageOne skill.
 Veterans from \StageOne  are shown in blue, while new volunteers are shown in
 orange. Point size is proportional to the total contribution made,
@@ -1685,7 +1688,7 @@ is an interesting challenge for future work.
 
 % %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % \begin{figure}
-% \centering\includegraphics[width=0.9\linewidth]{sw-system-figs/early_vs_final_skill.png}
+% \centering\includegraphics[width=0.9\linewidth]{early_vs_final_skill.png}
 % \caption{Predictability of final skill from early skill (after 10 training
 % classifications) in \StageOne agents. The dashed lines enclose 649 agents with
 % early skill greater than 0.1

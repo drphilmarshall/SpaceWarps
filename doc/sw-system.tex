@@ -419,8 +419,8 @@ lens candidates we ﬁnd with properties outside the ranges of the sims, may in
 some sense be considered bonuses, a product of the {\it imagination} of the
 crowd in extrapolating their understanding of gravitational lenses into a regime
 where they have not seen any before. In the \cfhtls project, the most important
-selection cuts were to only keep sims with a)  second brightest image brighter
-that $i = 23$ and b) total combined image magnitude brighter than 19--20
+selection cuts were to only keep sims with a) second brightest image brighter
+that $i = 23$ and b) total combined image magnitude fainter than 19--20
 (\PaperTwo, Table~1). The combination of these two cuts results in a sample of
 visible lensed image configurations.
 
@@ -511,6 +511,7 @@ gravitational lenses look like. We return to this balance below.
 
 
 \subsubsection{\StageTwo: Refinement}
+\label{sec:design:stages:two}
 
 The design of the \StageOne classification task, and its training set, should
 lead to sample of lens candidates that has high completeness but may have low
@@ -883,8 +884,9 @@ by the crowd, and the speed at which the image set was classified.
 \label{sec:results:sample}
 
 We first quantify the performance of the \SW system in terms of the recovery of
-the training set images. At \StageOne, this set contains around 5712 simulated
-lenses, and 450 duds; at \StageTwo, we used 152 simulated lenses and 201 duds.
+the training set images. At \StageOne, this set contained around 5712 simulated
+lenses, and 450 duds; at \StageTwo, we used 152 images of simulated lenses and
+201 duds selected as \StageOne false positives (\Sref{sec:design:stages:two}).
 \Fref{fig:results:sample:roc} shows receiver operating characteristic (ROC)
 curves for \cfhtls \StageOne and \StageTwo. These plots show the true positive
 rate (TPR, the number of sims correctly detected divided by the total number of
@@ -895,19 +897,18 @@ which varies along the curves.  In both stages, these curves show that true
 positive rates of  around 90\% were achieved, at very low false positive rates.
 
 For comparison we show the results of an analysis where the classifications of
-training images were ignored, and none of the agents allowed to learn: the
-agents were instead simply assigned initial values of their confusion matrices
-of 0.75 for each element, which then remained constant. This set-up emulates a
+training images were ignored, and the agents' confusion matrix elements
+were instead all simply assigned initial values of 0.75
+which then remained constant. This set-up emulates a
 very simple unweighted voting scheme, where all classifications are treated
 equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
-\StageTwo, thus quantifying  the benefit of including training images and
+\StageTwo, thus illustrating the benefit of including training images and
 allowing the agents to learn via their Bayesian updates.
 
 When the agents are allowed to update their confusion matrices, the choice of
-initial confusion matrix is not very important. The same 0.75 initial values
+initial confusion matrix is not very important: the same 0.75 initial values
 applied to normal, learning agents resulted in only a slightly lower TPR than
-the default case, nevertheless indicating that initializing the system less
-conservatively results in slightly worse performance.
+the default case.
 
 The dot-dashed curves show the impact of the offline analysis. At \StageOne the
 results are very similar to the online version that was actually run (solid
@@ -988,6 +989,10 @@ the purity decreases rapidly if higher completeness than this is sought. The
 optimal sample in this simulated lens search experiment would have been
 constructed with a threshold value of $\pr(\LENS|C,T) > 0.47$. At 100\% purity
 and 90\% completeness, it would have contained around 89 lens candidates.
+However, we remind the reader that all these values are dependent on the
+properties of the training subjects, which were chosen to be fairly
+visible: we expect the completeness to real lenses to be somewhat lower, as a
+result.
 
 % TP + FN ~ 2e-4 * 430000 ~ 100 ~ TP/C ; so TP ~ 89 candidates
 
@@ -1652,13 +1657,13 @@ their wide-field imaging data to contact us if they would like our help.
 
 \section*{Acknowledgements}
 
-We are also grateful to Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons,
+We thank Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons,
 David Hogg, Thomas Jennings, Layne  Wright, Cecile Faure, Jonathan Coles, Stuart
 Lowe and Jean-Paul Kneib for many useful conversations about citizen science and
 gravitational lens detection, and to the Dark Energy Survey and Pan-STARRS strong
 lensing science teams for their suggestions and encouragement.
 
-PJM and ES thank the Institute of Astronomy and Astrophysics, Academia Sinica
+PJM and ES also thank the Institute of Astronomy and Astrophysics, Academia Sinica
 (ASIAA) and Taiwan's Ministry of Science and Technology (MOST) for their
 financial support of the workshop ``Citizen Science in Astronomy'' in March
 2014, at which some parts of the SWAP analysis was developed.

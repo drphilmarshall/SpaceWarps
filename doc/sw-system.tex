@@ -1140,6 +1140,10 @@ incorrectly detected  divided by the total number of duds in the training set), 
 for a given sample of detections defined by a particular probability threshold,
 which varies along the curves.  In both stages, these curves show that true
 positive rates of  around 90\% were achieved, at very low false positive rates.
+The probability threshold that was used for retirement during the \StageOne online analysis
+was 0.95; this point is marked with a star on each curve.
+This turned out to be close to optimal (although a better approach would be to
+keep track of the ROC curve as the survey progressed!). 
 
 For comparison we show the results of an analysis where the classifications of
 training images were ignored, and the agents' confusion matrix elements

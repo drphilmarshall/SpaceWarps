@@ -160,41 +160,40 @@ all performed successful visual searches for lenses in HST imaging.
 
 Visual image inspection thus seems, at present, unavoidable at some level when
 searching for gravitational lenses. The technique has some drawbacks, however.
-The first is that humans make mistakes. A solution to
-this is for the inspectors to operate in teams, providing multiple
-classifications of the same images in order to catch errors and correct them.
-Second, and relatedly, is that humans get tired. With a well-designed
-classification interface, a human might be able to inspect images at a rate of
-one astronomical object per second (provided the majority are indeed
-uninteresting). At $10^4$ massive galaxies, and 10 lenses, per square degree,
-visual lens searches in good quality imaging data are limited to a few square
-degrees per inspector per day (and less, if more time is spent assessing difficult systems).
-Scaling to thousands of square degrees
-therefore means either robotically reducing the number of targets for
-inspection, or increasing the number of inspectors, or both.
+The first is that humans make mistakes. A solution to this is for the inspectors
+to operate in teams, providing multiple classifications of the same images in
+order to catch errors and correct them. Second, and relatedly, is that humans
+get tired. With a well-designed classification interface, a human might be able
+to inspect images at a rate of one astronomical object per second (provided the
+majority are indeed uninteresting). At $10^4$ massive galaxies, and 10 lenses,
+per square degree, visual lens searches in good quality imaging data are limited
+to a few square degrees per inspector per day (and less, if more time is spent
+assessing difficult systems). Scaling to thousands of square degrees therefore
+means either robotically reducing the number of targets for inspection, or
+increasing the number of inspectors, or both.
 
 For example, a $10^4$ square degree survey containing $10^8$
-photometrically-selected massive galaxies and $10^5$ lenses could only be
-searched by 10 inspectors at a mean rate of 1 galaxy per second and 10
-inspections per galaxy in about 14 years. Reducing the inspection time by a
-factor of 400 to two weeks would require a robot to reduce the target sample
-to 25 per square degree. However, at this point the required purity, 40\%,
-would very likely require the average classification time per object to be
-more like 10 seconds per object. Hiring 10 inspectors to assess complex images
-full time for five months may not be the most cost-effective or
-reliable strategy. Alternatively, a team of $10^6$ inspectors could, in
-principle, make the required $10^9$ image classifications, $10^3$ each, in a
-few weeks; robotically reducing the target list would lead to a proportional
-decrease in the required team size.
+photometrically-selected massive galaxies (and $10^5$ lenses) could only be
+searched by 10 inspectors (at a mean rate of 1 galaxy per second and 3
+inspections per galaxy) in about 5 years. Alternatively,  an automated system
+could be asked to produce a much purer sample: if it was able to reach a purity
+of 10\%, this would leave  $10^6$ lens candidates (100 targets per square
+degree) to be visually inspected.  At this point the average visual
+classification time per object could well be more like 10 seconds per object,
+requiring the same  team of 10 inspectors to work full time for 20 weeks (to
+provide 3 classifications  per lens between them) Neither of these may be the
+most cost-effective or reliable strategy. Alternatively, a team of $10^6$
+inspectors could, in principle, make the required $10^9$ image classifications,
+$10^3$ each, in a few weeks; robotically reducing the target list would lead to
+a proportional decrease in the required team size.
 
 Systematic detection of rare astronomical objects by such ``crowd-sourced''
-visual inspection has recently been achieved by the online citizen science
+visual inspection has recently been demonstrated by the online citizen science
 project \PH \citep{SchwambEtal2012}.
-
 \PH was designed to enable the discovery of transiting exoplanets in data taken
 by the Kepler satellite. A community of over 200,000 inspectors from the general
 public found, after each undergoing a small amount of training, over 40 new
-exoplanet candidates. They achived this   by visually inspecting the Kepler
+exoplanet candidates. They achieved this   by visually inspecting the Kepler
 lightcurves that were presented in a custom web-based classification interface
 \citep{WangEtal2013}.
 The older \GZ morphological classification
@@ -1770,12 +1769,26 @@ potentially reduce the false negative and false positive rates by
 ``resurrecting'' subjects that had been retired by the online system before the
 agents had time to learn enough about their classifier's high skill.
 
-If, as expected, the system efficiency could indeed be improved by a factor of
+\new{If, as expected, the system efficiency could indeed be improved by a factor of
 three via real-time classification analysis, we would expect the characteristic
 completion time $\tau_0$  in \Eref{eq:speed} to decrease by roughly the same
 factor, suggesting that a dataset of $10^4$~images could be searched for lenses
-by a crowd of $10^4$ volunteers in about 6 days.
+by a crowd of $10^4$ volunteers in about 6 days.}
 
+\new{The futuristic lens-finding problem sketched in \Sref{sec:intro}, where $10^5$
+lenses are to be found in a $10^4$ square degree wide field imaging survey, is
+approximately representative of the challenge facing both the LSST and Euclid
+strong lensing science teams \citep{LSSTSciBook,EuclidSciBook}. What role could
+citizen scientists at \SW play in lens searching in the next decade? From
+\Eref{eq:speed}, and assuming $\tau_0 = 6$ days (as above), we see that for the
+\SW crowd to be able to classify $10^8$ images of  photometrically-selected
+massive galaxies and groups in approximately 60 days, it would need to contain
+$10^7$ volunteers. This is only  a factor of ten larger than the current size of
+the Zooniverse userbase. Alternatively, suppose that automated  lens finding
+algorithms are able to select as few as $10^6$ targets for visual inspection (a
+sample with 10\% purity). Increasing $\tau_0$ by a factor of three to allow for
+more inspection time per subject,  we find that \SW could enable a crowd of just
+$10^6$ volunteers to assess them in about three  weeks.}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -1808,20 +1821,20 @@ multi-lingual user base would come with its own set of challenges, especially
 in terms of volunteers' continuing training and interactions on \Talk.
 
 The second way to scale up the number of high contribution classifiers is to
-increase the rate at which new volunteers become dedicated volunteers. Based
-on feedback from the wider \SW community, this could potentially be achieved
-through closer collaboration with the science team. It's also possible that
-the dynamic \StageTwo system proposed in the previous section may act as an
-incentive to some volunteers to increase their contribution (while gaining
-skill in order to ``reach'' \StageTwo). Reducing the rate at which  new
-volunteers lose interest could also play a role. Anecdotally, it seems fairly
-common for new volunteers to be wary of classifying at all, for fear of
-introducing errors. Better explanation of how their early classifications are
-analyzed could help assuage these fears: \Sref{sec:results:crowd} shows that
-effectively down-weighting new users' classifications (by setting their
-agents' initial confusion matrix elements to those of a random classifier)
-leads to best performance, a result which should be of some comfort to the
-nervous volunteer.
+increase the rate at which new volunteers become dedicated volunteers. Based on
+feedback from the wider \SW community, this could potentially be achieved
+through closer collaboration with the science team. \new{It's also possible that
+dynamically assigning subjects on the basis of the volunteer's skill could act
+as an incentive to some volunteers to increase their contribution, although any
+such ``gamified'' approach would need to be taken thoughtfully.}  Reducing the
+rate at which new volunteers lose interest could also play a role. Anecdotally,
+it seems fairly common for new volunteers to be wary of classifying at all, for
+fear of introducing errors. Better explanation of how their early
+classifications are analyzed could help assuage these fears:
+\Sref{sec:results:crowd} shows that effectively down-weighting new users'
+classifications (by setting their agents' initial confusion matrix elements to
+those of a random classifier) leads to best performance, a result which should
+be of some comfort to the nervous volunteer.
 
 
 
@@ -1912,6 +1925,20 @@ financial support of the workshop ``Citizen Science in Astronomy'' in March
 2014, at which some parts of the SWAP analysis was developed.
 
 \input{acknowledgments.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  REFERENCES
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% MNRAS does not use bibtex, input .bbl file instead.
+% Generate this in the makefile using bubble script in scriptutils:
+
+% bubble -f paper-lcr.tex references.bib
+% \input{paper-lcr.bbl}
+
+\bibliographystyle{apj}
+\bibliography{references}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  APPENDICES
@@ -2018,20 +2045,6 @@ column 7 of the table.
 % The uncertainty in the interpretation of the total
 % information generated provides some justification for our focus on the
 % expected information gain as a measure of volunteer contribution.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%  REFERENCES
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% MNRAS does not use bibtex, input .bbl file instead.
-% Generate this in the makefile using bubble script in scriptutils:
-
-% bubble -f paper-lcr.tex references.bib
-% \input{paper-lcr.bbl}
-
-\bibliographystyle{apj}
-\bibliography{references}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

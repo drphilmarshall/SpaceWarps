@@ -1019,7 +1019,7 @@ snapshot, 200 randomly-selected agents are shown distributed over the unit plane
 tendency to move towards the ``astute'' region in the upper right hand
 quadrant as each agent's volunteer views more images. Yellow point size is
 proprtional to the number of images classified; green point size shows
-agent-perceived ``skill.''}
+agent-perceived ``skill'' (\Aref{appendix:swap}).}
 \label{fig:swap:agent-probabilities}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1066,7 +1066,7 @@ computed to date, sub-divided by subject kind.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-During \StageOne classification of the \cfhtls images, we assigned a prior
+During the \StageOne classification of the \cfhtls images, we assigned a prior
 probability for each image to contain a lens of $2\times10^{-4}$, based on a
 rough estimate of the number of expected lenses in the survey, and the fraction
 of the survey area covered by each image. We then assigned two values of the
@@ -1077,7 +1077,8 @@ attained probability of less than the rejection threshold were scheduled for
 retirement and subsequently ignored by the analysis code. Subjects crossing the
 detection threshold were also subsequently ignored, but they were not
 retired from the website, just so that more volunteers could see them.
-The progress of the subjects is illustrated in
+
+The progress of the subjects during the online analysis is illustrated in
 \Fref{fig:swap:subject-trajectories}. Subjects appear on this plot at the tip of
 the arrow, at zero classifications and prior probability; they then drift
 downwards as they are classified by the crowd, with each agent applying the
@@ -1088,10 +1089,11 @@ probability, but some go the other way. The latter will help make up the
 candidate sample. As this plot shows, around 10 classifications are typically
 required for a subject to reach the retirement (or detection) threshold.
 
-The analysis code was run every night during the project, and subjects retired
+The online analysis code was run every night during the project, and subjects retired
 in batches after its completion. This introduced some inefficiency, because
 some classifications were accumulated in the time between them crossing the
 rejection threshold and the subject actually being retired from the website.
+(We quantify this inefficiency in \Sref{sec:discuss:efficiency} below.)
 As subjects were retired from the site, more subjects were activated. In this
 way, the volunteers who down-voted images for not containing any lensed
 features enabled new images to be shown to other members of the community.
@@ -1103,11 +1105,11 @@ the detection threshold ($\pr(\LENS|C,T) > 0.95$) at \StageOne. These were
 classified for one week, with no retirement but a maximum classification number
 of 50 each. The number of subjects at \StageTwo was small enough that we did not
 need to retire any: instead, we simply collected classifications for a fixed
-period of time (about 4 weeks). Without the time pressure motivating the online
-calculation of \StageOne, we carried out an offline analysis
-(\Sref{sec:swap:offline} above) of the  \StageTwo classifications, for
-comparison and as we will see in the next section, improving the pipeline
-performance.
+period of time (about 4 weeks). Without the time pressure motivating an
+online-only calculation (as there had been during \StageOne), we carried out an
+offline analysis (\Sref{sec:swap:offline} above) of the  \StageTwo
+classifications as well, both  for comparison and as we will see in the next
+section, to improve the pipeline performance.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1456,8 +1458,6 @@ of volunteers in the crowd. Just using the numbers above, we find a characterist
 timescale of $\tau_0 = 18\,{\rm days}$, but as we will see in the next section,
 we expect this to be significantly shorter in future projects.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1542,9 +1542,6 @@ that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \SW system (top row),
 and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
 0.95$) by the \SW system (bottom row).
-While the final \StageTwo analysis was done offline,
-these trajectory plots still serve to illustrate the approximate
-classification histories of the subjects.
 
 In some cases the rejection of the false negatives is understandable: the
 lensed features are faint, or in some cases, appear somewhat unrealistic compared to real lenses.
@@ -1553,7 +1550,7 @@ mainly seems to be due to noise in the system: when only low-skill classifiers
 view a subject, all the updates to its posterior probability are small, and if
 none are very confident about the presence of lensing, the subject follows a
 random walk down its trajectory plot. This can be seen in the top left panel
-of Figure \Fref{fig:discuss:performance:trajectories}.
+of \Fref{fig:discuss:performance:trajectories}.
 
 The false positives show similar behaviour, for example in the bottom lefthand
 panel of the figure. As well as subjects being ``unlucky'' in this way, there
@@ -1574,41 +1571,40 @@ improve system performance: adding flexibility to the classification
 interface, educating the volunteers, assigning subjects for
 classification, and interpreting the classification data.
 
-Some of  the mistakes made by reasonably high skill
-classifiers working at high speed
-could have perhaps been corrected by those classifiers themselves, had
-they had access to a ``go back'' option. While clearly enabling error
-reduction, we might worry about such a mechanism enabling classifiers to have
-a guess, then go and read the \Talk discussion, and then return to the
-classification interface to change their mind to agree with the forum. In
-fact, this is already possible on the current interface -- and indeed, it is
-not obvious that such correlations would necessarily lead to poorer system
-performance. There may well also be effects on user confidence; it may be that encouraging this sort of checking would result in increased and not necessarily productive caution. This could be tested by presenting a fraction of the volunteers
-with a version of the site that actively suggested that they take this
-approach, and then tracking the relative performance of ``collaborative''
-classifications compared with independent ones. We leave the exploration of
-this to further
-work.
+Some of  the mistakes made by reasonably high skill classifiers working at high
+speed could have perhaps been corrected by those classifiers themselves, had
+they had access to a ``go back'' option. While clearly enabling error reduction,
+we might worry about such a mechanism enabling classifiers to have a guess, then
+go and read the \Talk discussion, and then return to the classification
+interface to change their mind to agree with the forum. In fact, this is already
+possible on the current interface -- and indeed, it is not obvious that such
+correlations would necessarily lead to poorer system performance. There may well
+also be effects on user confidence; it may be that encouraging this sort of
+checking would result in increased and not necessarily productive caution. This
+could be tested by presenting a fraction of the volunteers with a version of the
+site that actively suggested that they take this approach, and then tracking the
+relative performance of ``collaborative'' classifications compared with
+independent ones. We leave the exploration of this to further work.
 
 Mistakes by both high and low skill classifiers could be reduced by improving
-the training in the system, which could be done in several ways. One is to
-make more training images available to those who want or need it. A basic
-level of training images are needed for SWAP to build up an accurate picture
-of each classifier's skill -- but one could imagine volunteers {\it choosing}
-to see more training images (still at random) in their stream. We could also
-experiment with providing greater training rates early on for all volunteers;
-the risk associated with this is that retention rates may drop if too few
-``fresh'' test images are shown early on. Another way of improving the
-training could be to provide more information about what lenses do. In this
-project, the Spotter's Guide, and the Science, FAQ and About pages were always available on the site, but as a
-passive background resource. We might consider providing more links to this
-guide in the feedback messages shown to the classifiers as they go -- or
-perhaps extending these messages to themselves include more explanations and
-example images. We might also investigate a more dynamic Spotter's Guide: a
-set of manipulable model lenses illustrating all the possible image
-configurations that that those deflectors can make could help volunteers gain
-understanding of what lensed features can look like very quickly. Such a toy
-is under development.
+the training in the system, which could be done in several ways. One is to make
+more training images available to those who want or need it. A basic level of
+training images are needed for SWAP to build up an accurate picture of each
+classifier's skill -- but one could imagine volunteers {\it choosing} to see
+more training images (still at random) in their stream. We could also experiment
+with providing greater training rates early on for all volunteers; the risk
+associated with this is that retention rates may drop if too few ``fresh'' test
+images are shown early on. Another way of improving the training could be to
+provide more information about what gravitational lens systems look like. In
+this project, the Spotter's Guide, and the Science, FAQ and About pages were
+always available on the site, but as a passive background resource. We might
+consider providing more links to this guide in the feedback messages shown to
+the classifiers as they go -- or perhaps extending these messages to themselves
+include more explanations and example images. We might also investigate a more
+dynamic Spotter's Guide: a set of manipulable model lenses illustrating all the
+possible image configurations that those deflectors can make could help
+volunteers very quickly gain understanding of what lensed features can look
+like. Such a tool is under development.\footnote{\texttt{http://slowe.github.io/LensToy}}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -1621,12 +1617,14 @@ while dashed lines are drawn at the mean values for each sample.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-However, most identification failures (around 60\%) seem to be due to the
-random walk problem. Short, random direction steps arise from low skill
-classifiers, arising from classifier inexperience (\Sref{sec:results:crowd}).
+However, identification failures (around 60\%, from inspection of a random sample)
+seem to be due to the statistical noise associated with
+the many short, semi-random direction steps arising from classifications made by
+low skill, inexperienced
+classifiers (\Sref{sec:results:crowd}).
 While improved training will help reduce this effect, it is here
 that targeted task assignment could also help improve system performance, by
-bringing higher skill volunteers in to the mix. We
+bringing higher skill volunteers in when needed. We
 advertised \StageTwo of the current project to all registered users; it was
 taken up by \StageOne veterans with a broad range of skill, and also picked up a
 significant number of new users who did not have enough time to aquire high
@@ -1634,16 +1632,19 @@ skill (since \StageTwo was quite short): of the 1964 volunteers who took part in
 the \StageTwo classification round, only 774 were veterans from \StageOne.
 
 \Fref{fig:discuss:performance:stage1vstage2} shows how the \StageOne skill maps
-on to \StageTwo skill and contribution.
-This figure suggests that there may be some benefit to opening \StageTwo on the
-basis of \StageOne agent skill, in order to reduce the noise in the system
-generated by new and low skill volunteers in this more difficult
-classification stage.  A simple implementation of this would be to switch the
-web app to the \StageTwo version when either a certain \StageOne skill (and/or
-effort) threshold was passed. Good strategy would probably be to switch back
-to \StageOne after some number of \StageTwo classifications (to avoid losing the
-high skill users from \StageOne entirely), and also to make it very clear which
-stage the classifier was at (since \StageTwo requires more careful attention).
+on to \StageTwo skill and contribution. This figure suggests that, while the
+gains are likely small (since  most of the contribution is still made by high
+skill volunteers),  there could have been some benefit to opening \StageTwo on
+the basis of \StageOne agent skill, in order to reduce the noise in the system
+generated by new and low skill volunteers in this more difficult classification
+stage.  In future, dynamically allocating subjects to volunteers according to
+their agents' skill could alleviate this issue.
+%A simple implementation of this would be to switch the web app to the \StageTwo
+%version when either a certain \StageOne skill (and/or effort) threshold was
+%passed. Good strategy would probably be to switch back to \StageOne after some
+%number of \StageTwo classifications (to avoid losing the high skill users from
+%\StageOne entirely), and also to make it very clear which stage the classifier
+%was at (since \StageTwo requires more careful attention).
 This is something we plan to experiment with in future.
 
 Finally, there could be some performance gains to be made by improving the
@@ -1660,16 +1661,18 @@ allow for some classifiers having greater skill in spotting one type of lens
 than another, or, more generally, as a function of lens property (such as
 colour, brightness, and image separation). In the current model, all agents are
 considered to be completely independent, whereas in fact we might expect there
-to be significant clustering of the confusion matrix elements. A hierarchical
+to be significant clustering of the confusion matrix elements in the $\PD - \PL$
+plane. A hierarchical
 model for the crowd, with hyper-parameters describing the distribution of
 confusion matrix elements across the population, may well accelerate the agent
 learning process by including the notion of one agent being likely to be
 similar to its neighbours. Finally, it is worth noting that the model of
 \citet{IBCC} explicitly avoids the assumption of the agent confusion matrix
-elements being constant in time, allowing the development of volunteer skill
+elements being constant in time (as was assumed in \Sref{sec:swap}),
+allowing the development of volunteer skill
 to be more accurately tracked -- and that they did see some time-evolution in
 the supernova zoo classifiers' skill. Finding a way to incorporate such a
-learning model into SWAP, while retaining its statistically online character
+learning model into SWAP while retaining its online character
 is an interesting challenge for future work.
 
 
@@ -1758,21 +1761,20 @@ appreciate what they had found together. (An unwanted side effect of this
 policy was noted in \Fref{fig:discuss:performance:stage1vstage2} in the
 previous sub-section.)
 
-It is clear that to increase the efficiency of the system we need to reduce
-the time lag between the classification being made and its outcome being
-analyzed. The optimal way to do this would be to have the web app itself
-analyze the classifications in a fully online system. This is under
-investigation for future projects. With the classification data being analyzed
-in real time, there may still be a place for a daily or weekly offline
-analysis: this could potentially reduce the false negative and false positive
-rates by ``resurrecting'' subjects that had been retired by the online system
-before the agents had time to learn enough about their classifier's high
-skill.
+It is clear that to increase the efficiency of the system we need to reduce the
+time lag between the classification being made and its outcome being analyzed.
+The optimal way to do this would be to have the web app itself analyze the
+classifications in real time. This is under investigation for future projects.
+There may still be a place for a daily or weekly offline analysis: this could
+potentially reduce the false negative and false positive rates by
+``resurrecting'' subjects that had been retired by the online system before the
+agents had time to learn enough about their classifier's high skill.
 
-If the system efficiency could be improved by a factor of three, we would expect
-the characteristic completion time $\tau_0$  in \Eref{eq:speed} to decrease by
-roughly the same factor, suggesting that a dataset of $10^4$~images could be
-searched for lenses by a crowd of $10^4$ volunteers in about 6 days.
+If, as expected, the system efficiency could indeed be improved by a factor of
+three via real-time classification analysis, we would expect the characteristic
+completion time $\tau_0$  in \Eref{eq:speed} to decrease by roughly the same
+factor, suggesting that a dataset of $10^4$~images could be searched for lenses
+by a crowd of $10^4$ volunteers in about 6 days.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %

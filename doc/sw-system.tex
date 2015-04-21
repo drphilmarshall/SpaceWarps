@@ -1143,7 +1143,7 @@ positive rates of  around 90\% were achieved, at very low false positive rates.
 The probability threshold that was used for retirement during the \StageOne online analysis
 was 0.95; this point is marked with a star on each curve.
 This turned out to be close to optimal (although a better approach would be to
-keep track of the ROC curve as the survey progressed!). 
+keep track of the ROC curve as the survey progressed!).
 
 For comparison we show the results of an analysis where the classifications of
 training images were ignored, and the agents' confusion matrix elements
@@ -1153,7 +1153,6 @@ very simple unweighted voting scheme, where all classifications are treated
 equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
 \StageTwo, thus illustrating the benefit of including training images and
 allowing the agents to learn via their Bayesian updates.
-
 When the agents are allowed to update their confusion matrices, the choice of
 initial confusion matrix is not very important: the same 0.75 initial values
 applied to normal, learning agents resulted in only a slightly lower TPR than
@@ -1169,13 +1168,19 @@ over 95\%, showing that some of the sims that were missed in the online analysis
 may be being recovered by doing the analysis offline. (The same is true at
 \StageOne, but to a lesser extent.) One interpretation for this result (if it holds up)
 would be that the offline analysis, by using each agent's entire history, is
-making less noisy probability estimates.
+making less noisy probability estimates. This could be consistent with
+other citizen science/crowdsourcing projects where,
+in the absence of high quality information about classifiers,
+sophisticated strategies tend to under-perform naive but simpler
+ones \citep{Waterhouse} (although we note that this rule of thumb seems not to extend
+to simple voting in this case!). 
 
 Assuming Poisson statistics for the
 fluctuations in the numbers of recovered lenses, the uncertainty in the measured
 \StageTwo TPR values is around 8\%, but the online and offline samples are
-highly correlated, such that the uncertainty on the {\it difference} between the ROC
-curves is somewhat less than this. Still, a larger validation set is needed to
+highly correlated, such that the uncertainty on the difference between the ROC
+curves is somewhat less than this.
+Still, a larger validation set is needed to
 test these algorithmic choices more rigorously. At \StageOne, high TPR can be
 measured to better than 1\%.
 

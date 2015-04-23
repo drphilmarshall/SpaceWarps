@@ -6575,6 +6575,24 @@ mv *.png *.pdf ../../../doc/sw-system-figs/
 # Then edited the latex to read in the PDFs...
 # Looks good!
 
+# Revisiting to try and reduce file sizes...
+
+# With dpi=300:
+
+du -sch *pdf
+424K	all_skill_contribution_experience_education.pdf
+100K	crowd_contrib_cumul.pdf
+100K	crowd_skill_cumul.pdf
+880K	stage2_veteran_contribution.pdf
+
+# With dpi=100:
+424K	all_skill_contribution_experience_education.pdf
+100K	crowd_contrib_cumul.pdf
+100K	crowd_skill_cumul.pdf
+880K	stage2_veteran_contribution.pdf
+
+# Will need to compress some other way.
+
 # ==============================================================================
 # 2015-04-23 10:14 BST
 
@@ -6594,14 +6612,50 @@ end
 
 # Old plots:
 
-set pngs = ( CFHTLS*png )
+set pngs = ( attic/CFHTLS*png )
 foreach png ( $pngs )
-  convert -quality 40 $png $png:r.jpg
+  convert -quality 30 $png $png:r.jpg
   convert $png:r.jpg $png:r.pdf
   du -h $png $png:r.jpg $png:r.pdf
 end
 
+# New plots as well:
+
+set pdfs = `ls *.pdf | grep -v ASW | grep -v CFHTLS | grep -v screengrab`
+foreach pdf ( $pdfs )
+  convert -quality 95 $pdf $pdf:r.jpg
+  convert $pdf:r.jpg $pdf:r_compressed.pdf
+  \rm $pdf:r.jpg
+  du -h $pdf $pdf:r_compressed.pdf
+end
+
+du -sch *compressed.pdf
+132K	all_skill_contribution_experience_education_compressed.pdf
+ 60K	completeness_purity_simple_compressed.pdf
+ 76K	crowd_contrib_cumul_compressed.pdf
+ 80K	crowd_skill_cumul_compressed.pdf
+ 88K	rate_classification_compressed.pdf
+ 92K	stage1_ROC_compressed.pdf
+104K	stage2_ROC_compressed.pdf
+140K	stage2_veteran_contribution_compressed.pdf
+772K	total
+
+Compare with:
+
+du -sch $pdfs
+424K	all_skill_contribution_experience_education.pdf
+136K	completeness_purity_simple.pdf
+100K	crowd_contrib_cumul.pdf
+100K	crowd_skill_cumul.pdf
+168K	rate_classification.pdf
+136K	stage1_ROC.pdf
+136K	stage2_ROC.pdf
+880K	stage2_veteran_contribution.pdf
+2.0M	total
+
 # Good! Now move all the PNGs to the attic, remove the JPGs and commit the PDFs.
+# Keep full resolution plot pdfs for submission to the journal (and for the latest
+# versions we show on our website, eventually).
 
 # ==============================================================================
 

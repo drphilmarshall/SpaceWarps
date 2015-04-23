@@ -244,7 +244,7 @@ def make_crowd_plots(argv):
 
     # 1.1 Contribution
 
-    plt.figure(figsize=(10,8),dpi=300)
+    plt.figure(figsize=(10,8),dpi=100)
 
     # All Stage 1 volunteers:
     cumulativecontribution1_all = np.cumsum(np.sort(contribution_all)[::-1])
@@ -299,7 +299,7 @@ def make_crowd_plots(argv):
 
     # 1.2 Skill
 
-    plt.figure(figsize=(10,8),dpi=300)
+    plt.figure(figsize=(10,8),dpi=100)
 
     # All Stage 1 volunteers:
     cumulativeskill1_all = np.cumsum(np.sort(final_skill_all)[::-1])
@@ -352,6 +352,7 @@ def make_crowd_plots(argv):
 
     # Plot #2: is final skill predicted by early skill?
 
+    """ Commented out as we left this out of the paper.
     N = len(final_skill)
     prodigies_final_skill = final_skill[np.where(early_skill > 0.1)]
     Nprodigies = len(prodigies_final_skill)
@@ -360,7 +361,7 @@ def make_crowd_plots(argv):
     print "make_crowd_plots: the",Nprodigies,"-",phr(100*Nprodigies/N),"% - of experienced stage 1 volunteers who have early skill > 0.1 go on to attain a mean final skill of",phr(mean_prodigies_skill,ndp=2)
     print "make_crowd_plots: with",phr(100*Ngood_prodigies/Nprodigies),"% of them remaining at skill 0.05 or higher"
 
-    plt.figure(figsize=(10,8),dpi=300)
+    plt.figure(figsize=(10,8),dpi=100)
     plt.xlim(-0.02,0.25)
     plt.ylim(-0.02,0.8)
     plt.xlabel('Early Skill, $\langle I \\rangle_{j<10}$ / bits')
@@ -375,7 +376,8 @@ def make_crowd_plots(argv):
     pngfile = output_directory+'early_vs_final_skill.pdf'
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: skill-skill plot saved to "+pngfile
-
+    """
+    
     # ------------------------------------------------------------------
 
     # Plot #3: corner plot for 5 variables of interest; stage1 = blue shaded, stage2 = orange outlines.
@@ -425,7 +427,7 @@ def make_crowd_plots(argv):
     # PJM: updated 2014-09-03 to show stage 1 vs 2 skill, point size shows effort.
 
     # plt.figure(figsize=(10,8))
-    plt.figure(figsize=(8,8),dpi=300)
+    plt.figure(figsize=(8,8),dpi=100)
     # plt.xlim(-10.0,895.0)
     plt.xlim(-0.02,0.85)
     plt.ylim(-0.02,0.85)

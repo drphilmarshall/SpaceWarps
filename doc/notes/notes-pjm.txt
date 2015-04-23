@@ -6657,6 +6657,18 @@ du -sch $pdfs
 # Keep full resolution plot pdfs for submission to the journal (and for the latest
 # versions we show on our website, eventually).
 
+# Now remove ':' from filenames.
+
+set colonfiles = `ls *.* | grep ':'`
+foreach colonfile ( $colonfiles )
+  set newfile = `echo $colonfile | sed s/':'//g`
+  mv -v $colonfile $newfile
+end
+
+CFHTLS_2013-10-29_10:16:35_histories.pdf -> CFHTLS_2013-10-29_101635_histories.pdf
+CFHTLS_2013-10-29_10:16:35_probabilities.pdf -> CFHTLS_2013-10-29_101635_probabilities.pdf
+CFHTLS_2013-10-29_10:16:35_trajectories.pdf -> CFHTLS_2013-10-29_101635_trajectories.pdf
+
 # ==============================================================================
 
 FINISH:

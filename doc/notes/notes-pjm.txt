@@ -6575,6 +6575,23 @@ mv *.png *.pdf ../../../doc/sw-system-figs/
 # Then edited the latex to read in the PDFs...
 # Looks good!
 
-# ======================================================================
+# ==============================================================================
+# 2015-04-23 10:14 BST
+
+# Reducing figure sizes for arxiv.
+
+convert -quality 50 sw-screengrab-marker+feedback.png sw-screengrab-marker+feedback.jpg
+convert sw-screengrab-marker+feedback.jpg sw-screengrab-marker+feedback.pdf
+
+set pngs = ( ASW*png CFHTLS*png ?.png )
+foreach png ( $pngs )
+  convert -quality 70 $png $png:r.jpg
+  convert $png:r.jpg $png:r.pdf
+  du -h $png $png:r.jpg $png:r.pdf
+end
+
+# Good! Now move all the PNGs to the attic, remove the JPGs and commit the PDFs.
+
+# ==============================================================================
 
 FINISH:

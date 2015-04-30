@@ -50,12 +50,13 @@
 We describe \SW, a novel gravitational lens discovery service that yields
 samples of high purity and completeness through crowd-sourced visual inspection.
 Carefully produced colour composite images are displayed to volunteers via a
-classification interface which records their estimates of the positions of
+web-based classification interface, which records their estimates of the positions of
 candidate lensed features. Simulated lenses, and expert-classified images which
 lack lenses, are inserted into the image stream at random intervals; this
 training set is used to give the volunteers feedback on their performance, as
-well as to calibrate it in order to allow dynamical updates to the probability
-of any image they classify to contain a lens. Low probability systems are
+well as to calibrate a model of the system that provides
+dynamical updates to the probability of containing a lens
+of every image they classify. Low probability systems are
 retired from the site periodically, concentrating the sample towards a set of
 candidates. Having divided 160 square degrees of Canada-France-Hawaii Telescope
 Legacy Survey (\cfhtls) imaging into some 430,000 overlapping 84 by 84 arcsecond
@@ -132,11 +133,11 @@ PawaseEtal2014}. Similarly, searches of over a hundred square degrees of CFHT
 Legacy Survey (\cfhtls) ground-based imaging, also with sub-arcsecond image quality,
 have revealed a smaller number of wider image separation group-scale systems
 \citep[e.g.][]{CabanacEtal2007,MoreEtal2012}. Detecting galaxy-scale lenses
-from the ground is hard, but feasible albeit with lower efficiency and requiring
+from the ground is difficult, but feasible albeit with lower efficiency and requiring
 HST or spectroscopic follow-up to confirm the candidates as lenses
 \citep[e.g.][]{GavazziEtal2014}.
 
-How can we scale these lens searches up to imaging surveys covering a hundred
+How can we scale these lens searches up to imaging surveys that cover a hundred
 times the sky area, such as the almost-all sky surveys planned with LSST and
 Euclid?  There are two approaches to detecting lenses in imaging surveys. The
 first one is robotic: automated analysis of the object catalogs and the survey
@@ -176,7 +177,7 @@ of 10\%, this would leave  $10^6$ lens candidates (100 targets per square
 degree) to be visually inspected.  At this point the average visual
 classification time per object could well be more like 10 seconds per object,
 requiring the same  team of 10 inspectors to work full time for 20 weeks (to
-provide 3 classifications  per lens between them) Neither of these may be the
+provide 3 classifications  per lens between them). Neither of these may be the
 most cost-effective or reliable strategy. Alternatively, a team of $10^6$
 inspectors could, in principle, make the required $10^9$ image classifications,
 $10^3$ each, in a few weeks; robotically reducing the target list would lead to
@@ -188,23 +189,24 @@ project \PH \citep{SchwambEtal2012}.
 \PH was designed to enable the discovery of transiting exoplanets in data taken
 by the Kepler satellite. A community of over 200,000 inspectors from the general
 public found, after each undergoing a small amount of training, over 40 new
-exoplanet candidates. They achieved this   by visually inspecting the Kepler
+exoplanet candidates. They achieved this by visually inspecting the Kepler
 lightcurves that were presented in a custom web-based classification interface
 \citep{WangEtal2013}.
 The older \GZ morphological classification
 project \citep{LintottEtal2008} has also enabled the discovery of rare objects,
 via its flexible inspection interface and discussion forum
-\citep{LintottEtal2009}. Indeed, several of us (AV,CC,CM,EB,PM,TJ,LW) were
+\citep{LintottEtal2009}. Indeed, several of us (AV,CC,CM,EB,PM,LW) were
 active in an informal \GZ gravitational lens search (Verma et al, in
 preparation), an experience which led to the present hypothesis that a
 systematic online visual lens search could be successful.
 
 In this paper, we describe the \SW project, a web-based system conceived to
 address the visual inspection problem in gravitational lens detection for future
-large surveys via crowd-sourcing. Implemented as a Zooniverse \citep{SimpsonEtal2014} citizen science
+large surveys by ``crowd-sourcing'' it to a community of citizen scientists.
+Implemented as a Zooniverse \citep{SimpsonEtal2014}
 project, it is designed to provide a {\it gravitational lens discovery service}
 to survey teams looking for lenses in wide field imaging data. In a companion
-paper (More et al, in preparation, herafter \PaperTwo) we will present the new
+paper \citep[][hereafter \PaperTwo](PaperII) we will present the new
 gravitational lenses discovered in our first lens search, and
 begin to investigate the differences between lens detections made in \SW and
 those made with automated techniques. Here though, we simply try to answer the
@@ -219,7 +221,7 @@ system? What is the completeness of the sample produced likely to be?
 produced?
 
 \item How quickly can lenses be detected, and non-lenses be rejected?
-How many classifications, and so how many volunteers are needed per target?
+How many classifications, and so how many volunteers, are needed per target?
 
 \item What can we learn about the scalability of the crowd-sourcing approach?
 
@@ -236,7 +238,7 @@ This paper is organised as follows.  In \Sref{sec:design} we introduce the \SW
 classification interface and the volunteers who make up the \SW
 collaboration,  explain how we use the training images, and describe our
 two-stage candidate selection strategy. We then briefly introduce, in
-\Sref{sec:data}, the particular dataset used in the first experimental tests
+\Sref{sec:data}, the particular dataset used in our first test
 of the \SW system, and how we prepared the images prior to displaying them in
 the web interface. In \Sref{sec:swap} we describe our methodology for
 interpreting the classifications made by the volunteers, and then present the

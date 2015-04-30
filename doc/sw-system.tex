@@ -257,15 +257,16 @@ The basic steps of a visual search for gravitational lenses are: 1) prepare
 the images, 2) display them to an inspector, 3) record the inspector's
 classification of each image (as, for example, containing a lens candidate or
 not) and 4) analyze that classification along with all others to produce a
-final candidate list. We describe step 1 in \Sref{sec:data} and step 4 in
-\Sref{sec:swap}. In this section we take a volunteer's eye view and begin by
+final candidate list. We describe step~1 in \Sref{sec:data}, and step~4 in
+\Sref{sec:swap}. In this section we take a volunteer's eye view, and begin by
 describing the \SW classification interface, the crowd of volunteers, and the
 interactions between the two.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure*}
 \centering\includegraphics[width=0.9\linewidth]{sw-screengrab-marker+feedback.pdf}
-\caption{Screenshot of the \SW classification interface.}
+\caption{Screenshot of the \SW classification interface at
+  \texttt{http://spacewarps.org}.}
 \label{fig:screenshot}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -280,11 +281,12 @@ A screenshot of the \SW classification interface (CI) is shown in
 \texttt{http://spacewarps.org}; the web application is written in coffeescript,
 css and html and follows the general design of others written by the Zooniverse
 team.\footnote{The \SW web application code is open source and can be accessed
-from \texttt{https://github.com/zooniverse/Lens-Zoo}. The project was renamed during development.}
-The focus of the CI is a
-large display of a pre-prepared PNG image of the ``subject'' being inspected.
-When the image is clicked on by the volunteer, a marker symbol appears where the
-pointer was. Several markers can be placed, and they can be removed by the user if, for example, they change their mind.
+from \texttt{https://github.com/zooniverse/Lens-Zoo}.  The project was renamed
+during development to avoid the question of  who ``Len'' is.} The focus of the
+CI is a large display of a pre-prepared PNG image of the ``subject'' being
+inspected. When the image is clicked on by the volunteer, a marker symbol
+appears at that position.  Several markers can be placed, and they can be
+removed by the user if they change their mind.
 
 The next image moves rapidly in from a queue formed at the right hand side of
 the screen when the ``Finished marking'' button is pressed. Gravitational lenses
@@ -293,28 +295,31 @@ these need to be quickly rejected by the inspector. The queue allows several
 images to be pre-loaded while the volunteer is classifying the current subject,
 and the rapid movement is designed to encourage volunteers to classify rapidly.
 After each classification, the positions of the markers are written out to the
-classification database, in an entry that also stores the ID of the subject, the
-username (or IP address if the user is not logged in) of the volunteer, a timestamp and some other metadata.
+classification database, in an entry that also stores metadata including the ID
+of the subject, the username of the volunteer  (or IP address if thy are not
+logged in), and a timestamp.
 
-For the more interesting subjects, the CI offers two features that  enable
-further investigation of the subjects. The first is the ``Quick Dashboard''
-(QD) a more advanced image viewer. This allows the viewer to compare three
+For the more interesting subjects, the CI offers two features that enable their
+further investigation. The first is the ``Quick Dashboard''
+(QD), a more advanced image viewer. This allows the viewer to compare three
 different contrast and colour balance settings, to help bring out subtle
 features, and to pan and zoom in on interesting regions of the image to assess
 small features. Markers can be placed in the Quick Dashboard just the same as
 in the main CI image viewer. The second is a link to that subject's page in
-the project discussion forum, \texttt{http://talk.spacewarps.org} (known as
-``Talk''). Here, volunteers can discuss the features they have seen either
+the project discussion forum (known as
+``\Talk\footnote{\texttt{http://talk.spacewarps.org}}'').
+Here, volunteers can discuss the features they have seen either
 before they submit their classification, or after, if they ``favourite'' the
 subject. There is no ``back'' button: each volunteer may only classify a given
 subject once. However, the presence of an option to see what others think
 about any given subject before submitting your own classification means that
-the classifications may not be strictly independent; the advantage of this
+the classifications may not be strictly independent; however, the advantage of this
 system is that volunteers can learn from others what constitutes a good lens
 candidate. This is not, however, the primary educational resource; we describe
 the explicit training that we provide for the volunteers in the next section.
 The FITS images of the subject can be further explored with Zooniverse
-``Dashboard Tools,'' using a more powerful image viewer that enables dynamic
+``Dashboard Tools,'' which include a
+more powerful image viewer that enables dynamic
 variation of the colour balance and contrast (stretch), and for any given view
 to be shared via unique URL back to \Talk. The FITS image viewing in both the
 Quick Dashboard and the Dashboard Tools are enabled by the javascript library
@@ -326,7 +331,7 @@ Quick Dashboard and the Dashboard Tools are enabled by the javascript library
 \subsection{Training}
 \label{sec:design:training}
 
-Gravitational lenses are largely unfamiliar objects to the general public.
+Gravitational lenses are typically unfamiliar objects to the general public.
 New volunteers need to learn what lenses look like as quickly as possible, so
 that they can contribute informative classifications. They also need to learn
 what lenses do not look like, in order to reduce the false positive detection
@@ -362,8 +367,8 @@ images that were expert-classified and found not to contain any lens
 candidates (these images are known as ``duds''). The tutorial explains that
 the volunteers  will be shown such training images. They are also informed
 that they will receive instant feedback about their performance after
-classifying (blind) any of these training subjects. Indeed, after a volunteer
-finishes marking a training subject and hits ``Finished marking,'' a pop-up
+classifying (blindly) any of these training subjects. Indeed, after a volunteer
+finishes marking a training subject, a pop-up
 message is generated, containing either congratulations for a successful
 classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or feedback for an unsuccessful one (for
@@ -390,56 +395,60 @@ given in \PaperTwo, where we also carry out performance tests relative to real
 lens candidates in the survey fields. Here, we merely note the following
 aspects to place this paper's results in context.
 
-We start by selecting massive galaxies and groups in the \cfhtls catalogs,
-by colour, brightness and photometric redshift. We then assign plausible mass
+We began by selecting massive galaxies and groups in the \cfhtls catalogs,
+by colour, brightness and photometric redshift. We then assigned plausible mass
 distributions to these ``potential lenses:'' a singular isothermal ellipsoid
 model for each massive galaxy, and an additional NFW profile dark matter halo
-for groups and clusters. The mass distributions are centred, elongated and
+for groups and clusters. The mass distributions were centred, elongated and
 aligned with the measured optical properties of the galaxies present. We then
-draw a source from a plausible background population, of either galaxies (for
+drew a source from a plausible background population, of either galaxies (for
 the group or galaxy lenses) or quasars (for the galaxy-scale lenses). The
-source redshift, luminosity and size distributions are all chosen to match
-those observed, while the source abundance is artificially increased such that
-each potential lens has a high probability of having a source occur at a
-position that will lead to it being  highly magnified. Source galaxies are
-given plausible surface brightness profiles and ellipticities. We then compute
+source redshift, luminosity and size distributions were all chosen to match
+those observed, while the source abundance was artificially increased such that
+each potential lens had a high probability of having a source occur at a
+position that will lead to it being highly magnified. Source galaxies were
+given plausible surface brightness profiles and ellipticities. We then computed
 the predicted multiple images of the source using the \gravlens ray-tracing
 code \citep{Keeton2000}.
 
-At this point, the distribution of lens and source properties are quite
-realistic. We then chose to make cuts of the simulated lens pool, in order to
-reject sims that were likely to be difficult to spot. While this ensured the
-educational value of the sims when feedback was given, it meant that we should
-only expect to detect real lens candidates that also pass these cuts. Indeed, for traditional machine learning or computer vision implementations then this would be a constraint, but human classifiers are capable of going beyond their training; Geach et al., for example (REF????) report the discovery of a red lens by volunteers who had only been trained on blue examples. This ability to go beyond training is a key advantage of human classifiers, and
-any real
-lens candidates we find with properties outside the ranges of the sims, may in
-this sense be considered bonuses, a product of the {\it imagination} of the
-crowd in extrapolating their understanding of gravitational lenses into a regime
-that they have not been trained for. In the \cfhtls project, the most important
-selection cuts were to only keep sims with a) second brightest image brighter
-that $i = 23$ and b) total combined image magnitude fainter than 19--20
-(\PaperTwo, Table~1). The combination of these two cuts results in a sample of
-visible lensed image configurations.
+At this point, we applied several cuts to the simulated lens pool, in order to
+reject sims that were likely to be difficult to spot. While this ensured that
+the educational value of the sims when feedback was given, it means that we
+should not necessarily expect to detect real lens candidates that would not pass
+these cuts (although human classifiers do possess the key advantage of  being
+able to go beyond their training\footnote{Any real lens candidates we find with
+properties outside the ranges of the training set will be of particular
+interest, being a product of the {\it imagination} of the crowd in extrapolating
+their understanding of gravitational lenses into a regime that they have not
+been trained for.  \citet{GeachEtal2015}, for example, report the discovery of a
+red lensed arc  by volunteers who had only been trained primarily on blue
+examples. We investigate this aspect of the \SW approach in \PaperTwo.}).
+In the present project, the most important selection cuts we made were to only
+keep sims with a) second brightest image brighter that $i = 23$ and b) total
+combined image magnitude fainter than 19--20 (\PaperTwo, Table~1). The
+combination of these two cuts resulted in a sample of visible lensed image
+configurations.
 
-When a volunteer begins classifying, they are initially shown training images at
-a mean frequency of two in five. Subjects are drawn at random from a pool
+Volunteers were initially shown training images at
+a mean frequency of two in five. Subjects were drawn at random from a pool
 consisting of (at first) 20\% sims, 20\% duds, and 60\% test images,
 and such that no volunteer ever
-sees a given image more than once. As the number of classifications made by the
-volunteer increases, the training frequency is decreased from 40\% to
+saw a given image more than once. As the number of classifications made by the
+volunteer increased, the training frequency was decreased from 40\% to
 $2/(5\times2^{(\textrm{int}(N_c/20)+1)/2})$ ($\approx 30\%$ for the second 20
 subjects, $20\%$ for the third 20 subjects, and so on).
 
-This training regime means that in the first 60 images viewed, each volunteer
-is shown (on average) 9 simulated gravitational lenses, and 9 empty fields.
-This is a much higher rate than the natural one: to try and avoid this leading
-to over-optimism among the inspectors (and a resulting high false positive
-rate), we display the current ``Simulation Frequency'' on the classification
-interface (``1 in 5'' in \Fref{fig:screenshot}) and maintain the consistent
-theme in the feedback messages that lenses are rare.
+This training regime meant that in the first 60 images viewed, each volunteer
+was shown (on average) 9 simulated gravitational lenses (as well as 9
+pre-selected empty ``dud'' fields). This is a much higher rate than the natural
+one: to try and avoid this leading to over-optimism among the inspectors (and a
+resulting high false positive rate), we displayed the current ``Simulation
+Frequency'' on the classification interface (``1 in 5'' in
+\Fref{fig:screenshot}) and maintained the consistent theme in the feedback
+messages that lenses are rare.
 
 In Figures~\ref{fig:training-gallery:sims}~and~\ref{fig:training-gallery:duds}
-we show example training images from the first \SW project (\Sref{sec:data}
+we show example training images from this first \SW project (\Sref{sec:data}
 below).
 
 

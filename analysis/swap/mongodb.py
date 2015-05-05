@@ -1,8 +1,3 @@
-"""
-TODO:
-    Save the whole list of clicks!
-"""
-
 # ======================================================================
 
 import numpy as np

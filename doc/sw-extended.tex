@@ -21,11 +21,13 @@
 \input{macros.tex}
 \input{addresses.tex}
 
+\def\indic#1{\mathbb{I}\left({#1}\right)}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title[\sw]
 {\SW Extended! Snappy Titles!}
-    
+
 \author[Davis et al.]{%
   \input{sw-system-authors.tex}
 }
@@ -33,17 +35,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{document}
-             
+
 \date{to be submitted to ?!?!}
 \pagerange{\pageref{firstpage}--\pageref{lastpage}}\pubyear{2014}
 
-\maketitle           
+\maketitle
 
 \label{firstpage}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{abstract} 
+\begin{abstract}
 
 \todo{Chris}{Do abstract!}
 
@@ -106,13 +108,15 @@ contexts), manipulating initializations, etc. We could also see what the
 benefits are for using the known lens information. Finally, we should examine the
 benefits of using a validation dataset (using information we already have!) to
 improve our estimates.}
+\flag{Chris}{I don't like using $p^0$ to both represent the true prior prior
+and our estimate of the correct prior according to the EM algorithm.}
 
 \sw keeps track of the following parameters:
 \begin{itemize}
-  \item{$x_{ij}$, the classification the $i$-th volunteer made of the $j$-th
-      image. $x_{ij}$ may take on three values:
+  \item{$C_{ij}$, the classification the $i$-th volunteer made of the $j$-th
+      image. $C_{ij}$ may take on three values:
       0, 1, or empty. Since volunteers do not see most images, the vast
-    majority of $x_{ij}$ are blank.}
+    majority of $C_{ij}$ are blank.}
     \item{$PD_{i}$, the probability, given that the image is a dud, that
         $i$-th the volunteer will classify it as a dud. The
       probability, given that the image is a dud, that the volunteer will
@@ -127,27 +131,27 @@ improve our estimates.}
   \item{$p^{0}$, the prior probability that an object is a lens.}
 \end{itemize}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsection{The Online System}
 \label{sec:formalism:online}
 In \sw, this is fixed at $2 \times 10^{-4}$, or the expectation that
 around 100 lenses will be found in 430,000 images. Because \sw is an online
 system that constantly reevaluates most of the above parameters (except $p_0$
-and any non-blank $x_{ij}$) in order to promote likely lenses\footnote{Note
+and any non-blank $C_{ij}$) in order to promote likely lenses\footnote{Note
 that this does not change the probability that a volunteer will actually draw
 said image.} or to retire likely duds,\footnote{Images whose probability of
 being a lens drops below a certain threshold are removed from the active
 dataset.} we augment $p$, $PL$, and $PD$ as $p_j^k$, the evaluation of
 $p_j$ at time $k$. \sw uses Bayes' Theorem to update $p_j^{(k + 1)}$ for
-some new evaluation $x_{ij}$\footnote{There is no superscript for $x_{ij}$
+some new evaluation $C_{ij}$\footnote{There is no superscript for $C_{ij}$
 because each user only sees an image once.}:
 \begin{align}
-  p_j^{(k + 1)} &= \left ( \frac{x_{ij} PL_{i}^{k}
+  p_j^{(k + 1)} &= \left ( \frac{C_{ij} PL_{i}^{k}
   }{PL_{i}^{k} p_j^k + (1 - PD_{i}^{k})(1 -
   p_j^k)}
   \right. \notag \\ & \; \left . +
-  \frac{(1 - x_{ij}) (1 - PL_{i}^{k})
+  \frac{(1 - C_{ij}) (1 - PL_{i}^{k})
   }{(1 - PL_{i}^{k}) p_j^k + PD_{i}^{k}(1 -
   p_j^k)} \right ) p_j^k \ ,
 \end{align}
@@ -159,13 +163,13 @@ actually change the probability exactly the same as one who always perfectly
 correctly classifies an image, given that the estimate of the obtuse
 volunteer's skill ($PL_{i} = 0$) is accurate.)
 
-\sw only updates the volunteer's $PL_{i}$ and $PD_{i}$ after volunteer $x_i$
+\sw only updates the volunteer's $PL_{i}$ and $PD_{i}$ after volunteer $C_i$
 classifies a training image:
 
 \begin{align}
-  PL_{i}^{(k + 1)} &= \frac{PL_{i}^{k} (NL_{i}^{k} + M) + \mathbb{I}[x_{ij} =
+  PL_{i}^{(k + 1)} &= \frac{PL_{i}^{k} (NL_{i}^{k} + M) + \mathbb{I}[C_{ij} =
   z_{j}]}{NL_{i}^{k} + M + 1} \\
-  PD_{i}^{(k + 1)} &= \frac{PD_{i}^{k} (ND_{i}^{k} + M) + \mathbb{I}[x_{ij} =
+  PD_{i}^{(k + 1)} &= \frac{PD_{i}^{k} (ND_{i}^{k} + M) + \mathbb{I}[C_{ij} =
   z_{j}]}{ND_{i}^{k} + M + 1}
 \end{align}
 where $ND_{i}^{k}$ and $NL_{i}^{k}$ refer to the number of training lenses and
@@ -176,7 +180,7 @@ empirically derived to smooth the skill classification of new volunteers.
 With these update rules plus an initialization of $PD_{i} = PL_{i} = 0.5$ and
 $p^{0} = 2 \times 10^{-4}$, the online update system is fully specified.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsection{An Offline Expectation Maximization Approach}
 \label{sec:formalism:em}
@@ -186,9 +190,9 @@ the number of images they have observed, or to allow a particular image to be
 more likely to be drawn), the complete log-likelihood for this model may be
 specified:
 \begin{multline}
-  \mathrm{CLL}(x_{ij}, z_{j}, PL_{i}, PD_{i}, p_{ij}^{0}) \\ = \sum_{i} \sum_{j \in \Omega_i} x_{ij} z_{j} \log PL_{i} +
-      (1 - x_{ij}) z_j \log (1 -
-      PL_{i}) \\ + (1 - x_{ij}) (1 - z_j) \log PD_{i} + x_{ij} (1 - z_j) \log (1 - PD_{i}) \\ + z_j \log p_{ij}^{0} +
+  \mathrm{CLL}(C_{ij}, z_{j}, PL_{i}, PD_{i}, p_{ij}^{0}) \\ = \sum_{i} \sum_{j \in \Omega_i} C_{ij} z_{j} \log PL_{i} +
+      (1 - C_{ij}) z_j \log (1 -
+      PL_{i}) \\ + (1 - C_{ij}) (1 - z_j) \log PD_{i} + C_{ij} (1 - z_j) \log (1 - PD_{i}) \\ + z_j \log p_{ij}^{0} +
       (1 - z_j ) \log(1 - p_{ij}^{0})
 \end{multline}
 where $\Omega_i$ is the set of all images volunteer $i$ has observed in $\Omega$,
@@ -198,7 +202,7 @@ I choose to simply ignore the unobserved images.} We can use this complete
 log-likelihood to derive an offline expectation maximization algorithm for
 determining the lens probabilities, user skills, and lens priors.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsubsection{E-Step}
 \label{sec:formalism:em:estep}
@@ -209,20 +213,20 @@ The E-Step is maximizing the complete log-likelihood with respect to the image
 probability $p_j$.  This is equivalent to replacing $z_j$ with $p_j$:
 % TODO: replace this with equivalent like eq1
 \begin{align}
-  p_j &= \frac{1}{N_j} \sum_{i \in \Omega_j} P(z_j = 1 \ | \ x_{ij} ; \Phi) =
-  \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{ P(x_{ij} \ | \ z_j = 1; \Phi)
-P(z_j = 1 ; \Phi)}{P(x_{ij} ; \Phi)} \\
-&= \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{ PL_{i}^{x_{ij}} (1 - PL_{i})^{(1 -
-x_{ij})} p_{ij}^{0}}{ PL_{i}^{x_{ij}} (1 -
-  PL_{i})^{(1 - x_{ij})} p_{ij}^{0} + PD_{i}^{(1 - x_{ij})} (1 -
-PD_{i})^{x_{ij}} (1 - p_{ij}^{0})}
+  p_j &= \frac{1}{N_j} \sum_{i \in \Omega_j} P(z_j = 1 \ | \ C_{ij} ; \Phi) =
+  \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{ P(C_{ij} \ | \ z_j = 1; \Phi)
+P(z_j = 1 ; \Phi)}{P(C_{ij} ; \Phi)} \\
+&= \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{ PL_{i}^{C_{ij}} (1 - PL_{i})^{(1 -
+C_{ij})} p_{ij}^{0}}{ PL_{i}^{C_{ij}} (1 -
+  PL_{i})^{(1 - C_{ij})} p_{ij}^{0} + PD_{i}^{(1 - C_{ij})} (1 -
+PD_{i})^{C_{ij}} (1 - p_{ij}^{0})}
 \end{align}
 where $i \in \Omega_j$ is now the set of classifications done on the $j$-th
 image and $N_j$ is the number of classifications done on the $j$-th image. This
 makes sense: $p_{ij}^{0}$ is just the prior likelihood of an image being a lens,
 while $PL_{i}$ is how well we would have identified a lens as such.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsubsection{M-Step}
 \label{sec:formalism:em:mstep}
@@ -230,9 +234,9 @@ The M-Step is done by maximizing the expected complete log-likelihood with
 regard to the input parameters $PD_{i}, PL_{i}, p_{ij}^{0}$. Doing the
 maximization process, we find:
 \begin{align}
-  PL_{i} &= \frac{\sum_{j \in \Omega_i} x_{ij} p_{j}}{\sum_{j \in
+  PL_{i} &= \frac{\sum_{j \in \Omega_i} C_{ij} p_{j}}{\sum_{j \in
 \Omega_i} p_{j}} \\
-  PD_{i} &= \frac{\sum_{j \in \Omega_i} (1 - x_{ij}) (1 - p_{j})}{\sum_{j \in
+  PD_{i} &= \frac{\sum_{j \in \Omega_i} (1 - C_{ij}) (1 - p_{j})}{\sum_{j \in
 \Omega_i} (1 - p_{j})}
 \end{align}
 \begin{align}
@@ -254,9 +258,9 @@ Finally, we also include Laplace smoothing into the M-Step in order to handle
 pathologic cases, such as when users never identify any lenses ($\sum_{j \in
 \Omega_{i}} p_j = 0$). The estimators for $PL_{i}$ and $PD_{i}$ now become:
 \begin{align}
-  PL_{i} &= \frac{M + \sum_{j \in \Omega_i} x_{ij} p_{j}}{2M + \sum_{j \in
+  PL_{i} &= \frac{M + \sum_{j \in \Omega_i} C_{ij} p_{j}}{2M + \sum_{j \in
 \Omega_i} p_{j}} \\
-  PD_{i} &= \frac{M + \sum_{j \in \Omega_i} (1 - x_{ij}) (1 - p_{j})}{2M + \sum_{j \in
+  PD_{i} &= \frac{M + \sum_{j \in \Omega_i} (1 - C_{ij}) (1 - p_{j})}{2M + \sum_{j \in
 \Omega_i} (1 - p_{j})}
 \end{align}
 where for Laplace smoothing, $M = 1$.
@@ -269,7 +273,7 @@ different prior on being a lens as well. Finally, if the image is a training
 image with known $p_j \in (0,1)$, then the known $p_j$ is used instead of
 the current estimate.
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsection{Validation of Training}
 \label{sec:validation}
@@ -302,7 +306,158 @@ them about a correct lens classification, and do you tell them it was a real
 lens?
 4. Can I just use the dud fields?
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Expanding Number of Classifications}
+\todo{Chris}{In this section, we expand possible classifications from LENS and
+  NOT to, say 0, 1, 2, 3. In effect, I take the stuff of \ref{sec:formalism:em}
+  and extend it to a multinomial model. I should put in the generative model
+here as well as the new confusion matrix. I have written the first several
+steps below (not properly formatted and all that).}
+
+\flag{Chris}{In the below formalism everything can only be classified once.
+  That is, classification from user $i$ on subject $j$ as type $u$ is $C_{ij} =
+  u$. If we want to expand classification numbers, we could say instead
+$C_{iju} = 1$ for 1 classification as type $u$. Then, if you draw $M$ total
+classifications, you replace $\text{Uniform}\left(p\right)$ with
+$\text{Mult}\left(p, M\right)$. \\
+Now you may ask: Chris, why would we ever make more than one classification on
+a subject? And I would agree, except that this provides an avenue for analyzing
+how to use \SW to deal with the markers (where there usually are multiple classifications).}
+
+We can extend the \SW binomial model to include multiple classifications and
+multiple categories -- we can talk about things like $P(``1" | \rm{LENSED\
+QUASAR})$ where a user assigns an object a rank $"1"$ and wish to know the
+likelihood that a lensed quasar would yield that category.
+
+Unfortunately our $PL$ and $PD$ terms must be
+generalized. We introduce instead $P_{ivu}$ to represent the $i$-th user's
+probability of making classification $``u"$ given that the object is of type
+$v$: $P_{ivu} = P(``u" | v)_i$. Naturally, the conditional probabilities are
+normalized over the possible classifications $``u"$: $\sum_u^U P_{ivu} = 1$. Overall there are $U$ types of
+classifications a user can make, representing $V$ types of objects.
+
+We also must expand $p^0$ to represent more than a binary classification.
+$p_{jv}^0$ is the prior probability that object $j$ is of type $v$. Naturally,
+$\sum_v p_{jv}^0$ = 1.
+The latent variable of subject $j$ as object $v$ is $z_{jv} = 1$ with all
+other $z_{jv} = 0$. Similarly, the classification of user $i$ on subject $j$
+as type $u$ is $C_{iju} = 1$ with all other $C_{iju} = 0$.
+% The latent variable of subject $j$ as object $v$ is $z_{j} =
+% v$. Similarly, the classification of user $i$ on subject $j$ as type $u$ is
+% $C_{ij} = u$.
+
+This is our generative model with explicit latent variables:
+\begin{itemize}
+  \item{Draw latent subject indicator vectors from the prior probability: $$z_{j}
+    \overset{\text{iid}}{\sim} \text{Uniform}\left(p^0\right)$$}
+  \item{Given latent subject indicator $z_{j}$ and the $i$-th user's confusion
+    matrix $P_i$, independently draw a classification vector from the $z_j$-th column
+  of $P_i$: $$C_{ij} | z_{j} \overset{\text{ind}}{\sim}
+\text{Uniform}\left(P_{i,z_j}\right)$$}
+\end{itemize}
+Hence, we can also make the following statements:
+\begin{equation}
+  p(z_{jv}) = p^0_{jv}
+\end{equation}
+% equiv: p(z_j = v) = p^0_v
+\begin{equation}
+  \label{eq:PCiju}
+  P(C_{iju} | z_{jv}; p^0_{jv}, P_{ivu}) = P_{ivu}^{C_{iju}}
+\end{equation}
+
+Thus our complete log likelihood is (ignoring irrelevant normalization terms)
+% \begin{align}
+%   \log p \left( C_{ij}, z_{j}; p_{jv}^0, P_{ivu} \right) &\propto
+%                                                       \sum_{i} \sum_{j \in
+%                                                       \Omega_i} \indic{z_j = v}
+%                                                       \log p_{jv}^0 \notag\\
+% &+ \indic{C_{ij} = u} \indic{z_j = v} \log P_{ivu}
+% \end{align}
+% where $\indic{}$ is the indicator function which evaluates as one when the
+% contained statement is true and zero when it is false.
+% \flag{Chris}{If you want to write it without indicators, expand the notation to
+%   vectors and you get the following:}
+\begin{align}
+  \log p \left( C_{iju}, z_{jv}; p_{jv}^0, P_{ivu} \right) &\propto \sum_{i} \sum_{j \in
+\Omega_i} \sum_{v} z_{jv} \log p_{jv}^0
+  \notag\\
+  &+ \sum_{i} \sum_{j \in \Omega_i} \sum_{v} \sum_{u} C_{iju} z_{jv} \log P_{ivu}
+\end{align}
+
+\subsubsection{E-Step}
+
+Now we repeat the exercise earlier of computing the expected complete log
+likelihood under the conditional distribution $p(z_{j} | C_{ij}; p^0,
+P_{i})$. Call $p_{jv} = p(z_{jv} | C_{iju}; p^0_{jv}, P_{ivu})$. It is
+sufficient to compute $p_{jv}$ to complete this step. By Bayes's Rule, we
+know that
+\flag{Chris}{Is this an abuse of notation? I want for a single $z_{jv}$, but
+given $C_{iju}, p^0_{jv}, P_{ivu}$ for \textit{all} $i$ and $u$. So really it
+is more correct to say $ p(z_{jv}) \prod_i \prod_u p(C_{iju} | z_{jv}; p^0_{jv},
+P_{ivu})$ since each classification $C_{ij}$ is independent. Should I do that?
+Alternatively, I could put one of those $\cdot$ in place of each $i$ and $u$...}
+$$
+p(z_{jv} | C_{iju}; p^0_{jv}, P_{ivu}) \propto p(C_{iju} | z_{jv}; p^0_{jv},
+P_{ivu}) p(z_{jv})
+$$
+But we know the values of all these terms, so we find:
+\todo{Chris}{Double check this. I'm not sure it's strictly correct when you
+have more than one classification per image / type.}
+\begin{align}
+  p_{jv} = \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{\prod_u p^0_{jv}
+  P_{ivu}^{C_{iju}}}{\sum_{v'} \prod_u p^0_{jv'} P_{iv'u}^{C_{iju}}}
+\end{align}
+
+\subsubsection{M-Step}
+
+We maximize the expected complete log likelihood. This is straightforwardly
+\todo{Chris}{Maybe not so straightforwardly if you have multiple
+classifications. Check that!}
+\begin{align}
+  P_{ivu} &= \frac{\sum_{j \in \Omega_i} C_{iju} p_{jv}}{\sum_{j \in
+\Omega_i} p_{jv}} \\
+  p_{jv}^0 &= p_{jv} \\
+  p_{v}^0 &= \frac{\sum_i \sum_{j \in \Omega_i} p_{jv}}{\sum_i \sum_{j \in
+\Omega_i} 1}
+\end{align}
+where $p_{v}^0$ is a possible specialization of $p_{jv}^0$.
+
+\subsubsection{Checks}
+\todo{Chris}{This section will make some obvious checks on the generalized
+  model. First I should be able to write down the binary model using this
+  formalism. Next, I should be able to show for sure that different $u$ can
+lead to different probability assignments if $v$ can only be two categories --
+that is, I should be able to show that $`1'$ gives a mixture of probability for
+LENS and NOT that makes sense when compared with $`0'$ or $`2'$. \\
+This section can probably be removed. This is more for internal sharing to help
+keep everyone up to speed.}
+
+Let's make sure we recover the old system. In our new notation, $u$ could be
+"LENS" or "NOT" while $v$ could be LENS or NOT. So, $PL_i = P_{iLL}$ and $PD_i
+= P_{iNN}$. We use the conservation of total probability to note that
+$P_{iLN} = 1 - P_{iLL} = 1 - PL_i$ and $P_{iNL} = 1 - P_{iNN} = 1 -
+PD_i$. Meanwhile, $p_j^0$ becomes $p_{jL}^0$ and we use conservation of total
+probability to note that $p_{jN}^0 = 1 - p_{j}^0$. We now account for the
+labels: $z_{j} = z_{jL}$ and $z_{jN} = 1 - z_{j}$. (There can only be one
+label on these objects.) Similarly for the classifications: $C_{ij} = C_{ijL}$,
+so $C_{ijN} = 1 - C_{ij}$.
+
+We can hence expand the
+sums over $v \in (L, N)$ and $u \in (L, N)$ to find that our CLL is
+proportional to:
+\begin{align}
+z_{jL} \log p_{jL}^0 + z_{jN} \log p_{jN}^0 +
+C_{ijL} z_{jL} \log P_{iLL} + C_{ijN} z_{jL} \log P_{iLN} \notag\\ + C_{ijL} z_{jN} \log
+P_{iNL} + C_{ijN} z_{jN} \log P_{iNN} = \notag\\
+z_j \log p_j^0 + (1 - z_j) \log (1 - p_j^0) + C_{ij} z_j \log PL_i + (1 -
+C_{ij}) z_j \log (1 - PL_i) \notag\\
++ C_{ij} (1 - z_j) \log (1 - PD_i) + (1 - C_{ij})
+(1 - z_j) \log PD_i
+\end{align}
+which is the same CLL as before.
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \section{Dynamic Allocations}
 \todo{Chris}{This section will examine whether we would be better off
@@ -318,7 +473,7 @@ skill vs effort, look at many trajectories of skill vs effort over time. That
 would be a useful thing to show to prove that we can find the good users in the
 first place -- early on!}
 
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % 
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \section{Discussion}
 
@@ -337,8 +492,8 @@ first place -- early on!}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section*{Acknowledgements}
- 
-\input{acknowledgments.tex}
+
+% \input{acknowledgments.tex}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %  APPENDICES
@@ -354,10 +509,10 @@ first place -- early on!}
 %  REFERENCES
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% MNRAS does not use bibtex, input .bbl file instead. 
+% MNRAS does not use bibtex, input .bbl file instead.
 % Generate this in the makefile using bubble script in scriptutils:
 
-% bubble -f paper-lcr.tex references.bib 
+% bubble -f paper-lcr.tex references.bib
 % \input{paper-lcr.bbl}
 
 \bibliographystyle{apj}

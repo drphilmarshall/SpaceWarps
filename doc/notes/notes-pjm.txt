@@ -6669,6 +6669,76 @@ CFHTLS_2013-10-29_10:16:35_histories.pdf -> CFHTLS_2013-10-29_101635_histories.p
 CFHTLS_2013-10-29_10:16:35_probabilities.pdf -> CFHTLS_2013-10-29_101635_probabilities.pdf
 CFHTLS_2013-10-29_10:16:35_trajectories.pdf -> CFHTLS_2013-10-29_101635_trajectories.pdf
 
+# ======================================================================
+# 2015-04-30 (Friday) 20:15 CET
+
+# Make crowd plots, using stage 1 and stage 2 bureaus from above, with
+# smaller figsizes to save space.
+
+cd $SWAP_DIR/workspace/CFHTLS
+
+set stage1bureau = $SWAP_DIR/workspace/CFHTLS/stage1/CFHTLS_bureau.pickle
+set stage2bureau = $SWAP_DIR/workspace/CFHTLS/stage2/CFHTLS_bureau.pickle
+
+python $SWAP_DIR/make_crowd_plots.py $stage1bureau $stage2bureau
+
+du -sch *.pdf
+424K	all_skill_contribution_experience_education.pdf
+100K	crowd_contrib_cumul.pdf
+100K	crowd_skill_cumul.pdf
+880K	stage2_veteran_contribution.pdf
+1.5M	total
+
+# OK, reduce to 4.0,4.0 and remake:
+
+du -sch *.pdf
+420K	all_skill_contribution_experience_education.pdf
+100K	crowd_contrib_cumul.pdf
+100K	crowd_skill_cumul.pdf
+876K	stage2_veteran_contribution.pdf
+
+# figsize makes almost no difference. Closing the issue - here's the size of
+# all sources for paper 1:
+
+cd $SWAP_DIR/../doc
+
+set files = `grep includegraphics sw-system.tex | cut -d'{' -f2 | cut -d'}' -f1`
+cd sw-system-figs/
+set pdfs = ()
+foreach file ( $files )      foreach? set file2 = `find . | grep "$file"`
+  set pdfs = ( $pdfs $file2 )
+end
+
+du -sch $pdfs
+ 68K	./sw-screengrab-marker+feedback.pdf
+ 44K	./gallery/4.pdf
+ 52K	./gallery/5.pdf
+ 44K	./gallery/6.pdf
+ 48K	./gallery/7.pdf
+ 32K	./gallery/0.pdf
+ 24K	./gallery/1.pdf
+ 28K	./gallery/2.pdf
+ 28K	./gallery/3.pdf
+ 96K	./CFHTLS_2013-10-29_101635_probabilities.pdf
+152K	./CFHTLS_2013-10-29_101635_trajectories.pdf
+136K	./stage1_ROC.pdf
+136K	./stage2_ROC.pdf
+136K	./completeness_purity_simple.pdf
+424K	./all_skill_contribution_experience_education.pdf
+100K	./crowd_contrib_cumul.pdf
+100K	./crowd_skill_cumul.pdf
+168K	./rate_classification.pdf
+ 52K	./ASW0008wyp_gri.pdf
+108K	./ASW0008wyp_stage2_trajectory.pdf
+ 48K	./ASW0006rkx_gri.pdf
+108K	./ASW0006rkx_stage1_trajectory.pdf
+ 28K	./ASW0000fgj_gri.pdf
+100K	./ASW0000fgj_stage1_trajectory.pdf
+ 48K	./ASW0003j2s_gri.pdf
+104K	./ASW0003j2s_stage1_trajectory.pdf
+880K	./stage2_veteran_contribution.pdf
+3.2M	total
+
 # ==============================================================================
 
 FINISH:

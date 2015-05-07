@@ -57,10 +57,10 @@ detected by these algorithms to the \sw sample and found that they are
 broadly similar.  The image separation distribution calculated from the
 \sw discovered sample shows that our previous constraints on the average
 density profile of the lenses are robust. \sw recovers about
-60\% of the known sample and the new candidates show a richer variety
+60~per~cent of the known sample and the new candidates show a richer variety
 compared to the lenses found by the two robots. We find that analyzing
 only those classifications which are performed by high power
-volunteers, \sw can achieve a detection rate of up to 75\% for the known
+volunteers, \sw can achieve a detection rate of up to 75~per~cent for the known
 lens sample.  Training and calibration of the performance of citizen
 scientists is crucial for the success of \sw. We also present the SIMCT
 pipeline, used for generating a sample of realistic simulated lensed
@@ -74,9 +74,8 @@ available.
 % Full list of options at http://www.journals.uchicago.edu/ApJ/instruct.key.html
 
 \begin{keywords}
-  gravitational lensing   --
-  methods: statistical    --
-  methods: citizen science
+  gravitational lensing: strong   --
+  methods: statistical
 \end{keywords}
 
 \setcounter{footnote}{1}
@@ -227,7 +226,7 @@ The \cfhtls has been searched for lenses using various lens finding
 methods and algorithms. Here, we give a brief summary of previously published lens
 samples in the chronological order.
 
-{\bf From the early release of the CFHTLS (T0002) covering 28~sq.~deg.,
+{\bf From the early release of the CFHTLS (T0002) covering 28~deg$^2$,
 \citet{Cabanac2007} used an arc finding algorithm \citep{Alard2006} to
 find arcs in galaxies, groups and clusters. They found about 40 lens
 candidates with quality grades from low to high.}
@@ -240,7 +239,7 @@ for the Weak Lensing survey \citep{Benjamin2007}.
 
 \citet{Sygnet2010} carried out a search for edge-on galaxy lenses in the
 \cfhtls WIDE. They identified galaxies, using {\sc SExtractor}, which
-had $18<i<21$ and inclination angle $<25$~deg. After applying few more
+had $18<i<21$ and inclination angle $<25\,^{\circ}$. After applying few more
 selection criteria and visual inspection, they found about 3 promising
 and a total of 18 lens candidates.
 
@@ -293,7 +292,7 @@ their follow-up campaign, 33 confirmed lenses \citep{Sonnenfeld2013a,Sonnenfeld2
 The work by \citet{Maturi2014} used the arc finding code of
 \citet{Seidel2007} and color properties of typical arcs to optimize arc
 detection. This new approach was tested on the CFHTLS-Archive-Research
-Survey \citep[CARS,][]{Erben2009} which covers an area of 37~sq.~deg
+Survey \citep[CARS,][]{Erben2009} which covers an area of 37~deg$^2$
 only and this entire data was also visually inspected by the authors to
 estimate completeness and purity of their robotic search. They found 29
 candidates with the robotic search alone and 41 candidates through pure
@@ -915,9 +914,9 @@ each stage. We find that all of the confirmed lenses found
 at \StageOne are also recovered at \StageTwo whereas a small fraction of
 the known lens candidates are rejected at \StageTwo. From the visually
 inspected known lens sample at \StageTwo (P$> 0.3$), the experts gave a
-grade of 1.3 and above to about 92\% (33 out of 36) of the systems. Overall,
+grade of 1.3 and above to about 92~per~cent (33 out of 36) of the systems. Overall,
 the sample of new \sw lens candidates increased the sample of total
-\cfhtls lens candidates by over 50\%.
+\cfhtls lens candidates by over 50~per~cent.
 
 In \Fref{fig:stackP}, we plot the distribution of false positives and
 the high probability lens candidates, categorized by the lens experts,
@@ -929,8 +928,8 @@ some scatter.  We note that from P$\sim$0.75 onwards to lower P values,
 the fraction of false positives starts to exceed the fraction of real
 lens candidates. This could be a good threshold to choose to maximize
 the purity of the final sample. However, we go with the choice of
-P~$=$~0.3 as this gives a better completeness of 100\% for the ``known
-lens'' sample instead of 67\% for P~$=$~0.75. Therefore, the new sample
+P~$=$~0.3 as this gives a better completeness of 100~per~cent for the ``known
+lens'' sample instead of 67~per~cent for P~$=$~0.75. Therefore, the new sample
 should also have increased completeness which combined with expert
 grading allows us to achieve further purity of our sample.
 
@@ -1107,8 +1106,8 @@ identified either with \af or {\sc sextractor}.
 We determine what fraction of the known sample of lenses are recovered
 by \sw. Note that this sample corresponds to the \rf and \af samples
 combined, as mentioned in \Sref{sec:data:kls}. In Table~\ref{tab:stats},
-we show that $\sim$~25\%-30\% of the known lens candidates and
-$\sim$~60\% of the known lenses are found at \StageOne and \StageTwo in
+we show that $\sim$~25$-$30~per~cent of the known lens candidates and
+$\sim$~60~per~cent of the known lenses are found at \StageOne and \StageTwo in
 \sw. The left and the middle panels of \Fref{fig:compre} show the
 fraction of detections as a function of arc magnitude and the Einstein
 radius of the lens systems for the known confirmed lenses and lens
@@ -1285,7 +1284,7 @@ trace and understand at what stage the algorithm failed to detect them.
 First, we rerun \rf on the new \sw sample. At the beginning, a galaxy
 catalog is generated based on magnitude, redshift and SED type
 \citep[see]{Gavazzi2014} to select galaxies which are most likely to act
-as lenses. We find that about 40\% of the new \sw candidates fail to
+as lenses. We find that about 40~per~cent of the new \sw candidates fail to
 meet this initial selection criteria, for example, {\bf SW1, SW14, SW20,
 SW23, SW27 and SW30}. All of the lensing galaxies are bright enough to
 satisfy the magnitude criterion ($i<22$). However, some of them have a
@@ -1308,7 +1307,7 @@ images.
 In the following steps, the flux from the galaxy is subtracted from the
 scaled difference image to enhance the visibility of the faint blue
 lensed features. An object finder is run on this image to quantify the
-lensed image properties. Another $\sim$~50\% of the \sw candidates could not be
+lensed image properties. Another $\sim$~50~per~cent of the \sw candidates could not be
 detected by the object finder because properties such as the image area,
 axis ratio, magnitude/color and alignment with respect to the lensing
 galaxy are not satisfied. Some of the candidates missed at this stage
@@ -1324,7 +1323,7 @@ Originally, the \af was run on a large image with an area of $\sim 19350
 \times 19350$ pixels$^2$. For the rerun, we work with much smaller
 images because this is faster but this alters the measured
 noise and hence, affects the number and type of arc detections. We find
-that about 30\% of the new candidates are detected without changing any
+that about 30~per~cent of the new candidates are detected without changing any
 of the thresholds in the code because of the change in the noise level.
 
 The \af code calculates second order brightness moments around every
@@ -1336,7 +1335,7 @@ feature. This is called the segmentation of the arc candidate. Subsequently, arc
 properties such as the area, mean flux, length and curvature are
 determined. We relax the threshold at the segmentation stage and also relax
 thresholds mainly on the area of the arc which leads to detection of
-about 75\% of the new \sw candidates. We find that relaxing thresholds
+about 75~per~cent of the new \sw candidates. We find that relaxing thresholds
 on other arc properties does not improve the detection rate significantly
 and thus, those thresholds are left unchanged.
 
@@ -1366,7 +1365,7 @@ galaxy within typical radius in order to reduce the false positives.
 \subsection{False negatives: known lenses missed by \sw}
 \label{sec:fn}
 Like any lens finding method, the \sw system can fail to detect certain
-kinds of lenses.  We find that about 40\% of the known sample of lenses
+kinds of lenses.  We find that about 40~per~cent of the known sample of lenses
 are missed both at \StageOne and II (see \Tref{tab:stats}). In fact, most
 of the known lenses from \StageOne are discovered at \StageTwo which
 means that the lenses are lost already at \StageOne. Below, we focus on the known
@@ -1376,11 +1375,11 @@ adopted in the future \sw lens searches.
 
 Many of the missed lenses are from the \rf sample with small
 Einstein radii and faint lensed images (see \Fref{fig:compre}). Among
-the confirmed lenses from the \rf, about 50\% are missed. Out of the
+the confirmed lenses from the \rf, about 50~per~cent are missed. Out of the
 missed sample of 18 lenses, about half of them are visually difficult to
 detect and the other half appear to have faint blue smudges around
 galaxies which should have been easier to identify. Similarly,
-if we consider the \af lens sample, $\sim$23\% are missed by \sw. This
+if we consider the \af lens sample, $\sim$23~per~cent are missed by \sw. This
 is a relatively small sample of $\sim 5$ systems and visual inspection
 suggests that, by and large, either the lensed features are faint
 or they have odd properties which makes them difficult to identify
@@ -1621,13 +1620,13 @@ that we lose a very small fraction of them as we go from \StageOne to
 detection efficiency right at \StageOne to increase the overall
 completeness of the final lens sample
 
-\item From the sample of known lenses, \sw missed about 40\% at \StageOne.
+\item From the sample of known lenses, \sw missed about 40~per~cent at \StageOne.
 Among the missed sample of about 20 lenses, roughly half of them are
 visually difficult to identify because most of them are faint with small
 image separations which are identified through the \rf
 
 \item If we use the classifications from the high power volunteers alone
-at \StageOne, then we recover over 30\% of the lenses from the missed
+at \StageOne, then we recover over 30~per~cent of the lenses from the missed
 sample. Thus, it is possible to improve the completeness of lenses by
 changing the strategy of when and who is shown an image.
 

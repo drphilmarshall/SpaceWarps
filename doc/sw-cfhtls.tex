@@ -46,8 +46,7 @@ through Citizen Science}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
-
-We report the discovery of {\bf 29} promising and a total of {\bf 59} new lens
+We report the discovery of {\bf 29 promising (and 59 total)} new lens
 candidates from the CFHT Legacy Survey (\cfhtls) based on about 11
 million classifications performed by citizen scientists as part of the
 first \sw lens search.  The goal of the blind lens search was to
@@ -57,15 +56,15 @@ mine the \cfhtls for lenses.  We compare some properties of lens samples
 detected by these algorithms to the \sw sample and found that they are
 broadly similar.  The image separation distribution calculated from the
 \sw discovered sample shows that our previous constraints on the average
-density profile of the lens population are robust. \sw recovers about
+density profile of the lenses are robust. \sw recovers about
 60\% of the known sample and the new candidates show a richer variety
 compared to the lenses found by the two robots. We find that analyzing
-only those classifications which are performed by the high power
+only those classifications which are performed by high power
 volunteers, \sw can achieve a detection rate of up to 75\% for the known
 lens sample.  Training and calibration of the performance of citizen
 scientists is crucial for the success of \sw. We also present the SIMCT
 pipeline, used for generating a sample of realistic simulated lensed
-images in the \cfhtls, and a sample of duds and false positives used in
+images in the \cfhtls, and samples of duds and false positives used in
 the training.  Such a training sample has a legacy value for testing
 future lens finding algorithms. We make our training sample publicly
 available.
@@ -102,7 +101,7 @@ as the Hubble constant and dark energy
 lenses are rare since a foreground massive object needs to be
 sufficiently aligned with a distant background source to produce
 multiple images. Nevertheless, systematic lens searches have led to the
-discovery of over 500 lenses till
+discovery of over 500 lenses to
 date\footnote{\texttt{http://admin.masterlens.org/index.php}}.
 
 The search for gravitational lenses is a needle-in-a-haystack problem.
@@ -121,11 +120,11 @@ difficult to distinguish these from the real lenses and thus, suffer
 from the problems of high rate of false positives.  To minimize this problem,
 algorithms are often restricted to detect a very narrow class of lens
 systems. However, even after such restrictions, robotic lens searches
-have to always rely on visual screening to find a sample of plausible
+have to always rely on visual screening to result in a sample of plausible
 lens candidates.
 
 Recognising patterns amidst an array of noisy pixelated images is one of the
-strengths of human brains. Humans are also capable of dealing with
+strengths of the human brain. Humans are also capable of dealing with
 multi-tiered complex web of questions before arriving at a conclusion which may
 not be always possible to automate. The algorithm by which our brains process a
 task is extremely malleable, self-learning and self-evolving. Therefore it has
@@ -138,10 +137,10 @@ beneficial for the lensing community. In particular, as we enter the era of
 large area imaging surveys (spanning thousands of square degrees), it is
 a perfect time to tap into the potential of citizen science.
 
-\GZ was the first citizen science project in astronomy, and addressed
+{\bf \GZ, one of the most successful citizen science project in
+astronomy, addressed}
 the problem of how to  classify large numbers of galaxies by their
-morphology \citep{Lintott2008}.  From the early results based on
-morphological classifications of galaxies, to several new unexpected and
+morphology \citep{Lintott2008}.  From these early results to several new unexpected and
 interesting discoveries, such as that of green pea galaxies
 \citep{Cardamone2009,Jaskot2013} and Hanny's Voorwerp
 \citep{Lintott2009,Keel2012}, \GZ has been able to harness the potential
@@ -153,7 +152,8 @@ complexity and that they are rare. To add to the challenge, not many
 citizen scientists are expected to be aware of the phenomenon of
 gravitational lensing, and the resulting image configurations.  With
 these significant challenges at hand, we designed the \sw project to
-enable the discovery of lenses through citizen science.  In a companion
+enable the discovery of lenses through citizen science (learning from 
+previous experience in serendipitous identification of lens candidates in \GZ).  In a companion
 paper, Paper I (Marshall et al., in prep.), we describe the design of
 \sw and how the entire system functions as a discovery service.  In this
 paper (Paper II hereafter), we describe our first lens search using data
@@ -239,7 +239,7 @@ inspection of the \cfhtls images as part of data reduction procedures
 for the Weak Lensing survey \citep{Benjamin2007}.
 
 \citet{Sygnet2010} carried out a search for edge-on galaxy lenses in the
-\cfhtls WIDE. They identified galaxies, using {\sc Sextractor}, which
+\cfhtls WIDE. They identified galaxies, using {\sc SExtractor}, which
 had $18<i<21$ and inclination angle $<25$~deg. After applying few more
 selection criteria and visual inspection, they found about 3 promising
 and a total of 18 lens candidates.
@@ -261,8 +261,8 @@ because more massive systems produce arcs or lensed images with large image
 separation from the lensing galaxy which are easier to detect compared to the
 galaxy-scales. In the absence of a large systematically followed up
 verified sample of candidates, we choose the most promising 26 systems
-as our bona fide lens sample from the \cfhtls WIDE. Also, the total
-number of lens candidates is 108 from the \cfhtls WIDE alone.
+as our bona fide lens sample from the \cfhtls WIDE. The total
+number of lens candidates in the \cfhtls WIDE alone is 108.
 
 In \citet{Elyiv2013}, the authors visually inspected a sample of 5500 optical
 counterparts of X-ray point-like sources identified in the XMM-LSS
@@ -271,7 +271,7 @@ of lensed quasars. Their sample consists of a total of 18 candidates out
 of which 3 candidates are found to be promising.
 
 The \rf \citep{Gavazzi2014} was used for finding compact rings or arcs
-around centers of isolated and massive early-type galaxies. The \rf
+around centers of isolated and massive early-type galaxies. \rf
 subtracts the point spread function (PSF)-matched $i$-band images from the $g$-band images, and
 looks for excess flux in the bluer $g$-band. An object detector measures
 the properties of these residual blue features, and candidates which
@@ -303,7 +303,7 @@ probability\footnote{\texttt{http://www.ita.uni-heidelberg.de/$\sim$maturi/Publi
 
 The \rf and the \af searches are the only searches that make use of a
 lens finding algorithm and that has been run on the entire \cfhtls
-imaging.  Thus, these can be considered as our reference sample of known
+imaging.  Thus, these are considered as our reference sample of known
 lenses from robotic searches. For the purposes of transparency and to
 help with the training, the volunteers participating in \sw-\cfhtls lens
 search were made aware of these two known lens samples. Images
@@ -337,7 +337,7 @@ straightforward comparison between one image and another, and for
 intuition to be built up about the appearance of stars and galaxies
 across the survey.
 
-We extract contiguous cutouts of size 81.84\arcsec\ (440 pixels) with an
+We extract contiguous cutouts of size 81.84\arcsec\ (440 pixels) including
 overlapping region of 10\arcsec (54 pixels) between the neighbouring
 cutouts. This  results in a catalog of $\sim$ 430 000 cutouts for the entire \cfhtls
 WIDE region. The size of the individual cutout is determined by
@@ -502,7 +502,7 @@ f(z)=\frac{e^{\zeta z_s}(1+e^{\xi z_*})}{(\sqrt{e^{\xi z_s}}+\sqrt{e^{\xi z_*}})
 We adopt the best-fit values $\zeta=2.98$, $\xi=4.05$, $z_{*}=1.60$
 \citep{Oguri2010}. For the faint end slope, we use $\beta=-1.45$ whereas for
 the bright end slope, we use $\alpha=-3.31$ when $z_s<3$ and $\alpha=-2.58$ at
-higher redshifts, as prescribed by \citet{Oguri2010}.
+higher redshifts, as prescribed by \citet{Oguri2010}. 
 
 With the cross-section, and the luminosity functions specified, we
 calculate the expected number of sources behind a candidate lensing
@@ -521,16 +521,25 @@ We follow similar procedures for both background galaxies and quasars.
 We draw source redshifts and luminosities from the aforementioned
 distributions. {\bf We note that the sources are being drawn from a much
 fainter magnitude range compared to the limiting magnitude of the
-\cfhtls imaging and thus, the Magnification bias is naturally taken into
-account.} The source positions with respect to the lens are drawn
-randomly from an area inside the caustic.  We perform ray-tracing for
-all of the $N_{\rm src}$ sources using the publicly available code
-\gravlens \citep{Keeton2000} and choose sources that satisfy our
-selection criteria given below. We determine fluxes of the lensed images and the
-total magnification of each of the lensed source. We draw a
-source randomly for which the flux of the second brightest lensed image and the
-total magnification of all lensed images meet the thresholds given
-in Table~\ref{tab:thresh}.
+\cfhtls imaging and thus, the magnification bias\footnote{ {\bf In a
+flux-limited sample from a survey, sources fainter than the flux limit
+end up in the sample owing to the magnification by lensing which is
+known as the magnification bias. This affects the source luminosity
+function and needs to be accounted for when comparing the true and
+observed luminosity functions.}} is naturally taken into account.} The
+source positions with respect to the lens are drawn randomly from an
+area inside the caustic.  {\bf When populating the sources within the
+caustics, the finite size of the background galaxies is expected to
+affect the lens cross-sections to some extent. As this factor is not
+critical for the purpose of our training sample, we assume the
+background galaxies to be point like for simplicity.} We perform
+ray-tracing for all of the $N_{\rm src}$ sources using the publicly
+available code \gravlens \citep{Keeton2000} and choose sources that
+satisfy our selection criteria given below. We determine fluxes of the
+lensed images and the total magnification of each of the lensed source.
+We draw a source randomly for which the flux of the second brightest
+lensed image and the total magnification of all lensed images meet the
+thresholds given in Table~\ref{tab:thresh}. 
 
 Since we want to produce realistic looking lens systems, we simulate
 lenses in each of the five \cfhtls~filters. The colors of the background
@@ -756,7 +765,7 @@ of the lensed galaxy population. Star-forming galaxies have complex structures
 such as star forming knots, spiral arms, bars and disks. The simulated lensed
 images do not display these features. This is fine for most cases or
 mostly for images taken from ground based telescopes such as the CFHT
-{\bf but sometimes the profiles of the lensed arcs appear very symmetric along the
+{\bf but sometimes the profiles of the lensed arcs can appear very symmetric along the
 length or width of the arc and featureless, especially, if the images
 are very bright.}
 
@@ -1010,7 +1019,7 @@ algorithm typically fails to detect such arcs because the arc is broken
 into smaller arclets which then falls below the minimum length or area
 allowed for an arc to be detected typically. Human brains have no
 problem in interpolating over the broken blue arc over the red galaxy
-and understand that it is a single long arc. The system SW19 has
+and understand that it is a single long arc. The system {\bf SW20} has
 point-like lensed images which cannot be detected by arc finding
 algorithm whereas the ring finding algorithm may miss this because of
 atypical color and structure of the galaxy. Detection of red arcs, for
@@ -1277,8 +1286,8 @@ First, we rerun \rf on the new \sw sample. At the beginning, a galaxy
 catalog is generated based on magnitude, redshift and SED type
 \citep[see]{Gavazzi2014} to select galaxies which are most likely to act
 as lenses. We find that about 40\% of the new \sw candidates fail to
-meet this initial selection criteria, for example, SW1, SW13, SW19,
-SW22, SW26 and SW29.  All of the lensing galaxies are bright enough to
+meet this initial selection criteria, for example, {\bf SW1, SW14, SW20,
+SW23, SW27 and SW30}. All of the lensing galaxies are bright enough to
 satisfy the magnitude criterion ($i<22$). However, some of them have a
 bright companion galaxy, some of them do not look like E/S0 type
 galaxies and some are edge on galaxies which could be the reason for
@@ -1303,7 +1312,7 @@ lensed image properties. Another $\sim$~50\% of the \sw candidates could not be
 detected by the object finder because properties such as the image area,
 axis ratio, magnitude/color and alignment with respect to the lensing
 galaxy are not satisfied. Some of the candidates missed at this stage
-are, for example, SW4, SW5, SW6, SW25, SW35, SW38 and SW45.
+are, for example, {\bf SW4, SW5, SW6, SW26, SW36, SW39 and SW46.}
 
 Next, we rerun the \af on the same \sw sample of new candidates. The \af
 is directly run on images to look for elongated arc like objects and does
@@ -1652,49 +1661,47 @@ SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & P 
 \endhead
 \hline
 \multicolumn{11}{p{18cm}}{
-The redshift with $^s$ are spectroscopic estimates taken from SDDS Data
-Release 12 whenever available unambiguously. The column Comments has two
+{\bf The redshift with $^s$ are spectroscopic estimates taken from SDDS Data
+Release 12 whenever available unambiguously.} The column Comments has two
 type of notes. The first is about the lens image configuration where the
 symbols mean the following A: Arc, D: Double, Q: Quad, R: Ring. The
 second is a comment on the type of lens assessed visually. Note that
 this classification is not based on colors or spectral analysis. The
 symbols are E: Elliptical, S: (face on) Spiral, G: Group-scale, D: Edge
-on disk, R: Red starforming galaxy.  This galaxy falls within the masked
-region as per the catalog from which the magnitudes and the redshift are
-extracted.
+on disk, R: Red starforming galaxy.  
 }\\
 \endlastfoot
-SW19 & CFHTLS J020642.0-095157 &  31.67504 &  -9.86584 &  0.2 & 21.4 &  0.9 &  2.0 & ASW0001ld7 &  0.8 &  A,R   \\ 
-SW8 & CFHTLS J020648.0-065639 &  31.70031 &  -6.94430 &  0.8 & 21.0 &  1.3 &  2.3 & ASW00099ed &  0.4 &  A,E   \\ 
-SW43 & CFHTLS J020810.7-040220 &  32.04497 &  -4.03891 &  1.0 & 21.6 &  1.8 &  1.3 & ASW0001c3j &  0.7 &  A,R   \\ 
-SW9 & CFHTLS J020832.1-043315 &  32.13396 &  -4.55429 &  1.0 & 21.9 &  1.6 &  2.3 & ASW0002asp &  1.0 &  A,R   \\ 
-SW10 & CFHTLS J020848.2-042427 &  32.20110 &  -4.40751 &  0.8 & 21.6 &  1.1 &  2.3 & ASW0002bmc &  0.9 &  D,D   \\ 
-SW11 & CFHTLS J020849.8-050429 &  32.20784 &  -5.07494 &  0.8 & 21.3 &  0.9 &  2.3 & ASW0002qtn &  1.0 &  A,R   \\ 
-SW44 & CFHTLS J021021.5-093415 &  32.58981 &  -9.57109 &  0.4 & 19.0 &  2.7 &  1.3 & ASW0002k40 &  0.4 &  D,S   \\ 
-SW30 & CFHTLS J021057.9-084450 &  32.74148 &  -8.74745 &  0.45$^s$ &  0.0 &  2.5 &  1.7 & ASW0002p8y &  0.4 &  A,G   \\ 
-SW20 & CFHTLS J021221.1-105251 &  33.08810 & -10.88106 &  0.3 & 18.2 &  1.8 &  2.0 & ASW0002dx7 &  0.8 &  D,E/S   \\ 
-SW45 & CFHTLS J021225.2-085211 &  33.10511 &  -8.86973 &  0.76$^s$ & 20.5 &  2.1 &  1.3 & ASW00024id &  1.0 &  R,R   \\ 
-SW46 & CFHTLS J021317.6-084819 &  33.32341 &  -8.80549 &  0.5 & 20.6 &  1.3 &  1.3 & ASW00024q6 &  0.4 &  A,R/E   \\ 
-SW31 & CFHTLS J021514.6-092440 &  33.81089 &  -9.41115 &  0.72$^s$ & 21.1 &  2.6 &  1.7 & ASW00021r0 &  0.4 &  A,R/G   \\ 
-SW32 & CFHTLS J022359.8-083651 &  35.99955 &  -8.61439 &  0.0 &  0.0 &  3.1 &  1.7 & ASW0004iye &  0.4 &  A,E   \\ 
-SW12 & CFHTLS J022406.1-062846 &  36.02558 &  -6.47963 &  0.4 & 20.1 &  0.9 &  2.3 & ASW0003wsu &  0.7 &  A,E   \\ 
-SW1 & CFHTLS J022409.5-105807 &  36.03978 & -10.96885 &  0.0 &  0.0 &  4.8 &  3.0 & ASW0004dv8 &  1.0 &  A,G   \\ 
-SW21 & CFHTLS J022533.3-053204 &  36.38882 &  -5.53460 &  0.57$^s$ & 20.4 &  3.6 &  2.0 & ASW0004m3x &  0.4 &  A,R/G   \\ 
-SW22 & CFHTLS J022716.4-105602 &  36.81856 & -10.93410 &  0.4 & 17.8 &  1.8 &  2.0 & ASW0009ab8 &  0.7 &  A,E/G   \\ 
-SW33 & CFHTLS J022745.2-062518 &  36.93868 &  -6.42183 &  0.6 & 21.3 &  1.2 &  1.7 & ASW0003s0m &  0.5 &  A,R   \\ 
-SW13 & CFHTLS J022805.6-051733 &  37.02362 &  -5.29266 &  0.4 & 19.2 &  1.4 &  2.3 & ASW00047ae &  1.0 &  Q,E   \\ 
-SW47 & CFHTLS J022843.0-063316 &  37.17942 &  -6.55465 &  0.5 & 19.9 &  1.8 &  1.3 & ASW0003r6c &  0.3 &  D/A,E   \\ 
-SW23 & CFHTLS J023008.6-054038 &  37.53591 &  -5.67744 &  0.50$^s$ & 20.4 &  1.9 &  2.0 & ASW0003r61 &  0.5 &  A,E   \\ 
-SW14 & CFHTLS J023123.2-082535 &  37.84682 &  -8.42663 &  0.0 & 0.0 &  1.2 &  2.3 & ASW0004xjk &  0.3 &  A,R   \\ 
-SW24 & CFHTLS J023315.2-042243 &  38.31334 &  -4.37886 &  0.7 & 20.4 &  1.0 &  2.0 & ASW00050sk &  0.8 &  A,R   \\ 
-SW34 & CFHTLS J023453.5-093032 &  38.72321 &  -9.50892 &  0.5 & 20.3 &  0.7 &  1.7 & ASW00051ld &  0.3 &  A,D   \\ 
-SW35 & CFHTLS J084833.2-044051 & 132.13847 &  -4.68085 &  0.8 & 21.1 &  0.9 &  1.7 & ASW0004wgd &  0.7 &  A,R   \\ 
-SW15 & CFHTLS J084841.0-045237 & 132.17084 &  -4.87720 &  0.3 & 19.5 &  1.0 &  2.3 & ASW0004nan &  1.0 &  A,E   \\ 
-SW48 & CFHTLS J090219.0-053923 & 135.57947 &  -5.65666 &  0.0 &  0.0 &  2.0 &  1.3 & ASW0000g95 &  1.0 &  A,R/E   \\ 
-SW36 & CFHTLS J090248.4-010232 & 135.70204 &  -1.04243 &  0.4 & 19.7 &  1.4 &  1.7 & ASW000096t &  0.6 &  D,E   \\ 
-SW25 & CFHTLS J090308.2-043252 & 135.78449 &  -4.54789 &  0.0 &  0.0 &  1.3 &  2.0 & ASW00007mq &  0.6 &  D,D   \\ 
-SW49 & CFHTLS J090319.4-040146 & 135.83105 &  -4.02971 &  0.0 & 20.6 &  1.2 &  1.3 & ASW00007ls &  0.5 &  A,R/E   \\ 
-SW50 & CFHTLS J090333.2-005829 & 135.88869 &  -0.97490 &  0.0 &  0.0 &  2.1 &  1.3 & ASW00008a0 &  1.0 &  A/D,E/G   \\ 
+SW19 & CFHTLS J020642.0$-$095157 &  31.67504 &  $-$9.86584 &  0.2 & 21.4 &  0.9 &  2.0 & ASW0001ld7 &  0.8 &  A,R   \\ 
+SW8 & CFHTLS J020648.0$-$065639 &  31.70031 &  $-$6.94430 &  0.8 & 21.0 &  1.3 &  2.3 & ASW00099ed &  0.4 &  A,E   \\ 
+SW43 & CFHTLS J020810.7$-$040220 &  32.04497 &  $-$4.03891 &  1.0 & 21.6 &  1.8 &  1.3 & ASW0001c3j &  0.7 &  A,R   \\ 
+SW9 & CFHTLS J020832.1$-$043315 &  32.13396 &  $-$4.55429 &  1.0 & 21.9 &  1.6 &  2.3 & ASW0002asp &  1.0 &  A,R   \\ 
+SW10 & CFHTLS J020848.2$-$042427 &  32.20110 &  $-$4.40751 &  0.8 & 21.6 &  1.1 &  2.3 & ASW0002bmc &  0.9 &  D,D   \\ 
+SW11 & CFHTLS J020849.8$-$050429 &  32.20784 &  $-$5.07494 &  0.8 & 21.3 &  0.9 &  2.3 & ASW0002qtn &  1.0 &  A,R   \\ 
+SW44 & CFHTLS J021021.5$-$093415 &  32.58981 &  $-$9.57109 &  0.4 & 19.0 &  2.7 &  1.3 & ASW0002k40 &  0.4 &  D,S   \\ 
+SW30 & CFHTLS J021057.9$-$084450 &  32.74148 &  $-$8.74745 &  0.45$^s$ &  0.0 &  2.5 &  1.7 & ASW0002p8y &  0.4 &  A,G   \\ 
+SW20 & CFHTLS J021221.1$-$105251 &  33.08810 & $-$10.88106 &  0.3 & 18.2 &  1.8 &  2.0 & ASW0002dx7 &  0.8 &  D,E/S   \\ 
+SW45 & CFHTLS J021225.2$-$085211 &  33.10511 &  $-$8.86973 &  0.76$^s$ & 20.5 &  2.1 &  1.3 & ASW00024id &  1.0 &  R,R   \\ 
+SW46 & CFHTLS J021317.6$-$084819 &  33.32341 &  $-$8.80549 &  0.5 & 20.6 &  1.3 &  1.3 & ASW00024q6 &  0.4 &  A,R/E   \\ 
+SW31 & CFHTLS J021514.6$-$092440 &  33.81089 &  $-$9.41115 &  0.72$^s$ & 21.1 &  2.6 &  1.7 & ASW00021r0 &  0.4 &  A,R/G   \\ 
+SW32 & CFHTLS J022359.8$-$083651 &  35.99955 &  $-$8.61439 &  0.0 &  0.0 &  3.1 &  1.7 & ASW0004iye &  0.4 &  A,E   \\ 
+SW12 & CFHTLS J022406.1$-$062846 &  36.02558 &  $-$6.47963 &  0.4 & 20.1 &  0.9 &  2.3 & ASW0003wsu &  0.7 &  A,E   \\ 
+SW1 & CFHTLS J022409.5$-$105807 &  36.03978 & $-$10.96885 &  0.0 &  0.0 &  4.8 &  3.0 & ASW0004dv8 &  1.0 &  A,G   \\ 
+SW21 & CFHTLS J022533.3$-$053204 &  36.38882 &  $-$5.53460 &  0.57$^s$ & 20.4 &  3.6 &  2.0 & ASW0004m3x &  0.4 &  A,R/G   \\ 
+SW22 & CFHTLS J022716.4$-$105602 &  36.81856 & $-$10.93410 &  0.4 & 17.8 &  1.8 &  2.0 & ASW0009ab8 &  0.7 &  A,E/G   \\ 
+SW33 & CFHTLS J022745.2$-$062518 &  36.93868 &  $-$6.42183 &  0.6 & 21.3 &  1.2 &  1.7 & ASW0003s0m &  0.5 &  A,R   \\ 
+SW13 & CFHTLS J022805.6$-$051733 &  37.02362 &  $-$5.29266 &  0.4 & 19.2 &  1.4 &  2.3 & ASW00047ae &  1.0 &  Q,E   \\ 
+SW47 & CFHTLS J022843.0$-$063316 &  37.17942 &  $-$6.55465 &  0.5 & 19.9 &  1.8 &  1.3 & ASW0003r6c &  0.3 &  D/A,E   \\ 
+SW23 & CFHTLS J023008.6$-$054038 &  37.53591 &  $-$5.67744 &  0.50$^s$ & 20.4 &  1.9 &  2.0 & ASW0003r61 &  0.5 &  A,E   \\ 
+SW14 & CFHTLS J023123.2$-$082535 &  37.84682 &  $-$8.42663 &  0.0 & 0.0 &  1.2 &  2.3 & ASW0004xjk &  0.3 &  A,R   \\ 
+SW24 & CFHTLS J023315.2$-$042243 &  38.31334 &  $-$4.37886 &  0.7 & 20.4 &  1.0 &  2.0 & ASW00050sk &  0.8 &  A,R   \\ 
+SW34 & CFHTLS J023453.5$-$093032 &  38.72321 &  $-$9.50892 &  0.5 & 20.3 &  0.7 &  1.7 & ASW00051ld &  0.3 &  A,D   \\ 
+SW35 & CFHTLS J084833.2$-$044051 & 132.13847 &  $-$4.68085 &  0.8 & 21.1 &  0.9 &  1.7 & ASW0004wgd &  0.7 &  A,R   \\ 
+SW15 & CFHTLS J084841.0$-$045237 & 132.17084 &  $-$4.87720 &  0.3 & 19.5 &  1.0 &  2.3 & ASW0004nan &  1.0 &  A,E   \\ 
+SW48 & CFHTLS J090219.0$-$053923 & 135.57947 &  $-$5.65666 &  0.0 &  0.0 &  2.0 &  1.3 & ASW0000g95 &  1.0 &  A,R/E   \\ 
+SW36 & CFHTLS J090248.4$-$010232 & 135.70204 &  $-$1.04243 &  0.4 & 19.7 &  1.4 &  1.7 & ASW000096t &  0.6 &  D,E   \\ 
+SW25 & CFHTLS J090308.2$-$043252 & 135.78449 &  $-$4.54789 &  0.0 &  0.0 &  1.3 &  2.0 & ASW00007mq &  0.6 &  D,D   \\ 
+SW49 & CFHTLS J090319.4$-$040146 & 135.83105 &  $-$4.02971 &  0.0 & 20.6 &  1.2 &  1.3 & ASW00007ls &  0.5 &  A,R/E   \\ 
+SW50 & CFHTLS J090333.2$-$005829 & 135.88869 &  $-$0.97490 &  0.0 &  0.0 &  2.1 &  1.3 & ASW00008a0 &  1.0 &  A/D,E/G   \\ 
 SW51 & CFHTLS J135724.8+561614 & 209.35374 &  56.27066 &  0.36$^s$ &  0.0 &  2.6 &  1.3 & ASW0006e0o &  0.9 &  D,E   \\ 
 SW26 & CFHTLS J135755.8+571722 & 209.48268 &  57.28971 &  0.8 & 21.4 &  0.9 &  2.0 & ASW0005ma2 &  0.8 &  A,R   \\ 
 SW52 & CFHTLS J140027.9+541028 & 210.11636 &  54.17455 &  0.6 &  0.0 &  1.2 &  1.3 & ASW0006a07 &  0.6 &  Q,R/E   \\ 

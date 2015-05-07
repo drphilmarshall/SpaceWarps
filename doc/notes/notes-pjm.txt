@@ -6740,5 +6740,48 @@ du -sch $pdfs
 3.2M	total
 
 # ==============================================================================
+# 2015-05-06 Wednesday
+
+# Making candidates table for results page on spacewarps.org.
+# Anu checked in lots of nice PNGs - now write html for them!
+
+set CANDIDATES_DIR = "$SWAP_DIR/projects/CFHTLS/candidates"
+set catalog = ${CANDIDATES_DIR}/SW_allcandidates_Ggt0_catalog.txt
+
+setenv LENSZOO_DIR ~/public_html/SpaceWarps/Lens-Zoo
+set output = ${LENSZOO_DIR}/app/views/results/CFHTLS/discoveries.input
+\rm -f $output ; touch $output
+
+set URL = "https://raw.githubusercontent.com/drphilmarshall/SpaceWarps/master/analysis/projects/CFHTLS/candidates/SW_allcandidates_Ggt0"
+
+set PNGs = `grep -v '#' $catalog | awk '{if ($6 > 1.99 && $9 == "N") print $1}'`
+
+foreach PNG ( $PNGs )
+  set ID = `echo $PNG | cut -d'_' -f3`
+  set PNGADDRESS = ${URL}/${PNG}
+  echo '  <div class="candidate">' >> $output
+  echo '    <div class="candidate-header">'${ID}'</div>' >> $output
+  echo '    <a href="http://talk.spacewarps.org/#/subjects/'${ID}'" target="_blank">' >> $output
+  echo '      <img width="200" height="200" src="'${PNGADDRESS}'" />' >> $output
+  echo '    </a>' >> $output
+  echo '  </div>' >> $output
+end
+
+# Now, cat this into discoveries.eco and add a
+
+echo '\
+  </div>\
+\
+</div>' >> discoveries.eco
+
+# at the end.
+
+# Then view on local website, started as follows:
+
+npm run-script start &
+
+open http://127.0.0.1:9294/#/projects/CFHTLS/discoveries
+
+# ==============================================================================
 
 FINISH:

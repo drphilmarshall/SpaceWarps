@@ -372,7 +372,11 @@ finishes marking a training subject, a pop-up
 message is generated, containing either congratulations for a successful
 classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or feedback for an unsuccessful one (for
-example, ``There is no gravitational lens in this field!'').
+example, ``There is no gravitational lens in this field!''). A successful
+classification of a simulated lens requires a marker to be placed fairly
+precisely on the lensed features, so as to avoid misinforming the classifier.
+The pixels in the lensed features are flagged via a mask contained in the
+PNG image transparency ``alpha'' channel. (The mask is not visible in the image.)
 
 Because we include a training set of images in amongst the survey ``test''
 images, \sw can be viewed as a {\it supervised learning} system. Consequently,
@@ -462,15 +466,15 @@ task. This ``Spotter's Guide'' is a set of webpages showing example lenses, both
 real and simulated, and also some common false positives, drawn from the pool of
 survey images. The false positives were identified during the selection of the
 ``dud'' training images (previous section). For easy reference, the lenses are
-divided by type (for example, ``lensed galaxies,'' ``lensed quasars'' and
-``cluster lenses''), as are the false positives (for example, ``Rings and
+divided by type (for example, ``Lensed Galaxies,'' ``Lensed Quasars'' and
+``Cluster Lenses''), as are the false positives (for example, ``Rings and
 Spirals,'' ``Mergers,'' ``Artifacts'' and so on). The example images are
 accompanied by explanatory text. The Spotter's Guide is reached via a button on
 the left hand side, or the hyperlinked thumbnail images of the ``Quick
 Reference'' provided on the right hand side, of the classification interface.
 
-Most of the text of the Spotter's Guide focuses on what kinds of image features
-gravitational lenses do or don't produce;
+Most of the text of the Spotter's Guide focuses on the kinds of features that
+gravitational lenses do or don't produce. To complement this,
 the website ``Science page'' contains a very brief introduction to how
 gravitational lensing works, which is fleshed out a little on the ``FAQ'' page.
 The FAQ also contains answers to frequently asked questions about the interface
@@ -505,9 +509,9 @@ many non-lenses must first be rejected, and several classifications by
 different inspectors are needed in either case.
 
 The \StageOne training set was chosen to be quite clear cut, in order to err on
-the side of inclusivity, and so ensure high completeness. When defining the
-training duds we discarded anything that could be considered a lens candidate
-(see \Sref{sec:design:training:guide}): this meant that objects that look
+the side of high completeness. When defining the
+training duds, we discarded anything that could be considered a lens candidate
+(see \Sref{sec:design:training:guide}). This meant that objects that look
 similar to lenses, such as galaxy mergers, tidal tails and spiral arms, pairs of
 blue stars and so on, were specifically excluded from the training set, and
 therefore we expect some of those types of object to appear in the \StageOne
@@ -519,7 +523,7 @@ selected to be relatively straightforward to spot.
 \label{sec:design:stages:two}
 
 The design of a \StageOne classification task, and its training set, should
-lead to sample of lens candidates that has high completeness but may have low
+lead to a sample of lens candidates that has high completeness but may have low
 purity. To refine this sample to higher purity, we need to reject more
 non-lenses, which means providing the volunteers with a more realistic and
 challenging training set as they re-classify it. The more demanding \StageTwo

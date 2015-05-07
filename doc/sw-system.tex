@@ -648,7 +648,7 @@ the \humvi software.\footnote{The \humvi colour image composition code used in
 this work is open source and available from
 \texttt{http://github.com/drphilmarshall/HumVI}} Specifically, we first rescaled
 the pixel values of each image, in the notation of \citeauthor{LuptonEtal2004},
-into flux units (``picomaggies,''), via the image AB zeropoint $m_0$ and the
+into flux units (``picomaggies''), via the image AB zeropoint $m_0$ and the
 pixel value calibration factor $f$  given by $\log_{10}{f} = 0.4(30.0 - m_0)$.
 We then multiplied these calibrated images by further aesthetic ``scales''
 $s_{i,r,g}$ before computing the total intensity image $I$ and applying an
@@ -686,9 +686,8 @@ dynamically according to, for example, the root-mean-square pixel value in
 each image, can lead to better presentation of bright objects, but in doing so
 they tend to hide the faint features in those images: we needed to optimize
 the detectability of these faint features.   Examples of \cfhtls training set
-images prepared in this way can be seen in the galleries of the previous
-section (Figures~\ref{fig:training-gallery:sims}
-and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of
+images prepared in this way can be seen in Figures~\ref{fig:training-gallery:sims}
+and~\ref{fig:training-gallery:duds}. We also defined two alternative sets of
 visualization parameters, to display a ``bluer'' image and a ``brighter''
 image in the classification interface Quick Dashboard
 (\Sref{sec:design:interface}). The QD code performs the same image composition
@@ -731,7 +730,7 @@ SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
 Each classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs, a timestamp and the classification results (the image
+volunteer IDs, a timestamp and the classification results (the image
 pixel-coordinate positions of every marker placed).  The ``category'' of subject --
 whether it is a ``training'' subject (a simulated lens or a known non-lens) or a
 ``test'' subject (an unseen image drawn from the survey) -- is also recorded.

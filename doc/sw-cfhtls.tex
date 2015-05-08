@@ -91,25 +91,25 @@ The last few decades have seen a rise in the discoveries of strong
 gravitational lenses owing to the plethora of interesting applications
 lenses have in astrophysics and cosmology. Strong lenses are routinely
 used to probe the dark matter distribution from galaxy
-\citep[e.g.][]{Koopmans2006,Barnabe2009,Leier2011,Sonnenfeld2015} to groups-cluster
-scales
+\citep[e.g.][]{Koopmans2006,Barnabe2009,Leier2011,Sonnenfeld2015} to group and
+cluster scales
 \citep[e.g.][]{Limousin2008,Zitrin2011,Oguri2012,More2012,Newman2013}, to
 study distant young galaxies by using the lensing magnification as a
 natural telescope \citep[e.g.][]{Zitrin2009,Zheng2012,Whitaker2014}, to
 test the cosmological model by constraining cosmological parameters such
-as the Hubble constant and dark energy
-\citep[e.g.][]{Suyu2010,Collett2012,Collett2014,Sereno2014} and many more. Strong
-lenses are rare since a foreground massive object needs to be
+as the Hubble constant and the dark energy equation of state
+\citep[e.g.][]{Suyu2010,Collett2012,Collett2014,Sereno2014}, and many more. Strong
+lenses are rare, because a foreground massive object needs to be
 sufficiently aligned with a distant background source to produce
 multiple images. Nevertheless, systematic lens searches have led to the
 discovery of over 500 lenses to
-date\footnote{\texttt{http://admin.masterlens.org/index.php}}.
+date.\footnote{\texttt{http://admin.masterlens.org/index.php}}
 
 The search for gravitational lenses is a needle-in-a-haystack problem.
-Efficient automated methods are imperative to find a reasonably complete
-and pure sample of strong lenses. Several lens finding algorithms have
+Several automated lens finding algorithms have
 been developed so far
-\citep[e.g.][]{Lenzen2004,Alard2006,Seidel2007,More2012,Brault2014,Gavazzi2014} but they can not
+\citep[e.g.][]{Lenzen2004,Alard2006,Seidel2007,More2012,Brault2014,Gavazzi2014},
+but they can not
 simultaneously capture the myriad types of lenses that are known to
 exist. For example, the lensed images of background galaxies show
 variety in their surface brightness distributions, colors, light
@@ -117,52 +117,55 @@ profiles, shapes, structures and angular image separations.  Moreover,
 many lensed images appear similar to features found commonly in galaxies
 (such as spiral arms) or to artifacts in astronomical images (scattered
 light around stars).  Almost all lens finding algorithms find it
-difficult to distinguish these from the real lenses and thus, suffer
-from the problems of high rate of false positives.  To minimize this problem,
+difficult to distinguish these from the real lenses and thus suffer
+from a high rate of false positive detections.  To mitigate this problem,
 algorithms are often restricted to detect a very narrow class of lens
 systems. However, even after such restrictions, robotic lens searches
 have to always rely on visual screening to result in a sample of plausible
 lens candidates.
 
-Recognising patterns amidst an array of noisy pixelated images is one of the
+Recognising patterns is one of the
 strengths of the human brain. Humans are also capable of dealing with
-multi-tiered complex web of questions before arriving at a conclusion which may
+multi-tiered complex web of questions before arriving at a conclusion, a process
+which may
 not be always possible to automate. The algorithm by which our brains process a
 task is extremely malleable, self-learning and self-evolving. Therefore it has
 a huge potential for the discovery of exotic objects which do not quite fit a
 set criteria, but are still very likely to be objects of interest. The lens
 finding algorithms are not yet advanced enough to produce better performance
-than visual classifications. Therefore, participation of a large community of
-volunteers to help with the visual identification of lenses is extremely
-beneficial for the lensing community. In particular, as we enter the era of
-large area imaging surveys (spanning thousands of square degrees), it is
-a perfect time to tap into the potential of citizen science.
+than visual classifications. Consequently, as we enter the era of
+large area imaging surveys spanning thousands of square degrees,
+the participation of a large community of
+volunteers to help with the visual identification of lenses would be very
+beneficial for the lensing community.  Now seems
+the perfect time to investigate the potential of citizen science.
 
-{\bf \GZ, one of the most successful citizen science project in
+{\bf \GZ, one of the most successful citizen science projects in
 astronomy, addressed}
 the problem of how to  classify large numbers of galaxies by their
-morphology \citep{Lintott2008}.  From these early results to several new unexpected and
+morphology \citep{Lintott2008}.
+From these early results to several new unexpected and
 interesting discoveries, such as that of green pea galaxies
 \citep{Cardamone2009,Jaskot2013} and Hanny's Voorwerp
-\citep{Lintott2009,Keel2012}, \GZ has been able to harness the potential
-of citizen scientists.  Since then astronomy and non-astronomy projects
+\citep{Lintott2009,Keel2012}, \GZ has been able to start to realize the potential
+of citizen scientists.  Since then, both astronomy and non-astronomy projects
 have been launched under the citizen science web portal Zooniverse
 (\texttt{http://zooniverse.org}). The task of finding gravitational lenses is
-significantly challenging given that the lens systems show such
+significantly challenging, given that the lens systems show such
 complexity and that they are rare. To add to the challenge, not many
 citizen scientists are expected to be aware of the phenomenon of
-gravitational lensing, and the resulting image configurations.  With
+gravitational lensing, and the resulting characteristic image configurations.  With
 these significant challenges at hand, we designed the \sw project to
 enable the discovery of lenses through citizen science (learning from
-previous experience in serendipitous identification of lens candidates in \GZ).  In a companion
-paper, Paper I (Marshall et al., in prep.), we describe the design of
+previous experience in serendipitous identification of lens candidates in \GZ).
+In a companion
+paper \citep[][hereafter \PaperOne]{Marshall2015}, we describe the design of
 \sw and how the entire system functions as a discovery service.  In this
-paper (Paper II hereafter), we describe our first lens search using data
+paper (\PaperTwo), we describe our first lens search using data
 from the Canada-France-Hawaii Telescope Legacy Survey
 (\cfhtls\footnote{\texttt{http://www.cfht.hawaii.edu/Science/CFHTLS/}}).
 {\bf In \citet{Kung2015}, we describe the design of a collaborative
-mass modelling tool that can be used by citizen scientists
-.}
+mass modelling tool that can be used by citizen scientists.}
 
 This paper is organised as follows. In
 \Sref{sec:data}, we introduce the \cfhtls imaging data and the
@@ -172,11 +175,11 @@ aid the \sw volunteers in the process of finding lenses. We give details of this
 training sample in \Sref{sec:ts} and \Sref{sec:dfp}. In \Sref{sec:swap},
 we briefly describe how the classifications of images from the volunteers are
 turned into a catalog of plausible candidates (for further details, see
-Paper I). In \Sref{sec:results}, we present the new lens candidates from \sw and
-compare it to the lens samples produced by a few robotic searches from
-the \cfhtls in the past. Next, we discuss what kind of lenses are detected
-or missed by the algorithms and \sw in \Sref{sec:discuss}. The summary
-and conclusions are given in \Sref{sec:conclude}.
+\PaperOne). In \Sref{sec:results}, we present the new lens candidates from \sw and
+compare it to the lens samples produced by past robotic searches of
+the \cfhtls. Next, we discuss what kind of lenses are detected
+or missed by the algorithms and \sw in \Sref{sec:discuss}.
+Our conclusions are given in \Sref{sec:conclude}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -325,7 +328,7 @@ the ``known lens candidates'' sample.
 In order to perform a blind lens search over the entire \cfhtls
 WIDE, we present the volunteers with cutouts of images selected
 from the survey region. We briefly describe the image presentation here
-for completeness but more information can be found in Paper I. We use
+for completeness but more information can be found in \PaperOne. We use
 the $g$, $r$ and $i$-band imaging from \cfhtls which are most useful for
 visual identification of lenses.  We made color composite images using
 the publicly-available code, \humvi\footnote{The open source  color image
@@ -361,7 +364,7 @@ large and we receive multiple classifications for the same cutout.
 The simulated lenses are important to train citizen scientists who are
 novice to the task of finding lenses but they are also crucial for
 analyzing the classifications performed by the citizen scientists (more
-details can be found in Paper I, but see \Sref{sec:swap} for a brief
+details can be found in \PaperOne, but see \Sref{sec:swap} for a brief
 summary). In this section, we describe the framework used for generating the
 simulated lens sample and give details of the sample itself along with
 some known limitations.
@@ -824,7 +827,7 @@ only promising lens candidates. A daily snapshot of classifications
 performed by volunteers are provided to the science team every night.
 This daily batch is analyzed by the Space Warps Analysis Pipeline
 (SWAP). The philosophy and the details of SWAP are described in detail
-in Paper I, here we briefly summarize how it works.
+in \PaperOne, here we briefly summarize how it works.
 
 Each subject (or image cutout) is assigned a prior probability of
 $2\times10^{-4}$ to contain a lens system. Every volunteer
@@ -1434,10 +1437,10 @@ located close to the border or well within the center.
 
 Here, we investigate if the power\footnote{see the
 \Aref{appendix:power} for the meaning of this term and how it is
-different from the ``Skill'' defined in paper I} of volunteers is systematically
+different from the ``Skill'' defined in \PaperOne} of volunteers is systematically
 different between the sample of detected and missed lenses.
 
-We check how the posterior probability P (see Paper I for the
+We check how the posterior probability P (see \PaperOne for the
 mathematical definition) of an image or a subject to contain a lens
 changes as the image receives more classifications from multiple
 volunteers. A graphical representation of changing probabilities for
@@ -1566,7 +1569,7 @@ Volunteers receive feedback messages when they click or fail to click on
 the training images during live classification of real images which
 helps them remain focused and improve their performance over time. More
 details about the design of \sw system and how it works are given in the
-companion paper, Paper I.
+companion paper, \PaperOne.
 
 The blind lens search in the \cfhtls is done in two stages: \StageOne and
 \StageTwo. In \StageOne, volunteers inspected $\sim$ 430 000 images and
@@ -1577,7 +1580,7 @@ candidates is obtained. In the next step, the images are graded by three
 lens experts (AM, AV and PJM) producing candidates with quality flags
 ranging from possibly a lens to almost certainly a lens.
 
-In this paper (Paper II), we present the new \sw sample and compare it
+In this paper, we present the new \sw sample and compare it
 with the previously known samples from two robotic searches from the
 \cfhtls namely, the \rf and \af. More detailed description and analyses
 of the new sample such as spectroscopic confirmation and mass modelling

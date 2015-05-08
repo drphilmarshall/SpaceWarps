@@ -186,6 +186,7 @@ Our conclusions are given in \Sref{sec:conclude}.
 
 \section{Data}
 \label{sec:data}
+
 \subsection{The CFHT Legacy Survey}
 \label{sec:data:cfhtls}
 
@@ -203,15 +204,15 @@ W3 has a sky coverage of 44.2~deg$^2$ and is more than twice as large as
 W2 and W4.
 
 The \cfhtls imaging is very homogeneous and has good image quality. Most
-of the lensed arcs are much brighter in the $g$ band thus, deep imaging
+of the lensed arcs are much brighter in the $g$ band, so deep imaging
 in this band is desirable. The limiting magnitude is 25.47 for the $g$
 band which goes the deepest among all of the five bands. The mean seeing
 in the $g$ band is 0.78\arcsec. The zero point to convert flux to AB
 magnitude for all bands is 30. These characteristics make \cfhtls ideal
 to do visual inspection for finding lenses.  We use the stacked images
 from the final T0007 release taken from the Terapix
-website\footnote{\texttt{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}} for this
-work.
+website\footnote{\texttt{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}}
+for this work.
 
 We note that the \cfhtls is a niche survey with a unique combination of wide
 imaging with deep sensitivity. It is a precursor to the ongoing wide imaging
@@ -237,12 +238,12 @@ find arcs in galaxies, groups and clusters. They found about 40 lens
 candidates with quality grades from low to high.}
 
 In the thesis dissertation of \citet{Thanjavur2009}, 9 promising and 2
-low probability candidates are reported which were discovered
+low probability candidates were reported as having been discovered
 serendipitously. These detections were made during the visual
 inspection of the \cfhtls images as part of data reduction procedures
 for the Weak Lensing survey \citep{Benjamin2007}.
 
-\citet{Sygnet2010} carried out a search for edge-on galaxy lenses in the
+\citet{Sygnet2010} carried out a search for edge-on disk galaxy lenses in the
 \cfhtls WIDE. They identified galaxies, using {\sc SExtractor}, which
 had $18<i<21$ and inclination angle $<25\,^{\circ}$. After applying few more
 selection criteria and visual inspection, they found about 3 promising
@@ -265,16 +266,16 @@ because more massive systems produce arcs or lensed images with large image
 separation from the lensing galaxy which are easier to detect compared to the
 galaxy-scales. In the absence of a large systematically followed up
 verified sample of candidates, we choose the most promising 26 systems
-as our bona fide lens sample from the \cfhtls WIDE. The total
-number of lens candidates in the \cfhtls WIDE alone is 108.
+as our bona fide lens sample from the \cfhtls WIDE.
+(The total number of lens candidates in the \cfhtls WIDE alone is 108.)
 
 In \citet{Elyiv2013}, the authors visually inspected a sample of 5500 optical
 counterparts of X-ray point-like sources identified in the XMM-LSS
 imaging of the \cfhtls W1 field. The goal was to find instances
-of lensed quasars. Their sample consists of a total of 18 candidates out
-of which 3 candidates are found to be promising.
+of lensed quasars. Their sample consists of a total of 18 candidates,
+of which 3 candidates were found to be promising.
 
-The \rf \citep{Gavazzi2014} was used for finding compact rings or arcs
+\citet{Gavazzi2014} used their \rf code to find compact rings or arcs
 around centers of isolated and massive early-type galaxies. \rf
 subtracts the point spread function (PSF)-matched $i$-band images from the $g$-band images, and
 looks for excess flux in the bluer $g$-band. An object detector measures
@@ -286,11 +287,11 @@ early type galaxies, or objects selected to have red centers and blue
 outer parts, from the T0006 CFHTLS data release catalogs. A total of
 14370 galaxies were found to show detectable blue residuals, and 2524
 were visually inspected, having passed the automatic feature selection
-process. This led to a total of 330 lens candidates out of which 42 are
-good quality (\texttt{q\_flag} = 3) and 288 are medium quality
+process. This led to a total of 330 lens candidates out of which 42 were deemed
+good quality (\texttt{q\_flag} = 3) and 288  medium quality
 (\texttt{q\_flag} = 2) candidates. In addition to the main well-defined
 sample of \citet{Gavazzi2014}, a further 71 candidates were reported to
-be detected by earlier version of the \rf or from the \cfhtls DEEP.
+have been detected by earlier versions of the \rf, or from the \cfhtls DEEP.
 From the main sample of ``\rf candidates,'' the SL2S team found, during
 their follow-up campaign, 33 confirmed lenses \citep{Sonnenfeld2013a,Sonnenfeld2013b}.
 
@@ -298,22 +299,22 @@ The work by \citet{Maturi2014} used the arc finding code of
 \citet{Seidel2007} and color properties of typical arcs to optimize arc
 detection. This new approach was tested on the CFHTLS-Archive-Research
 Survey \citep[CARS,][]{Erben2009} which covers an area of 37~deg$^2$
-only and this entire data was also visually inspected by the authors to
-estimate completeness and purity of their robotic search. They found 29
+only, and this entire image set was also visually inspected by the authors to
+estimate the completeness and purity of their robotic search. They found 29
 candidates with the robotic search alone and 41 candidates through pure
-visual inspection some of which are known from previous searches. Most
+visual inspection---some of which were known from previous searches. Most
 of these candidates are medium-low
 probability\footnote{\texttt{http://www.ita.uni-heidelberg.de/$\sim$maturi/Public/arcs}}.
 
 The \rf and the \af searches are the only searches that make use of a
-lens finding algorithm and that has been run on the entire \cfhtls
-imaging.  Thus, these are considered as our reference sample of known
+lens finding algorithm and that have been run on the entire \cfhtls
+imaging dataset.  Thus, we considered these to be our reference sample of known
 lenses from robotic searches. For the purposes of transparency and to
 help with the training, the volunteers participating in \sw-\cfhtls lens
 search were made aware of these two known lens samples. Images
 containing the systems from the \rf and the \af samples were labelled as
 ``known lens candidates'' in the \sw discussion forum,
-TALK\footnote{\texttt{http://talk.spacewarps.org/}}, where volunteers have the
+\Talk,\footnote{\texttt{http://talk.spacewarps.org/}} where volunteers have the
 opportunity to discuss their findings with fellow volunteers and the
 science team. In this paper, we refer to the sample of 330 \rf and 108
 \af lens candidates as the sample of ``known lens candidates'' and the
@@ -325,26 +326,28 @@ the ``known lens candidates'' sample.
 
 \subsection{Image presentation in \sw}
 \label{sec:data:impres}
+
 In order to perform a blind lens search over the entire \cfhtls
 WIDE, we present the volunteers with cutouts of images selected
 from the survey region. We briefly describe the image presentation here
-for completeness but more information can be found in \PaperOne. We use
+for completeness; more information can be found in \PaperOne. We use
 the $g$, $r$ and $i$-band imaging from \cfhtls which are most useful for
 visual identification of lenses.  We made color composite images using
 the publicly-available code, \humvi\footnote{The open source  color image
 composition code used in this work is available from
 \texttt{http://github.com/drphilmarshall/HumVI}} following the
-prescription of \citet{Lupton2004}. The color scales are chosen to
-maximize the contrast between faint extended objects. These parameters
-are then fixed during the production of all the tiles, in order to allow
+prescription of \citet{Lupton2004}. The color scales were chosen to
+maximize the contrast between faint extended objects and bright early type galaxies.
+These parameters
+were then fixed during the production of all the tiles, in order to allow
 straightforward comparison between one image and another, and for
 intuition to be built up about the appearance of stars and galaxies
 across the survey.
 
-We extract contiguous cutouts of size 81.84\arcsec\ (440 pixels) including
+We extracted contiguous cutouts of size 82\arcsec\ (440 pixels), including
 overlapping region of 10\arcsec (54 pixels) between the neighbouring
-cutouts. This  results in a catalog of $\sim$ 430 000 cutouts for the entire \cfhtls
-WIDE region. The size of the individual cutout is determined by
+cutouts. This resulted in a catalog of some 430,000 cutouts for the entire \cfhtls
+WIDE region. The size of the individual cutout was determined by
 optimising factors such as the typical angular scales of gravitational
 lenses, the number of objects seen in a single cutout and the total
 number of image cutouts in the survey. If a lens
@@ -356,18 +359,19 @@ across the neighbouring cutout unless {\bf they classify} a large
 number of images. This is not a problem since our user base is extremely
 large and we receive multiple classifications for the same cutout.
 
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Training sample: Simulated lenses}
 \label{sec:ts}
 
-The simulated lenses are important to train citizen scientists who are
-novice to the task of finding lenses but they are also crucial for
+The simulated lenses are important to train citizen scientists who may be
+new to the task of finding lenses, but they are also crucial for
 analyzing the classifications performed by the citizen scientists (more
-details can be found in \PaperOne, but see \Sref{sec:swap} for a brief
+details can be found in \PaperOne, but see \Sref{sec:swap} below for a brief
 summary). In this section, we describe the framework used for generating the
 simulated lens sample and give details of the sample itself along with
-some known limitations.
+some of its known limitations.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \begin{figure*}
@@ -400,8 +404,8 @@ simulation purpose, we exclude all those galaxies whose positions match
 with the lensing galaxies from the SARCS samples {\bf within
 2~arcsec\footnote{{\bf Due to inaccuracies and uncertainties in measurements
 of the centers of some of the lens candidates, some simulated lensed
-images were superposed on the galaxies of known lens candidates. This issue was overcome by
-ingesting the same \cfhtls images with and without the simulated
+images were superposed on the galaxies of known lens candidates. This issue was
+overcome by ingesting the same \cfhtls images with and without the simulated
 lenses.}}}.
 
 For each galaxy, the average number of source objects (either quasars or
@@ -510,17 +514,17 @@ higher redshifts, as prescribed by \citet{Oguri2010}.
 
 With the cross-section, and the luminosity functions specified, we
 calculate the expected number of sources behind a candidate lensing
-galaxy using Eq.~\ref{eqn:nsrc}. We need to generate a large number of
+galaxy using \Eref{eqn:nsrc}. We need to generate a large number of
 simulated lenses (larger than the number of real galaxy lenses we expect
 to find in \cfhtls) in order to have a reasonably large and diverse
 training sample for thousands of \sw volunteers. Therefore, we
 artificially boost the average number of sources by a factor (see
-Table~\ref{tab:thresh}), which increases the occurrence of lensing. We
+\Tref{tab:thresh}), which increases the occurrence of lensing. We
 draw a Poisson deviate, $N_{\rm src}$ with a mean equal to the boosted
 average number of sources. If $N_{\rm src}$ is greater than zero, then
 this galaxy is flagged as a potential lensing galaxy.
 
-Next, we determine properties of the background sources for every lens.
+Next, we determine properties of the background sources for every lens system.
 We follow similar procedures for both background galaxies and quasars.
 We draw source redshifts and luminosities from the aforementioned
 distributions. {\bf We note that the sources are being drawn from a much
@@ -535,15 +539,15 @@ source positions with respect to the lens are drawn randomly from an
 area inside the caustic.  {\bf When populating the sources within the
 caustics, the finite size of the background galaxies is expected to
 affect the lens cross-sections to some extent. As this factor is not
-critical for the purpose of our training sample, we assume the
-background galaxies to be point like for simplicity.} We perform
-ray-tracing for all of the $N_{\rm src}$ sources using the publicly
+critical for the purpose of our training sample, for simplicity we assume the
+background galaxies to be point like when computing cross-sections.} We perform
+ray-tracing for all of the $N_{\rm src}$ sources using the publically
 available code \gravlens \citep{Keeton2000} and choose sources that
-satisfy our selection criteria given below. We determine fluxes of the
-lensed images and the total magnification of each of the lensed source.
+satisfy our selection criteria given below. We determine the fluxes of the
+lensed images and the total magnification of each of the lensed sources.
 We draw a source randomly for which the flux of the second brightest
 lensed image and the total magnification of all lensed images meet the
-thresholds given in Table~\ref{tab:thresh}.
+thresholds given in \Tref{tab:thresh}.
 
 Since we want to produce realistic looking lens systems, we simulate
 lenses in each of the five \cfhtls~filters. The colors of the background
@@ -554,7 +558,7 @@ drawn to simulate quasar lenses. Next, we assumed a Gaussian
 profile\footnote{This was due to an oversight. We intend to use either
 an exponential or {\bf de Vaucouleurs'} profile.} for
 the galaxies. The ellipticity and the position angle (PA) are drawn
-randomly from within the range given in Table~\ref{tab:thresh}. The
+randomly from within the range given in \Tref{tab:thresh}. The
 effective radius of the galaxy is estimated from the luminosity$-$size
 relation \citep{Bernardi2003} (with a redshift scaling, to account for
 size evolution) given by
@@ -623,7 +627,7 @@ c) $_{\rm tot}$ -- total flux integrated over all of the lensed images.
 d) All fluxes are in AB mag. PA is in degrees measured East of North.
 \end{table}
 
-\subsubsection{Groups-scale lenses}
+\subsubsection{Group-scale lenses}
 
 At group or cluster-scales, the mass distribution is more complex. The
 convergence in the inner regions, which are typically responsible for the
@@ -673,10 +677,10 @@ determine the area covered by the caustics. We consider only galaxies as our
 background source population since group or cluster-scale quasar lenses are
 expected to be extremely rare in the \cfhtls.  Following the same procedure
 as described in \Sref{sect:gallens}, we calculate the number of galaxies
-expected to lie behind every potential lensing group (see Eq.~\ref{eqn:nsrc}).
+expected to lie behind every potential lensing group (see \Eref{eqn:nsrc}).
 As before, for each background galaxy within the lens cross-section, a redshift
 and an $i$-band magnitude is determined by drawing galaxies randomly from the
-respective distributions (see Eqs.~\ref{eqn:ps}-\ref{eqn:ns}).
+respective distributions (see Equations~\ref{eqn:ps}-\ref{eqn:ns}).
 
 All those groups that are found to have no background galaxies within the
 cross-sectional area are rejected and the rest are included as potential lenses.
@@ -726,12 +730,13 @@ provide the offset from the lens center, redshift, magnitudes, total
 magnification, number of lensed images. Additionally, when possible,
 ellipticity and effective radius of the background galaxies have also
 been provided. These catalogs are available from
-\texttt{https://github.com/anupreeta27/SIMCT} and simulated lens sample can be
-requested from the authors.
+\texttt{https://github.com/anupreeta27/SIMCT} and the
+simulated lens image sample is available from the authors on request.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Limitations of the simulated sample}
+\subsection{Limitations of the simulated lens sample}
+
 The simulated lens sample, although realistic, is not perfect, due to
 the simplicity of the lensing models and our limited understanding of
 the uncertainties in the model parameters. Comments from citizen

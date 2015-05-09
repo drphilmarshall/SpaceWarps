@@ -170,7 +170,7 @@ mass modelling tool that can be used by citizen scientists.}
 This paper is organised as follows. In
 \Sref{sec:data}, we introduce the \cfhtls imaging data and the
 previously published lens samples from the \cfhtls. We generated a training sample,
-consisting of simulated lenses, duds and false positives, in order to
+consisting of simulated lenses, duds and impostors, in order to
 aid the \sw volunteers in the process of finding lenses. We give details of this
 training sample in \Sref{sec:ts} and \Sref{sec:dfp}. In \Sref{sec:swap},
 we briefly describe how the classifications of images from the volunteers are
@@ -782,24 +782,24 @@ are very bright.}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\section{Training sample: Duds and False positives}
+\section{Training sample: Duds and Impostors}
 \label{sec:dfp}
 
 Citizen scientists need training not only to identify gravitational
-lenses, but also to reject images which either have no lenses or have
-objects which are lens impostors. Hence, in addition to the simulated
-lenses, we added a sample of duds and false positives to the training
+lenses, but also to reject images which either contain no lenses, or contain
+objects which could be mistaken for lenses. Hence, in addition to the simulated
+lenses, we added a sample of ``duds'' and ``impostors'' to the training
 sample. Duds are images which have been visually inspected by experts
-and confirmed to contain no lenses. False positives (FPs) are systems
+and confirmed to contain no lenses. Impostors are systems
 which look like lenses but are not, for example, spiral galaxies,
 starforming galaxies, chance alignments of features arranged in a
 lensing configuration and stars.
 
 We selected a sample of 450 duds for the \StageOne classification in \sw
-and a sample of 500 false positives for the \StageTwo inspection. The
-sample of false positives was selected from the candidates which passed
-the \StageOne of \sw. We note that this is the first time, we have a
-systematically compiled sample of visually inspected false positives by
+and a sample of 500 impostors for the \StageTwo inspection. The
+sample of impostors was selected from the candidates which passed
+the \StageOne of \sw. We note that this is the first time we have a
+systematically compiled sample of visually inspected impostors by
 the \sw volunteers and categorized by the science team. We produce
 additional larger sample of a few thousand FPs by scanning through the
 low probability images after the completion of \StageTwo. All of these

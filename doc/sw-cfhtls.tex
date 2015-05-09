@@ -924,12 +924,14 @@ detections of the known lens candidates, known lenses and the new lens
 candidates at each stage.  We also give the recovery fractions for the
 known samples and fraction of total detection for the new samples at
 each stage. We find that all of the confirmed lenses found
-at \StageOne are also recovered at \StageTwo whereas a small fraction of
+at \StageOne are also recovered at \StageTwo; a small fraction of
 the known lens candidates are rejected at \StageTwo. From the visually
 inspected known lens sample at \StageTwo (P$> 0.3$), the experts gave a
 grade of 1.3 and above to about 92~per~cent (33 out of 36) of the systems. Overall,
 the sample of new \sw lens candidates increased the sample of total
-\cfhtls lens candidates by over 50~per~cent.
+\cfhtls lens candidates by over 50~per~cent. However, we find that 42\% of known
+lenses were missed at \StageOne: we return to the discussion of these false
+negatives below.
 
 In \Fref{fig:stackP}, we plot the distribution of false positives and
 the high grade lens candidates,
@@ -957,9 +959,9 @@ Statistics of detections in \sw }
 \hline
 \hline
 Number  & 128 & 34 & 107  & 34  \\
-Percentage  & & & & \\
-of recovery & 29 & 58 & 25 & 58  \\
-P$_{\rm thresh}$ & 0.95 & 0.95 & 0.3 & 0.3 \\
+Fraction  & & & & \\
+of total recovered & 29\% & 58\% & 25\% & 58\%  \\
+$P_{\rm thresh}$ & 0.95 & 0.95 & 0.3 & 0.3 \\
 {\bf Expert Grade (G)} & $-$ & $-$ & 1.3 & 1.3 \\
 \hline
    &  \multicolumn{2}{c} {\StageTwo}  &   & \\
@@ -967,9 +969,9 @@ P$_{\rm thresh}$ & 0.95 & 0.95 & 0.3 & 0.3 \\
 \hline
 \hline
 Number  & {\bf 59} & 141 &  & \\
-Percentage & & & & \\
-of detection & 13 & 33 &  & \\
-P$_{\rm thresh}$ & 0.3 & 0.3 &  & \\
+Fraction & & & & \\
+of detections & 13\% & 33\% &  & \\
+$P_{\rm thresh}$ & 0.3 & 0.3 &  & \\
 {\bf Expert Grade (G)} & 1.3 & 1.3 & 1.3 & 1.3 \\
 
 \hline
@@ -979,7 +981,7 @@ P$_{\rm thresh}$ & 0.3 & 0.3 &  & \\
 {KL}-- Known lenses \\
 {NC}-- New lens candidates  \\
 {AC}-- All (known and new) lens candidates  \\
-P$_{\rm thresh}$ -- systems with Posterior probability $P$ above this threshold are selected \\
+$P_{\rm thresh}$ -- systems with Posterior probability~$P$ above this threshold are selected \\
 Note: For KC and KL, Percentages are with respect to the known
 population whereas for NC and AC, percentages are with respect to the
 total population of lens candidates. \\
@@ -990,54 +992,55 @@ total population of lens candidates. \\
 \subsection{New lens candidates from \sw}
 \label{sec:results:newcand}
 
-We give basic information about the final sample of {\bf 59} new lens
-candidates (medium-high probability) found by \sw in
-Table~\ref{tab:swcands}. We report the candidates with a \sw ID and Name
-of the lens system. We give their positions (Ra, Dec), photometric
+We give basic information about the final sample of {\bf 59} new medium grade
+lens candidates found by \sw in
+\Tref{tab:swcands}. We report the candidates with a \sw ID and Name
+of the lens system. We give their positions (RA, Dec), photometric
 redshift ($z_{phot}$), $i$ band magnitude of the lensing galaxy,
-averaged grade G from the lens experts, zoo ID (identifier used in
+averaged grade~$G$ from the lens experts, zoo ID (identifier used in
 TALK), $P$ value at \StageTwo and a visual categorization of the type of
 lensed images and the lensing galaxy in the ``Comments'' column in
-Table~\ref{tab:swcands}. Whenever available the lens properties are
-taken from the \cfhtls photometric catalog \citep{Coupon2009} otherwise
-for the lens galaxy positions, the reported values are measured
+\Tref{tab:swcands}. Whenever available the lens properties are
+taken from the \cfhtls photometric catalog \citep{Coupon2009}; otherwise,
+for the lens galaxy positions, the reported values were measured
 manually. The visual categorization of the lens type is only suggestive
 and the explanation of the notations in the Comments column is given at
 the bottom of the table.
 
-We show images of our new sample in \Fref{fig:lc} which is arranged
-first in the decreasing order of their grades and then increasing order
-of their positions. As the first lens search was a blind search with no
+We show images of our new sample in \Fref{fig:lc}. The panels are arranged
+first in the descending order of their grades, and within each grade, in
+ascending order
+of RA. As the first lens search was a blind search with no
 preselection of candidates from any algorithm, we find various types of
 lenses, as expected from such a search. The final sample consists of
 both galaxy and group-scale lens candidates. There are detections of
 elongated arcs and some interesting point-like quasar lensed images.
-Most of them are brighter in bluer $g$ band but some candidates brighter
-in the redder $i$ band are also found. Since robotic lens searches often
-look for blue colored lensed features, they are very much likely to miss
+Most of them are brighter in the bluer $g$ band, but some candidates brighter
+in the redder $i$ band are also found. Since the robotic lens searches
+focused on the blue lensed features, they are likely to miss
 such interesting lens candidates. We did not find any examples of
-exotic lens candidates from the visually inspected $P>0.3$ sample. There
-may be some interesting candidates lurking in TALK but these will have
-to be sifted through.
+exotic lens candidates from the visually inspected $P>0.3$ sample.
 
-The new \sw lens sample presented here shows the advantages of having
+The new \sw lens sample presented here illustrates some of
+the advantages of having
 citizen scientists find lenses through visual inspection. An algorithm,
 by definition will find objects that adhere to a selection criteria that
 uses either geometry or flux information from an image. On the other
-hand, citizen scientists can do amazing amount of interpolation or
-extrapolation over the basic selection criteria provided to them.  For
+hand, citizen scientists can interpolate over or
+extrapolate beyond the basic selection criteria provided to them.  For
 example, the lower blue arc in SW7 is split by a small red galaxy.  An
 algorithm typically fails to detect such arcs because the arc is broken
 into smaller arclets which then falls below the minimum length or area
-allowed for an arc to be detected typically. Human brains have no
-problem in interpolating over the broken blue arc over the red galaxy
-and understand that it is a single long arc. The system {\bf SW20} has
+allowed for an arc to be detected. Human inspectors have no
+problem in interpolating over the broken blue arc over the red galaxy,
+understanding that it is a single long arc. The system SW20 has
 point-like lensed images which cannot be detected by arc finding
-algorithm whereas the ring finding algorithm may miss this because of
-atypical color and structure of the galaxy. Detection of red arcs, for
-example, as seen in the SW38 candidate show how the volunteers
-extrapolate on the color parameter because the training sample mostly
-has blue arcs since this is the typical expectation.
+algorithm, whereas the ring finding algorithm may have missed this because of
+the atypical color and structure of the galaxy. Detection of red arcs, for
+example, as seen in the SW38 candidate, show how the volunteers
+extrapolate on the color parameter: the training sample contains
+predominantly blue arcs, because the source colors were drawn from realistic
+observed distributions.
 
 The power of citizen scientists also lies in the high dynamic range that
 allows us to find systems which vary from short (thick) to long (thin)
@@ -1046,8 +1049,8 @@ and point-like to elongated and curved images, from blue to red, from
 regular to exotic kinds of lenses while keeping the false positive rate
 low compared to algorithms. Discovery of this large sample of completely
 new candidates missed by some of these algorithms demonstrates that the
-\sw system is functioning well and the self-taught citizen scientists
-have managed to beat the robots in some sense.
+\sw system is functioning well, the self-taught citizen scientists
+reaching parts of discovery space that the robots did not.
 
 Further detailed qualitative and quantitative analysis of the properties
 of the entire \sw sample (new and previously identified candidates) and

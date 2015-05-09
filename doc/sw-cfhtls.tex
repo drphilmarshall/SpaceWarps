@@ -1392,24 +1392,26 @@ lens-finding algorithms, and the continuing benefits of visual screening.
 
 \subsection{False negatives: known lenses missed by \sw}
 \label{sec:fn}
-Like any lens finding method, the \sw system can fail to detect certain
+
+Like any lens finding method, the \sw system could potentially be failing
+to detect certain
 kinds of lenses.  We find that about 40~per~cent of the known sample of lenses
-are missed both at \StageOne and II (see \Tref{tab:stats}). In fact, all
-of the known lenses from \StageOne are discovered at \StageTwo which
-means that the lenses are lost already at \StageOne. Below, we focus on the known
+are missed at \StageOne; no further losses were incurred during
+the \StageTwo refinement (see \Tref{tab:stats}).
+Below, we focus on the known
 lens sample at \StageOne to understand why some of them are being missed
 and possibly find a way to improve the detection rate which can be
 adopted in the future \sw lens searches.
 
 Many of the missed lenses are from the \rf sample with small
 Einstein radii and faint lensed images (see \Fref{fig:compre}). Among
-the confirmed lenses from the \rf, about 50~per~cent are missed. Out of the
+the confirmed lenses from \rf, about 50~per~cent are missed. Out of the
 missed sample of 18 lenses, about half of them are visually difficult to
-detect and the other half appear to have faint blue smudges around
+detect. The other half appear to have faint blue smudges around
 galaxies which should have been easier to identify. Similarly,
 if we consider the \af lens sample, $\sim$23~per~cent are missed by \sw. This
 is a relatively small sample of $\sim 5$ systems and visual inspection
-suggests that, by and large, either the lensed features are faint
+of them suggests that, by and large, either the lensed features are faint
 or they have odd properties which makes them difficult to identify
 correctly. For further tests, we combine the \rf and \af sample.
 
@@ -1417,20 +1419,25 @@ For a lens finding method which uses the collective skill, experience and
 knowledge of a group of volunteers, it may be difficult to find a single
 factor with certainty which causes a lens candidate to be missed. We
 attempt to understand whether there is indeed a single dominant factor
-that is resulting in the loss of these lenses or the lenses are being
+that is resulting in the loss of these lenses, or if the lenses are being
 missed due to a combination of multiple reasons. Below, we consider some
 of the factors that could affect the efficiency of finding lenses.
 
 \subsubsection{Number of classifications}
-First, we check if the number of classifications (Nclass) is
+
+First, we check whether the number of classifications (Nclass) is
 significantly lower for the missed sample compared to the detected one.
-Surprisingly, most of the lenses in the known sample have few
-classifications (Nclass$<$10) which includes both the detected and
-missed lenses. Many of the remaining lenses have between 10 to 20
-classifications. And, only a few subjects have Nclass$>$20. They
-continue to remain for long in the database because these candidates are
-possibly difficult to identify. Overall, we do not find any correlation
-for the detected and the missed sample with Nclass.
+Most of the lenses in the known sample (including both those that were
+detected and those that were missed)
+% have few classifications (Nclass$<$10).
+% Many of the remaining lenses have between 10 to 20
+% classifications. And, only a
+received similar numbers of classifications to the other subjects.
+A few received Nclass$>$20, possibly a result of
+continuing to remain for a long time in the database because there was
+uncertainty over whether or not to reject them.
+Overall, we do not find any difference in the number of classifications
+between the detected and the missed lenses.
 
 \subsubsection{Blind lens search}
 Efficiency of a visual search can vary in different sections of an

@@ -1525,7 +1525,7 @@ classifications. Therefore, lack of high power volunteers classifying
 the missed lenses seems to be one of the major factors.
 
 We rerun SWAP for \StageOne where we use classifications from volunteers
-who produce $\Delta$ log(P)$>1.2$ only. This obviously means reducing
+who produce $\Delta \log{P} > 1.2$ only. This obviously means reducing
 the total Nclass per subject by a large fraction. As a result, we also
 need to change the $P_{\rm acc thresh}$ which is chosen to be 0.1 and we
 find that about a third of the missed lenses are detected while all the
@@ -1537,7 +1537,7 @@ volunteers. We understand that changing the rejection and acceptance
 thresholds will likely increase the rate of FPs along with improved
 completeness. After testing on a subsample of both \StageOne and
 \StageTwo FPs, we find that a small fraction of FPs are rejected when
-only classifications with $\Delta$ log(P)$>1.2$ only are considered.
+only classifications with $\Delta \log{P}>1.2$ only are considered.
 Therefore, we think it is worth adopting the new strategy in the future
 runs of SWAP in future lens searches.
 
@@ -1823,7 +1823,7 @@ As described in the appendix of \PaperOne, the posterior probability $P$
 of a subject is determined by the $P_{\rm L}$ and $P_{\rm D}$ of all the
 volunteers who clicked on the subject, via Bayes' Theorem. Each agent
 will apply a ``kick'' of a different size to the subject probability,
-$\Delta\log(P)$, which can be either positive (if the classifier thinks
+$\Delta\log{P}$, which can be either positive (if the classifier thinks
 the subject contains a lens) or negative (if the classifier thinks the
 subject does not contain a lens). For instance, given a subject
 (not) containing a lens, a volunteer with high ($P_{\rm D}$) $P_{\rm L}$
@@ -1847,7 +1847,7 @@ classifier's ability to detect lenses (compared to rejecting non-lenses).
 \begin{center}
 \includegraphics[scale=1.0]{dlnp_skill.pdf}
 \caption{ \label{fig:skilldlnp}
-Skill of the volunteers and $\Delta\log(P)$ given a lens or not a lens in
+Skill of the volunteers and $\Delta\log{P}$ given a lens or not a lens in
 an image as a function of $P_{\rm L}$ and $P_{\rm D}$. These
 quantities indicate the ability of the volunteers but do not have a simple
 linear relation with $P_{\rm L}$ and $P_{\rm D}$.

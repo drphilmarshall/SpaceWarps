@@ -580,7 +580,7 @@ the filters, the simulated image is added to the real \cfhtls~image centered
 on the lensing galaxy. Note that we ensure that the lensed galaxies and
 lensed quasars do not have the same lensing galaxy in the foreground. Similarly,
 the lensing galaxies from the galaxy-scale lenses are distinct from the central
-galaxies of groups-scale lenses which are described in the following section.
+galaxies of group-scale lenses which are described in the following section.
 
 
 \begin{figure}
@@ -589,7 +589,7 @@ galaxies of groups-scale lenses which are described in the following section.
 \caption{ \label{fig:remudist}
 Einstein radius distribution for all types of lenses. The solid (blue)
 curves show the theoretical prediction assuming an SIS model at galaxy-scales
-and a total (NFW+Hernquist) model at groups-scales taken from \citep{More2012}.
+and a total (NFW+Hernquist) model at group scales taken from \citep{More2012}.
 }
 \end{center}
 \end{figure}
@@ -691,7 +691,7 @@ follow the same procedure and apply thresholds to determine properties
 of the lensed galaxies for every lens as are described for galaxy-galaxy lenses
 in the previous section. The thresholds are same as those used for
 galaxy lenses (see \Tref{tab:thresh}) and are reported within ``()'', if
-different for group-scales. The simulated lensed images are then added
+different for group scales. The simulated lensed images are then added
 to the real \cfhtls~images with the BGGs as the center by following
 exactly the same procedure as described in the previous section.
 
@@ -706,12 +706,12 @@ of the \sw project. The statistical properties of the lens sample are
 expected to be similar to real lens samples.
 
 In \Fref{fig:remudist}, we show the Einstein radius ($R_{\rm E}$) distribution for the
-galaxy-scale and groups-scale simulated lenses. For comparison, we give
+galaxy-scale and group-scale simulated lenses. For comparison, we give
 the expected distributions (blue solid curves) for an SIS like density
-profile at galaxy-scales and an NFW+Hernquist profile at groups-scales.
+profile at galaxy-scales and an NFW+Hernquist profile at group scales.
 The theoretical curves are taken from \citet{More2012} wherein the
 models are explained in detail. We note that the model we adopt at
-groups-scale also includes SIS or SIE components for the group members
+the group scale also includes SIS or SIE components for the group members
 unlike the theoretical prediction. The theoretical curves have arbitrary
 normalizations. We also show the distribution of the total magnification
 for all three samples.
@@ -814,9 +814,9 @@ utility for training and testing of various lens finding algorithms
 \includegraphics[scale=0.6]{cand_fp_P_frac.pdf}
 \caption{ \label{fig:stackP}
 Distribution of different types of candidates as a function of the
-posterior probability P. The types of the candidates are the false
+posterior probability $P$. The types of the candidates are the false
 positives (FPs), the new candidates and the known candidates. The new
-and known candidates have higher detection rate for higher values of P,
+and known candidates have higher detection rate for higher values of $P$,
 as expected.}
 \end{center}
 \end{figure}
@@ -839,46 +839,45 @@ This daily batch was analyzed by the Space Warps Analysis Pipeline
 in \PaperOne. Here, we briefly summarize how it works.
 
 Each subject (image cutout) is assigned a prior probability of
-$2\times10^{-4}$ to contain a lens system. Every volunteer
+$2\times10^{-4}$ of containing a lens system. Every volunteer
 is assigned an agent characterised by a $2\times2$ confusion matrix,
 which quantifies the volunteer's ability to correctly classify an image
-to contain a lens ($P_L$) or to not contain a lens ($P_D$). The values of
-the confusion matrix are determined based on the performance of the
+as containing a lens ($P_L$) or not containing a lens ($P_D$). The values of
+these confusion matrix elements are determined based on the performance of the
 volunteer on the training sample, specifically, $P_L$ (and $P_D$) is
-determined based on the fraction of simulated lenses (and duds)
+determined based on the fraction of simulated lenses (and, respectively, duds)
 correctly classified. After every classification, the agent updates the
-prior probability of the classified subject based on the volunteer's classification
-and the confusion matrix, according to the Bayes theorem.
-Note that the volunteer's confusion matrix is updated after the
+probability of the classified subject based on the volunteer's classification
+and the confusion matrix, according to Bayes' theorem.
+The agent's confusion matrix is updated after the
 classification of every training image. The thresholds for the
 probabilities {\bf to accept or reject a subject if it contains a lens or does
 not contain one} can be chosen in SWAP. Those images which cross
-these threshold values are retired and are not subsequently shown to the
-volunteers, so that volunteers can use their time efficiently to
-classify previously unclassified subjects.
+these threshold values are ``retired'', and are not subsequently shown to the
+volunteers. In this way, the crowd can use its time efficiently in
+inspecting previously unclassified subjects.
 
 SWAP was run nightly during \StageOne in order to retire subjects and inject new
-ones in to the classification stream. The subjects that passed the acceptance
-threshold at the end of \StageOne are served again at \StageTwo for careful
-reinspection. Each subject, after \StageTwo, has an associated posterior
-probability P. In the ideal case, all images containing lenses will have high P
-values and those without lenses will have low P values. In practice, we expect a
-small fraction of the real lenses (or non-lenses) to be assigned low (or high) P
-values thereby, decreasing the completeness (or purity) of the final lens
+ones in to the classification stream. The subjects that passed the detection
+threshold at the end of \StageOne were served again at \StageTwo for careful
+re-inspection. Each subject, after \StageTwo, has a posterior
+probability $P$. In the ideal case, all images containing lenses will have high $P$
+values and those without lenses will have low $P$ values. In practice, we expect a
+small fraction of the real lenses (or non-lenses) to be assigned low (or high) $P$
+values, thereby decreasing the completeness (or purity) of the final lens
 sample. As this is the first lens search with \sw, we want to find a
-threshold P value which will result in acceptable levels of completeness and
+threshold $P$ value which will result in acceptable levels of completeness and
 purity of the final sample of lens candidates.
 
-We decided to inspect the top few hundreds of images from a catalog with
-descending P values as a reasonable sample size for visual inspection.
-We choose P$>0.3$ for which we find a total of 665 subjects in the
-catalog. These images were then visually inspected by three lens experts
-(AM, AV, PJM).  The images are assigned grades on a scale of 0 to 3,
-thus dividing the subjects into candidates with the quality flag -
-unlikely lens, possibly a lens, probably a lens and almost certainly a
-lens, respectively. The final sample of \sw-\cfhtls lens candidates is
-then produced by selecting candidates above some threshold on the
-averaged grades as described in the next section.
+To achieve this, we selected a total of 665 subjects with $P>0.3$
+which were then visually inspected by three of us (as ``lens experts'',
+ AM, AV, PJM).  The images were assigned grades on a scale of 0 to 3,
+representing those images
+0) unlikely to contain a lens, 1) possibly containing a lens, 2) probably
+containing a lens and 3) almost certainly containing a
+lens. The final sample of \sw-\cfhtls lens candidates was
+then produced by selecting candidates above a threshold on the
+average value of these grades, as described in the next section.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -934,16 +933,16 @@ the sample of new \sw lens candidates increased the sample of total
 
 In \Fref{fig:stackP}, we plot the distribution of false positives and
 the high probability lens candidates, categorized by the lens experts,
-as a function of the P value assigned by SWAP at the end of \StageTwo.
+as a function of the $P$ value assigned by SWAP at the end of \StageTwo.
 On average, the fraction of lens candidates is indeed an increasing
-function of P. This shows that the \sw generated P values for the
+function of $P$. This shows that the \sw generated $P$ values for the
 subject are roughly correlated with the expert grades albeit with quite
-some scatter.  We note that from P$\sim$0.75 onwards to lower P values,
+some scatter.  We note that from $P\sim$0.75 onwards to lower $P$ values,
 the fraction of false positives starts to exceed the fraction of real
 lens candidates. This could be a good threshold to choose to maximize
 the purity of the final sample. However, we go with the choice of
 P~$=$~0.3 as this gives a better completeness of 100~per~cent for the ``known
-lens'' sample instead of 67~per~cent for P~$=$~0.75. Therefore, the new sample
+lens'' sample instead of 67~per~cent for $P=0.75$. Therefore, the new sample
 should also have increased completeness which combined with expert
 grading allows us to achieve further purity of our sample.
 
@@ -980,7 +979,7 @@ P$_{\rm thresh}$ & 0.3 & 0.3 &  & \\
 {KL}-- Known lenses \\
 {NC}-- New lens candidates  \\
 {AC}-- All (known and new) lens candidates  \\
-P$_{\rm thresh}$ -- systems with Posterior probability P above this threshold are selected \\
+P$_{\rm thresh}$ -- systems with Posterior probability $P$ above this threshold are selected \\
 Note: For KC and KL, Percentages are with respect to the known
 population whereas for NC and AC, percentages are with respect to the
 total population of lens candidates. \\
@@ -997,7 +996,7 @@ Table~\ref{tab:swcands}. We report the candidates with a \sw ID and Name
 of the lens system. We give their positions (Ra, Dec), photometric
 redshift ($z_{phot}$), $i$ band magnitude of the lensing galaxy,
 averaged grade G from the lens experts, zoo ID (identifier used in
-TALK), P value at \StageTwo and a visual categorization of the type of
+TALK), $P$ value at \StageTwo and a visual categorization of the type of
 lensed images and the lensing galaxy in the ``Comments'' column in
 Table~\ref{tab:swcands}. Whenever available the lens properties are
 taken from the \cfhtls photometric catalog \citep{Coupon2009} otherwise
@@ -1011,13 +1010,13 @@ first in the decreasing order of their grades and then increasing order
 of their positions. As the first lens search was a blind search with no
 preselection of candidates from any algorithm, we find various types of
 lenses, as expected from such a search. The final sample consists of
-both galaxy and groups-scale lens candidates. There are detections of
+both galaxy and group-scale lens candidates. There are detections of
 elongated arcs and some interesting point-like quasar lensed images.
 Most of them are brighter in bluer $g$ band but some candidates brighter
 in the redder $i$ band are also found. Since robotic lens searches often
 look for blue colored lensed features, they are very much likely to miss
 such interesting lens candidates. We did not find any examples of
-exotic lens candidates from the visually inspected P$>0.3$ sample. There
+exotic lens candidates from the visually inspected $P>0.3$ sample. There
 may be some interesting candidates lurking in TALK but these will have
 to be sifted through.
 
@@ -1098,7 +1097,7 @@ identified by \af or {\sc sextractor}.
 The Einstein radius is also measured differently for
 different samples. For the galaxy-scale lenses in the simulated sample,
 we use the value of the input parameter of the lens model for the $R_{\rm E}$.
-For groups-scale lenses, since the lens model is multi-component, we
+For group-scale lenses, since the lens model is multi-component, we
 need to determine the $R_{\rm E}$ from the image positions. We use those
 pairs of lensed images that have the smallest and the largest angular
 separations. The $R_{\rm E}$ here is then half of the averaged values of
@@ -1427,8 +1426,8 @@ because they happen to be close to the borders of the image cutouts.
 
 From the SWAP, the image cutouts inspected by the \sw volunteers receive
 a status of detected (if P$>$P$_{\rm acc thresh}$), rejected (if
-P$<$P$_{\rm rej thresh}$) and undecided (if P$_{\rm rej thresh}<$ P $<$
-P$_{\rm acc thresh}$). In \Fref{fig:comppos}, we compare the positions
+P$<$P$_{\rm rej thresh}$) and undecided (if $P_{\rm rej thresh}< P <
+P_{\rm acc thresh}$). In \Fref{fig:comppos}, we compare the positions
 of lenses which are detected (red), undecided (green) and rejected
 (blue). The left and the right panels have the simulated lens sample and
 the known lens candidates sample, respectively. We note that the density
@@ -1449,7 +1448,7 @@ Here, we investigate if the power\footnote{see the
 different from the ``Skill'' defined in \PaperOne} of volunteers is systematically
 different between the sample of detected and missed lenses.
 
-We check how the posterior probability P (see \PaperOne for the
+We check how the posterior probability $P$ (see \PaperOne for the
 mathematical definition) of an image or a subject to contain a lens
 changes as the image receives more classifications from multiple
 volunteers. A graphical representation of changing probabilities for
@@ -1458,19 +1457,19 @@ increasing classifications is called a trajectory plot. In
 detected lenses (top left panels) and missed lenses (bottom left panels)
 from \StageOne of \sw. The number of classifications (Nclass) for a
 subject increase from top to bottom.  Also, every subject is assigned a
-prior probability P0$=2\times10^{-4}$ (grey dashed line) and starts at
-the middle of the trajectory plot. The P value of a subject is updated
+prior probability $P_0=2\times10^{-4}$ (grey dashed line) and starts at
+the middle of the trajectory plot. The $P$ value of a subject is updated
 with every classification from the volunteer.  If a volunteer identifies
 a lens candidate, the trajectory moves to the right otherwise moves to
 the left. A subject is accepted if it crosses the blue-dashed line
 marking the (P$_{\rm acc thresh}=0.95$) on the right and is rejected, if
-it crosses the red-dashed line marking the P$_{\rm rej thresh}=10^{-7}$
+it crosses the red-dashed line marking the $P_{\rm rej thresh}=10^{-7}$
 on the left.
 
-The amount by which the posterior probability P value of a subject will
+The amount by which the posterior probability $P$ value of a subject will
 change depends on how well the volunteers are performing on the training
 sample and its current probability. Thus, for a given current
-probability, high power volunteers will change the P by a large factor
+probability, high power volunteers will change the $P$ by a large factor
 compared to the low power volunteers. This is evident in the trajectory
 plots as large and small distances in between the consequent points
 which we refer to as kicks. Comparison of the kick sizes between the
@@ -1513,7 +1512,7 @@ the missed lenses seems to be one of the major factors.
 We rerun SWAP for \StageOne where we use classifications from volunteers
 who produce $\Delta$ log(P)$>1.2$ only. This obviously means reducing
 the total Nclass per subject by a large fraction. As a result, we also
-need to change the P$_{\rm acc thresh}$ which is chosen to be 0.1 and we
+need to change the $P_{\rm acc thresh}$ which is chosen to be 0.1 and we
 find that about a third of the missed lenses are detected while all the
 previously detected lenses remain detected too. The others simply do not
 have enough classifications from volunteers producing large positive
@@ -1663,12 +1662,12 @@ large imaging surveys.
 \caption{ \label{tab:swcands}
 Sample of the \sw new lens candidates. }\\
 \hline
-SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & P & Comments  \\
+SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & $P$ & Comments  \\
   &  & (deg) & (deg) &  & (mag) &  (") &  &  & & \\
 \hline
 \endfirsthead
 \hline
-SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & P & Comments  \\
+SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & $P$ & Comments  \\
   &  & (deg) & (deg) &  & (mag) &  (") &  &  & & \\
 \hline
 \endhead

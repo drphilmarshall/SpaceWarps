@@ -841,9 +841,10 @@ in \PaperOne. Here, we briefly summarize how it works.
 
 Each subject (image cutout) is assigned a prior probability of
 $2\times10^{-4}$ of containing a lens system. Every volunteer
-is assigned an agent characterised by a $2\times2$ confusion matrix,
+is assigned an agent characterised by a $2\times2$ confusion matrix~$\CM$,
 which quantifies the volunteer's ability to correctly classify an image
-as containing a lens ($P_L$) or not containing a lens ($P_D$). The values of
+as containing a lens ($\PL = P_L$) or not containing a lens ($\PD = P_D$).
+The values of
 these confusion matrix elements are determined based on the performance of the
 volunteer on the training sample, specifically, $P_L$ (and $P_D$) is
 determined based on the fraction of simulated lenses (and, respectively, duds)

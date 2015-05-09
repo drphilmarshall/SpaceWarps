@@ -1440,10 +1440,12 @@ Overall, we do not find any difference in the number of classifications
 between the detected and the missed lenses.
 
 \subsubsection{Blind lens search}
-Efficiency of a visual search can vary in different sections of an
+
+The efficiency of a visual search could potentially
+vary in different sections of an
 image. Our eyes tend to focus usually at the center of an image and lens
 candidates close to the borders could go undetected. Therefore, it is
-essential to test and understand if \sw is missing some of the known lenses
+important to check whether \sw could be missing some of the known lenses
 because they happen to be close to the borders of the image cutouts.
 
 From the SWAP, the image cutouts inspected by the \sw volunteers receive
@@ -1457,18 +1459,24 @@ of points do not represent the actual number of detections because, for
 cases with large sample size, randomly drawn subsamples are shown for
 the ease of visual comparison.
 
-We do not find any strong visual correlation in the detection rate of
-lenses as a function of their positions in the image for both the
-simulated and the known lens sample. Thus, the completeness of the lens
-sample is most likely not significantly affected by whether a lens is
-located close to the border or well within the center.
+We do not find any strong correlation in the detection rate of
+lenses as a function of their positions in the image, for either the
+simulated or the known lens sample. Thus, the completeness of the lens
+sample is most likely not significantly affected by lenses
+located close to the image borders.
 
-\subsubsection{Volunteer profile}
+\subsubsection{Classification Uncertainty}
 
-Here, we investigate if the power\footnote{see the
-\Aref{appendix:power} for the meaning of this term and how it is
-different from the ``Skill'' defined in \PaperOne} of volunteers is systematically
-different between the sample of detected and missed lenses.
+Each \sw image classification is based on the markers placed by around 10
+volunteers (on average, \PaperOne). This number could be
+small enough to introduce some scatter in the system performance, arising from
+the variations between the small groups of people inspecting each subject.
+In \PaperOne we investigated the system performamce in terms of the ``Skill''
+of each agent; in \Aref{appendix:power} we define a complementary property,
+the ``Power'' of a classification to make a large difference in the probability
+$P$ of an image containing a lens. Here, we investigate whether the distribution
+of classification power is systematically
+different between the detected and missed lenses.
 
 We check how the posterior probability $P$ (see \PaperOne for the
 mathematical definition) of an image or a subject to contain a lens
@@ -1476,29 +1484,30 @@ changes as the image receives more classifications from multiple
 volunteers. A graphical representation of changing probabilities for
 increasing classifications is called a trajectory plot. In
 \Fref{fig:detmis}, we show the trajectory plots of a few examples of
-detected lenses (top left panels) and missed lenses (bottom left panels)
-from \StageOne of \sw. The number of classifications (Nclass) for a
-subject increase from top to bottom.  Also, every subject is assigned a
+detected lenses (top row of panels) and missed lenses (bottom row of panels)
+from \StageOne of \sw. Every subject is assigned a
 prior probability $P_0=2\times10^{-4}$ (grey dashed line) and starts at
-the middle of the trajectory plot. The $P$ value of a subject is updated
+the middle of the trajectory plot. The number of classifications (Nclass) for a
+subject increases from top to bottom (subjects move down the trajectory plots
+as they are classified).  The $P$ value of a subject is updated
 with every classification from the volunteer.  If a volunteer identifies
 a lens candidate, the trajectory moves to the right otherwise moves to
 the left. A subject is accepted if it crosses the blue-dashed line
-marking the ($P_{\rm acc thresh}=0.95$) on the right and is rejected, if
+marking the ($P_{\rm acc thresh}=0.95$) on the right. It is rejected if
 it crosses the red-dashed line marking the $P_{\rm rej thresh}=10^{-7}$
 on the left.
 
 The amount by which the posterior probability $P$ value of a subject will
 change depends on how well the volunteers are performing on the training
 sample and its current probability. Thus, for a given current
-probability, high power volunteers will change the $P$ by a large factor
-compared to the low power volunteers. This is evident in the trajectory
-plots as large and small distances in between the consequent points
+probability, some volunteers will change the $P$ by a large factor
+compared to others. This is evident in the trajectory
+plots, which show both large and small distances between consecutive points
 which we refer to as kicks. Comparison of the kick sizes between the
-detected and the missed lenses suggests that the missed lenses do not
-have as many volunteers giving large kicks. We also note that most of
+detected and the missed lenses suggests that {\it the missed lenses do not
+have as many volunteers giving large kicks}. We also note that most of
 the large kicks seen in the trajectories of the missed lenses seem to be
-moving the subjects to the right. In other words, the high power
+moving the subjects to the right. In other words, certain ``high power''
 volunteers are mostly classifying them as subjects with lens candidates.
 Further qualitative comparison and discussion of the trajectory plots is
 given in \Aref{appendix:traj}.
@@ -1506,47 +1515,57 @@ given in \Aref{appendix:traj}.
 For a quantitative comparison of the large and small kicks for the
 entire samples of detected and missed known lenses, we show a plot of
 histogram on the right of \Fref{fig:detmis}. Qualitatively, there are
-four types of volunteers making classifications - those causing positive
-large kicks (correct classifications by high power volunteers), those
+four types of volunteers making classifications: those causing large, positive
+kicks (correct classifications by high power volunteers), those
 causing positive small kicks (correct classifications by low power
 volunteers), those causing negative small kicks (incorrect
 classifications by low power volunteers) and those causing negative
 large kicks (incorrect classifications by high power volunteers). The
 four histograms in the figure correspond to these four types of
-volunteers for each sample (that is, detected or missed). The kick size
-is small if $\Delta log{P} = \log{P_{\rm current}} - \log{P_{\rm
+volunteers for each sample (that is, detected or missed). In this plot,
+the kick size
+is defined as small if
+$\Delta log{P} = \log{P_{\rm current}} - \log{P_{\rm
 previous}} < \Delta\log{P}_{\rm cut}$ (chosen as 1.2) and is large
 if greather than $\Delta\log{P}_{\rm cut}$.
 
-Some of the key differences are i) the ratio of positive large kicks to
-positive small kicks for the detected sample is higher than the missed
-sample suggesting that the fraction of high power volunteers is large
-for the detected sample ii) in terms of Nclass, the missed sample is
-dominated by volunteers causing negative small kicks whereas for the
-detected sample there is a comparable contribution from three types of
-volunteers - positive small and large kicks and negative small kicks.
-iii) the Nclass from volunteers with negative large kicks are lower, both
-for the detected and the missed samples. This is consistent with our
-expectation that high power volunteers should not be making incorrect
-classifications. Therefore, lack of high power volunteers classifying
-the missed lenses seems to be one of the major factors.
+Some of the key differences are as follows.  i) The ratio of  large positive
+kicks to small positive kicks for the detected sample is higher than in the
+missed sample, suggesting that the fraction of high power volunteers is large
+for the detected sample.  ii) The number of classifications received by the
+missed sample is dominated small negative kicks. In contrast, for the detected
+sample there are comparable contributions from all three of small, positive
+kicks, large, positive kicks, and small, negative kicks. iii) The number of
+classifications providing large negative kicks is lower for both the detected
+and the missed samples. This is consistent with our expectation that high power
+volunteers should not be making incorrect classifications.
+We conclude that one of the major factors in the \SW system missing lenses is
+a lack of high power classifications.
 
-We rerun SWAP for \StageOne where we use classifications from volunteers
-who produce $\Delta \log{P} > 1.2$ only. This obviously means reducing
-the total Nclass per subject by a large fraction. As a result, we also
-need to change the $P_{\rm acc thresh}$ which is chosen to be 0.1 and we
-find that about a third of the missed lenses are detected while all the
-previously detected lenses remain detected too. The others simply do not
-have enough classifications from volunteers producing large positive
-kicks. Thus, it may be possible to detect more promising candidates if
-we preferentially show the rejected systems to a few high power
-volunteers. We understand that changing the rejection and acceptance
-thresholds will likely increase the rate of FPs along with improved
-completeness. After testing on a subsample of both \StageOne and
-\StageTwo FPs, we find that a small fraction of FPs are rejected when
-only classifications with $\Delta \log{P}>1.2$ only are considered.
-Therefore, we think it is worth adopting the new strategy in the future
-runs of SWAP in future lens searches.
+As a demonstration, we re-ran SWAP for \StageOne using only  classifications
+that produced large kicks, with $|\Delta \log{P}| > 1.2$.  This obviously meant
+reducing the total number of classifications per subject by a large fraction.
+As a result, we also needed to change the $P_{\rm acc thresh}$. Choosing this to
+be 0.1, we found that about a third of the lenses that had previously been
+missed were now detected, while all the previously detected lenses were again
+detected. The remaining missed lenses simply do not have enough classifications
+from volunteers producing large positive kicks. This experiment shows that it
+may be possible to increase the  \sw completeness  by preferentially showing
+certain rejected systems -- those that  had never received a high power
+classification --  to  volunteers capable of making such classifications.
+
+Changing the rejection and acceptance
+thresholds will likely increase the rate of false positives along with improved
+completeness.
+% After testing on a subsample of both \StageOne and
+% \StageTwo FPs, we find that a small fraction of FPs are rejected when
+% only only classifications with $|\Delta \log{P}|>1.2$ are considered.
+% Therefore, we think it is worth adopting the new strategy in the future
+% runs of SWAP in future lens searches.
+This will need to be further quantified before detailed recommendations can be
+made. However, dynamically assigning certain subjects to volunteers according to
+various measures of their skill seems like a fruitful line of investigation when
+seeking to improve the system performance in future.
 
 \begin{figure*}
 \begin{center}
@@ -1566,9 +1585,11 @@ simulated and the real sample of candidates. }
 \includegraphics[scale=0.6]{det_mis_traj.pdf}
 \includegraphics[scale=0.6]{det_mis_hist.pdf}
 \caption{ \label{fig:detmis}
-Examples of trajectories of some known lenses (top-left: detected and
-bottom-left: missed) at \StageOne and histogram of the known lenses for
-different types of volunteers (right). Among the sample of missed
+Left: Examples of \StageOne trajectories of some known lenses.
+Upper panels show detected
+lenses, lower panels show missed lenses (false negatives). Right:
+Histogram of classification power received by known lenses.
+Among the sample of missed
 lenses, most classifications are from the low power volunteers
 identifying these images incorrectly (i.e. $-\Delta$~logP) which
 overshadows the small number of correct identifications (i.e.

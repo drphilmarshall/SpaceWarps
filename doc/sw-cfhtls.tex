@@ -244,7 +244,7 @@ inspection of the \cfhtls images as part of data reduction procedures
 for the Weak Lensing survey \citep{Benjamin2007}.
 
 \citet{Sygnet2010} carried out a search for edge-on disk galaxy lenses in the
-\cfhtls WIDE. They identified galaxies, using {\sc SExtractor}, which
+\cfhtls WIDE. They identified galaxies, using \sextractor, which
 had $18<i<21$ and inclination angle $<25\,^{\circ}$. After applying few more
 selection criteria and visual inspection, they found about 3 promising
 and a total of 18 lens candidates.
@@ -1082,12 +1082,11 @@ The new \sw lens candidates with expert grade G$>=$1.3. The images are
 \end{figure*}
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-% PHIL IS HERE
 
 \subsection{Measurements of properties of the lens and the lensed images}
 \label{sec:results:meas}
 
-In the subsequent sections, we make comparison of various properties of the lens
+In the subsequent sections, we compare various properties of the lens
 candidates. Here, we describe how we extract or measure these properties, namely,
 the lens redshift, the Einstein radii and the total flux of the lensed images or
 arcs.
@@ -1100,11 +1099,11 @@ multiply the magnification of the second brightest image with the source
 magnitude. For the \rf sample, the arcs are detected in the scaled
 difference image of $g$ and $i$ bands from which the lensing galaxy is
 subtracted \citep[for details, see][]{Gavazzi2014}. Here, we use the flux
-of the lensed images measured by {\sc SExtractor} from the scaled
+of the lensed images measured by \sextractor from the scaled
 difference image, that is, $g-\alpha i$ and convert it to the $g$ band
 flux using mean colors of the foreground and background population. For
 the \af and the \sw sample, we integrate the flux in the image pixels
-identified by \af or {\sc SExtractor}.
+identified by \af or \sextractor.
 
 
 The Einstein radius is also measured differently for
@@ -1115,13 +1114,13 @@ need to determine the $R_{\rm E}$ from the image positions. We use those
 pairs of lensed images that have the smallest and the largest angular
 separations. The $R_{\rm E}$ here is then half of the averaged values of
 these angular image separations. For the \rf sample, we use the peak
-position of the lensed images measured by running {\sc SExtractor} on
+position of the lensed images measured by running \sextractor on
 the scaled difference image. We calculate the image separation from the
 lens center as an estimate of the $R_{\rm E}$. For the \af (SARCS)
 sample, we use the same definition as above except that the peak
 position is identified either by the \af or manually. For the \sw lens
 sample, the same definition is used where the peak positions are
-identified either with \af or {\sc SExtractor}.
+identified either with \af or \sextractor.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %

@@ -812,7 +812,7 @@ classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
 the training set of subjects.
 
 How should we model these compressed data? The circumstances of each
-classification are quite complex, as are the human classifiers in general: the
+classification are quite complex, as are the human classifiers themselves: the
 volunteers learn more about the problem as they go, but also inevitably make
 occasional mistakes (especially when classifying at high speed).
 To cope with this uncertainty, we assign a
@@ -1096,7 +1096,8 @@ As subjects were retired from the site, more subjects were activated. In this
 way, the volunteers who down-voted images for not containing any lensed
 features enabled new images to be shown to other members of the community.
 
-When all the subjects had either been retired, or classified around 10 times or
+When all the subjects had either been retired, or at least
+classified around 10 times or
 more, the web app was paused and reconfigured for \StageTwo. The sample of
 subjects classified during \StageTwo was selected to be all those that passed
 the detection threshold ($\pr(\LENS|C,T) > 0.95$) at \StageOne. These were

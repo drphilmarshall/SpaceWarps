@@ -1133,7 +1133,7 @@ lenses, and 450 duds; at \StageTwo, we used 152 images of simulated lenses and
 curves for \cfhtls \StageOne and \StageTwo. These plots show the true positive
 rate (TPR, the number of sims correctly detected divided by the total number of
 sims in the training set), and the false positive rate (FPR, the number of duds
-incorrectly detected  divided by the total number of duds in the training set), both
+incorrectly detected divided by the total number of duds in the training set), both
 for a given sample of detections defined by a particular probability threshold,
 which varies along the curves.  In both stages, these curves show that true
 positive rates of  around 90\% were achieved, at very low false positive rates.
@@ -1147,7 +1147,7 @@ training images were ignored, and the agents' confusion matrix elements
 were instead all simply assigned initial values of 0.75
 which then remained constant. This set-up emulates a
 very simple unweighted voting scheme, where all classifications are treated
-equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
+equally.  In this case, the TPR never reaches 80\% in \StageOne or 60\% in
 \StageTwo, thus illustrating the benefit of including training images and
 allowing the agents to learn via their Bayesian updates.
 When the software agents are allowed to update their confusion matrices, the choice of

@@ -646,7 +646,7 @@ images for similar features.
 The \cfhtls $g$, $r$ and $i$-band images have the greatest average
 depth and highest average image
 quality of the survey,
-and we chose to focus on this subset. (The remaining $u$ and $z$-band images
+and we chose to focus on this subset. (The $u$ and $z$-band images
 were also made available for perusal in \Talk). We made colour composite PNG
 format images following the prescription of \citet{LuptonEtal2004} \citep[with
 extensions by][and some particular choices of our own]{WherryEtal2004}, using
@@ -679,7 +679,7 @@ scale factor) until the background noise was just visible. Then we tuned the
 colour scales $s$ to find a balance between exposing the low surface
 brightness blue features (important for lens spotting!), and having the noise
 appear to have equal red, green and blue components. Non-linearity sets in at
-about $1/(Q \alpha)$ in the  scaled intensity image: finally, tuning $Q$ at
+about $1/(Q \alpha)$ in the  scaled intensity image. Finally, tuning $Q$ at
 fixed $\alpha$ determines the appearance of bright galaxies, which we need to
 be suppressed enough to allow the low surface brightness features to show
 through, but not so much that they no longer looked like massive galaxies.
@@ -687,11 +687,11 @@ through, but not so much that they no longer looked like massive galaxies.
 These parameters were then fixed during the production of all the tiles, in
 order to allow straightforward comparison between one image and another, and
 for intuition to be built up about the appearance of stars and galaxies across
-the survey. Alternative algorithms, such as adjusting the stretch and scale
+the survey. (Alternative algorithms, such as adjusting the stretch and scale
 dynamically according to, for example, the root-mean-square pixel value in
 each image, can lead to better presentation of bright objects, but in doing so
 they tend to hide the faint features in those images: we needed to optimize
-the detectability of these faint features.   Examples of \cfhtls training set
+the detectability of these faint features.)   Examples of \cfhtls training set
 images prepared in this way can be seen in Figures~\ref{fig:training-gallery:sims}
 and~\ref{fig:training-gallery:duds}. We also defined two alternative sets of
 visualization parameters, to display a ``bluer'' image and a ``brighter''
@@ -728,34 +728,36 @@ a starting point for image exploration. Our parameter choices are given in
 \label{sec:swap}
 
 Having described the classification interface, the training images and the
-test images,  we now outline our methodology for interpreting the interactions
-of the volunteers with the identification interface, and then describe how we
-applied this methodology in the two classification stages in the \cfhtls
+test images,  we now outline our methodology for interpreting the
+classifications made by the
+volunteers, and describe how we
+applied this methodology in the two classification stages of the \cfhtls
 project in the \SW Analysis Pipeline (SWAP) code.\footnote{The open source
 SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
-Each classification made is logged in a database, storing subject IDs,
-volunteer IDs, a timestamp and the classification results (the image
-pixel-coordinate positions of every marker placed).  The ``category'' of subject --
+Each classification made is logged in a database that stores the subject ID,
+volunteer ID, a timestamp and the results of each classification: the image
+pixel-coordinate positions of every marker placed.  The ``category'' of subject --
 whether it is a ``training'' subject (a simulated lens or a known non-lens) or a
 ``test'' subject (an unseen image drawn from the survey) -- is also recorded.
 For training subjects, we also store the ``kind'' of the subject as
 a lens (``sim''), or a non-lens (``dud''), and also the ``flavour'' of lens
 object if one is present in the image (``lensed galaxy'', ``lensed quasar'' or
-``cluster lens'').  This classification is used to provide instant feedback, but
-is also the basic measurement used in a probabilistic classification of every
+``cluster lens'').  This information is used to provide the instant feedback, but
+is also the basic data used in a probabilistic classification of every
 subject based on all image views to date. Not all
 volunteers register with the Zooniverse (although all are prompted to do so);
 in these cases we record their IP addresses as substitute IDs.
 
-While the \SW web app is live, and classifications are being made, we perform an
-online analysis of the classifications,  updating a probabilistic model of every
+While the \SW web app was live, and classifications were being made, we
+performed a daily online analysis of the classifications,
+updating a probabilistic model of every
 anonymous volunteer's data, and also updating the posterior probability that
-each subject (in both the training and test sets) contains a lens, on a daily
-basis. This gives us a dynamic estimate of the posterior probability for  any
+each subject (in both the training and test sets) contains a lens.
+This gave us a dynamic estimate of the posterior probability for  any
 given  subject being a lens, given all classifications of it to date. Assigning
-thresholds in this lens probability then allows us to make good decisions about
+thresholds in this lens probability then allowed us to make good decisions about
 whether or not to retire a subject from the system, in order to focus attention
 on new images.
 
@@ -785,8 +787,8 @@ set of all classifications made of this subject.)
 \end{itemize}
 
 For a detailed derivation of this analysis pipeline, please continue reading
-through \Sref{sec:swap:details} below. Alternatively, \Sref{sec:swap:practicalities}
-contains illustrations of the calculation.
+through \Sref{sec:swap:details} below. Alternatively,
+\Sref{sec:swap:practicalities} contains illustrations of the calculation.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -1899,7 +1901,8 @@ their wide-field imaging data to contact us if they would like our help.
 \section*{Acknowledgements}
 
 We thank Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons,
-David Hogg, Thomas Jennings, Layne  Wright, Cecile Faure, Jonathan Coles, Stuart
+David Hogg, Daniel Foreman-Mackey,
+Thomas Jennings, Layne  Wright, Cecile Faure, Jonathan Coles, Stuart
 Lowe and Jean-Paul Kneib for many useful conversations about citizen science and
 gravitational lens detection, and to the Dark Energy Survey and Pan-STARRS strong
 lensing science teams for their suggestions and encouragement.

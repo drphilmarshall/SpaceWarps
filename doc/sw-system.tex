@@ -26,7 +26,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \title[\SW]
-{\SW: I. Crowd-sourcing the Discovery of Gravitational Lenses with Citizen Science}
+{\SW: I. Crowd-sourcing the Discovery of Gravitational Lenses}
 
 \author[Marshall et al.]{%
   \input{sw-system-authors.tex}
@@ -771,7 +771,8 @@ probabilities, as estimated by the agent, that the volunteer is going to be 1)
 correct when they report that an image contains a lens when it really does
 contain a lens, $\PL = \pr(\saidLENS|\LENS,T)$, and 2) correct when they report that
 an image does not contain a lens when it really doesn't contain a lens,
-$\PD = \pr(\saidNOT|\NOT,T)$.
+$\PD = \pr(\saidNOT|\NOT,T)$. The confusion matrix contains all the information
+the agent has about how good its volunteer is at classifying images.
 
 \item Each agent updates its confusion matrix elements based on the number of
 times its volunteer has been right in each way (about both the sims and the
@@ -1040,15 +1041,15 @@ agent-perceived ``skill'' (\Aref{appendix:swap}).}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Fref{fig:swap:agent-probabilities} shows the confusion matrix elements of 200
-randomly-selected agents, as they were on a particular day during the
-\StageOne online analysis. Many volunteers classify  only a small number of images, and
-so their software agents' confusion matrix elements have remained close to their initial values
-of (0.5,0.5). As more images are classified (shown by the yellow point size),
-the agents' matrix elements tend to move towards higher values, partly as the
-volunteers attain greater skill levels (green point sizes, see
-\Sref{sec:results} below) but mostly as
-the agent updates its confusion matrix. In this upper
-right-hand quadrant, the agents perceive their volunteers to be ``astute.''
+randomly-selected agents, as they were on a particular day during the \StageOne
+online analysis. Many volunteers classify  only a small number of images, and so
+their software agents' confusion matrix elements have remained close to their
+initial values of (0.5,0.5). As more images are classified (shown by the yellow
+point size), the agents' matrix elements tend to move towards higher values,
+partly as the volunteers attain greater skill levels (green point sizes, see
+\Sref{sec:results} below) but mostly as the agent updates its confusion matrix.
+In this upper right-hand quadrant, the agents perceive their volunteers to be
+``astute.''
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -1144,13 +1145,14 @@ keep track of the ROC curve as the survey progressed!).
 
 For comparison we show the results of an analysis where the classifications of
 training images were ignored, and the agents' confusion matrix elements
-were instead all simply assigned initial values of 0.75
+were instead all simply assigned initial values of 0.75,
 which then remained constant. This set-up emulates a
 very simple unweighted voting scheme, where all classifications are treated
 equally.  In this case, the TPR never reaches 80\% in \StageOne or 60\% in
 \StageTwo, thus illustrating the benefit of including training images and
 allowing the agents to learn via their Bayesian updates.
-When the software agents are allowed to update their confusion matrices, the choice of
+When the software agents are allowed to update their confusion matrices,
+the choice of
 initial confusion matrix is not very important: the same 0.75 initial values
 applied to normal, learning agents resulted in only a slightly lower TPR than
 the default case.
@@ -1265,6 +1267,8 @@ an upper limit of $p=1.0$).}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+% PHIL IS HERE
 
 \subsection{Crowd Properties}
 \label{sec:results:crowd}

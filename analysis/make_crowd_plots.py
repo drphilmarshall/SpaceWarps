@@ -377,7 +377,7 @@ def make_crowd_plots(argv):
     plt.savefig(pngfile, bbox_inches='tight')
     print "make_crowd_plots: skill-skill plot saved to "+pngfile
     """
-    
+
     # ------------------------------------------------------------------
 
     # Plot #3: corner plot for 5 variables of interest; stage1 = blue shaded, stage2 = orange outlines.

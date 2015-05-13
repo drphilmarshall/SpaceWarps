@@ -1,4 +1,4 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % Space Warps Paper II: CFHTLS
 %
@@ -48,37 +48,32 @@ through Citizen Science}
 % AV IS HERE!
 
 \begin{abstract}
-
-We report the discovery of {\bf 29} promising and a total of {\bf 59} new lens
+We report the discovery of 29 promising (and 59 total) new lens
 candidates from the CFHT Legacy Survey (\cfhtls) based on about 11
 million classifications performed by citizen scientists as part of the
 first \sw lens search.  The goal of the blind lens search was to
-identify lenses missed by lens finding robots (the \rf on galaxy scales
-and \af on group/cluster scales), which have been previously used to
-mine the \cfhtls for lenses.  We compare some properties of lens samples
-detected by these algorithms to the \sw sample and found that they are
-broadly similar.  The image separation distribution calculated from the
-\sw discovered sample shows that our previous constraints on the average
-density profile of the lens population are robust. \sw recovers about
-60\% of the known sample and the new candidates show a richer variety
-compared to the lenses found by the two robots. We find that analyzing
-only those classifications which are performed by the high power
-volunteers, \sw can achieve a detection rate of up to 75\% for the known
-lens sample.  Training and calibration of the performance of citizen
-scientists is crucial for the success of \sw. We also present the SIMCT
-pipeline, used for generating a sample of realistic simulated lensed
-images in the \cfhtls, and a sample of duds and false positives used in
-the training.  Such a training sample has a legacy value for testing
-future lens finding algorithms. We make our training sample publicly
-available.
-
+identify lens candidates missed by robots (the \rf on galaxy scales and
+\af on group/cluster scales) which had been previously used to mine the
+\cfhtls for lenses.  We compare some properties of the samples detected
+by these algorithms to the \sw sample and find them to be broadly
+similar.  The image separation distribution calculated from the \sw
+sample shows that previous constraints on the average density profile of
+lens galaxies are robust. \sw recovers about 60\% of known lenses, while
+the new candidates show a richer variety compared to those found by the
+two robots. This detection rate could be increased to 75\% by only using
+classifications performed by expert volunteers (albeit at the cost of a
+higher false positive rate), indicating that the training and
+performance calibration of the citizen scientists is very important for
+the success of \sw. In this work we present the SIMCT pipeline, used for
+generating {\it in situ} a sample of realistic  simulated lensed images.
+This training sample, along with the false positives identified during
+the search, has a legacy value for testing future lens finding
+algorithms. We make the pipeline and the training set publicly available.
 \end{abstract}
 
-% Full list of options at http://www.journals.uchicago.edu/ApJ/instruct.key.html
-
 \begin{keywords}
-  gravitational lensing   --
-  methods: statistical    --
+  gravitational lensing: strong   --
+  methods: statistical            --
   methods: citizen science
 \end{keywords}
 
@@ -93,97 +88,102 @@ The last few decades have seen a rise in the discoveries of strong
 gravitational lenses owing to the plethora of interesting applications
 lenses have in astrophysics and cosmology. Strong lenses are routinely
 used to probe the dark matter distribution from galaxy
-\citep[e.g.][]{Koopmans2006,Barnabe2009,Leier2011,Sonnenfeld2015} to groups-cluster
-scales
+\citep[e.g.][]{Koopmans2006,Barnabe2009,Leier2011,Sonnenfeld2015} to group and
+cluster scales
 \citep[e.g.][]{Limousin2008,Zitrin2011,Oguri2012,More2012,Newman2013}, to
 study distant young galaxies by using the lensing magnification as a
 natural telescope \citep[e.g.][]{Zitrin2009,Zheng2012,Whitaker2014}, to
 test the cosmological model by constraining cosmological parameters such
-as the Hubble constant and dark energy
-\citep[e.g.][]{Suyu2010,Collett2012,Collett2014,Sereno2014} and many more. Strong
-lenses are rare since a foreground massive object needs to be
+as the Hubble constant and the dark energy equation of state
+\citep[e.g.][]{Suyu2010,Collett2012,Collett2014,Sereno2014}, and many more. Strong
+lenses are rare, because a foreground massive object needs to be
 sufficiently aligned with a distant background source to produce
 multiple images. Nevertheless, systematic lens searches have led to the
-discovery of over 500 lenses till
-date\footnote{\texttt{http://admin.masterlens.org/index.php}}.
+discovery of over 500 lenses to
+date.\footnote{\texttt{http://admin.masterlens.org/index.php}}
 
 The search for gravitational lenses is a needle-in-a-haystack problem.
-Efficient automated methods are imperative to find a reasonably complete
-and pure sample of strong lenses. Several lens finding algorithms have
+Several automated lens finding algorithms have
 been developed so far
-\citep[e.g.][]{Lenzen2004,Alard2006,Seidel2007,More2012,Brault2014,Gavazzi2014} but they can not
+\citep[e.g.][]{Lenzen2004,Alard2006,Seidel2007,More2012,Brault2014,Gavazzi2014},
+but they can not
 simultaneously capture the myriad types of lenses that are known to
 exist. For example, the lensed images of background galaxies show
-variety in their surface brightness distributions, colors, light
+variety in their surface brightness distributions, colours, light
 profiles, shapes, structures and angular image separations.  Moreover,
 many lensed images appear similar to features found commonly in galaxies
-(such as spiral arms) or to artifacts in astronomical images (scattered
+(such as spiral arms) or to artefacts in astronomical images (scattered
 light around stars).  Almost all lens finding algorithms find it
-difficult to distinguish these from the real lenses and thus, suffer
-from the problems of high rate of false positives.  To minimize this problem,
+difficult to distinguish these from the real lenses and thus suffer
+from a high rate of false positive detections.  To mitigate this problem,
 algorithms are often restricted to detect a very narrow class of lens
 systems. However, even after such restrictions, robotic lens searches
-have to always rely on visual screening to find a sample of plausible
+have to always rely on visual screening to produce a sample of plausible
 lens candidates.
 
-Recognising patterns amidst an array of noisy pixelated images is one of the
-strengths of human brains. Humans are also capable of dealing with
-multi-tiered complex web of questions before arriving at a conclusion which may
+Recognising patterns is one of the
+strengths of the human brain. Humans are also capable of dealing with
+multi-tiered complex web of questions before arriving at a conclusion, a process
+which may
 not be always possible to automate. The algorithm by which our brains process a
 task is extremely malleable, self-learning and self-evolving. Therefore it has
 a huge potential for the discovery of exotic objects which do not quite fit a
 set criteria, but are still very likely to be objects of interest. The lens
 finding algorithms are not yet advanced enough to produce better performance
-than visual classifications. Therefore, participation of a large community of
-volunteers to help with the visual identification of lenses is extremely
-beneficial for the lensing community. In particular, as we enter the era of
-large area imaging surveys (spanning thousands of square degrees), it is
-a perfect time to tap into the potential of citizen science.
+than visual classifications. Consequently, as we enter the era of
+large area imaging surveys spanning thousands of square degrees,
+the participation of a large community of
+volunteers to help with the visual identification of lenses would be very
+beneficial for the lensing community.  Now seems
+the perfect time to investigate the potential of citizen science.
 
-\GZ was the first citizen science project in astronomy, and addressed
+\GZ, one of the most successful citizen science projects in
+astronomy, addressed
 the problem of how to  classify large numbers of galaxies by their
-morphology \citep{Lintott2008}.  From the early results based on
-morphological classifications of galaxies, to several new unexpected and
+morphology \citep{Lintott2008}.
+From these early results to several new unexpected and
 interesting discoveries, such as that of green pea galaxies
 \citep{Cardamone2009,Jaskot2013} and Hanny's Voorwerp
-\citep{Lintott2009,Keel2012}, \GZ has been able to harness the potential
-of citizen scientists.  Since then astronomy and non-astronomy projects
+\citep{Lintott2009,Keel2012}, \GZ has been able to start to realize the potential
+of citizen scientists.  Since then, both astronomy and non-astronomy projects
 have been launched under the citizen science web portal Zooniverse
 (\texttt{http://zooniverse.org}). The task of finding gravitational lenses is
-significantly challenging given that the lens systems show such
+significantly challenging, given that the lens systems show such
 complexity and that they are rare. To add to the challenge, not many
 citizen scientists are expected to be aware of the phenomenon of
-gravitational lensing, and the resulting image configurations.  With
+gravitational lensing, and the resulting characteristic image configurations.  With
 these significant challenges at hand, we designed the \sw project to
-enable the discovery of lenses through citizen science.  In a companion
-paper, Paper I (Marshall et al., in prep.), we describe the design of
+enable the discovery of lenses through citizen science (learning from
+previous experience in serendipitous identification of lens candidates in \GZ).
+In a companion
+paper \citep[][hereafter \PaperOne]{Marshall2015}, we describe the design of
 \sw and how the entire system functions as a discovery service.  In this
-paper (Paper II hereafter), we describe our first lens search using data
+paper (\PaperTwo), we describe our first lens search using data
 from the Canada-France-Hawaii Telescope Legacy Survey
 (\cfhtls\footnote{\texttt{http://www.cfht.hawaii.edu/Science/CFHTLS/}}).
-{\bf In \citet{Kung2015}, we describe the design of a collaborative
-mass modelling tool that can be used by citizen scientists
-.}
+In \citet{Kung2015}, we describe the design of a collaborative
+mass modelling tool that can be used by citizen scientists.
 
 This paper is organised as follows. In
 \Sref{sec:data}, we introduce the \cfhtls imaging data and the
 previously published lens samples from the \cfhtls. We generated a training sample,
-consisting of simulated lenses, duds and false positives, in order to
+consisting of simulated lenses, duds and impostors, in order to
 aid the \sw volunteers in the process of finding lenses. We give details of this
 training sample in \Sref{sec:ts} and \Sref{sec:dfp}. In \Sref{sec:swap},
 we briefly describe how the classifications of images from the volunteers are
 turned into a catalog of plausible candidates (for further details, see
-Paper I). In \Sref{sec:results}, we present the new lens candidates from \sw and
-compare it to the lens samples produced by a few robotic searches from
-the \cfhtls in the past. Next, we discuss what kind of lenses are detected
-or missed by the algorithms and \sw in \Sref{sec:discuss}. The summary
-and conclusions are given in \Sref{sec:conclude}.
+\PaperOne). In \Sref{sec:results}, we present the new lens candidates from \sw and
+compare it to the lens samples produced by past robotic searches of
+the \cfhtls. Next, we discuss what kind of lenses are detected
+or missed by the algorithms and \sw in \Sref{sec:discuss}.
+Our conclusions are given in \Sref{sec:conclude}.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Data}
 \label{sec:data}
+
 \subsection{The CFHT Legacy Survey}
 \label{sec:data:cfhtls}
 
@@ -201,15 +201,15 @@ W3 has a sky coverage of 44.2~deg$^2$ and is more than twice as large as
 W2 and W4.
 
 The \cfhtls imaging is very homogeneous and has good image quality. Most
-of the lensed arcs are much brighter in the $g$ band thus, deep imaging
+of the lensed arcs are much brighter in the $g$ band, so deep imaging
 in this band is desirable. The limiting magnitude is 25.47 for the $g$
 band which goes the deepest among all of the five bands. The mean seeing
 in the $g$ band is 0.78\arcsec. The zero point to convert flux to AB
 magnitude for all bands is 30. These characteristics make \cfhtls ideal
 to do visual inspection for finding lenses.  We use the stacked images
 from the final T0007 release taken from the Terapix
-website\footnote{\texttt{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}} for this
-work.
+website\footnote{\texttt{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}}
+for this work.
 
 We note that the \cfhtls is a niche survey with a unique combination of wide
 imaging with deep sensitivity. It is a precursor to the ongoing wide imaging
@@ -229,89 +229,91 @@ The \cfhtls has been searched for lenses using various lens finding
 methods and algorithms. Here, we give a brief summary of previously published lens
 samples in the chronological order.
 
-{\bf From the early release of the CFHTLS (T0002) covering 28~sq.~deg.,
+From the early release of the CFHTLS (T0002) covering 28~deg$^2$,
 \citet{Cabanac2007} used an arc finding algorithm \citep{Alard2006} to
 find arcs in galaxies, groups and clusters. They found about 40 lens
-candidates with quality grades from low to high.}
+candidates with quality grades from low to high.
 
 In the thesis dissertation of \citet{Thanjavur2009}, 9 promising and 2
-low probability candidates are reported which were discovered
+low probability candidates were reported as having been discovered
 serendipitously. These detections were made during the visual
 inspection of the \cfhtls images as part of data reduction procedures
 for the Weak Lensing survey \citep{Benjamin2007}.
 
-\citet{Sygnet2010} carried out a search for edge-on galaxy lenses in the
-\cfhtls WIDE. They identified galaxies, using {\sc Sextractor}, which
-had $18<i<21$ and inclination angle $<25$~deg. After applying few more
+\citet{Sygnet2010} carried out a search for edge-on disk galaxy lenses in the
+\cfhtls WIDE. They identified galaxies, using \sextractor, which
+had $18<i<21$ and inclination angle $<25\,^{\circ}$. After applying few more
 selection criteria and visual inspection, they found about 3 promising
 and a total of 18 lens candidates.
 
 The \af \citep{More2012} was used for finding blue arc-like features in
-the entire \cfhtls imaging without any pre-selection on the type of the lensing
-object. This \af, {\bf an improved version of the algorithm by
-\citet{Alard2006}}, measures the second order moments of the flux distribution
-in pixels within small regions to estimate the direction and extent of local
-elongation of features. Pixels with high values of elongation are connected to
-form an arc candidate. Finally, a set of thresholds on arc properties such as
-the area, length, width, curvature and surface brightness are used to select
-arc-like candidates. The search was carried out in the g-band which is the most
-efficient wavelength to find typical lensed features.  This sample, called
-SARCS, has 55 promising and a total of 127 lens candidates which are selected
-from both \cfhtls WIDE and DEEP fields. The SARCS sample consists of some
-galaxy-scale candidates and mostly groups/cluster scale lens candidates. This is
-because more massive systems produce arcs or lensed images with large image
-separation from the lensing galaxy which are easier to detect compared to the
-galaxy-scales. In the absence of a large systematically followed up
-verified sample of candidates, we choose the most promising 26 systems
-as our bona fide lens sample from the \cfhtls WIDE. Also, the total
-number of lens candidates is 108 from the \cfhtls WIDE alone.
+the entire \cfhtls imaging without any pre-selection on the type of the
+lensing object. This \af, an improved version of the algorithm by
+\citet{Alard2006}, measures the second order moments of the flux
+distribution in pixels within small regions to estimate the direction
+and extent of local elongation of features. Pixels with high values of
+elongation are connected to form an arc candidate. Finally, a set of
+thresholds on arc properties such as the area, length, width, curvature
+and surface brightness are used to select arc-like candidates. The
+search was carried out in the $g$-band which is the most efficient
+wavelength to find typical lensed features.  This sample, called SARCS,
+has 55 promising and a total of 127 lens candidates which are selected
+from both \cfhtls WIDE and DEEP fields. The SARCS sample consists of
+some galaxy-scale candidates and mostly groups/cluster scale lens
+candidates. This is because more massive systems produce arcs or lensed
+images with large image separation from the lensing galaxy which are
+easier to detect compared to the galaxy-scales. In the absence of a
+large systematically followed up verified sample of candidates, we
+choose the most promising 26 systems as our bona fide lens sample from
+the \cfhtls WIDE. The total number of lens candidates in the \cfhtls
+WIDE alone is 108.
 
 In \citet{Elyiv2013}, the authors visually inspected a sample of 5500 optical
 counterparts of X-ray point-like sources identified in the XMM-LSS
 imaging of the \cfhtls W1 field. The goal was to find instances
-of lensed quasars. Their sample consists of a total of 18 candidates out
-of which 3 candidates are found to be promising.
+of lensed quasars. Their sample consists of a total of 18 candidates,
+of which 3 candidates were found to be promising.
 
-The \rf \citep{Gavazzi2014} was used for finding compact rings or arcs
-around centers of isolated and massive early-type galaxies. The \rf
+\citet{Gavazzi2014} used their \rf code to find compact rings or arcs
+around centres of isolated and massive early-type galaxies. \rf
 subtracts the point spread function (PSF)-matched $i$-band images from the $g$-band images, and
 looks for excess flux in the bluer $g$-band. An object detector measures
 the properties of these residual blue features, and candidates which
 meet the length-width ratio and tangential alignment criteria are then
 visually inspected to form the final sample. \citet{Gavazzi2014}
 pre-selected $\sim$638,000 targets as either photometrically-classified
-early type galaxies, or objects selected to have red centers and blue
+early type galaxies, or objects selected to have red centres and blue
 outer parts, from the T0006 CFHTLS data release catalogs. A total of
 14370 galaxies were found to show detectable blue residuals, and 2524
 were visually inspected, having passed the automatic feature selection
-process. This led to a total of 330 lens candidates out of which 42 are
-good quality (\texttt{q\_flag} = 3) and 288 are medium quality
+process. This led to a total of 330 lens candidates out of which 42 were deemed
+good quality (\texttt{q\_flag} = 3) and 288  medium quality
 (\texttt{q\_flag} = 2) candidates. In addition to the main well-defined
 sample of \citet{Gavazzi2014}, a further 71 candidates were reported to
-be detected by earlier version of the \rf or from the \cfhtls DEEP.
+have been detected by earlier versions of the \rf, or from the \cfhtls DEEP.
 From the main sample of ``\rf candidates,'' the SL2S team found, during
 their follow-up campaign, 33 confirmed lenses \citep{Sonnenfeld2013a,Sonnenfeld2013b}.
 
 The work by \citet{Maturi2014} used the arc finding code of
-\citet{Seidel2007} and color properties of typical arcs to optimize arc
+\citet{Seidel2007} and colour properties of typical arcs to optimize arc
 detection. This new approach was tested on the CFHTLS-Archive-Research
-Survey \citep[CARS,][]{Erben2009} which covers an area of 37~sq.~deg
-only and this entire data was also visually inspected by the authors to
-estimate completeness and purity of their robotic search. They found 29
+Survey \citep[CARS,][]{Erben2009} which covers an area of 37~deg$^2$
+only, and this entire image set was also visually inspected by the authors to
+estimate the completeness and purity of their robotic search. They found 29
 candidates with the robotic search alone and 41 candidates through pure
-visual inspection some of which are known from previous searches. Most
+visual inspection---some of which were known from previous searches. Most
 of these candidates are medium-low
 probability\footnote{\texttt{http://www.ita.uni-heidelberg.de/$\sim$maturi/Public/arcs}}.
 
 The \rf and the \af searches are the only searches that make use of a
-lens finding algorithm and that has been run on the entire \cfhtls
-imaging.  Thus, these can be considered as our reference sample of known
+lens finding algorithm and that have been run on the entire \cfhtls
+imaging dataset.  Thus, we considered these to be our reference sample of known
 lenses from robotic searches. For the purposes of transparency and to
 help with the training, the volunteers participating in \sw-\cfhtls lens
 search were made aware of these two known lens samples. Images
 containing the systems from the \rf and the \af samples were labelled as
 ``known lens candidates'' in the \sw discussion forum,
-TALK\footnote{\texttt{http://talk.spacewarps.org/}}, where volunteers have the
+\Talk,\footnote{\texttt{http://talk.spacewarps.org/}} where volunteers have the
 opportunity to discuss their findings with fellow volunteers and the
 science team. In this paper, we refer to the sample of 330 \rf and 108
 \af lens candidates as the sample of ``known lens candidates'' and the
@@ -323,49 +325,52 @@ the ``known lens candidates'' sample.
 
 \subsection{Image presentation in \sw}
 \label{sec:data:impres}
+
 In order to perform a blind lens search over the entire \cfhtls
 WIDE, we present the volunteers with cutouts of images selected
 from the survey region. We briefly describe the image presentation here
-for completeness but more information can be found in Paper I. We use
+for completeness; more information can be found in \PaperOne. We use
 the $g$, $r$ and $i$-band imaging from \cfhtls which are most useful for
-visual identification of lenses.  We made color composite images using
-the publicly-available code, \humvi\footnote{The open source  color image
+visual identification of lenses.  We made colour composite images using
+the publicly-available code, \humvi\footnote{The open source  colour image
 composition code used in this work is available from
 \texttt{http://github.com/drphilmarshall/HumVI}} following the
-prescription of \citet{Lupton2004}. The color scales are chosen to
-maximize the contrast between faint extended objects. These parameters
-are then fixed during the production of all the tiles, in order to allow
+prescription of \citet{Lupton2004}. The colour scales were chosen to
+maximize the contrast between faint extended objects and bright early
+type galaxies. These parameters
+were then fixed during the production of all the tiles, in order to allow
 straightforward comparison between one image and another, and for
 intuition to be built up about the appearance of stars and galaxies
 across the survey.
 
-We extract contiguous cutouts of size 81.84\arcsec\ (440 pixels) with an
+We extracted contiguous cutouts of size 82\arcsec\ (440 pixels), including
 overlapping region of 10\arcsec (54 pixels) between the neighbouring
-cutouts. This  results in a catalog of $\sim$ 430 000 cutouts for the entire \cfhtls
-WIDE region. The size of the individual cutout is determined by
+cutouts. This resulted in a catalog of some 430,000 cutouts for the entire \cfhtls
+WIDE region. The size of the individual cutout was determined by
 optimising factors such as the typical angular scales of gravitational
 lenses, the number of objects seen in a single cutout and the total
 number of image cutouts in the survey. If a lens
 candidate happens to be too close to the edge of a cutout, then the overlap
-between neighbouring cutout allows a volunteer to get a clearer view
+between neighbouring cutouts allows a volunteer to get a clearer view
 of the same candidate in at least one of the cutouts. We note that since
 the images are shown randomly, a volunteer may not necessarily come
-across the neighbouring cutout unless {\bf they classify} a large
+across the neighbouring cutout unless they classify a large
 number of images. This is not a problem since our user base is extremely
 large and we receive multiple classifications for the same cutout.
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Training sample: Simulated lenses}
 \label{sec:ts}
 
-The simulated lenses are important to train citizen scientists who are
-novice to the task of finding lenses but they are also crucial for
-analyzing the classifications performed by the citizen scientists (more
-details can be found in Paper I, but see \Sref{sec:swap} for a brief
+The simulated lenses are important to train citizen scientists who may be
+new to the task of finding lenses, but they are also crucial for
+analysing the classifications performed by the citizen scientists (more
+details can be found in \PaperOne, but see \Sref{sec:swap} below for a brief
 summary). In this section, we describe the framework used for generating the
 simulated lens sample and give details of the sample itself along with
-some known limitations.
+some of its known limitations.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \begin{figure*}
@@ -395,12 +400,12 @@ We begin by considering all elliptical galaxies at $z<1$ in our parent
 \cfhtls catalog \citep[]{Gavazzi2014} as potential lens candidates for
 the simulated sample. To avoid using a known lens galaxy for our
 simulation purpose, we exclude all those galaxies whose positions match
-with the lensing galaxies from the SARCS samples {\bf within
-2~arcsec\footnote{{\bf Due to inaccuracies and uncertainties in measurements
-of the centers of some of the lens candidates, some simulated lensed
+with the lensing galaxies from the SARCS samples within
+2~arcsec\footnote{ Due to inaccuracies and uncertainties in measurements
+of the centres of some of the lens candidates, some simulated lensed
 images were superposed on the galaxies of known lens candidates. This issue was overcome by
-ingesting the same \cfhtls images with and without the simulated
-lenses.}}}.
+presenting the same \cfhtls images with and without the simulated
+lenses to the volunteers.}.
 
 For each galaxy, the average number of source objects (either quasars or
 galaxies) above a minimum luminosity $L_{\rm min}$ in the background that may get lensed
@@ -426,13 +431,13 @@ ellipticity, $q$.
 In order to calculate the lensing cross-section, we first calculate the
 luminosity of each potential lensing galaxy using the photometric redshifts
 ($z_l$) from the parent galaxy catalog. Next, we use the $L-\sigma$ scaling relation from the
-bright sample of \citep{Parker2005} {\bf given by 
+bright sample of \citep{Parker2005} given by
 \be
 \label{magstar2}
 \sigma_v=142 \left(\frac{L}{L_{*}}\right)^{1/3} \, Km~s^{-1}.
 \ee
 This sets the velocity dispersion of the halo
-hosting the galaxy, which will be later used in the model.}
+hosting the galaxy, which will be later used in the model.
 We assume that the knee of the luminosity function of galaxies, $L_*$ evolves
 such that there is a decline of $1.5$ magnitudes between $z=1$ to $z=0$
 \citep{Faber2007}.\footnote{We anchor our $L_*$ evolution at low redshifts using the
@@ -462,16 +467,16 @@ $\sigma_{\rm lens}$, for every galaxy,
 \sigma_{\rm lens}=\frac{b^2 q}{2} \, \int_0^{2\pi} r^2(\theta) d\theta \,.
 \ee
 
-{\bf We also add external shear at the center of the lensing galaxy
+We also add external shear at the centre of the lensing galaxy
 drawn randomly from a set range (see \Tref{tab:thresh}. The shear is
 expected to affect the lens cross-section for a small number of cases
 when the shear strength is high in addition to high lens ellipticity or
 the PA of the shear is almost orthogonal to that of the lens
 ellipticity. However, the effect of shear on the lens cross-section is
 expected to be small for most of the cases and is ignored in the current
-implementation of SIMCT.}
+implementation of SIMCT.
 
-The luminosify functions of the background galaxies and quasars are
+The luminosity functions of the background galaxies and quasars are
 determined as follows. We use the results of \citet{Faure2009} to specify the luminosity
 function of galaxies where the redshift distribution of sources is
 given by
@@ -489,7 +494,7 @@ n_s=\int^{m_{\rm lim}}_{-\infty} \frac{n_0 {\rm d}m}{\sqrt{10^{2a(m_1-m)}+10^{2b
 with parameters $a=0.30$, $b=0.56$, $m_1=20$ and $n_0=3\times10^3~deg^{-2}$.
 
 For quasars, we assume the luminosity function prescription of \citet{Oguri2010}
-and adopt k-corrections by \citep{Richards2006}.
+and adopt k-corrections by \citet{Richards2006}.
 
 The luminosity function is expressed as
 \be
@@ -508,64 +513,73 @@ higher redshifts, as prescribed by \citet{Oguri2010}.
 
 With the cross-section, and the luminosity functions specified, we
 calculate the expected number of sources behind a candidate lensing
-galaxy using Eq.~\ref{eqn:nsrc}. We need to generate a large number of
+galaxy using \Eref{eqn:nsrc}. We need to generate a large number of
 simulated lenses (larger than the number of real galaxy lenses we expect
 to find in \cfhtls) in order to have a reasonably large and diverse
 training sample for thousands of \sw volunteers. Therefore, we
 artificially boost the average number of sources by a factor (see
-Table~\ref{tab:thresh}), which increases the occurrence of lensing. We
+\Tref{tab:thresh}), which increases the occurrence of lensing. We
 draw a Poisson deviate, $N_{\rm src}$ with a mean equal to the boosted
 average number of sources. If $N_{\rm src}$ is greater than zero, then
 this galaxy is flagged as a potential lensing galaxy.
 
-Next, we determine properties of the background sources for every lens.
+Next, we determine properties of the background sources for every lens system.
 We follow similar procedures for both background galaxies and quasars.
 We draw source redshifts and luminosities from the aforementioned
-distributions. {\bf We note that the sources are being drawn from a much
+distributions. We note that the sources are being drawn from a much
 fainter magnitude range compared to the limiting magnitude of the
-\cfhtls imaging and thus, the Magnification bias is naturally taken into
-account.} The source positions with respect to the lens are drawn
-randomly from an area inside the caustic.  We perform ray-tracing for
-all of the $N_{\rm src}$ sources using the publicly available code
-\gravlens \citep{Keeton2000} and choose sources that satisfy our
-selection criteria given below. We determine fluxes of the lensed images and the
-total magnification of each of the lensed source. We draw a
-source randomly for which the flux of the second brightest lensed image and the
-total magnification of all lensed images meet the thresholds given
-in Table~\ref{tab:thresh}.
+\cfhtls imaging and thus, the magnification bias\footnote{ In a
+flux-limited sample from a survey, sources fainter than the flux limit
+end up in the sample owing to the magnification by lensing which is
+known as the magnification bias. This affects the source luminosity
+function and needs to be accounted for when comparing the true and
+observed luminosity functions.} is naturally taken into account. The
+source positions with respect to the lens are drawn randomly from an
+area inside the caustic.  When populating the sources within the
+caustics, the finite size of the background galaxies is expected to
+affect the lens cross-sections to some extent. As this factor is not
+critical for the purpose of our training sample, for simplicity we assume the
+background galaxies to be point like when computing cross-sections. We perform
+ray-tracing for all of the $N_{\rm src}$ sources using the publicly
+available code \gravlens \citep{Keeton2000} and choose sources that
+satisfy our selection criteria given below. We determine the fluxes of the
+lensed images and the total magnification of each of the lensed sources.
+We draw a source randomly for which the flux of the second brightest
+lensed image and the total magnification of all lensed images meet the
+thresholds given in \Tref{tab:thresh}.
 
 Since we want to produce realistic looking lens systems, we simulate
-lenses in each of the five \cfhtls~filters. The colors of the background
+lenses in each of the five \cfhtls~filters. The colours of the background
 galaxies are drawn randomly from the photometric CFHTLenS catalog
 \citep{Hildebrandt2012,Erben2013}.  Similarly, we use a quasar catalog
-from the SDSS Data Release 9 \citep{Paris2012} from which colors are
-drawn to simulate quasar lenses. Next, we assumed a Gaussian
-profile\footnote{This was due to an oversight. We intend to use either
-an exponential or {\bf de Vaucouleurs'} profile.} for
-the galaxies. The ellipticity and the position angle (PA) are drawn
-randomly from within the range given in Table~\ref{tab:thresh}. The
+from the SDSS Data Release 9 \citep{Paris2012} from which colours are
+drawn to simulate quasar lenses. Next, we assume a Gaussian
+profile\footnote{This was due to an oversight. We intended to use either
+an exponential or de Vaucouleurs' profile that will be adopted for
+future implementations of SIMCT.} for the galaxies. The ellipticity and
+the position angle (PA) are drawn
+randomly from within the range given in \Tref{tab:thresh}. The
 effective radius of the galaxy is estimated from the luminosity$-$size
-relation \citep{Bernardi2003} (with a redshift scaling, to account for
-size evolution) given by
+relation \citep[][with a redshift scaling, to account for size evolution]{Bernardi2003} given by
 \be
-R_{\rm eff}= 10^{0.52} \frac{L_r^{2/3}}{{(1+z_s)}^2} \, {\bf Kpc}
+R_{\rm eff}= 10^{0.52} \frac{L_r^{2/3}}{{(1+z_s)}^2} \, {\rm Kpc}
 \ee
-where $L_r=L_s/10^{10.2} {\bf L_\odot}$. On the other hand, quasars are assumed to be
+where $L_r=L_s/10^{10.2} L_\odot$. On the other hand, quasars are assumed to be
 point sources and the PSF, with which quasars are convolved, is assumed
-to have a Gaussian profile. The full-width-at-half-maximum of PSF is
-equated to that of the median seeing for every filter. The median seeing
+to have a Gaussian profile. The full-width-at-half-maximum of the PSF is
+equated to that of the mean seeing for every filter. The mean seeing
 values are taken from Table 4 of the official Terapix T0007 release
 explanatory document \footnote{
 \texttt{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}}.
 
 Once all the parameters are determined for the lens and source models, we once
 again use \gravlens to generate simulated lensed images.  After accounting for the shot
-noise in the lensed images and convolving them with the median seeing in each of
-the filters, the simulated image is added to the real \cfhtls~image centered
+noise in the lensed images and convolving them with the seeing in each of
+the filters, the simulated image is added to the real \cfhtls~image centred
 on the lensing galaxy. Note that we ensure that the lensed galaxies and
 lensed quasars do not have the same lensing galaxy in the foreground. Similarly,
 the lensing galaxies from the galaxy-scale lenses are distinct from the central
-galaxies of groups-scale lenses which are described in the following section.
+galaxies of group-scale lenses which are described in the following section.
 
 
 \begin{figure}
@@ -574,11 +588,10 @@ galaxies of groups-scale lenses which are described in the following section.
 \caption{ \label{fig:remudist}
 Einstein radius distribution for all types of lenses. The solid (blue)
 curves show the theoretical prediction assuming an SIS model at galaxy-scales
-and a total (NFW+Hernquist) model at groups-scales taken from \citep{More2012}.
+and a total (NFW+Hernquist) model at group scales taken from \citep{More2012}.
 }
 \end{center}
 \end{figure}
-
 
 \begin{table}
 \begin{center}
@@ -612,18 +625,18 @@ c) $_{\rm tot}$ -- total flux integrated over all of the lensed images.
 d) All fluxes are in AB mag. PA is in degrees measured East of North.
 \end{table}
 
-\subsubsection{Groups-scale lenses}
+\subsubsection{Group-scale lenses}
 
 At group or cluster-scales, the mass distribution is more complex. The
 convergence in the inner regions, which are typically responsible for the
 multiple lensed images, arises from not only the brightest group galaxy (BGG) at
-the center, but also from the dark matter component and
+the centre, but also from the dark matter component and
 the satellite galaxies \citep{Oguri2005,Oguri2006}. We generate a basic group
 catalog based on the magnitudes and photometric redshifts available for the
 \cfhtls. We select all galaxies with 10$^{10.8} M_\odot$ as plausible BGGs. We
 select the member galaxies such that their photometric redshifts are within
 $\delta z = 0.01$ of the BGG and within an aperture of $250$~Kpc. If another BGG
-is found with the aperture, then the fainter BGG is removed from our list of
+is found within the aperture, then the fainter BGG is removed from our list of
 BGGs.
 
 \begin{figure*}
@@ -636,8 +649,8 @@ sample compared to the known lens sample SARCS.
 \end{center}
 \end{figure*}
 
-We assume a constant mass-to-light ratio of $3 \times
-0.7$~h~$M_{*}/L_{*}$, to convert the BGG luminosity to a stellar mass
+We assume a constant mass$-$to$-$light ratio of $3 \times
+0.7~h~ M_{*}/L_{*}$, to convert the BGG luminosity to a stellar mass
 estimate. The stellar mass$-$halo mass relation \citep{Behroozi2013},
 including random scatter, is then used to calculate the halo mass for
 the lens. We adopt an NFW \citep{Navarro1997} density profile for the
@@ -648,24 +661,26 @@ an SIE model for the BGG and members whenever the ellipticities are
 available from the galaxy catalog (else we use an isothermal sphere,
 SIS).
 
-We calculate the luminosity and velocity dispersion for the BGG and each of the
-member galaxies following the same prescription as in
+We calculate the luminosities and velocity dispersions for the BGG and each
+of the member galaxies following the same prescription as in
 \Sref{sect:gallens}. To calculate the average number of sources that get
-lensed by such a system, we need to calculate the lensing cross-section for each
-of these potential lensing groups. The complexity in the lens models makes it
-analytically intractable to calculate the size of the caustics\footnote{The lens
-mass distribution determines size and shape of the caustics. Any source
-located within the caustics will form multiple lensed images which is the
-criteria for strong lensing. To further understand caustics, see e.g., \citet{Schneider1992}.}.
+lensed by such a system, we need to calculate the lensing cross-section
+for each of these potential lensing groups. The complexity in the lens
+models makes it analytically intractable to calculate the size of the
+caustics\footnote{The lens mass distribution determines size and shape
+of the caustics. Any source located within the caustics will form
+multiple lensed images which is the criteria for strong lensing. To
+further understand caustics, see e.g., \citet{Schneider1992}.}.
 Therefore, we generate the caustics numerically using \gravlens and then
-determine the area covered by the caustics. We consider only galaxies as our
-background source population since group or cluster-scale quasar lenses are
-expected to be extremely rare in the \cfhtls.  Following the same procedure
-as described in \Sref{sect:gallens}, we calculate the number of galaxies
-expected to lie behind every potential lensing group (see Eq.~\ref{eqn:nsrc}).
-As before, for each background galaxy within the lens cross-section, a redshift
-and an $i$-band magnitude is determined by drawing galaxies randomly from the
-respective distributions (see Eqs.~\ref{eqn:ps}-\ref{eqn:ns}).
+determine the area covered by the caustics. We consider only galaxies as
+our background source population since group or cluster-scale quasar
+lenses are expected to be extremely rare in the \cfhtls.  Following the
+same procedure as described in \Sref{sect:gallens}, we calculate the
+number of galaxies expected to lie behind every potential lensing group
+(see \Eref{eqn:nsrc}).  As before, for each background galaxy within the
+lens cross-section, a redshift and an $i$-band magnitude is determined
+by drawing galaxies randomly from the respective distributions (see
+Equations~\ref{eqn:ps}-\ref{eqn:ns}).
 
 All those groups that are found to have no background galaxies within the
 cross-sectional area are rejected and the rest are included as potential lenses.
@@ -673,11 +688,11 @@ As mentioned earlier, we artificially boost the total number of sources behind
 every lens but ensure that the statistical properties such as the profile of the
 image separation distribution are not affected (see \Fref{fig:remudist}). We
 follow the same procedure and apply thresholds to determine properties
-of the lensed galaxies for every lens as are described for galaxy-galaxy lenses
+of the lensed galaxies for every lens as described for galaxy-galaxy lenses
 in the previous section. The thresholds are same as those used for
 galaxy lenses (see \Tref{tab:thresh}) and are reported within ``()'', if
-different for group-scales. The simulated lensed images are then added
-to the real \cfhtls~images with the BGGs as the center by following
+different for group scales. The simulated lensed images are then added
+to the real \cfhtls~images with the BGGs as the centre by following
 exactly the same procedure as described in the previous section.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -691,12 +706,12 @@ of the \sw project. The statistical properties of the lens sample are
 expected to be similar to real lens samples.
 
 In \Fref{fig:remudist}, we show the Einstein radius ($R_{\rm E}$) distribution for the
-galaxy-scale and groups-scale simulated lenses. For comparison, we give
+galaxy-scale and group-scale simulated lenses. For comparison, we give
 the expected distributions (blue solid curves) for an SIS like density
-profile at galaxy-scales and an NFW+Hernquist profile at groups-scales.
+profile at galaxy-scales and an NFW+Hernquist profile at group scales.
 The theoretical curves are taken from \citet{More2012} wherein the
 models are explained in detail. We note that the model we adopt at
-groups-scale also includes SIS or SIE components for the group members
+the group scale also includes SIS or SIE components for the group members
 unlike the theoretical prediction. The theoretical curves have arbitrary
 normalizations. We also show the distribution of the total magnification
 for all three samples.
@@ -711,79 +726,84 @@ We produce catalogs with lens and source properties for each of the
 three types of lenses.  The catalogs typically have lens position,
 redshift, magnitudes, Einstein radius, ellipticity (whenever available)
 and shear (for galaxy-scale lenses only). For the background sources, we
-provide the offset from the lens center, redshift, magnitudes, total
+provide the offset from the lens centre, redshift, magnitudes, total
 magnification, number of lensed images. Additionally, when possible,
 ellipticity and effective radius of the background galaxies have also
 been provided. These catalogs are available from
-\texttt{https://github.com/anupreeta27/SIMCT} and simulated lens sample can be
-requested from the authors.
+\texttt{https://github.com/anupreeta27/SIMCT} and the
+simulated lens image sample is available from the authors on request.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Limitations of the simulated sample}
+\subsection{Limitations of the simulated lens sample}
+
 The simulated lens sample, although realistic, is not perfect, due to
 the simplicity of the lensing models and our limited understanding of
 the uncertainties in the model parameters. Comments from citizen
-scientists were very helpful in order to sort some of these failures.
+scientists were very helpful in order to identify some of these failures, which
+make up roughly 5\% of the simulated sample.\footnote{This estimate is
+based on the number of \#simfail tags from TALK, the discussion forum.}
 Here, we describe some of the cases or aspects in which the simulations
-were known to have failed to look realistic. The fraction of such
-simulated sample is small (roughly 5 percent)\footnote{This estimate is
-based on the number of \#simfail tags from TALK, the discussion forum.}.
+were known to have failed to look realistic.
 
-The parameters required by various scaling relations and the models
+The parameters required by the models' various scaling relations
 primarily depend on the photometry of the galaxies, groups and quasars
-detected in the survey. For galaxy-scale lenses, the lensing galaxies at
-higher redshifts or which are fainter have poor photometric redshift
-measurements. Consequently these galaxies are assigned  wrong
-luminosity and velocity dispersion estimates. This then results in
+detected in the survey. For galaxy-scale lenses, the fainter or higher redshift
+lensing galaxies tend to have poor photometric redshift
+measurements. Consequently these galaxies were occasionally assigned the wrong
+luminosity and velocity dispersion estimates, resulting in
 simulated lenses which look implausible or unrealistic.  For example,
 the lensed images for some of the failed simulations have larger image
-separation than what you expect from the luminosity and/or size of the
-galaxy. We roughly expect mass to follow light so more massive galaxy
-typically looks brighter and/or bigger.
+separation than what one would expect from the luminosity and/or size of the
+galaxy. We roughly expect mass to follow light, so more massive galaxies
+typically look brighter and/or bigger.
 
-At group-scales, the photometric and redshift estimates are used when define
-the group membership. Therefore, errors in redshift estimates generate galaxy
-groups with BGG or member galaxies with dissimilar properties. In some cases,
-low redshift spiral galaxies have been incorrectly assigned high redshift.
+At group scales, the magnitudes and photometric redshifts were used when defining
+the group membership. Therefore, errors in redshift estimates occasionally
+generated galaxy
+groups having member galaxies with unrealistically dissimilar properties.
+In some cases,
+low redshift spiral galaxies were incorrectly assigned high redshift.
 Spiral galaxies are typically less massive and low redshift spiral galaxies are
 unlikely to act as gravitational lenses. Hence, some such instances
-do not appear convincing or the lensed images do not have the expected
-configuration or image separations.
+did not appear convincing, as the lensed images again did not have the expected
+configurations or separations.
 
-We also use a single component to describe the light profiles of
-background galaxies. This is clearly not the most accurate description for
-galaxies, especially, star-forming galaxies which form a significant fraction
-of the lensed galaxy population. Star-forming galaxies have complex structures
-such as star forming knots, spiral arms, bars and disks. The simulated lensed
-images do not display these features. This is fine for most cases or
-mostly for images taken from ground based telescopes such as the CFHT
-{\bf but sometimes the profiles of the lensed arcs appear very symmetric along the
-length or width of the arc and featureless, especially, if the images
-are very bright.}
+We also use a single component to describe the light distribution of the
+background galaxies. This is clearly not the most accurate description
+for galaxies, especially for the irregular star-forming galaxies which
+comprise a significant fraction of the lensed galaxy population.
+Star-forming galaxies have complex structures such as star forming
+knots, spiral arms, bars and disks. The simulated lensed images do not
+display these features. This is not problematic for most of the images
+taken from ground based telescopes such as the CFHT but sometimes the
+profiles of the lensed arcs can appear very symmetric (along the length
+or width of the arc) and featureless, especially, if the images are very
+bright.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\section{Training sample: Duds and False positives}
+\section{Training sample: Duds and Impostors}
 \label{sec:dfp}
 
 Citizen scientists need training not only to identify gravitational
-lenses, but also to reject images which either have no lenses or have
-objects which are lens impostors. Hence, in addition to the simulated
-lenses, we added a sample of duds and false positives to the training
+lenses, but also to reject images which either contain no lenses, or contain
+objects which could be mistaken for lenses. Hence, in addition to the simulated
+lenses, we added a sample of ``duds'' and ``impostors'' to the training
 sample. Duds are images which have been visually inspected by experts
-and confirmed to contain no lenses. False positives (FPs) are systems
-which look like lenses but are not, for example, spiral galaxies,
-starforming galaxies, chance alignments of features arranged in a
+and confirmed to contain no lenses. Impostors are systems
+which have lens like features but are not lenses in reality, for example, spiral galaxies,
+star-forming galaxies, chance alignments of features arranged in a
 lensing configuration and stars.
 
 We selected a sample of 450 duds for the \StageOne classification in \sw
-and a sample of 500 false positives for the \StageTwo inspection. The
-sample of false positives was selected from the candidates which passed
-the \StageOne of \sw. We note that this is the first time, we have a
-systematically compiled sample of visually inspected false positives by
-the \sw volunteers and categorized by the science team. We produce
-additional larger sample of a few thousand FPs by scanning through the
+and a sample of 500 impostors for the \StageTwo inspection. The
+sample of impostors was selected from the candidates which passed
+the \StageOne of \sw. We note that this is the first time we have a
+systematically compiled sample of visually inspected impostors by
+the \sw volunteers and categorized by the science team. We produced an
+additional larger sample of a few thousand false positive detections
+by scanning through the
 low probability images after the completion of \StageTwo. All of these
 data products will be made available at
 \texttt{http://spacewarps.org/\#/projects/CFHTLS/}. Such a sample has tremendous
@@ -795,9 +815,9 @@ utility for training and testing of various lens finding algorithms
 \includegraphics[scale=0.6]{cand_fp_P_frac.pdf}
 \caption{ \label{fig:stackP}
 Distribution of different types of candidates as a function of the
-posterior probability P. The types of the candidates are the false
+posterior probability $P$. The types of the candidates are the false
 positives (FPs), the new candidates and the known candidates. The new
-and known candidates have higher detection rate for higher values of P,
+and known candidates have higher detection rate for higher values of $P$,
 as expected.}
 \end{center}
 \end{figure}
@@ -806,59 +826,60 @@ as expected.}
 
 \section{Methodology to produce the \sw-\cfhtls lens sample}
 \label{sec:swap}
-The \sw works as a single unified system which uses the method of visual
+
+\sw works as a single unified system which uses the method of visual
 inspection to find gravitational lenses. For the first \sw lens search,
 the volunteers were shown images at two stages. At \StageOne, volunteers
-are requested to undertake a rapid inspection to select lens candiates
+were asked to carry out a rapid inspection to select lens candiates
 ranging from possible lenses to almost certain lenses. At \StageTwo,
-volunteers carefully inspect the candidates from \StageOne and select
-only promising lens candidates. A daily snapshot of classifications
-performed by volunteers are provided to the science team every night.
-This daily batch is analyzed by the Space Warps Analysis Pipeline
+volunteers were asked to inspect the candidates from \StageOne and select
+only promising lens candidates. A daily snapshot of the classifications
+performed by volunteers was provided to the science team every night.
+This daily batch was analysed by the Space Warps Analysis Pipeline
 (SWAP). The philosophy and the details of SWAP are described in detail
-in Paper I, here we briefly summarize how it works.
+in \PaperOne. Here, we briefly summarize how it works.
 
-Each subject (or image cutout) is assigned a prior probability of
-$2\times10^{-4}$ to contain a lens system. Every volunteer
-is assigned an agent characterised by a $2\times2$ confusion matrix,
+Each subject (image cutout) is assigned a prior probability of
+$2\times10^{-4}$ of containing a lens system. Every volunteer
+is assigned an agent characterised by a $2\times2$ confusion matrix~$\CM$,
 which quantifies the volunteer's ability to correctly classify an image
-to contain a lens ($P_L$) or to not contain a lens ($P_D$). The values of
-the confusion matrix are determined based on the performance of the
+as containing a lens ($\PL = P_L$) or not containing a lens ($\PD = P_D$).
+The values of
+these confusion matrix elements are determined based on the performance of the
 volunteer on the training sample, specifically, $P_L$ (and $P_D$) is
-determined based on the fraction of simulated lenses (and duds)
+determined based on the fraction of simulated lenses (and, respectively, duds)
 correctly classified. After every classification, the agent updates the
-prior probability of the classified subject based on the volunteer's classification
-and the confusion matrix, according to the Bayes theorem.
-Note that the volunteer's confusion matrix is updated after the
+probability of the classified subject based on the volunteer's classification
+and the confusion matrix, according to Bayes' theorem.
+The agent's confusion matrix is updated after the
 classification of every training image. The thresholds for the
-probabilities {\bf to accept or reject a subject if it contains a lens or does
-not contain one} can be chosen in SWAP. Those images which cross
-these threshold values are retired and are not subsequently shown to the
-volunteers, so that volunteers can use their time efficiently to
-classify previously unclassified subjects.
+probabilities to accept or reject a subject if it contains a lens or does
+not contain one can be chosen in SWAP. Those images which cross
+these threshold values are ``retired'', and are not subsequently shown to the
+volunteers. In this way, the crowd can use its time efficiently in
+inspecting previously unclassified subjects.
 
 SWAP was run nightly during \StageOne in order to retire subjects and inject new
-ones in to the classification stream. The subjects that passed the acceptance
-threshold at the end of \StageOne are served again at \StageTwo for careful
-reinspection. Each subject, after \StageTwo, has an associated posterior
-probability P. In the ideal case, all images containing lenses will have high P
-values and those without lenses will have low P values. In practice, we expect a
-small fraction of the real lenses (or non-lenses) to be assigned low (or high) P
-values thereby, decreasing the completeness (or purity) of the final lens
+ones in to the classification stream. The subjects that passed the detection
+threshold at the end of \StageOne were served again at \StageTwo for careful
+re-inspection. Each subject, after \StageTwo, has a posterior
+probability $P$. In the ideal case, all images containing lenses will have high $P$
+values and those without lenses will have low $P$ values. In practice, we expect a
+small fraction of the real lenses (or non-lenses) to be assigned low (or high) $P$
+values, thereby decreasing the completeness (or purity) of the final lens
 sample. As this is the first lens search with \sw, we want to find a
-threshold P value which will result in acceptable levels of completeness and
+threshold $P$ value which will result in acceptable levels of completeness and
 purity of the final sample of lens candidates.
 
-We decided to inspect the top few hundreds of images from a catalog with
-descending P values as a reasonable sample size for visual inspection.
-We choose P$>0.3$ for which we find a total of 665 subjects in the
-catalog. These images were then visually inspected by three lens experts
-(AM, AV, PJM).  The images are assigned grades on a scale of 0 to 3,
-thus dividing the subjects into candidates with the quality flag -
-unlikely lens, possibly a lens, probably a lens and almost certainly a
-lens, respectively. The final sample of \sw-\cfhtls lens candidates is
-then produced by selecting candidates above some threshold on the
-averaged grades as described in the next section.
+To achieve this, we selected a total of 665 subjects with $P>0.3$
+which were then visually inspected by three of us (as ``lens experts'',
+ AM, AV, PJM).  Each images was assigned a grade on a scale of 0 to 3,
+representing those images
+0) unlikely to contain a lens, 1) possibly containing a lens, 2) probably
+containing a lens and 3) almost certainly containing a
+lens. The final sample of \sw-\cfhtls lens candidates was
+then produced by selecting candidates above a threshold on the
+averaged grade~$G$, as described in the next section.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -867,65 +888,6 @@ averaged grades as described in the next section.
 
 \subsection{\sw-\cfhtls lens sample}
 \label{sec:swlens}
-
-In this section, we describe the \sw-\cfhtls lens sample (henceforth,
-called the \sw lens sample). We find a total of 141 candidates with
-G$\ge1.3$ (medium-high probability sample) out of which {\bf 59} are new
-systems. This sample is further divided as follows. We have a total of
-50 candidates with $1.3\le$G$<2$ (medium probability sample) out of
-which 30 are new. The quality of candidates in this category is such
-that at least one of the inspectors thought the candidate is most
-probably a lens (that is, a grade of 2) and a second inspector thought
-this is possibly a lens (that is, a grade of 1). Among our high
-probability sample (G$\ge$2), there are a total of 91 candidates out of
-which {\bf 29} are new. In this category, the minimum grade by all of the
-inspectors was 2 suggesting that the candidates are probably or almost
-certainly lenses according to all of the inspectors. To avoid
-duplication, further information on \sw candidates that were previously
-identified in the literature will be made available at
-\texttt{http://spacewarps.org/\#/projects/CFHTLS/} whereas the sample of new lens
-candidates with G$\ge 1.3$ (medium-high probability) is presented in
-this paper (see \Sref{sec:results:newcand}).
-
-We find a total of 288 (and {\bf 245} new) candidates with averaged grade
-$0<$G$<1.3$ (low probability sample) which means - in the worst case, at
-least one of the inspector thought the candidate is possibly a lens and
-in the best case, all three inspectors thought the candidate is possibly
-a lens (that is, a grade of 1)\footnote{If grades from the inspectors
-were found to be discrepant by 2 or more, these were discussed and
-re-graded to resolve the discrepancy.}. Further information on the low
-probability sample such as their positions and images will be available
-at \texttt{http://spacewarps.org/\#/projects/CFHTLS/}. Note that if all of the
-inspectors gave a grade of 0 to a candidate, then it is discarded from
-the sample.
-
-In Table~\ref{tab:stats}, we give overall statistics of the systems
-detected at \StageOne and \StageTwo. We give the total number of
-detections of the known lens candidates, known lenses and the new lens
-candidates at each stage.  We also give the recovery fractions for the
-known samples and fraction of total detection for the new samples at
-each stage. We find that all of the confirmed lenses found
-at \StageOne are also recovered at \StageTwo whereas a small fraction of
-the known lens candidates are rejected at \StageTwo. From the visually
-inspected known lens sample at \StageTwo (P$> 0.3$), the experts gave a
-grade of 1.3 and above to about 92\% (33 out of 36) of the systems. Overall,
-the sample of new \sw lens candidates increased the sample of total
-\cfhtls lens candidates by over 50\%.
-
-In \Fref{fig:stackP}, we plot the distribution of false positives and
-the high probability lens candidates, categorized by the lens experts,
-as a function of the P value assigned by SWAP at the end of \StageTwo.
-On average, the fraction of lens candidates is indeed an increasing
-function of P. This shows that the \sw generated P values for the
-subject are roughly correlated with the expert grades albeit with quite
-some scatter.  We note that from P$\sim$0.75 onwards to lower P values,
-the fraction of false positives starts to exceed the fraction of real
-lens candidates. This could be a good threshold to choose to maximize
-the purity of the final sample. However, we go with the choice of
-P~$=$~0.3 as this gives a better completeness of 100\% for the ``known
-lens'' sample instead of 67\% for P~$=$~0.75. Therefore, the new sample
-should also have increased completeness which combined with expert
-grading allows us to achieve further purity of our sample.
 
 \begin{table}
 \begin{center}
@@ -938,20 +900,20 @@ Statistics of detections in \sw }
 \hline
 \hline
 Number  & 128 & 34 & 107  & 34  \\
-Percentage  & & & & \\
-of recovery & 29 & 58 & 25 & 58  \\
-P$_{\rm thresh}$ & 0.95 & 0.95 & 0.3 & 0.3 \\
-{\bf Expert Grade (G)} & $-$ & $-$ & 1.3 & 1.3 \\
+Fraction  & & & & \\
+of total recovered & 29\% & 58\% & 25\% & 58\%  \\
+$P_{\rm acc thresh}$ & 0.95 & 0.95 & 0.3 & 0.3 \\
+Averaged Grade (G) & $-$ & $-$ & 1.3 & 1.3 \\
 \hline
    &  \multicolumn{2}{c} {\StageTwo}  &   & \\
       & NC  &  AC  &  & \\
 \hline
 \hline
-Number  & {\bf 59} & 141 &  & \\
-Percentage & & & & \\
-of detection & 13 & 33 &  & \\
-P$_{\rm thresh}$ & 0.3 & 0.3 &  & \\
-{\bf Expert Grade (G)} & 1.3 & 1.3 & 1.3 & 1.3 \\
+Number  & 59 & 141 &  & \\
+Fraction & & & & \\
+of detections & 14\% & 33\% &  & \\
+$P_{\rm acc thresh}$ & 0.3 & 0.3 &  & \\
+Averaged Grade (G) & 1.3 & 1.3 & 1.3 & 1.3 \\
 
 \hline
 \end{tabular}
@@ -960,75 +922,144 @@ P$_{\rm thresh}$ & 0.3 & 0.3 &  & \\
 {KL}-- Known lenses \\
 {NC}-- New lens candidates  \\
 {AC}-- All (known and new) lens candidates  \\
-P$_{\rm thresh}$ -- systems with Posterior probability P above this threshold are selected \\
+$P_{\rm acc thresh}$ -- systems with Posterior probability~$P$ above this threshold are selected \\
 Note: For KC and KL, Percentages are with respect to the known
-population whereas for NC and AC, percentages are with respect to the
-total population of lens candidates. \\
+population (i.e. 438 KC and 59 KL see \Sref{sec:data:kls}) whereas for
+NC and AC, percentages are with respect to the total sample of 429 lens
+candidates.
+\\
 \end{table}
+
+In this section, we describe the \sw candidate lens sample from the
+\cfhtls.  We find a total of 141 candidates with $G\ge1.3$ (medium-high
+grade), of which 59 are new systems. This sample is further divided as
+follows. We have a total of 50 candidates with $1.3\le$G$<2$ (medium
+grade), of which 30 are new. The quality of candidates in this category
+is such that at least one of the inspectors (``lens expert'') thought the candidate was
+probably a lens (that is, a grade of 2) and a second inspector thought
+that it was possibly a lens (that is, a grade of 1). Among our high
+grade sample ($G\ge$2), there are a total of 91 candidates, of which 29
+are new. In this category, the minimum grade by all of the inspectors
+was 2, suggesting that the candidates are probably or almost certainly
+lenses according to all three inspectors. To avoid duplication, only the
+newly discovered lens candidates with G$\ge 1.3$ (medium-high
+probability) are presented in this paper (see
+\Sref{sec:results:newcand}), and further information on \sw-selected
+candidates that were previously identified in the literature (as
+described in \Sref{sec:data:kls}) will be made available at
+\texttt{http://spacewarps.org/\#/projects/CFHTLS/}.
+
+
+We also find a total of 288 (and 245 new) candidates with averaged grade
+$0<$G$<1.3$ (low grade), which means that at
+least one of the inspector thought the candidate was possibly a lens, and
+in the best cases, all three inspectors thought the candidate was possibly
+a lens (that is, a grade of 1)\footnote{If grades from the inspectors
+were found to be discrepant by 2 or more, these were discussed and
+re-graded to resolve the discrepancy.}. Further information on the low
+probability sample such as their positions and images will be available
+at \texttt{http://spacewarps.org/\#/projects/CFHTLS/}. Note that if all of the
+inspectors gave a grade of 0 to a candidate, then it was discarded from
+the sample.
+
+In \Tref{tab:stats}, we give overall statistics of the systems detected
+at \StageOne and \StageTwo. We give the total number of detections of
+the known lens candidates, known lenses and the new lens candidates at
+each stage.  We also give the recovery fractions for the known samples
+and fraction of total detection for the new samples at each stage. We
+find that all of the confirmed lenses found at \StageOne are also
+recovered at \StageTwo; a small fraction of the known lens candidates
+are rejected at \StageTwo. From the visually inspected known lens sample
+at \StageTwo (P$> 0.3$), the experts gave a grade of 1.3 and above to
+$\sim$~92~per~cent (33 out of 36) of the systems. Overall, the sample of
+new \sw lens candidates increased the sample of total \cfhtls lens
+candidates by over 40~per~cent. However, we find that 42~per~cent of
+known lenses were missed at \StageOne: we return to the discussion of
+these false negatives below.
+
+In \Fref{fig:stackP}, we plot the distribution of false positives and
+the high grade lens candidates,
+as a function of the $P$ value assigned by SWAP at the end of \StageTwo.
+On average, the fraction of lens candidates is indeed an increasing
+function of $P$. This shows that the \sw generated $P$ values for the
+subject are roughly correlated with the expert grades albeit with quite
+some scatter.  We note that below $P\sim0.75$,
+the fraction of false positives starts to exceed the fraction of real
+lens candidates. This could be a good threshold to choose to maximize
+the purity of the final sample. However, choosing
+$P=0.3$ gives a completeness of 100\% for the ``known
+lens'' sample instead of 67\% for $P=0.75$. Therefore, the new sample
+should also have increased completeness; expert
+grading then allows us to increase the purity of the sample.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsection{New lens candidates from \sw}
 \label{sec:results:newcand}
 
-We give basic information about the final sample of {\bf 59} new lens
-candidates (medium-high probability) found by \sw in
-Table~\ref{tab:swcands}. We report the candidates with a \sw ID and Name
-of the lens system. We give their positions (Ra, Dec), photometric
-redshift ($z_{phot}$), $i$ band magnitude of the lensing galaxy,
-averaged grade G from the lens experts, zoo ID (identifier used in
-TALK), P value at \StageTwo and a visual categorization of the type of
+We give basic information about the final sample of 59 new medium-high grade
+lens candidates found by \sw in
+\Tref{tab:swcands}. We report the candidates with a \sw ID and Name
+of the lens system. We give their positions (RA, Dec), photometric
+redshift ($z_{\rm phot}$), $i$-band magnitude of the lensing galaxy,
+averaged grade~$G$ from the lens experts, zoo ID (identifier used in
+TALK), $P$ value at \StageTwo and a visual categorization of the type of
 lensed images and the lensing galaxy in the ``Comments'' column in
-Table~\ref{tab:swcands}. Whenever available the lens properties are
-taken from the \cfhtls photometric catalog \citep{Coupon2009} otherwise
-for the lens galaxy positions, the reported values are measured
+\Tref{tab:swcands}. Whenever available the lens properties are
+taken from the \cfhtls photometric catalog \citep{Coupon2009}; otherwise,
+for the lens galaxy positions, the reported values were measured
 manually. The visual categorization of the lens type is only suggestive
 and the explanation of the notations in the Comments column is given at
 the bottom of the table.
 
-We show images of our new sample in \Fref{fig:lc} which is arranged
-first in the decreasing order of their grades and then increasing order
-of their positions. As the first lens search was a blind search with no
-preselection of candidates from any algorithm, we find various types of
+We show images of our new sample in \Fref{fig:lc}. The panels are arranged
+first in the descending order of their grades, and within each grade, in
+ascending order
+of RA. As the first lens search was a blind search with no
+pre-selection of candidates from any algorithm, we find various types of
 lenses, as expected from such a search. The final sample consists of
-both galaxy and groups-scale lens candidates. There are detections of
+both galaxy and group-scale lens candidates. There are detections of
 elongated arcs and some interesting point-like quasar lensed images.
-Most of them are brighter in bluer $g$ band but some candidates brighter
-in the redder $i$ band are also found. Since robotic lens searches often
-look for blue colored lensed features, they are very much likely to miss
+Most of them are brighter in the bluer $g$ band, but some candidates brighter
+in the redder $i$ band are also found. Since the robotic lens searches
+focused on the blue lensed features, they are likely to miss
 such interesting lens candidates. We did not find any examples of
-exotic lens candidates from the visually inspected P$>0.3$ sample. There
-may be some interesting candidates lurking in TALK but these will have
-to be sifted through.
+exotic lens candidates from the visually inspected $P>0.3$ sample.
+There
+may be some more interesting candidates that were missed either at
+\StageOne or \StageTwo but have been identified by volunteers in \Talk.
+This resource is yet to be mined and is left for future work.
 
-The new \sw lens sample presented here shows the advantages of having
+The new \sw lens sample presented here illustrates some of
+the advantages of having
 citizen scientists find lenses through visual inspection. An algorithm,
 by definition will find objects that adhere to a selection criteria that
 uses either geometry or flux information from an image. On the other
-hand, citizen scientists can do amazing amount of interpolation or
-extrapolation over the basic selection criteria provided to them.  For
+hand, citizen scientists can interpolate over or
+extrapolate beyond the basic selection criteria provided to them.  For
 example, the lower blue arc in SW7 is split by a small red galaxy.  An
 algorithm typically fails to detect such arcs because the arc is broken
 into smaller arclets which then falls below the minimum length or area
-allowed for an arc to be detected typically. Human brains have no
-problem in interpolating over the broken blue arc over the red galaxy
-and understand that it is a single long arc. The system SW19 has
+allowed for an arc to be detected. Human inspectors have no
+problem in interpolating over the broken blue arc over the red galaxy,
+understanding that it is a single long arc. The system SW20 has
 point-like lensed images which cannot be detected by arc finding
-algorithm whereas the ring finding algorithm may miss this because of
-atypical color and structure of the galaxy. Detection of red arcs, for
-example, as seen in the SW38 candidate show how the volunteers
-extrapolate on the color parameter because the training sample mostly
-has blue arcs since this is the typical expectation.
+algorithm, whereas the ring finding algorithm may have missed this because of
+the atypical colour and structure of the galaxy. Detection of red arcs, for
+example, as seen in the SW39 candidate, shows how the volunteers
+extrapolate on the colour parameter: the training sample contains
+predominantly blue arcs, because the source colours were drawn from realistic
+observed distributions.
 
 The power of citizen scientists also lies in the high dynamic range that
-allows us to find systems which vary from short (thick) to long (thin)
+allows us to find systems which have very short (thick) to long (thin)
 arcs, from highly compact to low surface brightness images, from round
 and point-like to elongated and curved images, from blue to red, from
-regular to exotic kinds of lenses while keeping the false positive rate
+regular to exotic kinds of lenses; while keeping the false positive rate
 low compared to algorithms. Discovery of this large sample of completely
 new candidates missed by some of these algorithms demonstrates that the
-\sw system is functioning well and the self-taught citizen scientists
-have managed to beat the robots in some sense.
+\sw system is functioning well, the self-taught citizen scientists
+reaching parts of discovery space that the robots did not.
 
 Further detailed qualitative and quantitative analysis of the properties
 of the entire \sw sample (new and previously identified candidates) and
@@ -1052,75 +1083,29 @@ The new \sw lens candidates with expert grade G$>=$1.3. The images are
 \end{figure*}
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
+
 \subsection{Measurements of properties of the lens and the lensed images}
 \label{sec:results:meas}
 
-In the subsequent sections, we make comparison of various properties of the lens
+In the subsequent sections, we compare various properties of the lens
 candidates. Here, we describe how we extract or measure these properties, namely,
 the lens redshift, the Einstein radii and the total flux of the lensed images or
 arcs.
 
 We use the publicly available redshifts for the lens galaxy from the
 \cfhtls photometric catalogs \citep{Coupon2009}. The total flux of the
-lensed image or arc is measured in the $g$ band but the adopted method
+lensed image or arc is measured in the $g$-band but the adopted method
 is different for different samples. For the simulated sample, we
 multiply the magnification of the second brightest image with the source
 magnitude. For the \rf sample, the arcs are detected in the scaled
-difference image of $g$ and $i$ bands from which the lensing galaxy is
+difference image of $g$ and $i$-bands from which the lensing galaxy is
 subtracted \citep[for details, see][]{Gavazzi2014}. Here, we use the flux
-of the lensed images measured by {\sc sextractor} from the scaled
-difference image, that is, $g-\alpha i$ and convert it to the $g$ band
-flux using mean colors of the foreground and background population. For
+of the lensed images measured by \sextractor from the scaled
+difference image, that is, $g-\alpha i$ and convert it to the $g$-band
+flux using mean colours of the foreground and background population. For
 the \af and the \sw sample, we integrate the flux in the image pixels
-identified by \af or {\sc sextractor}.
+identified by \af or \sextractor.
 
-
-The Einstein radius is also measured differently for
-different samples. For the galaxy-scale lenses in the simulated sample,
-we use the value of the input parameter of the lens model for the $R_{\rm E}$.
-For groups-scale lenses, since the lens model is multi-component, we
-need to determine the $R_{\rm E}$ from the image positions. We use those
-pairs of lensed images that have the smallest and the largest angular
-separations. The $R_{\rm E}$ here is then half of the averaged values of
-these angular image separations. For the \rf sample, we use the peak
-position of the lensed images measured by running {\sc sextractor} on
-the scaled difference image. We calculate the image separation from the
-lens center as an estimate of the $R_{\rm E}$. For the \af (SARCS)
-sample, we use the same definition as above except that the peak
-position is identified either by the \af or manually. For the \sw lens
-sample, the same definition is used where the peak positions are
-identified either with \af or {\sc sextractor}.
-
-
-% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
-
-\subsection{Recovery of known lens samples from the \cfhtls by \sw}
-\label{sec:results:known}
-
-We determine what fraction of the known sample of lenses are recovered
-by \sw. Note that this sample corresponds to the \rf and \af samples
-combined, as mentioned in \Sref{sec:data:kls}. In Table~\ref{tab:stats},
-we show that $\sim$~25\%-30\% of the known lens candidates and
-$\sim$~60\% of the known lenses are found at \StageOne and \StageTwo in
-\sw. The left and the middle panels of \Fref{fig:compre} show the
-fraction of detections as a function of arc magnitude and the Einstein
-radius of the lens systems for the known confirmed lenses and lens
-candidates. As expected, we find that systems with brighter images
-and/or with larger $R_{\rm E}$ are detected more often in \sw.
-
-We find that most of the confirmed lenses and candidates that are missed
-by \sw are systems with fainter arcs and smaller $R_{\rm E}$ and they
-come from the \rf sample. The main reason why \rf found such candidates
-is because their team used lensing galaxy-subtracted images to detect
-the presence of the lensed images both during the automated
-object-finding phase and during the visual inspection and classification
-of their candidates. This approach naturally improves the detection
-efficiency at smaller $R_{\rm E}$ and for fainter systems. The \sw
-volunteers were not shown any galaxy-subtracted images. However, showing
-galaxy subtracted images might be a better strategy to adopt for future
-lens searches at galaxy-scales with \sw. In the Discussion
-\Sref{sec:fn}, we further explore and discuss why some of the confirmed
-lenses are missed by \sw.
 
 \begin{figure*}
 \begin{center}
@@ -1132,8 +1117,58 @@ sample. }
 \end{center}
 \end{figure*}
 
+The Einstein radius is also measured differently for
+different samples. For the galaxy-scale lenses in the simulated sample,
+we use the value of the input parameter of the lens model for the $R_{\rm E}$.
+For group-scale lenses, since the lens model is multi-component, we
+need to determine the $R_{\rm E}$ from the image positions. We use those
+pairs of lensed images that have the smallest and the largest angular
+separations. The $R_{\rm E}$ here is then half of the averaged values of
+these angular image separations. For the \rf sample, we use the peak
+position of the lensed images measured by running \sextractor on
+the scaled difference image. We calculate the image separation from the
+lens centre as a rough estimate of the $R_{\rm E}$. For the \af (SARCS)
+sample, we use the same definition as above except that the peak
+position is identified either by the \af or manually. For the \sw lens
+sample, the same definition is used where the peak positions are
+identified either with \af or \sextractor.
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Recovery of known lens samples from the \cfhtls by \sw}
+\label{sec:results:known}
+
+We now determine the fraction of the known sample of lenses that were recovered
+by \sw. Note that this sample corresponds to the \rf and \af samples
+combined, as defined in \Sref{sec:data:kls}. In \Tref{tab:stats},
+we show that $\sim25-30\%$ of the known lens candidates, and
+$\sim60\%$ of the known lenses were found at \StageOne. We find that
+$84$\% of the known lens candidates and \textbf{all} of the known lenses
+from \StageOne passed our \StageTwo selection criterion of $P>0.3$.
+The left and the middle panels of \Fref{fig:compre} show the
+fraction of detections as a function of arc magnitude and the Einstein
+radius of the lens systems for the known confirmed lenses and lens
+candidates. As expected, we find that systems with brighter images
+and/or with larger $R_{\rm E}$ are detected more often in \sw.
+
+We find that most of the confirmed lenses and candidates that are missed
+by \sw are systems from the \rf sample, with fainter arcs and smaller $R_{\rm E}$.
+The main reason why \rf found such candidates
+is because it involves subtracting the light from the lens galaxy,
+making it easier to detect the lensed images during both the automated
+object-finding, and the visual inspection and classification
+phases. This approach naturally improves the detection
+efficiency at smaller $R_{\rm E}$ and for fainter systems. The \sw
+volunteers were not shown any galaxy$-$subtracted images. Showing
+galaxy$-$subtracted images might be a better strategy to adopt for future
+lens searches at galaxy-scales with \sw. In
+\Sref{sec:fn} below, we further explore and discuss why some of the confirmed
+lenses were missed by \sw.
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
 \subsection{Image separation distribution}
 \label{sec:results:isd}
 
@@ -1146,13 +1181,14 @@ affect the constraints on the density profile. A blind lens search done
 by visual inspection alone, for example, through \sw citizen scientists may find
 lenses missed by the \af search and thereby, improve completeness.
 
-Indeed, we have found {\bf 59} new lens candidates that were not known
+Indeed, we have found 59 new medium-high grade
+lens candidates that were not known
 before. In \Fref{fig:isd}, we show the image separation distribution for
 the known \rf and \af sample (green), for the \sw identified (known and
-new) lens sample (blue) only and combined \cfhtls sample of \rf, \af and
+new) lens sample (blue) only and the combined \cfhtls sample of \rf, \af and
 the new \sw lens sample (magenta). It is interesting to note that both
-these samples have very similar profiles and thus, the profile of the
-combined sample has not changed signficantly. This implies that previous
+the \rf$+$\af and \sw samples have very similar profiles and thus, the profile of the
+combined sample has not changed significantly. This implies that previous
 constraints on the image separation distribution are robust and the \af
 selected sample does not suffer from significant incompleteness for
 medium to large $R_{\rm E}$. This is the regime that probes density
@@ -1160,35 +1196,22 @@ profiles of galaxy groups to clusters.
 
 In the figure, we also show for comparison the theoretical predictions
 corresponding to three density profiles, namely, isothermal sphere (IS),
-NFW \citep{Navarro1997} and Total profile which has NFW and Hernquist
-profiles combined with an adiabatically contracting model for dark
+NFW and a ``Total'' profile which has NFW and Hernquist
+profiles combined with an adiabatically contracting model for the dark
 matter component \citep{Gnedin2004}. These curves are taken from
-\citet{More2012} which gives details of the calculation of these
+\citet{More2012}, which gives details of the calculation of these
 predictions.  With the updated sample of lens candidates, we confirm our
 previous prediction that the mass density profiles of galaxy groups is
-indeed similar to the Total profile.
+indeed consistent with the ``Total'' profile.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{figure}
-\begin{center}
-\includegraphics[scale=1.2]{isd_cfhtls_sw.pdf}
-\caption{ \label{fig:isd} Image separation distribution. Comparing theoretical
-predictions (solid curves) with the \cfhtls known lens samples (green)
-and the combined sample of known and \sw lens candidates (magenta). The
-sample of new and the known lens candidates discovered from \sw alone is
-shown in blue. The new updated profile of the isd (magenta) is
-consistent with our previous measurements and strengthens our conclusion
-that the average density profiles of the lenses are similar to the Total
-profile.}
-\end{center}
-\end{figure}
 
 \section{Discussion}
 \label{sec:discuss}
 
 Finding gravitational lenses is a difficult and complex task. No single
-method is perfect. Each method has some advantages over the other. It
+method is perfect, each method has some advantages over the other. It
 may be the case that a single method may never be the best method for
 optimising completeness and purity. Visual inspection will likely be
 required for pruning candidates at some stage of lens candidate
@@ -1201,13 +1224,9 @@ In this section, we first compare the lens candidates found by
 method failed to detect lenses from the other sample.
 
 \subsection{Comparison of the \rf, \sw and \af samples}
-Here, we compare the properties of the lens candidates from each sample
-to understand if there are any clear differences between them. We
-consider the lens redshift, the total flux of the lensed images and the
-Einstein radii of the systems for this purpose.
 
 In \Fref{fig:zlmgre}, we show the lens redshift and the arc flux
-measured in $g$ AB mag as a function of the Einstein radius for the \rf
+measured in $g$-band AB magnitude as a function of the Einstein radius for the \rf
 (green), the \af (red) and the \sw sample (new candidates only in blue
 and known candidates as blue circles). We note that the errors on the
 redshift measurement should not be too different across the samples
@@ -1217,25 +1236,25 @@ samples and the types of systematics are also different.  We have not
 attempted to quantify these errors in this work. With that caveat, we
 find that the \sw candidates sample is broadly similar to the
 robotically found lens candidates in terms of the flux of the lensed
-images or the redshift of the lensing galaxies.
+images and the redshift of the lensing galaxies.
 
-Since \sw is visual based search, it is difficult to detect many lens
-candidates with small $R_{\rm E}$ in the presence of a bright lensing
-galaxy. While this is true for algorithms too, the \rf team adopted a
-different method to circumvent this problem whose goal was to find
-galaxy-scale lenses which have small $R_{\rm E}$. The \rf sample is
-generated by working with lensing galaxy $-$subtracted images and this
+Since in this project \sw enabled a visual search based on simple colour
+composite images drawn directly from the survey,
+it was difficult to detect many lens
+candidates with a small $R_{\rm E}$ in the presence of a bright lensing
+galaxy. In contrast, the \rf sample was
+generated by working with lensing galaxy$-$subtracted images and this
 led to increased detections of small image separation candidates. The
-\sw {\bf interface did not show} any galaxy subtracted images and hence,
+\sw interface did not show any galaxy subtracted images and hence,
 this results in a quantitative difference between the \sw and the \rf
 sample as a function of $R_{\rm E}$.
 
-The \af, on the other hand, is capable of finding smaller image
-separation lenses but a lower limit at $R_{\rm E}=2\arcsec$ was imposed
+The \af is capable of finding some small image
+separation lenses, but a lower limit at $R_{\rm E}=2\arcsec$ was imposed
 by the \af team to simplify the selection function of their sample.
 Thus, we can compare the \sw and \af samples at about $R_{\rm
 E}>2\arcsec$. There is a good overlap between the two samples given that
-most of these are candidates and could turn out be not lenses. We again
+most of these are candidates and could turn out not to be lenses. We again
 caution the readers that the uncertainties on the measurements are not
 quantified and may change the results to some extent.
 
@@ -1248,17 +1267,31 @@ accurate analysis is deferred to the future.
 
 Lastly, in \Fref{fig:stackremg}, we show the relative distribution of
 number of candidates from each sample as a function of the Einstein
-radius and arc magnitude. The light blue color shows the overlap between
-the \sw and the \rf samples and the purple color shows the overlap
+radius and arc magnitude. The light blue colour shows the overlap between
+the \sw and the \rf samples and the purple colour shows the overlap
 between the \sw candidates and the \af samples. As noted earlier, the
-\rf dominates the small $R_{\rm E} (<2\arcsec)$ range although \sw does
-find modest number of candidates in this range. At larger $R_{\rm E}$,
+\rf dominates the small $R_{\rm E} (<2\arcsec)$ detections although \sw does
+find a modest number of candidates in this range. At larger $R_{\rm E}$,
 \sw sample begins to dominate and is comparable to the \af sample.  As a
 function of the arc magnitudes, all three samples have detections at all
-magnitudes and median magnitudes for all samples is around 24.5.
+magnitudes and median magnitudes for all samples is around $g\sim24.5$.
 Relatively, the \rf sample spans a narrower range compared to the \sw
 and \af sample. However, this can be verified only after understanding
 and accounting for the systematic uncertainties in our measurements.
+
+\begin{figure}
+\begin{center}
+\includegraphics[scale=1.2]{isd_cfhtls_sw.pdf}
+\caption{ \label{fig:isd} Image separation distribution (ISD). Comparing theoretical
+predictions (solid curves) with the \cfhtls known lens samples (green)
+and the combined sample of known and \sw lens candidates (magenta). The
+sample of new and the known lens candidates discovered from \sw alone is
+shown in blue. The new updated profile of the ISD (magenta) is
+consistent with our previous measurements and strengthens our conclusion
+that the average density profiles of the lenses are similar to the Total
+profile.}
+\end{center}
+\end{figure}
 
 \begin{figure}
 \begin{center}
@@ -1267,24 +1300,27 @@ and accounting for the systematic uncertainties in our measurements.
 Comparison of the lens redshift and the arc magnitude with the
 Einstein radius for all of the three lens samples, namely, the \rf (green dots),
 \sw (known candidates$-$blue circles and new candidates only$-$blue dots)
-and \af (red dots). Alls samples have broadly similar properties.}
+and \af (red dots). All samples have broadly similar properties.}
 \end{center}
 \end{figure}
 
-\subsection{Why \sw candidates were missed by lens finding robots?}
-We test the \rf and \af on images centered on the new \sw candidates to
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Why were the new \sw candidates missed by the robots?}
+
+We test the \rf and \af on images centred on the new \sw candidates to
 trace and understand at what stage the algorithm failed to detect them.
 
-First, we rerun \rf on the new \sw sample. At the beginning, a galaxy
+First, we re-ran \rf on the new \sw sample. At the beginning, a galaxy
 catalog is generated based on magnitude, redshift and SED type
 \citep[see]{Gavazzi2014} to select galaxies which are most likely to act
-as lenses. We find that about 40\% of the new \sw candidates fail to
-meet this initial selection criteria, for example, SW1, SW13, SW19,
-SW22, SW26 and SW29.  All of the lensing galaxies are bright enough to
+as lenses. We find that about 40~per~cent of the new \sw candidates failed to
+meet this initial selection criteria, for example, SW1, SW14, SW20,
+SW23, SW27 and SW30. All of the lensing galaxies are bright enough to
 satisfy the magnitude criterion ($i<22$). However, some of them have a
 bright companion galaxy, some of them do not look like E/S0 type
 galaxies and some are edge on galaxies which could be the reason for
-excluding these galaxies from the inital catalog.
+these galaxies having failed the photometric redshift and SED type pre-selection.
 
 \begin{figure*}
 \begin{center}
@@ -1298,27 +1334,30 @@ images.
 \end{center}
 \end{figure*}
 
-In the following steps, the flux from the galaxy is subtracted from the
+In subsequent \rf steps, the flux from the galaxy is subtracted from the
 scaled difference image to enhance the visibility of the faint blue
-lensed features. An object finder is run on this image to quantify the
-lensed image properties. Another $\sim$~50\% of the \sw candidates could not be
+lensed features. An object finder is then run on this image to quantify the
+lensed image properties.
+Another $\sim$~50~per~cent of the \sw candidates could not be
 detected by the object finder because properties such as the image area,
-axis ratio, magnitude/color and alignment with respect to the lensing
-galaxy are not satisfied. Some of the candidates missed at this stage
-are, for example, SW4, SW5, SW6, SW25, SW35, SW38 and SW45.
+axis ratio, magnitude/colour and alignment with respect to the lensing
+galaxy were not satisfied. Some of the candidates missed at this stage
+are, for example, SW4, SW5, SW6, SW26, SW36, SW39 and SW46.
 
-Next, we rerun the \af on the same \sw sample of new candidates. The \af
-is directly run on images to look for elongated arc like objects and does
+
+Next, we re-ran the \af on the same \sw sample of new candidates. The \af
+is directly run on the images to look for elongated arc like objects and does
 not require a list of targets to begin with. Objects are identified by
 placing thresholds on the noise level in the images. Thus, \af
 detections are sensitive to changes in the noise levels.
 
 Originally, the \af was run on a large image with an area of $\sim 19350
-\times 19350$ pixels$^2$. For the rerun, we work with much smaller
-images because this is faster but this alters the measured
-noise and hence, affects the number and type of arc detections. We find
-that about 30\% of the new candidates are detected without changing any
-of the thresholds in the code because of the change in the noise level.
+\times 19350$ pixels$^2$. For the rerun, we worked with much smaller
+images because this is faster. However, this alters the measured
+noise and hence affects the number and type of arc detections. We find
+that about 30~per~cent of the new candidates were detected without changing any
+of the thresholds in the code, suggesting that these could have been detected by
+\af had its noise thresholds been set differently.
 
 The \af code calculates second order brightness moments around every
 pixel to decide if the distribution of flux is elongated in some
@@ -1327,55 +1366,53 @@ estimator is assigned to every pixel. All pixels with a value of the
 elongation estimator above a certain threshold are connected to form the arc
 feature. This is called the segmentation of the arc candidate. Subsequently, arc
 properties such as the area, mean flux, length and curvature are
-determined. We relax the threshold at the segmentation stage and also relax
-thresholds mainly on the area of the arc which leads to detection of
-about 75\% of the new \sw candidates. We find that relaxing thresholds
-on other arc properties does not improve the detection rate significantly
-and thus, those thresholds are left unchanged.
+determined. We relaxed the threshold at the segmentation stage and also relaxed
+thresholds mainly on the area of the arc. These new settings led to the detection of
+about 75~per~cent of the new \sw candidates. We find that relaxing thresholds
+on other arc properties does not improve the detection rate significantly.
 
-Typically, the candidates are missed from the \af sample if a) the arcs
-are fainter in $g$ band which is used for arc detection because then the
-arc feature is at the noise level and fails detection b) the flux of the
-arc and the galaxy are blended in the $g$ band such that the \af
-incorrectly connects part of the galaxy to the arc. This results in a
-candidate with no morphological characteristics of a typical arc c)
-unusually short or thick arcs or d) if the lensed images are almost
-circular or point-like which means most of the lensed quasars images
-will be missed.
+Typically then, the \sw candidates were missed from the \af sample either
+because a) the arcs
+were fainter, b) the flux of the
+arc and the galaxy were blended together (such that the \af
+incorrectly connected part of the galaxy to the arc), c)
+the arcs were unusually short or thick, or d) the lensed images are almost
+circular or point-like (\af was not designed to detect lensed quasars).
 
-Relaxing the thresholds obviously increases the number of candidate arc
-detections but this also includes a large sample of false positives.
-For example, the number of arc candidate detections increase by a factor
-of $\sim$2 when we relaxed the thresholds in the reruns described above
-whereas the number of false positives increase by a factor of $\sim$5.
-Thus, it is not recommended to relax these thresholds alone. A better
-alternative is to relax the thresholds to increase the completeness and
-cross-correlate the arc candidate positions with a galaxy catalog to
-discard those candidates which are not close to a putative lensing
-galaxy within typical radius in order to reduce the false positives.
+Relaxing the \af thresholds obviously increases the number of candidate arc
+detections but this also increases the false positive rate.
+For example, the number of arc candidate detections increased by a factor
+of $\sim$2 when we relaxed the thresholds in the rerun described above,
+while the number of false positives increased by a factor of $\sim$5.
+While the \af sample purity could be increased by
+cross-correlating the arc candidate positions with a putative lens
+galaxy catalog, these numbers illustrate the predicament facing automated
+lens-finding algorithms, and the continuing benefits of visual screening.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
 \subsection{False negatives: known lenses missed by \sw}
 \label{sec:fn}
-Like any lens finding method, the \sw system can fail to detect certain
-kinds of lenses.  We find that about 40\% of the known sample of lenses
-are missed both at \StageOne and II (see \Tref{tab:stats}). In fact, most
-of the known lenses from \StageOne are discovered at \StageTwo which
-means that the lenses are lost already at \StageOne. Below, we focus on the known
+
+Like any lens finding method, the \sw system could potentially be failing
+to detect certain
+kinds of lenses.  We find that about 40~per~cent of the known sample of lenses
+are missed at \StageOne; no further losses were incurred during
+the \StageTwo refinement (see \Tref{tab:stats}).
+Below, we focus on the known
 lens sample at \StageOne to understand why some of them are being missed
 and possibly find a way to improve the detection rate which can be
 adopted in the future \sw lens searches.
 
 Many of the missed lenses are from the \rf sample with small
 Einstein radii and faint lensed images (see \Fref{fig:compre}). Among
-the confirmed lenses from the \rf, about 50\% are missed. Out of the
+the confirmed lenses from \rf, about 50~per~cent are missed. Out of the
 missed sample of 18 lenses, about half of them are visually difficult to
-detect and the other half appear to have faint blue smudges around
+detect. The other half appear to have faint blue smudges around
 galaxies which should have been easier to identify. Similarly,
-if we consider the \af lens sample, $\sim$23\% are missed by \sw. This
+if we consider the \af lens sample, $\sim$23~per~cent are missed by \sw. This
 is a relatively small sample of $\sim 5$ systems and visual inspection
-suggests that, by and large, either the lensed features are faint
+of them suggests that, by and large, either the lensed features are faint
 or they have odd properties which makes them difficult to identify
 correctly. For further tests, we combine the \rf and \af sample.
 
@@ -1383,129 +1420,171 @@ For a lens finding method which uses the collective skill, experience and
 knowledge of a group of volunteers, it may be difficult to find a single
 factor with certainty which causes a lens candidate to be missed. We
 attempt to understand whether there is indeed a single dominant factor
-that is resulting in the loss of these lenses or the lenses are being
+that is resulting in the loss of these lenses, or if the lenses are being
 missed due to a combination of multiple reasons. Below, we consider some
 of the factors that could affect the efficiency of finding lenses.
 
 \subsubsection{Number of classifications}
-First, we check if the number of classifications (Nclass) is
+
+First, we check whether the number of classifications (Nclass) is
 significantly lower for the missed sample compared to the detected one.
-Surprisingly, most of the lenses in the known sample have few
-classifications (Nclass$<$10) which includes both the detected and
-missed lenses. Many of the remaining lenses have between 10 to 20
-classifications. And, only a few subjects have Nclass$>$20. They
-continue to remain for long in the database because these candidates are
-possibly difficult to identify. Overall, we do not find any correlation
-for the detected and the missed sample with Nclass.
+Most of the lenses in the known sample (including both those that were
+detected and those that were missed)
+received similar numbers of classifications to the other subjects.
+A few received Nclass$>$20, possibly as a result of
+continuing to remain for a long time in the database because there was
+uncertainty over whether or not to reject them.
+Overall, we do not find any difference in the number of classifications
+between the detected and the missed lenses.
 
 \subsubsection{Blind lens search}
-Efficiency of a visual search can vary in different sections of an
-image. Our eyes tend to focus usually at the center of an image and lens
+
+The efficiency of a visual search could potentially
+vary in different sections of an
+image. Our eyes tend to focus usually at the centre of an image and lens
 candidates close to the borders could go undetected. Therefore, it is
-essential to test and understand if \sw is missing some of the known lenses
+important to check whether \sw could be missing some of the known lenses
 because they happen to be close to the borders of the image cutouts.
 
 From the SWAP, the image cutouts inspected by the \sw volunteers receive
-a status of detected (if P$>$P$_{\rm acc thresh}$), rejected (if
-P$<$P$_{\rm rej thresh}$) and undecided (if P$_{\rm rej thresh}<$ P $<$
-P$_{\rm acc thresh}$). In \Fref{fig:comppos}, we compare the positions
+a status of detected (if $P>P_{\rm acc thresh}$), rejected (if
+$P<P_{\rm rej thresh}$) and undecided (if $P_{\rm rej thresh}< P <
+P_{\rm acc thresh}$). In \Fref{fig:comppos}, we compare the positions
 of lenses which are detected (red), undecided (green) and rejected
 (blue). The left and the right panels have the simulated lens sample and
 the known lens candidates sample, respectively. We note that the density
 of points do not represent the actual number of detections because, for
-cases with large sample size, randomly drawn subsamples are shown for
+cases with large sample size, randomly drawn sub-samples are shown for
 the ease of visual comparison.
 
-We do not find any strong visual correlation in the detection rate of
-lenses as a function of their positions in the image for both the
-simulated and the known lens sample. Thus, the completeness of the lens
-sample is most likely not significantly affected by whether a lens is
-located close to the border or well within the center.
+We do not find any strong correlation in the detection rate of
+lenses as a function of their positions in the image, for either the
+simulated or the known lens sample. Thus, the completeness of the lens
+sample is most likely not significantly affected by lenses
+located close to the image borders.
 
-\subsubsection{Volunteer profile}
+\subsubsection{Classification Power}
 
-Here, we investigate if the power\footnote{see the
-\Aref{appendix:power} for the meaning of this term and how it is
-different from the ``Skill'' defined in paper I} of volunteers is systematically
-different between the sample of detected and missed lenses.
+Each \sw image classification is based on the markers placed by around 10
+volunteers (on average, \PaperOne). This number could be
+small enough to introduce some scatter in the system performance, arising from
+the variations between the small groups of volunteers inspecting each subject.
+In \PaperOne we investigated the system performance in terms of the ``Skill''
+of each agent; in \Aref{appendix:power} we define a complementary property,
+the ``Power'' of a classification to make a large difference in the probability
+$P$ of an image containing a lens. Here, we investigate whether the distribution
+of classification power is systematically different between the detected and missed lenses.
 
-We check how the posterior probability P (see Paper I for the
+We check how the posterior probability $P$ (see \PaperOne for the
 mathematical definition) of an image or a subject to contain a lens
 changes as the image receives more classifications from multiple
 volunteers. A graphical representation of changing probabilities for
 increasing classifications is called a trajectory plot. In
 \Fref{fig:detmis}, we show the trajectory plots of a few examples of
-detected lenses (top left panels) and missed lenses (bottom left panels)
-from \StageOne of \sw. The number of classifications (Nclass) for a
-subject increase from top to bottom.  Also, every subject is assigned a
-prior probability P0$=2\times10^{-4}$ (grey dashed line) and starts at
-the middle of the trajectory plot. The P value of a subject is updated
+detected lenses (top row of panels) and missed lenses (bottom row of panels)
+from \StageOne of \sw. Every subject is assigned a
+prior probability $P_0=2\times10^{-4}$ (grey dashed line) and starts at
+the middle of the trajectory plot. The number of classifications (Nclass) for a
+subject increases from top to bottom (subjects move down the trajectory plots
+as they are classified).  The $P$ value of a subject is updated
 with every classification from the volunteer.  If a volunteer identifies
 a lens candidate, the trajectory moves to the right otherwise moves to
 the left. A subject is accepted if it crosses the blue-dashed line
-marking the (P$_{\rm acc thresh}=0.95$) on the right and is rejected, if
-it crosses the red-dashed line marking the P$_{\rm rej thresh}=10^{-7}$
-on the left.
+marking the $P_{\rm acc thresh}$ (set to 0.95 for \StageOne) on the
+right. It is rejected if it crosses the red-dashed line marking the
+$P_{\rm rej thresh}$ (set to $10^{-7}$ for \StageOne) on the left.
 
-The amount by which the posterior probability P value of a subject will
+The amount by which the posterior probability $P$ value of a subject will
 change depends on how well the volunteers are performing on the training
 sample and its current probability. Thus, for a given current
-probability, high power volunteers will change the P by a large factor
-compared to the low power volunteers. This is evident in the trajectory
-plots as large and small distances in between the consequent points
+probability, some volunteers will change the $P$ by a large factor
+compared to others. This is evident in the trajectory
+plots, which show both large and small distances between consecutive points
 which we refer to as kicks. Comparison of the kick sizes between the
-detected and the missed lenses suggests that the missed lenses do not
-have as many volunteers giving large kicks. We also note that most of
+detected and the missed lenses suggests that {\it the missed lenses do not
+have as many volunteers giving large kicks}. We also note that most of
 the large kicks seen in the trajectories of the missed lenses seem to be
-moving the subjects to the right. In other words, the high power
+moving the subjects to the right. In other words, certain ``high power''
 volunteers are mostly classifying them as subjects with lens candidates.
-Further qualitative comparison and discussion of the trajectory plots is
-given in \Aref{appendix:traj}.
+
+The green (and red) trajectories of the missed lenses, in the bottom panels
+of \Fref{fig:detmis}, show visually easier (and more difficult) to identify
+lenses. In spite of some mild qualitative differences, both set of
+trajectories have very similar behaviour. The trajectories in panel (e)
+are typical of this sample in terms of Nclass and the dominance of small
+negative kicks. Panel (f) represents a small fraction of this sample
+where the kicks are only small and negative. The panel (g) shows how some
+lenses receive a bunch of large positive kicks which are led to
+rejection by still mostly small negative kicks. Finally, panel (h) shows
+those cases of lenses which received almost sufficient number of large
+positive kicks to be detected but ended up being rejected.
+
+The detected lenses shown with green trajectories, in the upper
+panels of \Fref{fig:detmis}, can be thought of as counterparts of the trajectories of the
+missed lenses in the corresponding bottom panels except that their
+classification power is different. Most detected lenses are similar to the case
+in panel (a) that are detected within a few classifications coming from
+large positive kicks.  Panel (b) represents a few odd cases which are
+dominated mainly by small positive kicks. Panel (c) shows a lens getting
+more classifications, but not reaching the detection or rejection
+thresholds because of the tug between positive and negative kicks mostly
+from experienced volunteers.  Panel (d) represents two extreme cases when
+the images are on the verge of being rejected but are saved thanks to a
+series of large positive kicks.  The red trajectories are some more
+examples of randomly selected cases which demonstrate how having
+sufficient number of large positive kicks allows lenses to be detected
+in spite of several small negative kicks.
 
 For a quantitative comparison of the large and small kicks for the
 entire samples of detected and missed known lenses, we show a plot of
 histogram on the right of \Fref{fig:detmis}. Qualitatively, there are
-four types of volunteers making classifications - those causing positive
-large kicks (correct classifications by high power volunteers, those
-causing positive small kicks (correct classifications by low power
-volunteers), those causing negative small kicks (incorrect
-classifications by low power volunteers) and those causing negative
-large kicks (incorrect classifications by high power volunteers). The
+four types of volunteers making classifications: those causing large, positive
+kicks (correct classifications by high power volunteers), those
+causing small, positive kicks (correct classifications by low power
+volunteers), those causing small, negative kicks (incorrect
+classifications by low power volunteers) and those causing large, negative
+kicks (incorrect classifications by high power volunteers). The
 four histograms in the figure correspond to these four types of
-volunteers for each sample (that is, detected or missed). The kick size
-is small if $\Delta$ log(P)$=$log (P$_{\rm current}) - $log(P$_{\rm
-previous}) < \Delta$log(P)$_{\rm cut}$ (chosen as 1.2) and is large
-if greather than $\Delta$log(P)$_{\rm cut}$.
+volunteers for each sample (that is, detected or missed). In this plot,
+the kick size
+is defined as small if
+$\Delta \log{P} (= \log{P_{\rm current}} - \log{P_{\rm
+previous}}) < \Delta\log{P}_{\rm cut}$ (chosen as 1.2) and is large
+if greater than $\Delta\log{P}_{\rm cut}$.
 
-Some of the key differences are i) the ratio of positive large kicks to
-positive small kicks for the detected sample is higher than the missed
-sample suggesting that the fraction of high power volunteers is large
-for the detected sample ii) in terms of Nclass, the missed sample is
-dominated by volunteers causing negative small kicks whereas for the
-detected sample there is a comparable contribution from three types of
-volunteers - positive small and large kicks and negative small kicks.
-iii) the Nclass from volunteers with negative large kicks are lower, both
-for the detected and the missed samples. This is consistent with our
-expectation that high power volunteers should not be making incorrect
-classifications. Therefore, lack of high power volunteers classifying
-the missed lenses seems to be one of the major factors.
+Some of the key inferences are as follows.  i) The ratio of  large
+positive kicks to small positive kicks for the detected sample is higher
+than in the missed sample, suggesting that the fraction of high power
+volunteers is large for the detected sample.  ii) The number of
+classifications received by the missed sample is dominated by small
+negative kicks. In contrast, for the detected sample there are
+comparable contributions from all three types -- small positive kicks,
+large positive kicks, and small negative kicks.  iii) The number of
+classifications providing large negative kicks is lower for both the
+detected and the missed samples. This is consistent with our expectation
+that high power volunteers should not be making incorrect
+classifications.  We conclude that one of the major factors in the \SW
+system missing the known lenses is a lack of high power classifications.
 
-We rerun SWAP for \StageOne where we use classifications from volunteers
-who produce $\Delta$ log(P)$>1.2$ only. This obviously means reducing
-the total Nclass per subject by a large fraction. As a result, we also
-need to change the P$_{\rm acc thresh}$ which is chosen to be 0.1 and we
-find that about a third of the missed lenses are detected while all the
-previously detected lenses remain detected too. The others simply do not
-have enough classifications from volunteers producing large positive
-kicks. Thus, it may be possible to detect more promising candidates if
-we preferentially show the rejected systems to a few high power
-volunteers. We understand that changing the rejection and acceptance
-thresholds will likely increase the rate of FPs along with improved
-completeness. After testing on a subsample of both \StageOne and
-\StageOne FPs, we find that a small fraction of FPs are rejected when
-only classifications with $\Delta$ log(P)$>1.2$ only are considered.
-Therefore, we think it is worth adopting the new strategy in the future
-runs of SWAP in future lens searches.
+As a demonstration, we re-ran SWAP for \StageOne using only  classifications
+that produced large kicks, with $|\Delta \log{P}| > 1.2$.  This obviously meant
+reducing the total number of classifications per subject by a large fraction.
+As a result, we also needed to change the $P_{\rm acc thresh}$. Choosing this to
+be 0.1, we found that about a third of the lenses that had previously been
+missed were now detected, while all the previously detected lenses were again
+detected. The remaining missed lenses simply do not have enough classifications
+from volunteers producing large positive kicks. This experiment shows that it
+may be possible to increase the  \sw completeness  by preferentially showing
+certain rejected systems -- those that  had never received a high power
+classification --  to  volunteers capable of making such classifications.
+
+Changing the rejection and acceptance thresholds will likely increase
+the rate of false positives along with improved completeness.  This will
+need to be further quantified before detailed recommendations can be
+made. However, dynamically assigning certain subjects to volunteers
+according to various measures of their skill seems like a fruitful line
+of investigation when seeking to improve the system performance in
+future.
 
 \begin{figure*}
 \begin{center}
@@ -1525,13 +1604,15 @@ simulated and the real sample of candidates. }
 \includegraphics[scale=0.6]{det_mis_traj.pdf}
 \includegraphics[scale=0.6]{det_mis_hist.pdf}
 \caption{ \label{fig:detmis}
-Examples of trajectories of some known lenses (top-left: detected and
-bottom-left: missed) at \StageOne and histogram of the known lenses for
-different types of volunteers (right). Among the sample of missed
+Left: Examples of \StageOne trajectories of some known lenses.
+Upper panels show detected
+lenses, lower panels show missed lenses (false negatives). Right:
+Histogram of classification power received by known lenses.
+Among the sample of missed
 lenses, most classifications are from the low power volunteers
-identifying these images incorrectly (i.e. $-\Delta$~logP) which
+identifying these images incorrectly (i.e. $-\Delta$~log(P)) which
 overshadows the small number of correct identifications (i.e.
-$\Delta$~logP) coming from both the less and the high power volunteers
+$\Delta$~log(P)) coming from both the less and the high power volunteers
 combined. For the detected lens sample, most classifications are correct
 identifications coming from both low and high power volunteers.
 }
@@ -1545,188 +1626,181 @@ identifications coming from both low and high power volunteers.
 \label{sec:conclude}
 
 We report the discovery of gravitational lens candidates from the
-the first \sw lens search. In this search, volunteers are shown
-$g-r-i$ color images of random regions of the sky taken by the CFHT Legacy
-Survey. The aim of this blind lens search is to find lenses that have been
-missed by previous searches done on the \cfhtls with lens finding
-algorithms. In this search, we use a training sample to train the
-volunteers and calibrate their performance which helps us in more
-efficient pruning of the lens candidates. The training sample has
-simulated lenses, duds and FPs. In this paper, we describe the details
-of the training sample generated and tuned for the \cfhtls data.
-Volunteers receive feedback messages when they click or fail to click on
-the training images during live classification of real images which
-helps them remain focused and improve their performance over time. More
-details about the design of \sw system and how it works are given in the
-companion paper, Paper I.
+first \sw lens search. In this search, volunteers were shown $g-r-i$
+colour images of random regions of the sky taken by the CFHT Legacy
+Survey. The aim of this blind lens search was to find lenses that had
+been missed by previous searches done on the \cfhtls with lens finding
+algorithms.
 
-The blind lens search in the \cfhtls is done in two stages: \StageOne and
-\StageTwo. In \StageOne, volunteers inspected $\sim$ 430 000 images and
-selected a smaller sample of $\sim$ 3000 images with interesting lens
-candidates. In \StageTwo, after a careful reinspection of the candidates
-from \StageOne, a smaller pool of more pure sample of $\sim$~500
-candidates is obtained. In the next step, the images are graded by three
-lens experts (AM, AV and PJM) producing candidates with quality flags
-ranging from possibly a lens to almost certainly a lens.
+The search was carried out in two stages.  In \StageOne, volunteers
+inspected $\sim$ 430,000 images, and selected a smaller sample of $\sim$
+3000 images as having interesting lens candidates. In \StageTwo, after a
+careful second inspection of the candidates from \StageOne, a purer
+sample of $\sim$~500 candidates was obtained. In a final step, these
+images were inspected by three of us (AM, AV and PJM) to produce a
+sample of candidates with grades ranging from possibly a lens (1) to
+almost certainly a lens (3).  In this paper, we presented this new \sw
+sample and compared it with the previously known samples from two
+robotic searches from the \cfhtls, namely, \rf and \af.
 
-In this paper (Paper II), we present the new \sw sample and compare it
-with the previously known samples from two robotic searches from the
-\cfhtls namely, the \rf and \af. More detailed description and analyses
-of the new sample such as spectroscopic confirmation and mass modelling
-analyses will be presented in a subsequent \sw paper (Verma et al., in
-prep.). 
-
-Below, we give some of our conclusions from the first \sw lens search
-and the comparison with robotic searches:
+Our conclusions are as follows:
 \begin{itemize}
-
 \item \sw works well as a discovery engine for gravitational lenses
 through citizen science. While a targeted visual search may be more
 efficient, we show that the blind search works reasonably well too.
 
-\item We present a sample of {\bf 59 new} gravitational lens candidates
-out of which {\bf 29} are more promising systems. These candidates received
-averaged grades, G$\ge$1.3 from three experts where 1-possibly, a lens,
-2-probably, a lens and 3-certainly, a lens. In addition, among the
-G$\ge$1.3 sample, we find 83 lens candidates from the various samples
+\item We use a sample of simulated lenses, duds and impostors tailored
+to the \cfhtls data to train the volunteers and calibrate their
+performance. The volunteers not only perform well on the training sample
+(see Paper I) but also find lenses that are fainter, more compact or
+redder than covered by the training sample demonstrating their
+adaptability in this task. 
+
+\item We present a sample of {\bf 29 new} gravitational lens candidates,
+and an additional 30 medium grade systems. These 59 candidates received
+averaged grade G$\ge$1.3 from three experts following the scale
+where (1) means possibly, (2) means
+probably, and (3) means almost certainly, a lens. In addition, among the
+G$\ge$1.3 sample, we re-discovered 82 lens candidates from various samples
 published in the literature.
 
-\item Compared to the sample of robotically (the \rf and \af) detected
-lens candidates, the \sw sample finds lens systems with similar range in
-the lens redshift and properties of the lensed images such as the total
-magnitude and the Einstein radii. However, the \sw search being a purely
-visual one cannot find some of the \rf-identified-lensed images with
-sub-arcsecond $R_{\rm E}$ because the flux of the typically faint
-lensed images is obscured by the flux from bright lensing galaxies. The
-\rf finds these candidates because it works with lensing
-galaxy-subtracted images.
+\item Compared to the sample of \rf and \af robotically detected
+lens candidates, the \sw sample finds lens systems with statistically similar properties,
+including the range of
+lens redshifts, lensed image total
+magnitudes, and Einstein radii. However, having only displayed images without
+the lens galaxy light subtracted, the \sw sample does not contain
+many of the \rf-identified-lensed images with
+sub-arcsecond $R_{\rm E}$, just because the flux of the typically faint
+lensed images is obscured by the flux from bright lensing galaxies.
 
-\item Qualitatively, the \sw sample finds lens systems with different
+\item Qualitatively, \sw seems to have found lens systems with different
 types of lensing galaxies, for example, elliptical, spiral (face on and
 edge on) and small red galaxies unlike those found from robotic
 searches. Similarly, the lensed images too have diverse properties such
-as different colors, morphologies and sizes which are again typically
+as different colours, morphologies and sizes which are again typically
 missed by any given algorithm.
 
 \item Based on the known sample of lenses and lens candidates, we find
-that we lose a very small fraction of them as we go from \StageOne to
-\StageTwo. In other words, it is more important to improve the lens
-detection efficiency right at \StageOne to increase the overall
-completeness of the final lens sample
+that we lose a very small fraction of them during \StageTwo refinement.
+It is more important to improve the lens
+detection sensitivity at the initial \StageOne classification step.
+About 40\% of the previously known lenses ($\sim$20 in total) were missed at \StageOne.
+Roughly half of these missed lenses were found to be galaxy-scale \rf
+systems, with faint arcs blended with the bright lens galaxies.
 
-\item From the sample of known lenses, \sw missed about 40\% at \StageOne.
-Among the missed sample of about 20 lenses, roughly half of them are
-visually difficult to identify because most of them are faint with small
-image separations which are identified through the \rf
-
-\item If we use the classifications from the high power volunteers alone
-at \StageOne, then we recover over 30\% of the lenses from the missed
-sample. Thus, it is possible to improve the completeness of lenses by
-changing the strategy of when and who is shown an image.
+\item It is possible to improve the \sw completeness by
+changing the strategy of when and who is shown an image: only using high power
+classifications recovers 30\% of the missed lenses.
 
 \end{itemize}
 
-The discovery of several new candidates through the first \sw lens
+The discovery of many new lens candidates through the first \sw lens
 search has demonstrated that the citizen scientists have successfully
-taught themselves to identify lenses within a short span of time and
-that they have found lens candidates which the algorithms failed to
-discover.  However, the upcoming and planned imaging surveys such as the
-DES, HSC and LSST will have formidable amount of data. Any one approach
-for finding lenses is likely going to be inefficient. Thus, combining
-robotic methods for pre-selection with the citizen science approach for
-visual screening will be an optimal choice for finding lenses in these
-large imaging surveys.
+taught themselves to identify lenses within a short span of time.  They
+have found lens candidates which the algorithms failed to discover.
+Upcoming and planned wide-field imaging surveys such as the DES, HSC and
+LSST will produce formidable amounts of data.  Blind lens searches as
+described here will be infeasible with these very large surveys although
+it may be possible to do a blind search on a subset of a large survey in
+order to assess the performance of either the algorithms or the
+volunteers which can be extrapolated to the entire survey. However, any
+one approach for finding lenses from the entire survey data is likely
+going to be inefficient. Thus, combining robotic methods for
+pre-selection with the citizen science approach for visual screening
+could be a good strategy for finding lenses in these large imaging
+surveys.
 
 \onecolumn
 \begin{center}
 \begin{longtable}{llrrrrrrlrr}
+%\begin{sideways}
+%\begin{tabular}{llrrrrrrlrr}
 \caption{ \label{tab:swcands}
 Sample of the \sw new lens candidates. }\\
 \hline
-SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & P & Comments  \\
+SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & $G$ & ZooID & $P$ & Comments  \\
   &  & (deg) & (deg) &  & (mag) &  (") &  &  & & \\
 \hline
 \endfirsthead
 \hline
-SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & G & ZooID & P & Comments  \\
+SW ID & Name & RA & Dec &  $z_{\rm phot}$ & $m_i$ & $R_{\rm E}$ & $G$ & ZooID & $P$ & Comments  \\
   &  & (deg) & (deg) &  & (mag) &  (") &  &  & & \\
 \hline
 \endhead
 \hline
 \multicolumn{11}{p{18cm}}{
-The redshift with $^s$ are spectroscopic estimates taken from SDDS Data
-Release 12 whenever available unambiguously. The column Comments has two
-type of notes. The first is about the lens image configuration where the
-symbols mean the following A: Arc, D: Double, Q: Quad, R: Ring. The
-second is a comment on the type of lens assessed visually. Note that
-this classification is not based on colors or spectral analysis. The
-symbols are E: Elliptical, S: (face on) Spiral, G: Group-scale, D: Edge
-on disk, R: Red starforming galaxy.  This galaxy falls within the masked
-region as per the catalog from which the magnitudes and the redshift are
-extracted.
+The column Comments has two type of notes. The first is about the lens
+image configuration where the symbols mean the following A: Arc, D:
+Double, Q: Quad, R: Ring. The second is a comment on the type of lens
+assessed visually. Note that this classification is not based on colours
+or spectral analysis. The symbols are E: Elliptical, S: (face on)
+Spiral, G: Group-scale, D: Edge on disk, R: Red star-forming galaxy.
 }\\
 \endlastfoot
-SW19 & CFHTLS J020642.0-095157 &  31.67504 &  -9.86584 &  0.2 & 21.4 &  0.9 &  2.0 & ASW0001ld7 &  0.8 &  A,R   \\ 
-SW8 & CFHTLS J020648.0-065639 &  31.70031 &  -6.94430 &  0.8 & 21.0 &  1.3 &  2.3 & ASW00099ed &  0.4 &  A,E   \\ 
-SW43 & CFHTLS J020810.7-040220 &  32.04497 &  -4.03891 &  1.0 & 21.6 &  1.8 &  1.3 & ASW0001c3j &  0.7 &  A,R   \\ 
-SW9 & CFHTLS J020832.1-043315 &  32.13396 &  -4.55429 &  1.0 & 21.9 &  1.6 &  2.3 & ASW0002asp &  1.0 &  A,R   \\ 
-SW10 & CFHTLS J020848.2-042427 &  32.20110 &  -4.40751 &  0.8 & 21.6 &  1.1 &  2.3 & ASW0002bmc &  0.9 &  D,D   \\ 
-SW11 & CFHTLS J020849.8-050429 &  32.20784 &  -5.07494 &  0.8 & 21.3 &  0.9 &  2.3 & ASW0002qtn &  1.0 &  A,R   \\ 
-SW44 & CFHTLS J021021.5-093415 &  32.58981 &  -9.57109 &  0.4 & 19.0 &  2.7 &  1.3 & ASW0002k40 &  0.4 &  D,S   \\ 
-SW30 & CFHTLS J021057.9-084450 &  32.74148 &  -8.74745 &  0.45$^s$ &  0.0 &  2.5 &  1.7 & ASW0002p8y &  0.4 &  A,G   \\ 
-SW20 & CFHTLS J021221.1-105251 &  33.08810 & -10.88106 &  0.3 & 18.2 &  1.8 &  2.0 & ASW0002dx7 &  0.8 &  D,E/S   \\ 
-SW45 & CFHTLS J021225.2-085211 &  33.10511 &  -8.86973 &  0.76$^s$ & 20.5 &  2.1 &  1.3 & ASW00024id &  1.0 &  R,R   \\ 
-SW46 & CFHTLS J021317.6-084819 &  33.32341 &  -8.80549 &  0.5 & 20.6 &  1.3 &  1.3 & ASW00024q6 &  0.4 &  A,R/E   \\ 
-SW31 & CFHTLS J021514.6-092440 &  33.81089 &  -9.41115 &  0.72$^s$ & 21.1 &  2.6 &  1.7 & ASW00021r0 &  0.4 &  A,R/G   \\ 
-SW32 & CFHTLS J022359.8-083651 &  35.99955 &  -8.61439 &  0.0 &  0.0 &  3.1 &  1.7 & ASW0004iye &  0.4 &  A,E   \\ 
-SW12 & CFHTLS J022406.1-062846 &  36.02558 &  -6.47963 &  0.4 & 20.1 &  0.9 &  2.3 & ASW0003wsu &  0.7 &  A,E   \\ 
-SW1 & CFHTLS J022409.5-105807 &  36.03978 & -10.96885 &  0.0 &  0.0 &  4.8 &  3.0 & ASW0004dv8 &  1.0 &  A,G   \\ 
-SW21 & CFHTLS J022533.3-053204 &  36.38882 &  -5.53460 &  0.57$^s$ & 20.4 &  3.6 &  2.0 & ASW0004m3x &  0.4 &  A,R/G   \\ 
-SW22 & CFHTLS J022716.4-105602 &  36.81856 & -10.93410 &  0.4 & 17.8 &  1.8 &  2.0 & ASW0009ab8 &  0.7 &  A,E/G   \\ 
-SW33 & CFHTLS J022745.2-062518 &  36.93868 &  -6.42183 &  0.6 & 21.3 &  1.2 &  1.7 & ASW0003s0m &  0.5 &  A,R   \\ 
-SW13 & CFHTLS J022805.6-051733 &  37.02362 &  -5.29266 &  0.4 & 19.2 &  1.4 &  2.3 & ASW00047ae &  1.0 &  Q,E   \\ 
-SW47 & CFHTLS J022843.0-063316 &  37.17942 &  -6.55465 &  0.5 & 19.9 &  1.8 &  1.3 & ASW0003r6c &  0.3 &  D/A,E   \\ 
-SW23 & CFHTLS J023008.6-054038 &  37.53591 &  -5.67744 &  0.50$^s$ & 20.4 &  1.9 &  2.0 & ASW0003r61 &  0.5 &  A,E   \\ 
-SW14 & CFHTLS J023123.2-082535 &  37.84682 &  -8.42663 &  0.0 & 0.0 &  1.2 &  2.3 & ASW0004xjk &  0.3 &  A,R   \\ 
-SW24 & CFHTLS J023315.2-042243 &  38.31334 &  -4.37886 &  0.7 & 20.4 &  1.0 &  2.0 & ASW00050sk &  0.8 &  A,R   \\ 
-SW34 & CFHTLS J023453.5-093032 &  38.72321 &  -9.50892 &  0.5 & 20.3 &  0.7 &  1.7 & ASW00051ld &  0.3 &  A,D   \\ 
-SW35 & CFHTLS J084833.2-044051 & 132.13847 &  -4.68085 &  0.8 & 21.1 &  0.9 &  1.7 & ASW0004wgd &  0.7 &  A,R   \\ 
-SW15 & CFHTLS J084841.0-045237 & 132.17084 &  -4.87720 &  0.3 & 19.5 &  1.0 &  2.3 & ASW0004nan &  1.0 &  A,E   \\ 
-SW48 & CFHTLS J090219.0-053923 & 135.57947 &  -5.65666 &  0.0 &  0.0 &  2.0 &  1.3 & ASW0000g95 &  1.0 &  A,R/E   \\ 
-SW36 & CFHTLS J090248.4-010232 & 135.70204 &  -1.04243 &  0.4 & 19.7 &  1.4 &  1.7 & ASW000096t &  0.6 &  D,E   \\ 
-SW25 & CFHTLS J090308.2-043252 & 135.78449 &  -4.54789 &  0.0 &  0.0 &  1.3 &  2.0 & ASW00007mq &  0.6 &  D,D   \\ 
-SW49 & CFHTLS J090319.4-040146 & 135.83105 &  -4.02971 &  0.0 & 20.6 &  1.2 &  1.3 & ASW00007ls &  0.5 &  A,R/E   \\ 
-SW50 & CFHTLS J090333.2-005829 & 135.88869 &  -0.97490 &  0.0 &  0.0 &  2.1 &  1.3 & ASW00008a0 &  1.0 &  A/D,E/G   \\ 
-SW51 & CFHTLS J135724.8+561614 & 209.35374 &  56.27066 &  0.36$^s$ &  0.0 &  2.6 &  1.3 & ASW0006e0o &  0.9 &  D,E   \\ 
-SW26 & CFHTLS J135755.8+571722 & 209.48268 &  57.28971 &  0.8 & 21.4 &  0.9 &  2.0 & ASW0005ma2 &  0.8 &  A,R   \\ 
-SW52 & CFHTLS J140027.9+541028 & 210.11636 &  54.17455 &  0.6 &  0.0 &  1.2 &  1.3 & ASW0006a07 &  0.6 &  Q,R/E   \\ 
-SW16 & CFHTLS J140030.2+574437 & 210.12601 &  57.74371 &  0.38$^s$ & 18.8 &  2.0 &  2.3 & ASW0009bp2 &  0.6 &  A,E   \\ 
-SW2 & CFHTLS J140522.2+574333 & 211.34261 &  57.72587 &  0.52$^s$ & 20.3 &  1.0 &  2.7 & ASW000619d &  0.7 &  A,R   \\ 
-SW17 & CFHTLS J140622.9+520942 & 211.59581 &  52.16169 &  0.7 & 21.3 &  1.2 &  2.3 & ASW0005rnb &  0.7 &  A,R   \\ 
-SW27 & CFHTLS J141432.9+534004 & 213.63716 &  53.66788 &  0.7 & 22.1 &  1.0 &  2.0 & ASW0006jh5 &  0.8 &  A,R   \\ 
-SW53 & CFHTLS J141518.9+513915 & 213.82903 &  51.65420 &  0.29$^s$ & 18.9 &  3.0 &  1.3 & ASW00070vl &  0.8 &  D,E   \\ 
-SW3 & CFHTLS J142603.2+511421 & 216.51375 &  51.23935 &  0.0 &  0.0 &  4.4 &  2.7 & ASW0006mea &  0.7 &  A,G   \\ 
-SW54 & CFHTLS J142620.8+561356 & 216.58699 &  56.23230 &  0.5 & 19.9 &  1.3 &  1.3 & ASW0007sez &  0.8 &  A/R,S   \\ 
-SW55 & CFHTLS J142652.8+560001 & 216.72004 &  56.00044 &  0.0 &  0.0 &  1.5 &  1.3 & ASW0007t5y &  1.0 &  R,R   \\ 
-SW56 & CFHTLS J142843.5+543713 & 217.18153 &  54.62036 &  0.4 & 20.3 &  1.3 &  1.3 & ASW0007pga &  0.6 &  D,D   \\ 
-SW4 & CFHTLS J142934.2+562541 & 217.39261 &  56.42807 &  0.51$^s$ & 19.9 &  5.9 &  2.7 & ASW0009cjs &  0.8 &  A,G   \\ 
-SW28 & CFHTLS J143055.9+572431 & 217.73332 &  57.40883 &  0.60$^s$ & 20.1 &  1.6 &  2.0 & ASW0007xrs &  0.9 &  A,R/G   \\ 
-SW37 & CFHTLS J143100.2+564603 & 217.75124 &  56.76750 &  0.0 &  0.0 &  1.2 &  1.7 & ASW00086xq &  0.8 &  A,E   \\ 
-SW38 & CFHTLS J143353.6+542310 & 218.47357 &  54.38624 &  0.65$^s$ & 20.7 &  1.8 &  1.7 & ASW0009cp0 &  0.7 &  A,E   \\ 
-SW5 & CFHTLS J143454.4+522850 & 218.72702 &  52.48080 &  0.62$^s$ & 20.5 &  4.4 &  2.7 & ASW0007k4r &  0.4 &  Q,G/R   \\ 
-SW6 & CFHTLS J143627.9+563832 & 219.11636 &  56.64249 &  0.53$^s$ & 20.2 &  1.5 &  2.7 & ASW0008swn &  0.9 &  A,D   \\ 
-SW57 & CFHTLS J143631.5+571131 & 219.13155 &  57.19215 &  0.7 & 22.0 &  1.3 &  1.3 & ASW0008pag &  0.6 &  D/A,R   \\ 
-SW58 & CFHTLS J143651.6+530705 & 219.21503 &  53.11832 &  0.58$^s$ & 20.2 &  3.1 &  1.3 & ASW0007iwp &  0.7 &  A,E/G   \\ 
-SW18 & CFHTLS J143658.1+533807 & 219.24246 &  53.63550 &  0.61$^s$ & 20.3 &  0.9 &  2.3 & ASW0007hu2 &  0.6 &  D,D   \\ 
-SW29 & CFHTLS J143838.1+572647 & 219.65887 &  57.44645 &  0.8 & 21.3 &  1.1 &  2.0 & ASW0008qsm &  0.9 &  A,R   \\ 
-SW59 & CFHTLS J143950.6+544606 & 219.96101 &  54.76858 &  0.73$^s$ &  0.0 &  1.7 &  1.3 & ASW00085cp &  0.4 &  A,G/R   \\ 
-SW39 & CFHTLS J220215.2+012124 & 330.56348 &   1.35667 &  0.31$^s$ & 18.0 &  4.6 &  1.7 & ASW0005qiz &  0.5 &  rA,G   \\ 
-SW7 & CFHTLS J220256.8+023432 & 330.73691 &   2.57581 &  0.48$^s$ &  0.0 &  6.8 &  2.7 & ASW0007e08 &  0.8 &  A,G   \\ 
-SW40 & CFHTLS J221306.1+014708 & 333.27579 &   1.78561 &  0.0 & 17.8 &  1.4 &  1.7 & ASW0008wmr &  0.9 &  A,S   \\ 
-SW41 & CFHTLS J221519.7+005758 & 333.83212 &   0.96615 &  0.4 & 20.8 &  1.0 &  1.7 & ASW0008xbu &  0.8 &  A,D   \\ 
-SW42 & CFHTLS J221716.5+015826 & 334.31894 &   1.97394 &  0.1 & 22.0 &  1.0 &  1.7 & ASW00096rm &  1.0 &  A/R,R   \\ 
+SW19 & CFHTLS\,J020642.0$-$095157 &  31.67504 &  $-$9.86584 &  0.2 & 20.8 &  0.9 &  2.0 & ASW0001ld7 &  0.8 &  A,R   \\ 
+SW8  & CFHTLS\,J020648.0$-$065639 &  31.70031 &  $-$6.94430 &  0.8 & 20.2 &  1.3 &  2.3 & ASW00099ed &  0.4 &  A,E   \\ 
+SW43 & CFHTLS\,J020810.7$-$040220 &  32.04497 &  $-$4.03891 &  1.0 & 20.8 &  1.8 &  1.3 & ASW0001c3j &  0.7 &  A,R   \\ 
+SW9  & CFHTLS\,J020832.1$-$043315 &  32.13396 &  $-$4.55429 &  1.0 & 21.0 &  1.6 &  2.3 & ASW0002asp &  1.0 &  A,R   \\ 
+SW10 & CFHTLS\,J020848.2$-$042427 &  32.20110 &  $-$4.40751 &  0.8 & 20.5 &  1.1 &  2.3 & ASW0002bmc &  0.9 &  D,D   \\ 
+SW11 & CFHTLS\,J020849.8$-$050429 &  32.20784 &  $-$5.07494 &  0.8 & 20.6 &  0.9 &  2.3 & ASW0002qtn &  1.0 &  A,R   \\ 
+SW44 & CFHTLS\,J021021.5$-$093415 &  32.58981 &  $-$9.57109 &  0.4 & 18.4 &  2.7 &  1.3 & ASW0002k40 &  0.4 &  D,S   \\ 
+SW30 & CFHTLS\,J021057.9$-$084450 &  32.74148 &  $-$8.74745 &  0.0 &  0.0 &  2.5 &  1.7 & ASW0002p8y &  0.4 &  A,G   \\ 
+SW20 & CFHTLS\,J021221.1$-$105251 &  33.08810 & $-$10.88106 &  0.3 & 17.9 &  1.8 &  2.0 & ASW0002dx7 &  0.8 &  D,E/S   \\ 
+SW45 & CFHTLS\,J021225.2$-$085211 &  33.10511 &  $-$8.86973 &  0.8 & 19.5 &  2.1 &  1.3 & ASW00024id &  1.0 &  R,R   \\ 
+SW46 & CFHTLS\,J021317.6$-$084819 &  33.32341 &  $-$8.80549 &  0.5 & 19.8 &  1.3 &  1.3 & ASW00024q6 &  0.4 &  A,R/E   \\ 
+SW31 & CFHTLS\,J021514.6$-$092440 &  33.81089 &  $-$9.41115 &  0.7 & 19.9 &  2.6 &  1.7 & ASW00021r0 &  0.4 &  A,R/G   \\ 
+SW32 & CFHTLS\,J022359.8$-$083651 &  35.99955 &  $-$8.61439 &  0.0 &  0.0 &  3.1 &  1.7 & ASW0004iye &  0.4 &  A,E   \\ 
+SW12 & CFHTLS\,J022406.1$-$062846 &  36.02558 &  $-$6.47963 &  0.4 & 19.6 &  0.9 &  2.3 & ASW0003wsu &  0.7 &  A,E   \\ 
+SW1  & CFHTLS\,J022409.5$-$105807 &  36.03978 & $-$10.96885 &  0.0 &  0.0 &  4.8 &  3.0 & ASW0004dv8 &  1.0 &  A,G   \\ 
+SW21 & CFHTLS\,J022533.3$-$053204 &  36.38882 &  $-$5.53460 &  0.5 & 19.4 &  3.6 &  2.0 & ASW0004m3x &  0.4 &  A,R/G   \\ 
+SW22 & CFHTLS\,J022716.4$-$105602 &  36.81856 & $-$10.93410 &  0.4 & 17.3 &  1.8 &  2.0 & ASW0009ab8 &  0.7 &  A,E/G   \\ 
+SW33 & CFHTLS\,J022745.2$-$062518 &  36.93868 &  $-$6.42183 &  0.6 & 20.5 &  1.2 &  1.7 & ASW0003s0m &  0.5 &  A,R   \\ 
+SW13 & CFHTLS\,J022805.6$-$051733 &  37.02362 &  $-$5.29266 &  0.4 & 18.8 &  1.4 &  2.3 & ASW00047ae &  1.0 &  Q,E   \\ 
+SW47 & CFHTLS\,J022843.0$-$063316 &  37.17942 &  $-$6.55465 &  0.5 & 19.1 &  1.8 &  1.3 & ASW0003r6c &  0.3 &  D/A,E   \\ 
+SW23 & CFHTLS\,J023008.6$-$054038 &  37.53591 &  $-$5.67744 &  0.6 & 19.7 &  1.9 &  2.0 & ASW0003r61 &  0.5 &  A,E   \\ 
+SW14 & CFHTLS\,J023123.2$-$082535 &  37.84682 &  $-$8.42663 &  0.0 &  0.0 &  1.2 &  2.3 & ASW0004xjk &  0.3 &  A,R   \\ 
+SW24 & CFHTLS\,J023315.2$-$042243 &  38.31334 &  $-$4.37886 &  0.7 & 19.7 &  1.0 &  2.0 & ASW00050sk &  0.8 &  A,R   \\ 
+SW34 & CFHTLS\,J023453.5$-$093032 &  38.72321 &  $-$9.50892 &  0.5 & 19.8 &  0.7 &  1.7 & ASW00051ld &  0.3 &  A,D   \\ 
+SW35 & CFHTLS\,J084833.2$-$044051 & 132.13847 &  $-$4.68085 &  0.8 & 20.2 &  0.9 &  1.7 & ASW0004wgd &  0.7 &  A,R   \\ 
+SW15 & CFHTLS\,J084841.0$-$045237 & 132.17084 &  $-$4.87720 &  0.3 & 19.0 &  1.0 &  2.3 & ASW0004nan &  1.0 &  A,E   \\ 
+SW48 & CFHTLS\,J090219.0$-$053923 & 135.57947 &  $-$5.65666 &  0.0 &  0.0 &  2.0 &  1.3 & ASW0000g95 &  1.0 &  A,R/E   \\ 
+SW36 & CFHTLS\,J090248.4$-$010232 & 135.70204 &  $-$1.04243 &  0.4 & 19.1 &  1.4 &  1.7 & ASW000096t &  0.6 &  D,E   \\ 
+SW25 & CFHTLS\,J090308.2$-$043252 & 135.78449 &  $-$4.54789 &  0.0 &  0.0 &  1.3 &  2.0 & ASW00007mq &  0.6 &  D,D   \\ 
+SW49 & CFHTLS\,J090319.4$-$040146 & 135.83105 &  $-$4.02971 &  0.0 & 19.8 &  1.2 &  1.3 & ASW00007ls &  0.5 &  A,R/E   \\ 
+SW50 & CFHTLS\,J090333.2$-$005829 & 135.88869 &  $-$0.97490 &  0.0 &  0.0 &  2.1 &  1.3 & ASW00008a0 &  1.0 &  A/D,E/G   \\ 
+SW51 & CFHTLS\,J135724.8$+$561614 & 209.35374 &    56.27066 &  0.0 &  0.0 &  2.6 &  1.3 & ASW0006e0o &  0.9 &  D,E   \\ 
+SW26 & CFHTLS\,J135755.8$+$571722 & 209.48268 &    57.28971 &  0.8 & 20.2 &  0.9 &  2.0 & ASW0005ma2 &  0.8 &  A,R   \\ 
+SW52 & CFHTLS\,J140027.9$+$541028 & 210.11636 &    54.17455 &  0.0 &  0.0 &  1.2 &  1.3 & ASW0006a07 &  0.6 &  Q,R/E   \\ 
+SW16 & CFHTLS\,J140030.2$+$574437 & 210.12601 &    57.74371 &  0.4 & 18.2 &  2.0 &  2.3 & ASW0009bp2 &  0.6 &  A,E   \\ 
+SW2  & CFHTLS\,J140522.2$+$574333 & 211.34261 &    57.72587 &  0.7 & 19.7 &  1.0 &  2.7 & ASW000619d &  0.7 &  A,R   \\ 
+SW17 & CFHTLS\,J140622.9$+$520942 & 211.59581 &    52.16169 &  0.7 & 20.3 &  1.2 &  2.3 & ASW0005rnb &  0.7 &  A,R   \\ 
+SW27 & CFHTLS\,J141432.9$+$534004 & 213.63716 &    53.66788 &  0.7 & 21.4 &  1.0 &  2.0 & ASW0006jh5 &  0.8 &  A,R   \\ 
+SW53 & CFHTLS\,J141518.9$+$513915 & 213.82903 &    51.65420 &  0.4 & 18.3 &  3.0 &  1.3 & ASW00070vl &  0.8 &  D,E   \\ 
+SW3  & CFHTLS\,J142603.2$+$511421 & 216.51375 &    51.23935 &  0.0 &  0.0 &  4.4 &  2.7 & ASW0006mea &  0.7 &  A,G   \\ 
+SW54 & CFHTLS\,J142620.8$+$561356 & 216.58699 &    56.23230 &  0.5 & 19.5 &  1.3 &  1.3 & ASW0007sez &  0.8 &  A/R,S   \\ 
+SW55 & CFHTLS\,J142652.8$+$560001 & 216.72004 &    56.00044 &  0.0 &  0.0 &  1.5 &  1.3 & ASW0007t5y &  1.0 &  R,R   \\ 
+SW56 & CFHTLS\,J142843.5$+$543713 & 217.18153 &    54.62036 &  0.4 & 19.7 &  1.3 &  1.3 & ASW0007pga &  0.6 &  D,D   \\ 
+SW4  & CFHTLS\,J142934.2$+$562541 & 217.39261 &    56.42807 &  0.5 & 19.0 &  5.9 &  2.7 & ASW0009cjs &  0.8 &  A,G   \\ 
+SW28 & CFHTLS\,J143055.9$+$572431 & 217.73332 &    57.40883 &  0.7 & 19.3 &  1.6 &  2.0 & ASW0007xrs &  0.9 &  A,R/G   \\ 
+SW37 & CFHTLS\,J143100.2$+$564603 & 217.75124 &    56.76750 &  0.0 &  0.0 &  1.2 &  1.7 & ASW00086xq &  0.8 &  A,E   \\ 
+SW38 & CFHTLS\,J143353.6$+$542310 & 218.47357 &    54.38624 &  0.8 & 19.8 &  1.8 &  1.7 & ASW0009cp0 &  0.7 &  A,E   \\ 
+SW5  & CFHTLS\,J143454.4$+$522850 & 218.72702 &    52.48080 &  0.6 & 19.4 &  4.4 &  2.7 & ASW0007k4r &  0.4 &  Q,G/R   \\ 
+SW6  & CFHTLS\,J143627.9$+$563832 & 219.11636 &    56.64249 &  0.5 & 19.5 &  1.5 &  2.7 & ASW0008swn &  0.9 &  A,D   \\ 
+SW57 & CFHTLS\,J143631.5$+$571131 & 219.13155 &    57.19215 &  0.7 & 20.9 &  1.3 &  1.3 & ASW0008pag &  0.6 &  D/A,R   \\ 
+SW58 & CFHTLS\,J143651.6$+$530705 & 219.21503 &    53.11832 &  0.6 & 19.2 &  3.1 &  1.3 & ASW0007iwp &  0.7 &  A,E/G   \\ 
+SW18 & CFHTLS\,J143658.1$+$533807 & 219.24246 &    53.63550 &  0.7 & 19.6 &  0.9 &  2.3 & ASW0007hu2 &  0.6 &  D,D   \\ 
+SW29 & CFHTLS\,J143838.1$+$572647 & 219.65887 &    57.44645 &  0.8 & 20.2 &  1.1 &  2.0 & ASW0008qsm &  0.9 &  A,R   \\ 
+SW59 & CFHTLS\,J143950.6$+$544606 & 219.96101 &    54.76858 &  0.0 &  0.0 &  1.7 &  1.3 & ASW00085cp &  0.4 &  A,G/R   \\ 
+SW39 & CFHTLS\,J220215.2$+$012124 & 330.56348 &     1.35667 &  0.3 & 17.4 &  4.6 &  1.7 & ASW0005qiz &  0.5 &  rA,G   \\ 
+SW7  & CFHTLS\,J220256.8$+$023432 & 330.73691 &     2.57581 &  0.0 &  0.0 &  6.8 &  2.7 & ASW0007e08 &  0.8 &  A,G   \\ 
+SW40 & CFHTLS\,J221306.1$+$014708 & 333.27579 &     1.78561 &  0.0 & 17.1 &  1.4 &  1.7 & ASW0008wmr &  0.9 &  A,S   \\ 
+SW41 & CFHTLS\,J221519.7$+$005758 & 333.83212 &     0.96615 &  0.4 & 20.2 &  1.0 &  1.7 & ASW0008xbu &  0.8 &  A,D   \\ 
+SW42 & CFHTLS\,J221716.5$+$015826 & 334.31894 &     1.97394 &  0.1 & 21.6 &  1.0 &  1.7 & ASW00096rm &  1.0 &  A/R,R   \\ 
 \end{longtable}
 \end{center}
+%\end{tabular}
+%\end{sideways}
 
 \twocolumn
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1743,34 +1817,6 @@ SW42 & CFHTLS J221716.5+015826 & 334.31894 &   1.97394 &  0.1 & 22.0 &  1.0 &  1
 
 \appendix
 
-\section{Qualitative comparison of detected and missed known lenses}
-\label{appendix:traj}
-
-The bottom panels show the missed or rejected lenses. The green (and red)
-trajectories show visually easier (and more difficult) to identify
-lenses. In spite of some mild qualitative differences, both set of
-trajectories have very similar behaviour. The trajectories in panel e
-are typical of this sample in terms of Nclass and the dominance of short
-negative kicks. The panel f represents a small fraction of this sample
-where the kicks are only short and negative. The panel g shows how some
-lenses receive a bunch of large positive kicks which are led to
-rejection by still mostly negative short kicks. Finally, panel h shows
-those cases of lenses which received almost sufficient number of large
-positive kicks to be detected but ended up being rejected.
-
-The top panels show the detected lenses. The cases shown with green trajectories
-in each panel can be thought of counterparts of the trajectories of the missed
-lenses in the corresponding bottom panels except that the type of volunteers are
-different. Most detected lenses are similar to the case in panel a which are
-detected within a few classifications but coming from large positive kicks.
-Panel b represents a few odd cases which are dominated mainly by short positive
-kicks. Panel c shows a lens getting more classifications because of the tug
-between positive and negative kicks whereas the panel d represents the extreme
-cases when the images are on the verge of being rejected but are saved thanks
-to a series of large positive kicks. The red trajectories are some more
-examples of randomly selected cases which demonstrate how having sufficient
-number of large positive kicks allows lenses to be detected in spite of several
-short negative kicks.
 
 \section{Lens Detection Power}
 \label{appendix:power}
@@ -1785,18 +1831,18 @@ $P_{\rm L}$ and $P_{\rm D}$ (see the left panel of
 \Fref{fig:skilldlnp}). The skill reflects the all-round ability of a
 classifier to contribute information.
 
-As described in the appendix of \PaperOne, the posterior probability $P$
+As described in \PaperOne, the posterior probability $P$
 of a subject is determined by the $P_{\rm L}$ and $P_{\rm D}$ of all the
 volunteers who clicked on the subject, via Bayes' Theorem. Each agent
 will apply a ``kick'' of a different size to the subject probability,
-$\Delta\log(P)$, which can be either positive (if the classifier thinks
+$\Delta\log{P}$, which can be either positive (if the classifier thinks
 the subject contains a lens) or negative (if the classifier thinks the
 subject does not contain a lens). For instance, given a subject
-(not) containing a lens, a volunteer with high ($P_{\rm D}$) $P_{\rm L}$
-implies a large (negative) positive kick irrespective the value of
-($P_{\rm L}$) $P_{\rm D}$ as shown in the (right most) middle panel of
-\Fref{fig:skilldlnp}. However, large (negative) positive kicks are
-still possible for a volunteer located in the (lower) upper triangle
+containing a lens, a volunteer with high $P_{\rm L}$
+implies a large positive kick irrespective of the value of
+$P_{\rm D}$, as shown in the middle panel of
+\Fref{fig:skilldlnp}. However, large positive kicks are
+still possible for a volunteer located in the upper triangle
 with different combinations of ($P_{\rm L}$, $P_{\rm D}$) suggesting that
 the kick is not a simple function of ($P_{\rm L}$, $P_{\rm D}$).
 
@@ -1813,7 +1859,7 @@ classifier's ability to detect lenses (compared to rejecting non-lenses).
 \begin{center}
 \includegraphics[scale=1.0]{dlnp_skill.pdf}
 \caption{ \label{fig:skilldlnp}
-Skill of the volunteers and $\Delta\log(P)$ given a lens or not a lens in
+Skill of the volunteers and $\Delta\log{P}$ given a lens or not a lens in
 an image as a function of $P_{\rm L}$ and $P_{\rm D}$. These
 quantities indicate the ability of the volunteers but do not have a simple
 linear relation with $P_{\rm L}$ and $P_{\rm D}$.

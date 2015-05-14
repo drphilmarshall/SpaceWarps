@@ -962,7 +962,8 @@ classifications, and the set of training subjects seen by each of those
 volunteers.
 $\pr(\LENS|\data)$ is the fundamental property of each test subject that
 we are trying to infer. We track $\pr(\LENS|\data)$ as a function of time,
-and by comparing it to a lower or upper threshold, make decisions about
+as it is updated;
+by comparing it to a lower or upper threshold, we can make decisions about
 whether to retire the subject from the classification interface, or
 flag it for further study, respectively.
 
@@ -1082,7 +1083,7 @@ The progress of the subjects during the online analysis is illustrated in
 \Fref{fig:swap:subject-trajectories}. Subjects appear on this plot at the tip of
 the arrow, at zero classifications and prior probability; they then drift
 downwards as they are classified by the crowd, with each agent applying the
-appropriate kick in probability based on what it hears its volunteer say.
+appropriate ``kick'' in probability based on what it hears its volunteer say.
 Encouragingly, sims (blue) tend to end up with high probability, while duds
 (red) pile up at low probability; test subjects (black) mostly drift to low
 probability, but some go the other way. The latter will help make up the
@@ -1537,10 +1538,11 @@ categories, performance, efficiency and capacity.
 false negatives (blue) and false positives (red) from the classification of
 the \SW$-$\cfhtls training set. The trajectory plot for each of the 4 subjects is
 shown to the right of its image. Lefthand panels show the most common types of
-trajectories: short step random walks resulting from no high skill classifiers
+trajectories: random walks with short steps resulting from no high skill classifiers
 viewing the subject. The righthand panels show examples where higher skill
-classifiers have been involved, causing random walks with longer step lengths
-(top) and catastrophic mis-classifications (bottom right). Note that both these
+classifiers have been involved, causing larger, more efficient ``kicks''
+(top) but also catastrophic mis-classifications (bottom right).
+Note that both these
 subjects were {\it very nearly} detected but didn't quite reach the threshold
 set (marked by the blue dashed line). Insets for the false
 negatives show the lens feature. The inset for the lower righthand panel shows
@@ -1581,12 +1583,12 @@ volunteers, illustrated in the righthand column of the figure. In the false nega
 subject shown in the top right-hand panel, several high skill classifiers update
 the subject upwards in log probability by some way each time, but other,
 comparable skill classifiers mis-classify the system to lower probability.   The
-trajectory looks like a random walk, but with bigger steps; this particular
+trajectory looks like a random walk, but with bigger step sizes; this particular
 subject came very close to crossing the detection  threshold three times, but
 didn't quite make it. The bottom right-hand panel shows an example of a final,
 apparently rare, failure mode: we see some short-step random walk behaviour,
 followed by a mis-classification by a very high skill ``expert'' classifier
-after 20 classifications that promotes the subject to high probability.
+after 20 classifications that ``kicks'' the subject to high probability.
 
 There are a number of places where we can address these problems and
 improve system performance: adding flexibility to the classification
@@ -1641,7 +1643,7 @@ while dashed lines are drawn at the mean values for each sample.}
 
 However, identification failures (around 60\%, from inspection of a random sample)
 seem to be due to the statistical noise associated with
-the many short, semi-random direction steps arising from classifications made by
+the many short, semi-random direction kicks arising from classifications made by
 low skill, inexperienced
 classifiers (\Sref{sec:results:crowd}).
 While improved training will help reduce this effect, it is here

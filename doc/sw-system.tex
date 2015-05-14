@@ -1073,7 +1073,7 @@ images' posterior probability, $\pr(\LENS|C,T)$, to define ``detection'' and
 symmetrically in the logarithm of probability), $10^{-7}$. Subjects that
 attained probability of less than the rejection threshold were scheduled for
 retirement and subsequently ignored by the analysis code. Subjects crossing the
-detection threshold were also subsequently ignored, but they were not
+$P=0.95$ detection threshold were also subsequently ignored, but they were not
 retired from the website, just so that more volunteers could see them.
 
 The progress of the subjects during the online analysis is illustrated in
@@ -1110,8 +1110,6 @@ offline analysis (\Sref{sec:swap:offline} above) of the  \StageTwo
 classifications as well, both  for comparison and as we will see in the next
 section, to improve the pipeline performance.
 
-\flag{AV}{Do we say somewhere that once a subject reaches 0.95 it cannot be down
-graded even if there are more classifications?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1370,8 +1368,6 @@ were available to be classified, and 2) the information generated per agent was
 slightly higher at \StageTwo, just because the subjects had (on average) higher
 probability.
 
-\flag{AV}{MENTION HARDER TRAINING HERE MEANING THAT THE SPREAD IS LARGER?}
-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=0.9\linewidth]{crowd_contrib_cumul.pdf}
@@ -1558,8 +1554,10 @@ citizens. Instead, the volunteers clicked many different features.}
 \label{sec:discuss:performance}
 
 We investigated the source of the incompleteness and impurity visible in
-\Fref{fig:results:sample:CP}, by examining the \StageTwo false negatives and
-false positives, and their behaviour as they are classified using the online
+\Fref{fig:results:sample:CP}, by examining the \StageTwo ``false negatives''
+(simulated lenses that incorrectly acquired $P < 10^{-7}$) and
+false positives (duds or impostors that incorrectly acquired $P > 0.95$),
+and their behaviour as they are classified using the online
 analysis trajectory plots introduced in \Sref{sec:swap}
 (\Fref{fig:swap:subject-trajectories}).
 \Fref{fig:discuss:performance:trajectories} shows 2 example simulated lenses
@@ -1567,13 +1565,6 @@ that were missed ($\pr(\LENS|C,T) < 10^{-7}$) by the \SW system (top row),
 and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
 0.95$) by the \SW system (bottom row).
-
-\flag{AV}{wonder if we should include some definitions for less familiar readers
-for false positive: a non-lens that is selected by the crowd,
-false negative: a lens candidate that is rejected by the crowd,
-true positive: a lens candidate selected by the crowd,
-true negative (not used in the paper): an empty field that's correctly
-identified as being empty...}
 
 In some cases the rejection of the false negatives is understandable: the
 lensed features are faint, or in some cases, appear somewhat unrealistic compared to real lenses.
@@ -1605,15 +1596,9 @@ classification, and interpreting the classification data.
 
 Some of  the mistakes made by reasonably high skill classifiers working at high
 speed could have perhaps been corrected by those classifiers themselves, had
-they had access to a ``go back'' option. While clearly enabling error reduction, particularly those caused by simply skimming too fast,
-we might worry about such a mechanism enabling classifiers to have a guess, then
-go and read the \Talk discussion, and then return to the classification
-interface to change their mind to agree with the forum. In fact, this is already
-possible on the current interface -- and indeed, it is not obvious that such
-correlations would necessarily lead to poorer system performance.
-\flag{AV}{REPETITION OF
-TALK FACTOR FROM EARLIER SECTION, IT"S NOT NEEDED TWICE}. There may well
-also be effects on volunteer confidence; it may be that encouraging this sort of
+they had access to a ``go back'' option. While clearly enabling error reduction,
+we might worry about such a mechanism having a negative effect on
+volunteer confidence: it may be that encouraging this sort of
 checking would result in increased and not necessarily productive caution. This
 could be tested by presenting a fraction of the volunteers with a version of the
 site that actively suggested that they take this approach, and then tracking the
@@ -1651,20 +1636,19 @@ while dashed lines are drawn at the mean values for each sample.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-However, identification failures \flag{AV}{DEFINE WHAT YOU MEAN BY IDENTIFICATION
-FAILURES} around 60\%, from inspection of a random sample) seem to be due to the
-statistical noise associated with the many short, semi-random direction kicks
-arising from classifications made by low skill, inexperienced classifiers
-(\Sref{sec:results:crowd}). \flag{AV}{ARE YOU SAYING THAT THERE ARE MORE OF THESE THAN THE
-RIGHT COLUMN EXAMPLES?  WE SHOULD GIVE NUMBERS.} While improved training will
-help reduce this effect, it is here that targeted task assignment could also
-help improve system performance, by bringing higher skill volunteers in when
-needed. We advertised \StageTwo of the current project to all registered users;
-it was taken up by \StageOne veterans with a broad range of skill, and also
-picked up a significant number of new users who did not have enough time to
+However, many false negatives (around 60\%, from inspection of a random sample)
+seem to be due to the statistical noise associated with the many short,
+semi-random direction kicks arising from classifications made by low skill,
+inexperienced classifiers (\Sref{sec:results:crowd}). While improved training
+will help reduce this effect, it is here that targeted task assignment could
+also help improve system performance, by bringing higher skill volunteers in
+when needed. We advertised \StageTwo of the current project to all registered
+users; it was taken up by \StageOne veterans with a broad range of skill, and
+also picked up a significant number of new users who did not have enough time to
 acquire high skill (since \StageTwo was quite short): of the 1964 volunteers who
 took part in the \StageTwo classification round, only 774 were veterans from
-\StageOne.
+\StageOne. This issue is discussed further in \PaperTwo, where we investigate
+the known lenses missed by the \SW system.
 
 \Fref{fig:discuss:performance:stage1vstage2} shows how the \StageOne
 skill maps on to \StageTwo skill and contribution. This figure suggests

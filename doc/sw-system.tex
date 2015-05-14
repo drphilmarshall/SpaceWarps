@@ -61,7 +61,7 @@ candidates. Having divided 160 square degrees of Canada-France-Hawaii Telescope
 Legacy Survey (\cfhtls) imaging into some 430,000 overlapping 82 by 82 arcsecond
 tiles and displaying them on the site, we were joined by around 37,000
 volunteers who contributed 11~million image classifications over the course of 8
-months. This \StageOne search reduced the sample to 3368 images containing candidates; these were then
+months. This \StageOne search reduced the sample to 3381 images containing candidates; these were then
 refined in \StageTwo to yield a sample that we expect to be over 90\% complete and 30\% pure, based on our analysis of the volunteers performance on training images (refer for \Sref{sec:design:stages} for more information on the two stage strategy) .
 We comment on the scalability of the \SW system to the wide field survey era,
 based on our finding that searches of $10^4$ images can be performed by a
@@ -140,11 +140,12 @@ times the sky area, such as the almost-all sky surveys planned with the Large
 Synoptic Survey Telescope (LSST) and
 Euclid?  There are two approaches to detecting lenses in imaging surveys. The
 first one is robotic: automated analysis of the object catalogs and the survey
-images. The candidate samples produced by these methods have, to date, not been
-of high purity  \citep[see
-e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}, with visual inspection
-by teams of humans still required to narrow down the robotically-generated
-samples. In this approach, the image data may or may not be explicitly modelled
+images. The candidate samples produced by these methods have, to date, only
+reached purities of 1-10\%, with visual inspection
+by teams of humans still required to reduce the robotically-generated
+samples by factors of 10-100 \citep[see
+e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}.
+In this approach, the image data may or may not be explicitly modelled
 by the robots as if it contained a gravitational lens, but the visual inspection
 can be thought of as a ``mental modeling'' step.  An inspector who classifies an
 object as a lens candidate does so because the features in the image that they
@@ -153,7 +154,8 @@ lenses do.  The second approach simply cuts out the robot middleman:
 \citet{MoustakasEtal2007,FaureEtal2008,Jackson2008} and \citet{PawaseEtal2014}
 all performed successful visual searches for lenses in HST imaging.
 
-Until this problem is solved by machine learning tools, at present visual image inspection seems unavoidable at some level when
+Until this problem is solved by machine learning tools,
+at present visual image inspection seems unavoidable at some level when
 searching for gravitational lenses. The technique has some drawbacks, however.
 The first is that humans make mistakes. A solution to this is for the inspectors
 to operate in teams, providing multiple classifications of the same images in
@@ -1002,9 +1004,10 @@ inference, the effect will be that of applying the time-averaged confusion
 matrices to each classification,  rather than a set that evolves as the agents
 (and in the real world, the volunteers) learn. This will mean  that the early
 classifications will effectively not be downweighted as a result of the agent's
-ignorance. On the other hand, this ignorance could also have provided some
-conservatism, reducing the noise due to early classifications if they are
-unreliable. Whether or not an offline analysis out-performs an online one is a
+ignorance. On the other hand, this ignorance provides some conservatism,
+reducing the noise due to early classifications if they are unreliable: in
+practice we ignore the first two classifications made by  each volunteer, for
+this reason. Whether or not an offline analysis out-performs an online one is a
 matter for experiment.
 
 The mechanics of how we carry out the offline inference  will be presented
@@ -1113,6 +1116,28 @@ section, to improve the pipeline performance.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\begin{minipage}{0.48\linewidth}
+  \centering\includegraphics[width=\linewidth]{stage1_ROC.pdf}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering\includegraphics[width=\linewidth]{stage2_ROC.pdf}
+\end{minipage}
+\caption{Receiver operating characteristic curves for the \SW system, using
+the \cfhtls training set. Left: \StageOne, right: \StageTwo. Insets show a
+magnified view of the top lefthand corner of each plot. Linestyles illustrate
+the software agent properties (initial confusion matrix elements, learning or not)
+discussed in the text, as well as the difference between the online and offline
+analyses. The \StageTwo sample was defined using the online \StageOne results
+(solid blue curve), while the offline analysis was chosen for the final
+\StageTwo results (dot-dashed orange curve).
+Lens probability varies along the curves: the stars indicate the point where
+the value of this quantity is 0.95.}
+\label{fig:results:sample:roc}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \section{Results}
 \label{sec:results}
 
@@ -1183,25 +1208,16 @@ test these algorithmic choices more rigorously. At \StageOne, high TPR can be
 measured to better than 1\%.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}
-\begin{minipage}{0.48\linewidth}
-  \centering\includegraphics[width=\linewidth]{stage1_ROC.pdf}
-\end{minipage}\hfill
-\begin{minipage}{0.48\linewidth}
-  \centering\includegraphics[width=\linewidth]{stage2_ROC.pdf}
-\end{minipage}
-\caption{Receiver operating characteristic curves for the \SW system, using
-the \cfhtls training set. Left: \StageOne, right: \StageTwo. Insets show a
-magnified view of the top lefthand corner of each plot. Linestyles illustrate
-the software agent properties (initial confusion matrix elements, learning or not)
-discussed in the text, as well as the difference between the online and offline
-analyses. The \StageTwo sample was defined using the online \StageOne results
-(solid blue curve), while the offline analysis was chosen for the final
-\StageTwo results (dot-dashed orange curve).
-Lens probability varies along the curves: the stars indicate the point where
-the value of this quantity is 0.95.}
-\label{fig:results:sample:roc}
-\end{figure*}
+\begin{figure}
+\centering\includegraphics[width=\linewidth]{completeness_purity_simple.pdf}
+\caption{Completeness-estimated purity curves for the \sw system, using
+the \cfhtls training set. The curves are truncated at the high purity end by
+the ``detection'' limit subject probability (subjects in the online
+\StageOne analysis were
+deemed to be detected at $p=0.95$, while at \StageTwo rounding error led to
+an upper limit of $p=1.0$).}
+\label{fig:results:sample:CP}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Adopting the online \StageOne analysis, and the offline \StageTwo analysis, we
@@ -1252,18 +1268,6 @@ properties of the training subjects, which were chosen to be fairly
 visible: we expect the completeness to real lenses to be somewhat lower, as a
 result (see \PaperTwo).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=\linewidth]{completeness_purity_simple.pdf}
-\caption{Completeness-estimated purity curves for the \sw system, using
-the \cfhtls training set. The curves are truncated at the high purity end by
-the ``detection'' limit subject probability (subjects in the online
-\StageOne analysis were
-deemed to be detected at $p=0.95$, while at \StageTwo rounding error led to
-an upper limit of $p=1.0$).}
-\label{fig:results:sample:CP}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -1447,7 +1451,7 @@ classification rate. (A 10\% increase in average skill was seen over the first
 cause a significant difference between classification and contribution rate
 behaviour, but perhaps reflecting a learning period at the start and then a
 decrease
-in participation later on.) \StageTwo (3400 subjects) was completed in around 600
+in participation later on.) \StageTwo (nearly 3400 subjects) was completed in around 600
 hours by around 2000 participants, with classification rates starting at
 $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
@@ -1715,7 +1719,7 @@ is an interesting challenge for future work.
   \hline {Stage} & Subjects & Contribution                          & Agents & Skill      & Classifications          & Candidates & Information \\
                            & $\Ns$    & $\sum_k^{\Nv} \contribution_k$ (bits) & $\Nv$  & $\sum_k^{\Nv} \skill_k$ (bits) & $\sum_k^{\Nv} \thiseffort$ & $\Ncands$  & $\sum_j^{\Ns}\sum_k^{\Nv} \information_{j,k}$ (bits) \\
             \hline
-                      1    & $427064$ & $1292016.3$ & $36982$ & $1471.9$ & $10802125$ & $3368$ & $91122.6$ \\
+                      1    & $427064$ & $1292016.3$ & $36982$ & $1471.9$ & $10802125$ & $3381$ & $91122.6$ \\
                       2    & $3679$   &   $21895.8$ &  $1964$ &  $102.4$ &   $224745$ &   $89$ &  $1640.4$ \\
   \hline \hline
 \end{tabular}
@@ -1873,7 +1877,8 @@ could have made comparable contributions had they classified more images.
 
 \item The optimal true positive rate (completeness) and false positive rate in
 the training set were estimated to be around $91-93\%$ and $<1\%$
-(Stages I and II). This FPR translates to an approximate purity of 30\%. We find a
+(Stages I and II). This FPR translates to a purity of approximately 30\%.
+We find an even
 higher purity at \StageTwo (perhaps as a result of the least visible candidates already
 being discarded): here, 100\% purity was reached at just under $90\%$
 completeness. Because \SW is a supervised learning system, these numbers should

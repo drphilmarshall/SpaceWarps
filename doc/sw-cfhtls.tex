@@ -56,9 +56,9 @@ identify lens candidates missed by robots (the \rf on galaxy scales and
 by these algorithms to the \sw sample and find them to be broadly
 similar.  The image separation distribution calculated from the \sw
 sample shows that previous constraints on the average density profile of
-lens galaxies are robust. \new{ \sw recovers about 65\% of known lenses, while
+lens galaxies are robust. \sw recovers about 65\% of known lenses, while
 the new candidates show a richer variety compared to those found by the
-two robots. This detection rate could be increased to 80\% by only using}
+two robots. This detection rate could be increased to 80\% by only using
 classifications performed by expert volunteers (albeit at the cost of a
 higher false positive rate), indicating that the training and
 performance calibration of the citizen scientists is very important for
@@ -66,7 +66,8 @@ the success of \sw. In this work we present the SIMCT pipeline, used for
 generating {\it in situ} a sample of realistic  simulated lensed images.
 This training sample, along with the false positives identified during
 the search, has a legacy value for testing future lens finding
-algorithms. We make the pipeline and the training set publicly available.
+algorithms. We make the pipeline and the training set publicly
+available.
 \end{abstract}
 
 \begin{keywords}
@@ -890,7 +891,7 @@ averaged grade~$G$, as described in the next section.
 \begin{table}
 \begin{center}
 \caption{ \label{tab:stats}
-\new {Statistics of detections in \sw} }
+Statistics of detections in \sw }
 \begin{tabular}{l l l l l}
 \hline
    &  \multicolumn{2}{c} {\StageOne}  & \multicolumn{2}{c}{\StageTwo} \\
@@ -960,21 +961,20 @@ at \texttt{http://spacewarps.org/\#/projects/CFHTLS/}. Note that if all of the
 inspectors gave a grade of 0 to a candidate, then it was discarded from
 the sample.
 
-\new{In \Tref{tab:stats}, we give overall statistics of the systems
-detected at \StageOne and \StageTwo. We give the total number of
-detections of the known lens candidates, known lenses and the new lens
-candidates at each stage.  We also give the recovery fractions for the
-known samples and fraction of total detection for the new samples at
-each stage.  Overall, the sample of new \sw lens candidates comprises
-over 40~per~cent of the total \sw$-$\cfhtls lens candidates.  Nearly
-45~per~cent of the known lens candidates from \StageOne are rejected at
-\StageTwo. Such fractions are acceptable for ``candidates'' as their
-quality grades vary from high to low.  We find that most of the
-confirmed lenses found at \StageOne are also recovered at \StageTwo.
-However, $\sim35$~per~cent of the known lenses were missed already at
-\StageOne: we return to the discussion of these false negatives below in
-\Sref{sec:fn}.
-}
+In \Tref{tab:stats}, we give overall statistics of the systems detected
+at \StageOne and \StageTwo. We give the total number of detections of
+the known lens candidates, known lenses and the new lens candidates at
+each stage.  We also give the recovery fractions for the known samples
+and fraction of total detection for the new samples at each stage.
+Overall, the sample of new \sw lens candidates comprises over
+40~per~cent of the total \sw$-$\cfhtls lens candidates. We find that
+90~per~cent of the confirmed lenses found at \StageOne are also
+recovered at \StageTwo.  However, $\sim35$~per~cent of the known lenses
+were missed already at \StageOne: we return to the discussion of these
+false negatives below in \Sref{sec:fn}. Nearly 45~per~cent of the known
+lens candidates from \StageOne are rejected at \StageTwo. Such fractions
+are acceptable for ``candidates'' as their quality grades vary from high
+to low.  
 
 In \Fref{fig:stackP}, we plot the distribution of false positives and
 the high grade lens candidates, as a function of the $P$ value assigned
@@ -984,9 +984,9 @@ candidates is indeed an increasing function of $P$. This shows that the
 expert grades albeit with quite some scatter.  We note that below
 $P\sim0.75$, the fraction of false positives starts to exceed the
 fraction of real lens candidates. This could be a good threshold to
-choose to maximize \new{the purity of the final sample. However,
+choose to maximize the purity of the final sample. However,
 choosing $P=0.3$ gives a completeness of 92\% for the ``known lens''
-sample instead of 64\% for $P=0.75$.} Therefore, the new sample should
+sample instead of 64\% for $P=0.75$. Therefore, the new sample should
 also have increased completeness; expert grading then allows us to
 increase the purity of the sample.
 
@@ -1139,11 +1139,11 @@ identified either with \af or \sextractor.
 We now determine the fraction of the known sample of lenses that were
 recovered by \sw. Note that this sample corresponds to the \rf and \af
 samples combined, as defined in \Sref{sec:data:kls}. In
-\new{ \Tref{tab:stats}, we show that $\sim32\%$ of the known lens candidates,
+\Tref{tab:stats}, we show that $\sim32\%$ of the known lens candidates,
 and $\sim65\%$ of the known lenses were found at \StageOne. We find that
 $56$\% of the known lens candidates and $87$\% of the known lenses from
 \StageOne passed our \StageTwo selection criterion of $P>0.3$ and
-$G>1.3$.} The left and the middle panels of \Fref{fig:compre} show the
+$G>1.3$. The left and the middle panels of \Fref{fig:compre} show the
 fraction of detections as a function of arc magnitude and the Einstein
 radius of the lens systems for the known confirmed lenses and lens
 candidates. As expected, we find that systems with brighter images
@@ -1390,16 +1390,16 @@ lens-finding algorithms, and the continuing benefits of visual screening.
 \subsection{False negatives: known lenses missed by \sw}
 \label{sec:fn}
 
-\new{Like any lens finding method, the \sw system could potentially be
+Like any lens finding method, the \sw system could potentially be
 failing to detect certain kinds of lenses.  We find that about
 35~per~cent of the known sample of lenses are missed at \StageOne; 
 about 10~per~cent losses were incurred during the \StageTwo refinement
 (see \Tref{tab:stats}).  Below, we focus on the known lens sample at
 \StageOne to understand why some of them are being missed and possibly
 find a way to improve the detection rate which can be adopted in the
-future \sw lens searches.}
+future \sw lens searches.
 
-\new{Many of the missed lenses are from the \rf sample with small
+Many of the missed lenses are from the \rf sample with small
 Einstein radii and faint lensed images (see \Fref{fig:compre}). Among
 the confirmed lenses from \rf, about 45~per~cent are missed. Out of the
 missed sample of 15 lenses, about half of them are visually difficult to
@@ -1409,7 +1409,7 @@ if we consider the \af lens sample, $\sim$20~per~cent are missed by \sw. This
 is a relatively small sample of $\sim 5$ systems and visual inspection
 of them suggests that, by and large, either the lensed features are faint
 or they have odd properties which makes them difficult to identify
-correctly. For further tests, we combine the \rf and \af sample.}
+correctly. For further tests, we combine the \rf and \af sample.
 
 For a lens finding method which uses the collective skill, experience and
 knowledge of a group of volunteers, it may be difficult to find a single
@@ -1644,30 +1644,28 @@ Our conclusions are as follows:
 through citizen science. While a targeted visual search may be more
 efficient, we show that the blind search works reasonably well too.
 
-\new {\item We use a sample of simulated lenses, duds and impostors tailored
+\item We use a sample of simulated lenses, duds and impostors tailored
 to the \cfhtls data to train the volunteers and calibrate their
 performance. The volunteers not only perform well on the training sample
 (see Paper I) but also find lenses that are fainter, more compact or
 redder than covered by the training sample demonstrating their
-adaptability in this task. }
+adaptability in this task. 
 
 \item We present a sample of {\bf 29 new} gravitational lens candidates,
 and an additional 30 medium grade systems. These 59 candidates received
-averaged grade G$\ge$1.3 from three experts following the scale
-where (1) means possibly, (2) means
-probably, and (3) means almost certainly, a lens. In addition, among the
-G$\ge$1.3 sample, we re-discovered 82 lens candidates from various samples
-published in the literature.
+averaged grade G$\ge$1.3 from three experts following the scale where
+(1) means possibly, (2) means probably, and (3) means almost certainly,
+a lens. In addition, among the G$\ge$1.3 sample, we re-discovered 82
+lens candidates from various samples published in the literature.
 
-\item Compared to the sample of \rf and \af robotically detected
-lens candidates, the \sw sample finds lens systems with statistically similar properties,
-including the range of
-lens redshifts, lensed image total
-magnitudes, and Einstein radii. However, having only displayed images without
-the lens galaxy light subtracted, the \sw sample does not contain
-many of the \rf-identified-lensed images with
-sub-arcsecond $R_{\rm E}$, just because the flux of the typically faint
-lensed images is obscured by the flux from bright lensing galaxies.
+\item Compared to the sample of \rf and \af robotically detected lens
+candidates, the \sw sample finds lens systems with statistically similar
+properties, including the range of lens redshifts, lensed image total
+magnitudes, and Einstein radii. However, having only displayed images
+without the lens galaxy light subtracted, the \sw sample does not
+contain many of the \rf-identified-lensed images with sub-arcsecond
+$R_{\rm E}$, just because the flux of the typically faint lensed images
+is obscured by the flux from bright lensing galaxies.
 
 \item Qualitatively, \sw seems to have found lens systems with different
 types of lensing galaxies, for example, elliptical, spiral (face on and
@@ -1676,19 +1674,17 @@ searches. Similarly, the lensed images too have diverse properties such
 as different colours, morphologies and sizes which are again typically
 missed by any given algorithm.
 
-\new{\item Based on the known sample of lenses and lens candidates, we find
-that we lose a small fraction of them during \StageTwo refinement.
-It is more important to improve the lens
-detection sensitivity at the initial \StageOne classification step.
-About 35\% of the known lenses (20 in total) were missed at \StageOne.
-Two thirds of these missed lenses were found to be galaxy-scale \rf
-systems, with faint arcs blended with the bright lens galaxies.}
+\item Based on the known sample of lenses and lens candidates, we find
+that we lose a small fraction of them during \StageTwo refinement.  It
+is more important to improve the lens detection sensitivity at the
+initial \StageOne classification step.  About 35\% of the known lenses
+(20 in total) were missed at \StageOne.  Two thirds of these missed
+lenses were found to be galaxy-scale \rf systems, with faint arcs
+blended with the bright lens galaxies.
 
-\new{
 \item It is possible to improve the \sw completeness by
 changing the strategy of when and who is shown an image: only using high power
 classifications recovers 40\% of the missed lenses.
-}
 
 \end{itemize}
 
@@ -1696,17 +1692,17 @@ The discovery of many new lens candidates through the first \sw lens
 search has demonstrated that the citizen scientists have successfully
 taught themselves to identify lenses within a short span of time.  They
 have found lens candidates which the algorithms failed to discover.
-\new{Upcoming and planned wide-field imaging surveys such as the DES, HSC and
+Upcoming and planned wide-field imaging surveys such as the DES, HSC and
 LSST will produce formidable amounts of data.  Blind lens searches as
 described here will be infeasible with these very large surveys although
 it may be possible to do a blind search on a subset of a large survey in
 order to assess the performance of either the algorithms or the
-volunteers which can be extrapolated to the entire survey. However, any
-one approach for finding lenses from the entire survey data is likely
-going to be inefficient.} Thus, combining robotic methods for
-pre-selection with the citizen science approach for visual screening
-could be a good strategy for finding lenses in these large imaging
-surveys.
+volunteers which can be extrapolated to the entire survey.  As
+demonstrated in this paper, any one approach for finding lenses from the
+entire survey data may not be sufficiently complete. Thus, combining
+robotic methods for pre-selection with the citizen science approach for
+visual screening might be a good strategy for finding lenses in these
+large imaging surveys.
 
 \onecolumn
 \begin{center}

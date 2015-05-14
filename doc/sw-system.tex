@@ -44,8 +44,6 @@
 \label{firstpage}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% AV edits
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{abstract}
 
@@ -1112,6 +1110,8 @@ offline analysis (\Sref{sec:swap:offline} above) of the  \StageTwo
 classifications as well, both  for comparison and as we will see in the next
 section, to improve the pipeline performance.
 
+\flag{AV}{Do we say somewhere that once a subject reaches 0.95 it cannot be down
+graded even if there are more classifications?}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -1567,6 +1567,13 @@ that were missed ($\pr(\LENS|C,T) < 10^{-7}$) by the \SW system (top row),
 and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
 0.95$) by the \SW system (bottom row).
+
+\flag{AV}{wonder if we should include some definitions for less familiar readers
+for false positive: a non-lens that is selected by the crowd,
+false negative: a lens candidate that is rejected by the crowd,
+true positive: a lens candidate selected by the crowd,
+true negative (not used in the paper): an empty field that's correctly
+identified as being empty...}
 
 In some cases the rejection of the false negatives is understandable: the
 lensed features are faint, or in some cases, appear somewhat unrealistic compared to real lenses.

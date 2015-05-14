@@ -1534,7 +1534,7 @@ categories, performance, efficiency and capacity.
 \end{minipage}
 \caption{Illustrative examples of
 false negatives (blue) and false positives (red) from the classification of
-the \SW \cfhtls training set. The trajectory plot for each of the 4 subjects is
+the \SW$-$\cfhtls training set. The trajectory plot for each of the 4 subjects is
 shown to the right of its image. Lefthand panels show the most common types of
 trajectories: short step random walks resulting from no high skill classifiers
 viewing the subject. The righthand panels show examples where higher skill
@@ -1648,7 +1648,7 @@ that targeted task assignment could also help improve system performance, by
 bringing higher skill volunteers in when needed. We
 advertised \StageTwo of the current project to all registered users; it was
 taken up by \StageOne veterans with a broad range of skill, and also picked up a
-significant number of new users who did not have enough time to aquire high
+significant number of new users who did not have enough time to acquire high
 skill (since \StageTwo was quite short): of the 1964 volunteers who took part in
 the \StageTwo classification round, only 774 were veterans from \StageOne.
 
@@ -1690,7 +1690,7 @@ plane. A hierarchical
 model for the crowd, with hyper-parameters describing the distribution of
 confusion matrix elements across the population, may well accelerate the agent
 learning process by including the notion of one agent being likely to be
-similar to its neighbours. Finally, it is worth noting that the model of
+similar to its neighbours in the parameter space. Finally, it is worth noting that the model of
 \citet{IBCC} explicitly avoids the assumption of the agent confusion matrix
 elements being constant in time (as was assumed in \Sref{sec:swap}),
 allowing the development of volunteer skill
@@ -1729,7 +1729,7 @@ is an interesting challenge for future work.
 
 
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
-information generated in both \StageOne and 2 of the \cfhtls project, with the
+information generated in both Stages I and II of the \cfhtls project, with the
 total numbers of agents and subjects for comparison.   These numbers allow us
 to quantify the efficiency of the system.
 
@@ -1769,18 +1769,19 @@ by a crowd of $10^4$ volunteers in about 6 days.
 
 The futuristic lens-finding problem sketched in \Sref{sec:intro}, where $10^5$
 lenses are to be found in a $10^4$ square degree wide field imaging survey, is
-approximately representative of the challenge facing both the LSST and Euclid
+approximately representative of the challenge facing both the \new{
+expand the acronym LSST in the Introduction -- LSST} and Euclid
 strong lensing science teams \citep{LSSTSciBook,EuclidSciBook}. What role could
 citizen scientists at \SW play in lens searching in the next decade? From
 \Eref{eq:speed}, and assuming $\tau_0 = 6$ days (as above), we see that for the
 \SW crowd to be able to classify $10^8$ images of  photometrically-selected
 massive galaxies and groups in approximately 60 days, it would need to contain
 $10^7$ volunteers. This is only  a factor of ten larger than the current size of
-the Zooniverse userbase. Alternatively, suppose that automated  lens finding
+the Zooniverse userbase. \new{Sentence sounds incomplete -- Alternatively, suppose that automated  lens finding
 algorithms were able to select as few as $10^5$ targets for visual
 inspection,
 sample with 10\% purity with a surface density of $\sim10$ per square degree
-\citep[a rate within reach of \RF, for example:][]{GavazziEtal2014}.
+\citep[a rate within reach of \RF, for example:][]{GavazziEtal2014}.}
 Increasing $\tau_0$ by a factor of three to allow for
 more inspection time per subject,  we find that \SW could enable a crowd of just
 $10^5$ volunteers to assess them in about three weeks.
@@ -1818,7 +1819,7 @@ in terms of volunteers' continuing training and interactions on \Talk.
 The second way to scale up the number of high contribution classifiers is to
 increase the rate at which new volunteers become dedicated volunteers. Based on
 feedback from the wider \SW community, this could potentially be achieved
-through closer collaboration with the science team. It's also possible that
+through closer collaboration with the science team. It is also possible that
 dynamically assigning subjects on the basis of the volunteer's skill could act
 as an incentive to some volunteers to increase their contribution, although any
 such approach would need to take into account the need to optimise not only for efficiency but also for the most interesting or pleasurable volunteer experience; a solution which gave every volunteer a very uniform experience, for example, is unlikely to succeed even if it appears optimally efficient.  Reducing the

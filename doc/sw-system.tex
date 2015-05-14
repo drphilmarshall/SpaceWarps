@@ -1271,8 +1271,6 @@ result (see \PaperTwo).
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-% PHIL IS HERE
-
 \subsection{Crowd Properties}
 \label{sec:results:crowd}
 
@@ -1398,14 +1396,13 @@ However, it is not the case that only these small groups were {\it capable} of
 making large contributions. The cumulative distribution of agent skill is shown
 in \Fref{fig:crowd:cumulskillplot}: these distributions are significantly
 broader than the corresponding distributions of agent contribution, in
-\Fref{fig:crowd:cumulplot}. For example,
-the most skilled 20\% of agents possess around 80\% of the skill.
-
+\Fref{fig:crowd:cumulplot}. For example, 80\% of the skill is distributed among
+20\% of the agents.
 The inexperienced volunteers also possess a significant fraction of the skill.
 We find that dividing the crowd into ``experienced volunteers'' (who have seen
 10 or more training images), and ``inexperienced volunteers'' (the rest),
 results in two groups containing approximately equal total skill (see the dashed
-curve in \Fref{fig:crowd:cumulskillplot}). The most skillful 20\% of {\it
+curve in \Fref{fig:crowd:cumulskillplot}): the most skillful 20\% of {\it
 experienced} volunteers (1824 people) only possess 43\% of the total skill.
 The breadth of the skill distributions suggests that  the high level of
 contribution made at \SW by experienced volunteers is largely a matter of choice
@@ -1451,7 +1448,8 @@ classification rate. (A 10\% increase in average skill was seen over the first
 cause a significant difference between classification and contribution rate
 behaviour, but perhaps reflecting a learning period at the start and then a
 decrease
-in participation later on.) \StageTwo (nearly 3400 subjects) was completed in around 600
+in participation later on.)
+\StageTwo (nearly 3400 subjects) was completed in around 600
 hours by around 2000 participants, with classification rates starting at
 $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
@@ -1468,9 +1466,10 @@ integrals under the curves are both one. }
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The similarities between \StageOne and 2, suggest that these numbers could be
-scaled to estimate the speed of future \SW projects (or at least those following
-a similar blind search strategy). For example, the completion time for a \SW
+The similarities between between \StageOne and 2 regarding the results above,
+and despite the difference in the task set,
+suggest that these numbers can be scaled to estimate cautiously
+the speed of future \SW projects. For example, the completion time for a \SW
 project may be approximated as
 \begin{equation}
     \tau \approx \tau_0 \left(\frac{10^4}{N_p}\right)
@@ -1490,7 +1489,7 @@ we expect this to be significantly shorter in future projects.
 
 What can we learn from the results of the previous section, for future
 projects? Potential improvements to the \SW system can be divided into three
-categories, performance, efficiency and capacity.
+categories: performance, efficiency and capacity.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -1571,7 +1570,8 @@ non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
 0.95$) by the \SW system (bottom row).
 
 In some cases the rejection of the false negatives is understandable: the
-lensed features are faint, or in some cases, appear somewhat unrealistic compared to real lenses.
+lensed features are faint, or in some cases, appear somewhat unrealistic
+compared to real lenses.
 However, in other cases a reasonably obvious lens was passed over.  This
 mainly seems to be due to noise in the system: when only low-skill classifiers
 view a subject, all the updates to its posterior probability are small, and if
@@ -1670,7 +1670,6 @@ experiment with in future.
 
 Finally, there could be some performance gains to be made by improving the SWAP
 agent model, or its implementation.
-
 Low skill is typically a result  of inexperience (\Sref{sec:results:crowd}) --
 but it could be the agent that is inexperienced, as much the classifier.  In a
 future paper we plan to investigate the use of the test images as well as the
@@ -1782,7 +1781,8 @@ the Zooniverse userbase.
 Alternatively, suppose that automated  lens finding algorithms were able to
 select as few as $10^5$ targets for visual inspection, corresponding to a sample
 with 10\% purity and a surface density of $\sim10$ per square degree \citep[a
-rate within reach of \RF, for example:][]{GavazziEtal2014}. Increasing $\tau_0$
+rate within reach of \RF, for example:][]{GavazziEtal2014}. Now
+increasing $\tau_0$
 by a factor of three to allow for more inspection time per subject,  we find
 that in this case \SW could enable a crowd of just $10^5$ volunteers to assess
 them in about three weeks.
@@ -1840,7 +1840,7 @@ be of some comfort to the nervous volunteer.
 \section{Conclusions}
 \label{sec:conclude}
 
-We have designed, implemented and tested a system for   detecting new strong
+We have designed, implemented and tested a system for detecting new strong
 gravitational lens candidates in wide field imaging surveys by crowd-sourced
 visual inspection. The \SW web-based classification interface presents carefully
 prepared colour composite sky images to volunteers, who mark features they
@@ -1877,8 +1877,8 @@ could have made comparable contributions had they classified more images.
 
 \item The optimal true positive rate (completeness) and false positive rate in
 the training set were estimated to be around $91-93\%$ and $<1\%$
-(Stages I and II). This FPR translates to a purity of approximately 30\%.
-We find an even
+(in both classification stages).
+This FPR translates to a purity of approximately 30\%. We find an even
 higher purity at \StageTwo (perhaps as a result of the least visible candidates already
 being discarded): here, 100\% purity was reached at just under $90\%$
 completeness. Because \SW is a supervised learning system, these numbers should
@@ -1909,12 +1909,12 @@ their wide-field imaging data to contact us if they would like our help.
 
 \section*{Acknowledgements}
 
-We thank Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons,
-David Hogg, Daniel Foreman-Mackey,
-Thomas Jennings, Layne  Wright, Cecile Faure, Jonathan Coles, Stuart
-Lowe and Jean-Paul Kneib for many useful conversations about citizen science and
-gravitational lens detection, and to the Dark Energy Survey and Pan-STARRS strong
-lensing science teams for their suggestions and encouragement.
+We thank Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons, David Hogg,
+Daniel Foreman-Mackey, Thomas Jennings, Layne  Wright, Cecile Faure, Jonathan
+Coles, Stuart Lowe and Jean-Paul Kneib for many useful conversations about
+citizen science and gravitational lens detection, and to the Dark Energy Survey
+and Pan-STARRS strong lensing science teams for their suggestions and
+encouragement.
 
 PJM and ES also thank the Institute of Astronomy and Astrophysics, Academia Sinica
 (ASIAA) and Taiwan's Ministry of Science and Technology (MOST) for their
@@ -2001,7 +2001,7 @@ $\information$ over  the possible classifications that could be made:
 \end{align}
 where $\mathcal{S}(x) = x \log_2{x}$. If we choose to
 evaluate $\langle\information\rangle$ at $p = 0.5$, the result has some
-useful properties. While random classifiers presented with  $p = 0.5$
+pleasing properties. While random classifiers presented with  $p = 0.5$
 subjects have $\skill = 0.0$  as expected, perfect classifiers appear to
 the agents to have  $\skill = 1.0$. This suggests that  $\skill$, the
 amount of information we expect to  gain when a classifier is presented
@@ -2016,7 +2016,8 @@ measure of that classifier's
 \emph{contribution} to the lens search.
 
 We conservatively initialize both elements of each  agent's confusion
-matrix to be $\CM^0_{LL} = \CM^0_{NN} = 0.5$, that of a maximally ambivalent  random classifier, so
+matrix to be $\CM^0_{LL} = \CM^0_{NN} = 0.5$, that of a maximally ambivalent
+random classifier, so
 that all agents start with zero skill. While  this makes no allowance
 for volunteers that actually do have previous experience of what
 gravitational lenses look like, we might expect it to help mitigate

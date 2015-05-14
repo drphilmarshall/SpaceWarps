@@ -1006,7 +1006,8 @@ matrices to each classification,  rather than a set that evolves as the agents
 classifications will effectively not be downweighted as a result of the agent's
 ignorance. On the other hand, this ignorance provides some conservatism,
 reducing the noise due to early classifications if they are unreliable: in
-practice we ignore the first two classifications made by  each volunteer, for
+practice we do downweight (via Laplace/add-one smoothing)
+the early classifications made by each volunteer, for
 this reason. Whether or not an offline analysis out-performs an online one is a
 matter for experiment.
 

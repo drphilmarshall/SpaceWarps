@@ -128,7 +128,7 @@ approach is to search images already of sufficiently high resolution and colour
 contrast, and confirm the systems as gravitational lenses by modeling the
 survey data themselves \citep[][]{MarshallEtal2009}. Several square degrees of
 HST images have been searched, yielding several tens of galaxy-scale lenses
-\citep[e.g.][]{MoustakasEtal2007,FaureEtal2008,Jackson2008,MoreEtal2011,
+\citep[e.g.][]{MoustakasEtal2007,Jackson2008,MoreEtal2011,
 PawaseEtal2014}. Similarly, searches of over a hundred square degrees of CFHT
 Legacy Survey (\cfhtls) ground-based imaging, also with sub-arcsecond image quality,
 have revealed a smaller number of wider image separation group-scale systems
@@ -620,7 +620,7 @@ the \SW system. The \cfhtls is also well-representative of the data quality
 expected from several next-generation sky surveys, such as DES, KiDS, HSC and
 LSST. We use the stacked images
 from the final T0007 release taken from the Terapix
-website\footnote{\texttt{http://terapix.iap.fr/cplt/T0007/doc/T0007-doc.pdf}} for this
+website\footnote{\texttt{ftp://t07.terapix.fr/pub/T07/}} for this
 work.
 
 In order to investigate the completeness of the previous semi-automated lens
@@ -1251,7 +1251,7 @@ and 90\% completeness, it would have contained around 89 lens candidates.
 However, we remind the reader that all these values are dependent on the
 properties of the training subjects, which were chosen to be fairly
 visible: we expect the completeness to real lenses to be somewhat lower, as a
-result.
+result (see \PaperTwo).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -1448,14 +1448,14 @@ classification rate. (A 10\% increase in average skill was seen over the first
 cause a significant difference between classification and contribution rate
 behavior, but perhaps reflecting a learning period at the start and then a
 decrease
-in participation late on.) \StageTwo (3700 subjects) was completed in around 600
+in participation later on.) \StageTwo (3400 subjects) was completed in around 600
 hours by around 2000 participants, with classification rates starting at
 $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=\linewidth]{rate_classification.pdf}
-\caption{Fractional classification rate in the \SW \cfhtls survey. Fractional classification rate is the number
+\caption{Fractional classification rate in the \SW$-$\cfhtls survey. Fractional classification rate is the number
 of classifications per unit time, divided by the final total number of
 classifications. Fractional survey time is the time elapsed since the beginning
 of the survey, divided by the total length of the survey. The unit of time in
@@ -1559,7 +1559,7 @@ false positives, and their behaviour as they are classified using the online
 analysis trajectory plots introduced in \Sref{sec:swap}
 (\Fref{fig:swap:subject-trajectories}).
 \Fref{fig:discuss:performance:trajectories} shows 2 example simulated lenses
-that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \SW system (top row),
+that were missed ($\pr(\LENS|C,T) < 10^{-7}$) by the \SW system (top row),
 and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
 0.95$) by the \SW system (bottom row).
@@ -1844,7 +1844,7 @@ visual inspection. The \SW web-based classification interface presents carefully
 prepared colour composite sky images to volunteers, who mark features they
 propose to  have been lensed. The participants receive ongoing training with a
 mixture of simulated lens and known-to-be-empty images, and we use this
-information to inform the automated interpretation of their markers. In our
+information to automate the interpretation of their markers. In our
 first lens search we simply divided the \cfhtls imaging into some 430,000 tiles,
 and collected over 11~million volunteer image classifications.
 
@@ -1854,11 +1854,11 @@ the following specific ways:
 
 \begin{itemize}
 
-\item Participation levels were high (over 36,000 volunteers, contributing
+\item Participation levels were high (about 37,000 volunteers, contributing
 classifications at rates between $10^3$ and $10^4$ images per hour), suggesting
 that if this can be maintained, visual inspection of tens of thousands of images
-could be performed just a few weeks. An expanded crowd of $10^6$ volunteers
-(which has already been reached in the Galaxy Zoo project) would
+could be performed in just a few weeks. An expanded crowd of $10^6$ volunteers
+(which has already been reached in Zooniverse) would
 be able to inspect a plausible sample of $10^6$ LSST or Euclid targets
 on similar time scales.
 
@@ -1870,12 +1870,12 @@ a few hundred), enough for an expert team to take over.
 images they have classified.  Quantifying the ``contribution'' as the integrated
 skill over the test subjects classified, we find that about 90\% of the
 contribution was made by a few hundred volunteers ($1\%$ of the crowd) -- but
-that the width of the skill distribution means that a  few thousand volunteers
+that the broad width of the skill distribution means that a few thousand volunteers
 could have made comparable contributions had they classified more images.
 
 \item The optimal true positive rate (completeness) and false positive rate in
-the training set were estimated to be around $91-93\%$ and $<1\%$ (Stages 1 and
-2). This FPR translates to an approximate purity of 30\%. We find a
+the training set were estimated to be around $91-93\%$ and $<1\%$
+(Stages I and II). This FPR translates to an approximate purity of 30\%. We find a
 higher purity at \StageTwo (perhaps as a result of the least visible candidates already
 being discarded): here, 100\% purity was reached at just under $90\%$
 completeness. Because \SW is a supervised learning system, these numbers should
@@ -1884,7 +1884,8 @@ not been selected for a high visibility training set).
 
 \item The simulated gravitational lenses that were missed were predominantly
 galaxy-scale lenses with faint blue galaxy sources, whose lensed features are
-difficult to distinguish from the light from the lens galaxy. We observed some
+difficult to distinguish from the light from the lens galaxy (consistent
+with what we find also for real lenses, see \PaperTwo). We observed some
 additional scatter, with some simulated lenses accumulating low probability
 simply due to classification noise.
 

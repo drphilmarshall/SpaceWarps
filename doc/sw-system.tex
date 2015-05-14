@@ -287,7 +287,7 @@ during development to avoid the question of  who ``Len'' is.} The focus of the
 CI is a large display of a pre-prepared PNG image of the ``subject'' being
 inspected. When the image is clicked on by the volunteer, a marker symbol
 appears at that position.  Several markers can be placed, and they can be
-removed by the user if they change their mind.
+removed by the classifier if they change their mind.
 
 The next image moves rapidly in from a queue formed at the right hand side of
 the screen when the ``Finished marking'' button is pressed. Gravitational lenses
@@ -1544,9 +1544,9 @@ classifiers have been involved, causing random walks with longer step lengths
 subjects were {\it very nearly} detected but didn't quite reach the threshold
 set (marked by the blue dashed line). Insets for the false
 negatives show the lens feature. The inset for the lower righthand panel shows
-where most users believed a lens was located. There is no corresponding inset
-for the lower left panel because no particular feature stood out to users.
-Instead, users clicked many different features.}
+where most volunteers believed a lens was located. There is no corresponding inset
+for the lower left panel because no particular feature stood out to the
+classifiers. Instead, the volunteers clicked many different features.}
 \label{fig:discuss:performance:trajectories}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1577,7 +1577,7 @@ of \Fref{fig:discuss:performance:trajectories}.
 The false positives show similar behaviour, for example in the bottom lefthand
 panel of the figure. As well as subjects being ``unlucky'' in this way, there
 are two less common failure modes associated with mistakes made by higher skill
-users, illustrated in the righthand column of the figure. In the false negative
+volunteers, illustrated in the righthand column of the figure. In the false negative
 subject shown in the top right-hand panel, several high skill classifiers update
 the subject upwards in log probability by some way each time, but other,
 comparable skill classifiers mis-classify the system to lower probability.   The
@@ -1601,7 +1601,7 @@ go and read the \Talk discussion, and then return to the classification
 interface to change their mind to agree with the forum. In fact, this is already
 possible on the current interface -- and indeed, it is not obvious that such
 correlations would necessarily lead to poorer system performance. There may well
-also be effects on user confidence; it may be that encouraging this sort of
+also be effects on volunteer confidence; it may be that encouraging this sort of
 checking would result in increased and not necessarily productive caution. This
 could be tested by presenting a fraction of the volunteers with a version of the
 site that actively suggested that they take this approach, and then tracking the
@@ -1813,7 +1813,7 @@ volunteers make large contributions. Greater exposure of the website to the
 public through mass media would help. Another option is to advertise the
 project to new groups of volunteers by translating the website into other
 languages (something which is now supported by the Zooniverse). A
-multi-lingual user base would come with its own set of challenges, especially
+multi-lingual userbase would come with its own set of challenges, especially
 in terms of volunteers' continuing training and interactions on \Talk.
 
 The second way to scale up the number of high contribution classifiers is to
@@ -1827,7 +1827,7 @@ rate at which new volunteers lose interest could also play a role. Anecdotally,
 it seems fairly common for new volunteers to be wary of classifying at all, for
 fear of introducing errors. Better explanation of how their early
 classifications are analyzed could help assuage these fears:
-\Sref{sec:results:crowd} shows that effectively down-weighting new users'
+\Sref{sec:results:crowd} shows that effectively down-weighting new volunteers'
 classifications (by setting their agents' initial confusion matrix elements to
 those of a random classifier) leads to best performance, a result which should
 be of some comfort to the nervous volunteer.

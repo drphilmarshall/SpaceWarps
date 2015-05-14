@@ -27,4 +27,4 @@ You can email us at [spacewarpspi@googlegroups.com](mailto:spacewarpspi@googlegr
 
 ### License
 
-All our code is free to re-use under the MIT license. If you make use of any of it in your research, please cite us at this website, and (for now) as *"(Marshall et al, More et al in preparation)"*. Please do get in touch though - it would be great to collaborate on improving the SWAP analysis, for example!
+All our code is free to re-use under the MIT license. If you make use of any of it in your research, please cite us at this website, and (for now) as *"(Marshall et al 2015, More et al 2015)"*. Please do get in touch though - it would be great to collaborate on improving the SWAP analysis, for example!

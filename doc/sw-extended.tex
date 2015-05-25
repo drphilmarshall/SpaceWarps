@@ -168,14 +168,15 @@ classifies a training image:
 
 \begin{align}
   PL_{i}^{(k + 1)} &= \frac{PL_{i}^{k} (NL_{i}^{k} + M) + \mathbb{I}[C_{ij} =
-  z_{j}]}{NL_{i}^{k} + M + 1} \\
+  z_{j}]}{NL_{i}^{k} + M + z_{j}} \\
   PD_{i}^{(k + 1)} &= \frac{PD_{i}^{k} (ND_{i}^{k} + M) + \mathbb{I}[C_{ij} =
-  z_{j}]}{ND_{i}^{k} + M + 1}
+  z_{j}]}{ND_{i}^{k} + M + z_{j}}
 \end{align}
 where $ND_{i}^{k}$ and $NL_{i}^{k}$ refer to the number of training lenses and
-training duds observed by the $i$-th volunteer at time $k$, $z_{j}$ refers
-to the true state of the $j$-th image, and $M = 4$ is a smoothing factor
-empirically derived to smooth the skill classification of new volunteers.
+training duds observed by the $i$-th volunteer at time $k$, $z_{j}$ refers to
+the true state of the $j$-th image (1 is LENS, 0 is DUD), and $M = 4$ is a
+smoothing factor empirically derived to smooth the skill classification of new
+volunteers.
 
 With these update rules plus an initialization of $PD_{i} = PL_{i} = 0.5$ and
 $p^{0} = 2 \times 10^{-4}$, the online update system is fully specified.
@@ -252,7 +253,10 @@ the majority expectation of the probability of an image being a lens, instead
 of its true value.
 
 In practice we have training images where $p_{j}$ is known. In those
-cases we can use the true value when doing the M-Step.
+cases we can use the true value when doing the M-Step. We can also choose to
+perform the M-step using only the training images (a supervised learning
+approach), giving us another handle on quantifying the impact and importance of
+simulated training images.
 
 Finally, we also include Laplace smoothing into the M-Step in order to handle
 pathologic cases, such as when users never identify any lenses ($\sum_{j \in
@@ -272,6 +276,12 @@ of the run; training images also have a
 different prior on being a lens as well. Finally, if the image is a training
 image with known $p_j \in (0,1)$, then the known $p_j$ is used instead of
 the current estimate.
+
+An easy way to conceptualize the previous section is to note that the
+Expectation Maximization takes advantage of the fact that each classification
+is supposed to be independent of the others and so can be treated as though all
+classifications were made at the same time.  The repetition of the steps
+ensures that the parameters are self-consistent.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -422,6 +432,22 @@ classifications. Check that!}
 \Omega_i} 1}
 \end{align}
 where $p_{v}^0$ is a possible specialization of $p_{jv}^0$.
+
+\subsubsection{Online}
+
+Like in the binomial case, the multinomial case can be performed online, where
+each new piece of information updates an existing assessment of lens
+classification and user skill. If a new classification $C_{iju}^{(k + 1)}$ is
+made, then by Bayes' Theorem the updates are as follows (with $i$, $j$, $u$,
+and $v$ acting as fixed indices):
+\begin{align}
+  p_{jv}^{(k + 1)} &= \left( \frac{P^{k}_{ivu}^{C_{iju}^{(k + 1)}}}{\sum_{v'}
+  p_{jv'}^{k} P^{k}_{iv'u}^{C_{iju}^{(k+1)}}} \right) p_{jv}^{k} \\
+  P^{(k+1)}_{ivu}  &= \frac{C^{(k+1)}_{iju} p^{k}_{jv} + P^{k}_{ivu} \sum_{j'\in
+  \Omega_i} p^{k}_{j'v} }{p^{k}_{jv} + \sum_{j'
+  \in \Omega_i} p^{k}_{j'v}}
+\end{align}
+If we are using only a supervised learning set, then $p^k_{j'v} \in (0, 1)$.
 
 \subsubsection{Checks}
 \todo{Chris}{This section will make some obvious checks on the generalized

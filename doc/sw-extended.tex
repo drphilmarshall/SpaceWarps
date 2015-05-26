@@ -555,6 +555,21 @@ C_{ij}) z_j \log (1 - PL_i) \notag\\
 \end{align}
 which is the same CLL as before.
 
+\subsubsection{Test}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{This figure will be an ROC curve of the two subtypes in stage2 using
+the above way of doing the confusion matrix. Also plotted will be the ROC
+curves of the subtypes using just the binary classification. Do we do better by actually specifying? Or are we basically as well
+off just taking our binary distribution and dividing up? Failure modes are:
+either we don't have enough sims of each subtype to make this worthwhile, or it
+doesn't help.}
+\label{fig:}
+\end{figure}
+
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 \subsection{The Prior}
 
@@ -615,6 +630,10 @@ reliably identify skilled users early on. That is, instead of looking at final
 skill vs effort, look at many trajectories of skill vs effort over time. That
 would be a useful thing to show to prove that we can find the good users in the
 first place -- early on!}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\subsection{Relaxing Constant Confusion Matrices}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 

@@ -143,7 +143,7 @@ that this does not change the probability that a volunteer will actually draw
 said image.} or to retire likely duds,\footnote{Images whose probability of
 being a lens drops below a certain threshold are removed from the active
 dataset.} we augment $p$, $PL$, and $PD$ as $p_j^k$, the evaluation of
-$p_j$ at time $k$. \sw uses Bayes' Theorem to update $p_j^{(k + 1)}$ for
+$p_j$ at time $k$. \sw uses Bayes's Theorem to update $p_j^{(k + 1)}$ for
 some new evaluation $C_{ij}$\footnote{There is no superscript for $C_{ij}$
 because each user only sees an image once.}:
 \begin{align}
@@ -207,12 +207,13 @@ determining the lens probabilities, user skills, and lens priors.
 
 \subsubsection{E-Step}
 \label{sec:formalism:em:estep}
-% TODO: reword. The maximization here is over the zj's, so word to make that clear.
-% The E-Step is just taking the expected complete log-likelihood, or the
-% expectation value over $P(\cdot \ | x, \phi)$.
+\todo{Chris}{reword. The maximization here is over the zj's, so word to
+  make that clear. The E-Step is just taking the expected complete
+log-likelihood, or the expectation value over $P(\cdot \ | x, \phi)$.}
 The E-Step is maximizing the complete log-likelihood with respect to the image
-probability $p_j$.  This is equivalent to replacing $z_j$ with $p_j$:
-% TODO: replace this with equivalent like eq1
+probability $p_j$.  This is equivalent to replacing binary $z_j$ with
+probability $p_j$:
+\todo{Chris}{replace this with equivalent like eq1}
 \begin{align}
   p_j &= \frac{1}{N_j} \sum_{i \in \Omega_j} P(z_j = 1 \ | \ C_{ij} ; \Phi) =
   \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{ P(C_{ij} \ | \ z_j = 1; \Phi)
@@ -277,44 +278,99 @@ different prior on being a lens as well. Finally, if the image is a training
 image with known $p_j \in (0,1)$, then the known $p_j$ is used instead of
 the current estimate.
 
-An easy way to conceptualize the previous section is to note that the
-Expectation Maximization takes advantage of the fact that each classification
-is supposed to be independent of the others and so can be treated as though all
-classifications were made at the same time.  The repetition of the steps
-ensures that the parameters are self-consistent.
+An easy way to conceptualize this section is to note that the Expectation
+Maximization takes advantage of the fact that each classification is supposed
+to be independent of the others and so the dataset can be treated as though all
+classifications were made at the same time.  The repetition of the $E$ and $M$
+steps ensures that the parameters are self-consistent.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Validation of Training}
-\label{sec:validation}
+\section{Tests}
 
-\todo{Chris}{In order to look at a validation dataset, I need to create a
-  blacklist of agents and subjects (and decide what sort of division of either
-/ both / neither constitutes a good validation dataset here) that SWAP.py can
-then read in and process.}
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{Offline vs online}
 
-A validation dataset is needed to prevent overfitting training data and to try
-to test how the training data does against real lenses. These need to come in
-two categories: actual lens environments, and simulated lenses. The need for
-two sets arises because of the paucity of actual lenses. In \SW, most training
-objects are explicitly given to a user -- if a user incorrectly identifies a
-training object, they are informed of that failure, and likewise for a correct
-classification.
+\flag{Chris}{This section was somewhat talked about in \SW paper 1, but it
+needs reiterating here.}
 
-Problems:
-0. By telling users about failures in the sim/dud, we explicitly break the
-notion that users come in fully-formed. But we also need to give users
-incentives to keep working, by rewarding them for good behavior. Replace by
-current crowd assessments and telling them how they did compared with the
-crowd?
-1. \SW does not have any 'silent' training images which could function as
-validation datasets, since you have broken the training by telling users.
-2. How to manage the difference between 'dud known lens fields' and 'dud sim
-fields'? Just put them together?
-3. If you tell users about the correct sim classification, do you also tell
-them about a correct lens classification, and do you tell them it was a real
-lens?
-4. Can I just use the dud fields?
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{ROC curve of online vs offline for both stages}
+\label{fig:}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{Scatter plot of p values from online and offline for both stage 1 and
+stage 2. Then a second plot of a similar thing but for the confusion matrices.
+Show if there are any systematic differences that need to be explained}
+\label{fig:}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{Unsupervised vs supervised}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{This figure will show three sets of ROC curves: supervised only,
+unsupervised only, and both together.}
+\label{fig:}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{Scatter plot of p values using supervised only vs unsupervised +
+supervised and unsupervised only. Then a second plot of a similar thing but for
+the confusion matrices. The idea is to show that (probably) there is no major
+systematic shift in evaluations.}
+\label{fig:}
+\end{figure}
+
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{Importance of initialization}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{This figure will show ROC curves for different initialization parameters.}
+\label{fig:}
+\end{figure}
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{Scatter plot of p values. Then a second plot of a similar thing but for
+the confusion matrices. The idea is to show that (probably) there is no major
+systematic shift in evaluations.}
+\label{fig:}
+\end{figure}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{Simulated vs known strong lenses}
+
+\flag{Chris}{This section will talk about training on the small set of known
+  strong lenses.  I cut down the users only to those who observed strong
+  lenses. I could use as a prior the distribution of confusion matrices and
+  probabilities from the training, or maybe some sort of dirichlet model. I
+think it will be vital that I use an informative prior, since in my previous
+explorations of this matter there simply wasn't enough data to go off of.}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+
+\section{Extensions to Existing Model}
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -337,7 +393,7 @@ how to use \SW to deal with the markers (where there usually are multiple classi
 
 We can extend the \SW binomial model to include multiple classifications and
 multiple categories -- we can talk about things like $P(``1" | \rm{LENSED\
-QUASAR})$ where a user assigns an object a rank $"1"$ and wish to know the
+QUASAR})$ where a user assigns an object a rank $``1"$ and wish to know the
 likelihood that a lensed quasar would yield that category.
 
 Unfortunately our $PL$ and $PD$ terms must be
@@ -400,7 +456,7 @@ Thus our complete log likelihood is (ignoring irrelevant normalization terms)
 Now we repeat the exercise earlier of computing the expected complete log
 likelihood under the conditional distribution $p(z_{j} | C_{ij}; p^0,
 P_{i})$. Call $p_{jv} = p(z_{jv} | C_{iju}; p^0_{jv}, P_{ivu})$. It is
-sufficient to compute $p_{jv}$ to complete this step. By Bayes's Rule, we
+sufficient to compute $p_{jv}$ to compute this step. By Bayes's Theorem, we
 know that
 \flag{Chris}{Is this an abuse of notation? I want for a single $z_{jv}$, but
 given $C_{iju}, p^0_{jv}, P_{ivu}$ for \textit{all} $i$ and $u$. So really it
@@ -418,6 +474,7 @@ have more than one classification per image / type.}
   p_{jv} = \frac{1}{N_j} \sum_{i \in \Omega_j} \frac{\prod_u p^0_{jv}
   P_{ivu}^{C_{iju}}}{\sum_{v'} \prod_u p^0_{jv'} P_{iv'u}^{C_{iju}}}
 \end{align}
+where $N_j = \sum_{i \in \Omega_j} 1$.
 
 \subsubsection{M-Step}
 
@@ -438,16 +495,31 @@ where $p_{v}^0$ is a possible specialization of $p_{jv}^0$.
 Like in the binomial case, the multinomial case can be performed online, where
 each new piece of information updates an existing assessment of lens
 classification and user skill. If a new classification $C_{iju}^{(k + 1)}$ is
-made, then by Bayes' Theorem the updates are as follows (with $i$, $j$, $u$,
+made, then by Bayes's Theorem the updates are as follows (with $i$, $j$, $u$,
 and $v$ acting as fixed indices):
+\question{Chris}{In our case, there is only one classification $u$ such that
+  $C_{iju'} = 1$ if $u' = u$ and $0$ else. Is it more clear if I instead call
+our classification $C_{ij}$ and multiply over all $u$ indices?}
+\todo{Chris}{Double check whether the updates to $p$ and $P$ use the $k+1$ term
+of the other, and if so, the ordering of it.}
 \begin{align}
   p_{jv}^{(k + 1)} &= \left( \frac{P^{k}_{ivu}^{C_{iju}^{(k + 1)}}}{\sum_{v'}
   p_{jv'}^{k} P^{k}_{iv'u}^{C_{iju}^{(k+1)}}} \right) p_{jv}^{k} \\
   P^{(k+1)}_{ivu}  &= \frac{C^{(k+1)}_{iju} p^{k}_{jv} + P^{k}_{ivu} \sum_{j'\in
   \Omega_i} p^{k}_{j'v} }{p^{k}_{jv} + \sum_{j'
-  \in \Omega_i} p^{k}_{j'v}}
-\end{align}
-If we are using only a supervised learning set, then $p^k_{j'v} \in (0, 1)$.
+  \in \Omega_i} p^{k}_{j'v}} \\
+  P^{(k+1)}_{ivu}  &= \left( \frac{p^{k}_{jv}}{p^{k}_{jv} + \sum_{j'
+  \in \Omega_i} p^{k}_{j'v}} \right) C^{(k+1)}_{iju} +
+  \left( \frac{\sum_{j'\in \Omega_i} p^{k}_{j'v}}
+    {p^{k}_{jv} + \sum_{j'\in \Omega_i} p^{k}_{j'v}}
+ \right) P^{k}_{ivu} \end{align}
+\question{Chris}{Do we like the first or second way of writing out
+$P^{(k+1)}_{ivu}$?}
+If we are using only a supervised learning set, then $p^k_{jv} \in (0, 1)$, and
+$\Omega_i$ becomes instead of the set of all images classified by user $i$ the
+set of all training images classified by user $i$.
+\todo{Chris}{Put in the Laplace smoothing. Double check that it again is just
+$M$ and $2M$ in the numerator and denominator, respectively.}
 
 \subsubsection{Checks}
 \todo{Chris}{This section will make some obvious checks on the generalized
@@ -484,8 +556,53 @@ C_{ij}) z_j \log (1 - PL_i) \notag\\
 which is the same CLL as before.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{The Prior}
 
-\section{Dynamic Allocations}
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{Validation of Training}
+\label{sec:validation}
+
+\todo{Chris}{In order to look at a validation dataset, I need to create a
+  blacklist of agents and subjects (and decide what sort of division of either
+/ both / neither constitutes a good validation dataset here) that SWAP.py can
+then read in and process.}
+
+A validation dataset is needed to prevent overfitting training data, to try
+to test how the training data does against real lenses, and to train the
+hyperparameters from any priors we might use. These need to come in
+two categories: actual lens environments, and simulated lenses. The need for
+two sets arises because of the paucity of actual lenses. In \SW, most training
+objects are explicitly given to a user -- if a user incorrectly identifies a
+training object, they are informed of that failure, and likewise for a correct
+classification.
+
+Problems:
+0. By telling users about failures in the sim/dud, we explicitly break the
+notion that users come in fully-formed. But we also need to give users
+incentives to keep working, by rewarding them for good behavior. Replace by
+current crowd assessments and telling them how they did compared with the
+crowd?
+1. \SW does not have any 'silent' training images which could function as
+validation datasets, since you have broken the training by telling users.
+2. How to manage the difference between 'dud known lens fields' and 'dud sim
+fields'? Just put them together?
+3. If you tell users about the correct sim classification, do you also tell
+them about a correct lens classification, and do you tell them it was a real
+lens?
+4. Can I just use the dud fields?
+
+\begin{figure}
+\begin{center}
+    \includegraphics[scale=]{Figures/}
+\end{center}
+\caption{This figure }
+\label{fig:validation}
+\end{figure}
+
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+\subsection{Dynamic Allocations}
 \todo{Chris}{This section will examine whether we would be better off
   dynamically assigning images to people (based on current estimates of skill
   and probability) rather than randomly assigning them. This means I will need

@@ -378,7 +378,7 @@ def SWAP(argv):
         # some settings that I guess you could configure but these work fine enough
         initialPL = tonights.parameters['initialPL']
         initialPD = tonights.parameters['initialPD']
-        N_min = 20   # min number of EM steps required
+        N_min = 40   # min number of EM steps required
         N_max = 100  # max number of EM steps allowed
         # TODO: make the epsilons be in logit terms?
         epsilon_min = 1e-6  # average change in probabilities before we claim convergence

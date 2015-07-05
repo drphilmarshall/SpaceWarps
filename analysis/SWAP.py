@@ -397,6 +397,8 @@ def SWAP(argv):
         print "SWAP: offline: running EM"
         while (epsilon_taus > epsilon_min) * (N_try < N_max) + (N_try < N_min):
 
+            print(N_try)
+            import ipdb; ipdb.set_trace() # BREAKPOINT 
             # do E step
             epsilon_taus = 0
             num_taus = 0

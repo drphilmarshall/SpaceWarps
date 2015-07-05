@@ -406,7 +406,14 @@ def SWAP(argv):
                 classifications = annotationhistory['ItWas']
                 if len(names) > 0:
                     old_probability = sample.member[ID].mean_probability
-                    sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False)  # not doing the binomial realization
+                    if supervised_and_unsupervised:
+                        laplace_smoothing = 1.
+                    elif supervised:
+                        laplace_smoothing = 0
+                    else:
+                        laplace_smoothing = 1
+
+                    sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False, laplace_smoothing=laplace_smoothing)  # not doing the binomial realization
                     epsilon_taus += (sample.member[ID].mean_probability - old_probability) ** 2
                     num_taus += 1
 
@@ -449,7 +456,7 @@ def SWAP(argv):
                         probabilities.append(sample.member[Subj_ID].mean_probability)
                     probabilities = np.array(probabilities)
 
-                bureau.member[ID].heard_many_times(probabilities, classifications)
+                bureau.member[ID].heard_many_times(priobabilities, classifications)
             # done with the EM steps! add one to the tally of tries
             N_try += 1
 

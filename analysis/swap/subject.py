@@ -134,7 +134,7 @@ class Subject(object):
 # Update probability of LENS, given latest classification:
 #   eg.  sample.member[ID].was_described(by=agent,as_being='LENS',at_time=t)
 
-    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1],online=True,record=True,realize_confusion=True):
+    def was_described(self,by=None,as_being=None,at_time=None,while_ignoring=0,haste=False,at_x=[-1],at_y=[-1],online=True,record=True,realize_confusion=True,laplace_smoothing=0):
 
         # TODO: CPD: make likelihood into an attribute?  if so, I need to
         # probably wipe it here to avoid silent bugs (likelihood not updating,
@@ -199,13 +199,13 @@ class Subject(object):
                 prior_probability=self.probability*1.0;  # TODO: not used?!
 
                 if as_being == 'LENS':
-                    likelihood = PL_realization
-                    likelihood /= (PL_realization*self.probability + (1-PD_realization)*(1-self.probability))
+                    likelihood = PL_realization + laplace_smoothing
+                    likelihood /= (PL_realization*self.probability + (1-PD_realization)*(1-self.probability) + 2 * laplace_smoothing)
                     as_being_number = 1
 
                 elif as_being == 'NOT':
-                    likelihood = (1-PL_realization)
-                    likelihood /= ((1-PL_realization)*self.probability + PD_realization*(1-self.probability))
+                    likelihood = (1-PL_realization) + laplace_smoothing
+                    likelihood /= ((1-PL_realization)*self.probability + PD_realization*(1-self.probability) + 2 * laplace_smoothing)
                     as_being_number = 0
 
                 else:
@@ -252,7 +252,7 @@ class Subject(object):
 # ----------------------------------------------------------------------
 # Update probability of LENS, given many classifications at once (E step):
 
-    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=-1,realize_confusion=False):
+    def was_described_many_times(self, bureau, names, classifications, record=False, haste=False, while_ignoring=-1,realize_confusion=False,laplace_smoothing=0):
         # classifications is assumed to be a list of 0s and 1s for NOT and LENS
         # names is assumed to just be a list of agent names
         N_classifications_used = 0
@@ -267,7 +267,7 @@ class Subject(object):
 
             by = agent
             as_being = ['NOT', 'LENS'][classification]
-            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=False,record=record,realize_confusion=realize_confusion)
+            likelihood_sum += self.was_described(by=by,as_being=as_being,while_ignoring=while_ignoring,haste=haste,online=False,record=record,realize_confusion=realize_confusion,laplace_smoothing=laplace_smoothing)
             N_classifications_used += 1
         self.probability = likelihood_sum * self.probability / N_classifications_used
         self.update_state()
@@ -286,11 +286,8 @@ class Subject(object):
         else:
             # is iterable
             # Update median probability
-            # cut probability to only be in 0 and 1. others are probably weird
-            # bugs
-            conds = self.probability > 0
-            self.mean_probability=10.0**(sum(np.log10(self.probability[conds]))/Ntrajectory)
-            self.median_probability=np.sort(self.probability[conds])[int(Ntrajectory/2)]
+            self.mean_probability=10.0 ** np.mean(np.log10(self.probability))
+            self.median_probability=np.median(self.probability)
 
         # Should we count it as a detection, or a rejection?
         # Only test subjects get de-activated:

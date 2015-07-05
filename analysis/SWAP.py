@@ -456,7 +456,7 @@ def SWAP(argv):
                         probabilities.append(sample.member[Subj_ID].mean_probability)
                     probabilities = np.array(probabilities)
 
-                bureau.member[ID].heard_many_times(priobabilities, classifications)
+                bureau.member[ID].heard_many_times(probabilities, classifications)
             # done with the EM steps! add one to the tally of tries
             N_try += 1
 

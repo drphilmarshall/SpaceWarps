@@ -432,7 +432,12 @@ def SWAP(argv):
                     classifications_train = agent.traininghistory['ItWas']
                     probabilities_train = []
                     for Subj_ID in agent.traininghistory['ID']:
-                        probabilities_train.append(sample.member[Subj_ID].mean_probability)
+                        if sample.member[Subj_ID].kind == 'test':
+                            probabilities_train.append(sample.member[Subj_ID].mean_probability)
+                        elif sample.member[Subj_ID].kind == 'sim':
+                            probabilities_train.append(1.0)
+                        elif sample.member[Subj_ID].kind == 'dud':
+                            probabilities_train.append(0)
                     probabilities_train = np.array(probabilities_train)
 
                     classifications_test = agent.testhistory['ItWas']

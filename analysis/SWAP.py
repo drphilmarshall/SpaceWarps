@@ -496,7 +496,8 @@ def SWAP(argv):
         tonights.parameters['survey']+'_'+tonights.parameters['finish']
 
     tonights.parameters['dir'] = os.getcwd()+'/'+tonights.parameters['trunk']
-    subprocess.call(["mkdir","-p",tonights.parameters['dir']])
+    if not os.path.exists(tonights.parameters['dir']):
+        os.makedirs(tonights.parameters['dir'])
 
     # ------------------------------------------------------------------
     # Pickle the bureau, sample, and database, if required. If we do

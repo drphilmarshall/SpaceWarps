@@ -286,8 +286,11 @@ class Subject(object):
         else:
             # is iterable
             # Update median probability
-            self.mean_probability=10.0**(sum(np.log10(self.probability))/Ntrajectory)
-            self.median_probability=np.sort(self.probability)[Ntrajectory/2]
+            # cut probability to only be in 0 and 1. others are probably weird
+            # bugs
+            conds = self.probability > 0
+            self.mean_probability=10.0**(sum(np.log10(self.probability[conds]))/Ntrajectory)
+            self.median_probability=np.sort(self.probability[conds])[int(Ntrajectory/2)]
 
         # Should we count it as a detection, or a rejection?
         # Only test subjects get de-activated:

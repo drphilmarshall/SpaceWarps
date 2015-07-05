@@ -378,8 +378,9 @@ def SWAP(argv):
         # some settings that I guess you could configure but these work fine enough
         initialPL = tonights.parameters['initialPL']
         initialPD = tonights.parameters['initialPD']
-        N_min = 10   # min number of EM steps required
+        N_min = 20   # min number of EM steps required
         N_max = 100  # max number of EM steps allowed
+        # TODO: make the epsilons be in logit terms?
         epsilon_min = 1e-6  # average change in probabilities before we claim convergence
         epsilon_taus = 10  # initial value
         N_try = 0  # initial value
@@ -407,11 +408,11 @@ def SWAP(argv):
                 if len(names) > 0:
                     old_probability = sample.member[ID].mean_probability
                     if supervised_and_unsupervised:
-                        laplace_smoothing = 1.
+                        laplace_smoothing = 0
                     elif supervised:
                         laplace_smoothing = 0
                     else:
-                        laplace_smoothing = 1
+                        laplace_smoothing = 0
 
                     sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False, laplace_smoothing=laplace_smoothing)  # not doing the binomial realization
                     epsilon_taus += (sample.member[ID].mean_probability - old_probability) ** 2
@@ -461,7 +462,6 @@ def SWAP(argv):
 
                 bureau.member[ID].heard_many_times(probabilities, classifications)
             # done with the EM steps! add one to the tally of tries
-            print(N_try, probabilities)
             N_try += 1
 
         # done with EM! collect probabilities in the bureau

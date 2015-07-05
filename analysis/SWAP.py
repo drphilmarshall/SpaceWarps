@@ -397,8 +397,6 @@ def SWAP(argv):
         print "SWAP: offline: running EM"
         while (epsilon_taus > epsilon_min) * (N_try < N_max) + (N_try < N_min):
 
-            print(N_try)
-            import ipdb; ipdb.set_trace() # BREAKPOINT 
             # do E step
             epsilon_taus = 0
             num_taus = 0
@@ -430,8 +428,11 @@ def SWAP(argv):
                     # supervised learning AND unsupervised
                     # use perfect training in M step
                     # use test info in M step
-                    probabilities_train = agent.traininghistory['ActuallyItWas']
                     classifications_train = agent.traininghistory['ItWas']
+                    probabilities_train = []
+                    for Subj_ID in agent.trainhistory['ID']:
+                        probabilities_train.append(sample.member[Subj_ID].mean_probability)
+                    probabilities_train = np.array(probabilities_train)
 
                     classifications_test = agent.testhistory['ItWas']
                     probabilities_test = []
@@ -460,6 +461,7 @@ def SWAP(argv):
 
                 bureau.member[ID].heard_many_times(probabilities, classifications)
             # done with the EM steps! add one to the tally of tries
+            print(N_try, probabilities)
             N_try += 1
 
         # done with EM! collect probabilities in the bureau

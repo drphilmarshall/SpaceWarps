@@ -430,7 +430,7 @@ def SWAP(argv):
                     # use test info in M step
                     classifications_train = agent.traininghistory['ItWas']
                     probabilities_train = []
-                    for Subj_ID in agent.trainhistory['ID']:
+                    for Subj_ID in agent.traininghistory['ID']:
                         probabilities_train.append(sample.member[Subj_ID].mean_probability)
                     probabilities_train = np.array(probabilities_train)
 

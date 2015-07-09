@@ -42,9 +42,10 @@ for stage in stages:
 ###############################################################################
 # Select Datasets
 ###############################################################################
-from os import makedirs
+from os import makedirs, path
 out_directory = '/u/ki/cpd/public_html/targets'
-makedirs(out_directory)
+if not path.exists(out_directory):
+    makedirs(out_directory)
 
 stage = 1
 # all stage1 sims and duds

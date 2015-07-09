@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import swap
+import matplotlib.pyplot as plt
 
 def logit(x):
     return np.log(x / (1 - x))

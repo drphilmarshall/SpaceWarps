@@ -77,7 +77,7 @@ if not path.exists(out_directory):
     makedirs(out_directory)
 
 colors = ['DarkBlue', 'Orange']
-line_style = ['-', '--', ':']
+linestyles = ['-', '--', ':']
 labels = ['offline', 'online', 'offline_supervised_and_unsupervised']
 
 for stage in [1, 2]:
@@ -209,46 +209,50 @@ for stage in [1, 2]:
     ## fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
 
 
-    ###########################################################################
-    # make ROC curves
-    ###########################################################################
+    ## ###########################################################################
+    ## # make ROC curves
+    ## ###########################################################################
 
-    col = collections[(stage, 'offline')]
-    fig, ax = plt.subplots(figsize=(10,8))
-    fig2, ax2 = plt.subplots(nrows=2, figsize=(10,8))
-    for kind_i, kind in enumerate(labels):
-        # select kinds that are duds or sims
-        conds = col['kind'] in ['sim', 'dud']
-        col_use = col[conds]
-        y_true = (col_use['kind'] == 'sim').values.astype(np.int)
-        y_score = col_use['mean_probability{0}'.format(
-                {'offline': '',
-                 'online': '_online',
-                 'offline_supervised_and_unsupervised': '_alldata'}[kind])].values
-        fpr, tpr, threshold = roc_curve(y_true, y_score)
+    ## col = collections[(stage, 'offline')]
+    ## fig, ax = plt.subplots(figsize=(10,8))
+    ## fig2, ax2 = plt.subplots(nrows=2, figsize=(10,8))
+    ## # select kinds that are duds or sims
+    ## conds = col['kind'].isin(['sim', 'dud'])
+    ## col_use = col[conds]
+    ## for kind_i, kind in enumerate(labels):
+    ##     y_true = (col_use['kind'] == 'sim').values.astype(np.int)
+    ##     y_score = col_use['mean_probability{0}'.format(
+    ##             {'offline': '',
+    ##              'online': '_online',
+    ##              'offline_supervised_and_unsupervised': '_alldata'}[kind])].values
 
-        color = colors[stage_i]
-        label = labels[kind_i]
-        line_style = linestyles[kind_i]
+    ##     fpr, tpr, threshold = roc_curve(y_true, y_score)
 
-        ax.plot(fpr, tpr, color, label=label, linestyle=line_style, linewidth=3)
-        # also plot ax2 tpr and fpr as function of threshold
-        ax2[0].plot(threshold, fpr, color, label=label, linestyle=line_style, linewidth=3)
-        ax2[1].plot(threshold, rpr, color, label=label, linestyle=line_style, linewidth=3)
+    ##     color = colors[stage_i]
+    ##     label = labels[kind_i]
+    ##     line_style = linestyles[kind_i]
 
-    ax.set_xlim(0, 0.1)
-    ax.set_ylim(0.8, 1)
-    ax.set_xlabel('False Positive Rate')
-    ax.set_ylabel('True Positive Rate')
-    plt.legend(loc='lower right')
-    ax2[0].set_xlabel('Threshold')
-    ax2[0].set_ylabel('False Positive Rate')
-    ax2[0].set_xlim(0, 1)
-    ax2[0].set_ylim(0, 1)
-    ax2[1].set_xlabel('Threshold')
-    ax2[1].set_ylabel('True Positive Rate')
-    ax2[1].set_xlim(0, 1)
-    ax2[1].set_ylim(0, 1)
+    ##     ax.plot(fpr, tpr, color, label='stage {0} {1}'.format(stage, label), linestyle=line_style, linewidth=3)
 
-    fig.savefig(out_directory + '/roc_stage{0}.pdf'.format(stage))
-    fig2.savefig(out_directory + '/threshold_stage{0}.pdf'.format(stage))
+    ##     # also plot ax2 tpr and fpr as function of threshold
+    ##     ax2[0].plot(threshold, fpr, color, label='stage {0} {1}'.format(stage, label), linestyle=line_style, linewidth=3)
+    ##     ax2[1].plot(threshold, tpr, color, label='stage {0} {1}'.format(stage, label), linestyle=line_style, linewidth=3)
+
+    ## ax.set_xlim(0, 0.2)
+    ## ax.set_ylim(0.8, 1)
+    ## ax.set_xlabel('False Positive Rate')
+    ## ax.set_ylabel('True Positive Rate')
+    ## ax.legend(loc='lower right')
+    ## ax2[0].legend(loc='upper right')
+
+    ## ax2[0].set_xlabel('Threshold')
+    ## ax2[0].set_ylabel('False Positive Rate')
+    ## ax2[0].set_xlim(0, 1)
+    ## ax2[0].set_ylim(0, 0.1)
+    ## ax2[1].set_xlabel('Threshold')
+    ## ax2[1].set_ylabel('True Positive Rate')
+    ## ax2[1].set_xlim(0, 1)
+    ## ax2[1].set_ylim(0.80, 1)
+
+    ## fig.savefig(out_directory + '/roc_stage{0}.pdf'.format(stage))
+    ## fig2.savefig(out_directory + '/threshold_stage{0}.pdf'.format(stage))

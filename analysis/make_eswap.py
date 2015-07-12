@@ -76,7 +76,9 @@ out_directory = '/u/ki/cpd/public_html/targets'
 if not path.exists(out_directory):
     makedirs(out_directory)
 
-stage = 1
+colors = ['DarkBlue', 'Orange']
+line_style = ['-', '--', ':']
+labels = ['offline', 'online', 'offline_supervised_and_unsupervised']
 
 for stage in [1, 2]:
     # all stage1 sims and duds
@@ -100,20 +102,20 @@ for stage in [1, 2]:
     # stage1 high offline low online
     # note that the ROC curve takes relatively low p for classification
     high_chance_conds = ((col['mean_probability'] > 0.35) &
-                         (col['mean_probability_online'] < 0.01) &
+                         (col['mean_probability_online'] < 0.95) &
                          (col['kind'] == 'test'))
     high_chance = col[high_chance_conds]
     high_chance.to_csv(out_directory + '/high_chance_{0}.csv'.format(stage))
-    print('high_chance', len(high_chance))  # 1594
+    print('high_chance', len(high_chance))  # 1594 with online < 0.01
 
 
     # stage1 high offline low online for unsupervised_and_supervised
     high_chance_all_conds = ((col['mean_probability_alldata'] > 0.7) &
-                             (col['mean_probability_online'] < 0.01) &
+                             (col['mean_probability_online'] < 0.95) &
                              (col['kind'] == 'test'))
     high_chance_all = col[high_chance_all_conds]
     high_chance_all.to_csv(out_directory + '/high_chance_unsup_{0}.csv'.format(stage))
-    print('high_chance_all', len(high_chance_all))  # 1808. 2057 unique between both
+    print('high_chance_all', len(high_chance_all))  # 1808. 2057 unique between both with online < 0.01
 
     # stage1 low offline high online
     low_chance_conds = ((col['mean_probability'] < 0.7) &
@@ -133,77 +135,120 @@ for stage in [1, 2]:
     print('low_chance_all', len(low_chance_all))  # 205
 
     # now all
-    conds_all = known_conds | \
-                high_chance_conds | high_chance_all_conds | \
-                low_chance_conds | low_chance_all_conds
+    conds_all = known_conds | high_chance_conds | high_chance_all_conds
+
     chance_all = col[conds_all]
     chance_all.to_csv(out_directory + '/targets_stage{0}.csv'.format(stage))
     print('all', len(chance_all))
 
+    ## ###########################################################################
+    ## # make some plots
+    ## ###########################################################################
+
+    ## xkey = 'mean_probability'
+    ## lims = (-0.05, 1.05)
+    ## # all
+    ## fig = fig_maker(col, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_stage{0}.pdf'.format(stage, xkey))
+    ## # known lens
+    ## fig = fig_maker(known, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_knownlens_stage{0}.pdf'.format(stage, xkey))
+    ## # train
+    ## fig = fig_maker(train, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_train_stage{0}.pdf'.format(stage, xkey))
+    ## # sim
+    ## fig = fig_maker(sim, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_sim_stage{0}.pdf'.format(stage, xkey))
+    ## # dud
+    ## fig = fig_maker(dud, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_dud_stage{0}.pdf'.format(stage, xkey))
+    ## # all selected
+    ## fig = fig_maker(chance_all, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
+
+    ## xkey = 'logit_prob'
+    ## lims = (None, None)
+    ## # all
+    ## fig = fig_maker(col, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_stage{0}.pdf'.format(stage, xkey))
+    ## # known lens
+    ## fig = fig_maker(known, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_knownlens_stage{0}.pdf'.format(stage, xkey))
+    ## # train
+    ## fig = fig_maker(train, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_train_stage{0}.pdf'.format(stage, xkey))
+    ## # sim
+    ## fig = fig_maker(sim, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_sim_stage{0}.pdf'.format(stage, xkey))
+    ## # dud
+    ## fig = fig_maker(dud, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_dud_stage{0}.pdf'.format(stage, xkey))
+    ## # all selected
+    ## fig = fig_maker(chance_all, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
+
+    ## xkey = 'logit_prob_cut'
+    ## lims = (-5.05, 5.05)
+    ## # all
+    ## fig = fig_maker(col, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_stage{0}.pdf'.format(stage, xkey))
+    ## # known lens
+    ## fig = fig_maker(known, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_knownlens_stage{0}.pdf'.format(stage, xkey))
+    ## # train
+    ## fig = fig_maker(train, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_train_stage{0}.pdf'.format(stage, xkey))
+    ## # sim
+    ## fig = fig_maker(sim, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_sim_stage{0}.pdf'.format(stage, xkey))
+    ## # dud
+    ## fig = fig_maker(dud, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_dud_stage{0}.pdf'.format(stage, xkey))
+    ## # all selected
+    ## fig = fig_maker(chance_all, xkey, lims)
+    ## fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
+
+
     ###########################################################################
-    # make some plots
+    # make ROC curves
     ###########################################################################
 
-    xkey = 'mean_probability'
-    lims = (-0.05, 1.05)
-    # all
-    fig = fig_maker(col, xkey, lims)
-    fig.savefig(out_directory + '/{1}_stage{0}.pdf'.format(stage, xkey))
-    # known lens
-    fig = fig_maker(known, xkey, lims)
-    fig.savefig(out_directory + '/{1}_knownlens_stage{0}.pdf'.format(stage, xkey))
-    # train
-    fig = fig_maker(train, xkey, lims)
-    fig.savefig(out_directory + '/{1}_train_stage{0}.pdf'.format(stage, xkey))
-    # sim
-    fig = fig_maker(sim, xkey, lims)
-    fig.savefig(out_directory + '/{1}_sim_stage{0}.pdf'.format(stage, xkey))
-    # dud
-    fig = fig_maker(dud, xkey, lims)
-    fig.savefig(out_directory + '/{1}_dud_stage{0}.pdf'.format(stage, xkey))
-    # all selected
-    fig = fig_maker(chance_all, xkey, lims)
-    fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
+    col = collections[(stage, 'offline')]
+    fig, ax = plt.subplots(figsize=(10,8))
+    fig2, ax2 = plt.subplots(nrows=2, figsize=(10,8))
+    for kind_i, kind in enumerate(labels):
+        # select kinds that are duds or sims
+        conds = col['kind'] in ['sim', 'dud']
+        col_use = col[conds]
+        y_true = (col_use['kind'] == 'sim').values.astype(np.int)
+        y_score = col_use['mean_probability{0}'.format(
+                {'offline': '',
+                 'online': '_online',
+                 'offline_supervised_and_unsupervised': '_alldata'}[kind])].values
+        fpr, tpr, threshold = roc_curve(y_true, y_score)
 
-    xkey = 'logit_prob'
-    lims = (None, None)
-    # all
-    fig = fig_maker(col, xkey, lims)
-    fig.savefig(out_directory + '/{1}_stage{0}.pdf'.format(stage, xkey))
-    # known lens
-    fig = fig_maker(known, xkey, lims)
-    fig.savefig(out_directory + '/{1}_knownlens_stage{0}.pdf'.format(stage, xkey))
-    # train
-    fig = fig_maker(train, xkey, lims)
-    fig.savefig(out_directory + '/{1}_train_stage{0}.pdf'.format(stage, xkey))
-    # sim
-    fig = fig_maker(sim, xkey, lims)
-    fig.savefig(out_directory + '/{1}_sim_stage{0}.pdf'.format(stage, xkey))
-    # dud
-    fig = fig_maker(dud, xkey, lims)
-    fig.savefig(out_directory + '/{1}_dud_stage{0}.pdf'.format(stage, xkey))
-    # all selected
-    fig = fig_maker(chance_all, xkey, lims)
-    fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
+        color = colors[stage_i]
+        label = labels[kind_i]
+        line_style = linestyles[kind_i]
 
-    xkey = 'logit_prob_cut'
-    lims = (-5.05, 5.05)
-    # all
-    fig = fig_maker(col, xkey, lims)
-    fig.savefig(out_directory + '/{1}_stage{0}.pdf'.format(stage, xkey))
-    # known lens
-    fig = fig_maker(known, xkey, lims)
-    fig.savefig(out_directory + '/{1}_knownlens_stage{0}.pdf'.format(stage, xkey))
-    # train
-    fig = fig_maker(train, xkey, lims)
-    fig.savefig(out_directory + '/{1}_train_stage{0}.pdf'.format(stage, xkey))
-    # sim
-    fig = fig_maker(sim, xkey, lims)
-    fig.savefig(out_directory + '/{1}_sim_stage{0}.pdf'.format(stage, xkey))
-    # dud
-    fig = fig_maker(dud, xkey, lims)
-    fig.savefig(out_directory + '/{1}_dud_stage{0}.pdf'.format(stage, xkey))
-    # all selected
-    fig = fig_maker(chance_all, xkey, lims)
-    fig.savefig(out_directory + '/{1}_selected_stage{0}.pdf'.format(stage, xkey))
+        ax.plot(fpr, tpr, color, label=label, linestyle=line_style, linewidth=3)
+        # also plot ax2 tpr and fpr as function of threshold
+        ax2[0].plot(threshold, fpr, color, label=label, linestyle=line_style, linewidth=3)
+        ax2[1].plot(threshold, rpr, color, label=label, linestyle=line_style, linewidth=3)
 
+    ax.set_xlim(0, 0.1)
+    ax.set_ylim(0.8, 1)
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    plt.legend(loc='lower right')
+    ax2[0].set_xlabel('Threshold')
+    ax2[0].set_ylabel('False Positive Rate')
+    ax2[0].set_xlim(0, 1)
+    ax2[0].set_ylim(0, 1)
+    ax2[1].set_xlabel('Threshold')
+    ax2[1].set_ylabel('True Positive Rate')
+    ax2[1].set_xlim(0, 1)
+    ax2[1].set_ylim(0, 1)
+
+    fig.savefig(out_directory + '/roc_stage{0}.pdf'.format(stage))
+    fig2.savefig(out_directory + '/threshold_stage{0}.pdf'.format(stage))

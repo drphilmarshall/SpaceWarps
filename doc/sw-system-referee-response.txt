@@ -41,7 +41,7 @@ the circles.
 
     TO DO! Edit SWAP to make red and blue points bigger, red and blue
     trajectories thicker and less alpha'd, red and blue histograms
-    in the foregroun with alpha=1. Issued as #219
+    in the foreground with alpha=1. Issued as #219
 
 Page 12, Figure 6, the different linestyles should be replaced by
 different colors to make the whole plots more readable, and to be able
@@ -118,4 +118,10 @@ The authors should add a discussion about the complexity of computing
 of a selection function in the case of visual inspection compared to
 the automated methods.
 
-    TO DO.
+    We are happy to provide a new paragraph on this topic at the end
+    of Section 5.1 (Results: Sample Properties). In short, we believe
+    that computing a selection function based on the quantitative,
+    probabilistic classification labels produced by the Space Warps
+    system should be no more difficult or complex than doing so based
+    on the outputs of a machine classifier, which would correspond
+    exactly in character.

@@ -342,10 +342,19 @@ class Subject(object):
 
         if self.kind == 'sim':
             colour = 'blue'
+            linewidth = 1.5
+            alpha = 0.3
+            size = 30
         elif self.kind == 'dud':
             colour = 'red'
+            linewidth = 1.5
+            alpha = 0.3
+            size = 30
         elif self.kind == 'test':
             colour = 'black'
+            linewidth = 1.0
+            alpha = 0.1
+            size = 20
 
         if self.status == 'undecided':
             facecolour = colour
@@ -355,20 +364,22 @@ class Subject(object):
         if highlight:
             # Thicker, darker line:
             plt.plot(mdn_trajectory,N,color=colour,alpha=0.5,linewidth=2.0, linestyle="-")
+            # Bigger point:
+            size = 40
         else:
             # Thinner, fainter line:
-            plt.plot(mdn_trajectory,N,color=colour,alpha=0.1,linewidth=1.0, linestyle="-")
+            plt.plot(mdn_trajectory,N,color=colour,alpha=alpha,linewidth=linewidth, linestyle="-")
 
         NN = N[-1]
         if NN > swap.Ncmax: NN = swap.Ncmax
         if highlight:
             # Heavier symbol:
-            plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.8);
+            plt.scatter(mdn_trajectory[-1], NN, s=size, edgecolors=colour, facecolors=facecolour, alpha=0.8);
             plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.5);
         else:
             # Fainter symbol:
-            plt.scatter(mdn_trajectory[-1], NN, edgecolors=colour, facecolors=facecolour, alpha=0.5);
-            plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.3);
+            plt.scatter(mdn_trajectory[-1], NN, s=size, edgecolors=colour, facecolors=facecolour, alpha=alpha+0.4);
+            plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=alpha);
 
 
 

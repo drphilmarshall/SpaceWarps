@@ -94,7 +94,15 @@ II. Nevertheless, I think the authors should at least add a sentence
 or two about it in their conclusion, maybe by completing the last
 indent of Section 7 concerning the missed lenses.
 
-    TO DO.
+    We have added the following to the last conclusion bullet, to
+    close this loop as the referee suggests:
+
+    "Future searches will need to address of these issues. We expect
+    it to be especially interesting to try crowd-sourcing the visual
+    inspection of target systems which have had their candidate lens
+    galaxy light automatically subtracted off (as, for example,
+    RingFinder does), in a collaboration between humans and
+    machines."
 
 Page 18, I think the title of subsection 6.3 : "Increasing capacity"
 should be changed to "Increasing crowd capacity" to avoid confusion.

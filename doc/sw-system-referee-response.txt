@@ -1,0 +1,113 @@
+
+We thank the referee for their very helpful comments, all of which we
+address below.  Their comments are shown unindented, while our
+responses are shown indented.
+
+ - - - - - - - - - - - - - - - - - - - -
+
+This work merits publication after some minor revisions.
+
+Following the order of the text, my comments (on both form and
+content) are:
+
+In the abstract, "expert-classified images which lack lenses" should
+be replaced by something like "real images that lack lenses" or
+"observed images that lack lenses", talking about "expert classified
+images" when referring to non lenses seems a bit confusing.
+
+    Done.
+
+Page 9, 4 lines after equation (2), "Nx is the number of lenses the
+volunteer has been shown" should be replaced by "Nx is the number of
+training subjects of the relevant type the volunteer has been shown",
+since it can refer either to lenses or non lenses.
+
+    Done.
+
+Page 9, I do not think it is necessary to create a specific
+subsubsection 4.2.1 to present the examples, which can be presented in
+the rest of the text of subsection 4.2.
+
+    Done.
+
+Page 10, maybe the title of subsection 4.5 : "Practicalities" should
+be changed for a more specific title here.
+
+    Done. We've gone with "Application to the CFHTLS Classifications".
+
+Page 11, Figure 5, the figure is interesting but it should be better
+highlighted with clearer color contrasts, for the histograms and for
+the circles.
+
+    TO DO! Edit SWAP to make red and blue points bigger, red and blue
+    trajectories thicker and less alpha'd, red and blue histograms
+    in the foregroun with alpha=1. Issued as #219
+
+Page 12, Figure 6, the different linestyles should be replaced by
+different colors to make the whole plots more readable, and to be able
+to distinguish the 4 "stars" corresponding to a lens probability
+threshold of 0.95 in each case. Still for this figure, in the caption,
+"Lens probability varies along the curve" should be replaced by "Lens
+probability threshold varies..."
+
+     TO DO! Plot edits issued as #220.
+     Caption: Done.
+
+Page 12, in the caption of Figure 7, the authors should add a sentence
+about the inset as in the caption of Figure 6 : "The inset shows a
+magnified view of the bottom righthand corner of the plot".
+
+    Done.
+
+Page 12, subsection 5.1, paragraph 5, line 9, I would replace "If the
+training set samples from the same systems as the test set" by "AS the
+training set samples..."
+
+    This was not a typo: we have clarified what we mean (using better
+    grammar!) in the text as follows:
+
+    "If the training set were to be sampled fairly from test set, the
+    completeness of the training set would be equal to the completeness of
+    the test set. (In practice this will likely only be approximately
+    true, as simulated lenses [and the distributions of their properties]
+    are used instead of real ones.)"
+
+    We think this will make sense to the reader, as we discuss the
+    efforts we made to make the training sims realistic elsewhere.
+
+Page 15, last paragraph before Section 6, first sentence, there is a
+repetition of "between".
+
+    Fixed.
+
+Page 16, subsection 6.1, I would write the first sentence of the 3rd
+paragraph: "The false positives show similar behavior.." at the end of
+the second paragraph, and begin the 3rd paragraph with "As well as
+subjects being 'unlucky'...".
+
+    Done.
+
+Page 18, the last paragraph of subsection 6.2 quickly deals with the
+subject of automated lens searches. I would have liked to read more
+development on that subject, which I could find though in Space Warps
+II. Nevertheless, I think the authors should at least add a sentence
+or two about it in their conclusion, maybe by completing the last
+indent of Section 7 concerning the missed lenses.
+
+    TO DO.
+
+Page 18, I think the title of subsection 6.3 : "Increasing capacity"
+should be changed to "Increasing crowd capacity" to avoid confusion.
+
+    Done.
+
+Page 18, subsection 6.3, 1st paragraph, line 7, there is a 'typo' :
+"quantitively".
+
+    Fixed.
+
+The authors should add a discussion about the complexity of computing
+of a selection function in the case of visual inspection compared to
+the automated methods.
+
+    TO DO.

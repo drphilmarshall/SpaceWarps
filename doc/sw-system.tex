@@ -51,7 +51,8 @@ We describe \SW, a novel gravitational lens discovery service that yields
 samples of high purity and completeness through crowd-sourced visual inspection.
 Carefully produced colour composite images are displayed to volunteers via a
 web-based classification interface, which records their estimates of the
-positions of candidate lensed features. Simulated lenses, and expert-classified
+positions of candidate lensed features. Images of simulated lenses, as
+well as real
 images which lack lenses, are inserted into the image stream at random
 intervals; this training set is used to give the volunteers instantaneous
 feedback on their performance, as well as to calibrate a model of the system
@@ -852,7 +853,8 @@ very simple estimate:
 Here, $X$ stands for the true classification of the subject, \ie either
 $\LENS$ or $\NOT$, while $``X''$ is the corresponding classification
 made by the volunteer on viewing the subject. $N_X$ is the number of
-lenses the volunteer has been shown, while $N_{``X"}$ is the number of
+training subjects of the relevant type the volunteer has been shown,
+while $N_{``X"}$ is the number of
 times the volunteer got their classifications of this type of training subject
 right. $\training$ stands for all
 $N_{\LENS} + N_{\NOT}$ training data that the agent has heard about to
@@ -899,11 +901,7 @@ update this prior probability into a posterior one using this new information:
 which can be evaluated numerically using the elements of the confusion
 matrix.
 
-
-\subsubsection{Examples}
-\label{sec:swap:details:examples}
-
-Suppose we have a volunteer who is always right about the true
+For example, suppose we have a volunteer who is always right about the true
 nature of a training subject.
 Their agent's confusion matrix would be
 \be
@@ -1030,7 +1028,7 @@ in  \Sref{sec:results:sample} below.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Practicalities}
+\subsection{Application to the CFHTLS Classifications}
 \label{sec:swap:practicalities}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1136,7 +1134,7 @@ discussed in the text, as well as the difference between the online and offline
 analyses. The \StageTwo sample was defined using the online \StageOne results
 (solid blue curve), while the offline analysis was chosen for the final
 \StageTwo results (dot-dashed orange curve).
-Lens probability varies along the curves: the stars indicate the point where
+Lens probability threshold varies along the curves: the stars indicate the point where
 the value of this quantity is 0.95.}
 \label{fig:results:sample:roc}
 \end{figure*}
@@ -1219,7 +1217,8 @@ the \cfhtls training set. The curves are truncated at the high purity end by
 the ``detection'' limit subject probability (subjects in the online
 \StageOne analysis were
 deemed to be detected at $p=0.95$, while at \StageTwo rounding error led to
-an upper limit of $p=1.0$).}
+an upper limit of $p=1.0$). The inset shows a magnified view of the
+bottom righthand corner of the plot.}
 \label{fig:results:sample:CP}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1233,9 +1232,15 @@ detected sims divided by the total number of sims in the training set, while
 purity is the number of correct detections divided by the total number of
 detections.\footnote{The completeness is equivalent to the TPR and is also
 known elsewhere as the ``recall.''  The purity is also known as the
-``precision.''} If the training set samples from the same systems as the test
-set, then the completeness of the training set will be equivalent to the
-completeness of the test set. The purity depends on the proportion of sims to
+``precision.''}
+%
+If the training set were to be sampled fairly from test set, the
+completeness of the training set would be equal to the completeness of
+the test set. (In practice this will likely only be approximately
+true, as simulated lenses [and the distributions of their properties]
+are used instead of real ones.)
+
+The purity depends on the proportion of sims to
 duds, and so the purity of the test set must be approximated by rescaling the
 training set to the expected proportion of lens systems to not-lens systems in
 the survey. First we compute the expected number of false positives by
@@ -1470,7 +1475,7 @@ integrals under the curves are both one. }
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The similarities between between \StageOne and 2 regarding the results above,
+The similarities between \StageOne and 2 regarding the results above,
 and despite the difference in the task set,
 suggest that these numbers can be scaled to estimate cautiously
 the speed of future \SW projects. For example, the completion time for a \SW
@@ -1582,9 +1587,10 @@ view a subject, all the updates to its posterior probability are small, and if
 none are very confident about the presence of lensing, the subject follows a
 random walk down its trajectory plot. This can be seen in the top left panel
 of \Fref{fig:discuss:performance:trajectories}.
-
 The false positives show similar behaviour, for example in the bottom lefthand
-panel of the figure. As well as subjects being ``unlucky'' in this way, there
+panel of the figure.
+
+As well as subjects being ``unlucky'' in this way, there
 are two less common failure modes associated with mistakes made by higher skill
 volunteers, illustrated in the righthand column of the figure. In the false negative
 subject shown in the top right-hand panel, several high skill classifiers update
@@ -1793,7 +1799,7 @@ them in about three weeks.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Increasing capacity}
+\subsection{Increasing crowd capacity}
 \label{sec:discuss:capacity}
 
 Finally, we comment on the size of the first \SW crowd, and how the system might
@@ -1801,7 +1807,7 @@ be scaled up for future surveys. In \Sref{sec:results:crowd} and
 \Tref{tab:crowd:contributions}, the following rough picture emerged for the \SW
 crowd in this project: it consisted of a few $10^4$ volunteers, with a few
 $10^3$ achieving considerable skill, and a few $10^2$ having the time to make a
-significant contribution. Slightly more quantitively, we might note that  the
+significant contribution. Slightly more quantitatively, we might note that  the
 total skill of the crowd, computed by summing the skill of all the agents, is a
 measure of the effective crowd size, in the sense that a crowd of perfect
 classifiers would be of this size. By this measure, the \StageOne crowd was

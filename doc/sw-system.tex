@@ -1277,6 +1277,38 @@ properties of the training subjects, which were chosen to be fairly
 visible: we expect the completeness to real lenses to be somewhat lower, as a
 result (see \PaperTwo).
 
+Finally, it is worth noting the implications of the results in this
+section for future studies of samples of lenses (and lens candidates)
+discovered through visual inspection at \SW. The ROC curve analysis we
+have carried out should be very familiar to those working in machine
+classification, and in fact is identical to that which would be
+performed on the classifications made by a new automated method.
+Supervised machine learning methods and the \SW system as described
+here both require a training set, and both return quantitative,
+probabilistic classifications (consisting of a label and some measure
+of confidence in that label) that can be used in further analysis. A
+good example of where such quantitification is important is in the
+derivation of the selection function for a given sample. While such a
+derivation is beyond the scope of this work, it is sufficient to note
+that from the point of view of an astronomer seeking to derive a
+selection function, {\it the labels produced by \SW and those produced
+by a machine learning method can be treated equivalently}: that is, we
+have succeeded in elevating visual inspection to a quantitative
+science. Indeed, the discussion of completeness given above is all in
+terms of recovery of a large set of simulated lenses, just as it would
+be in the case of an automated method---and in both cases, the
+limiting factor is the realism of the training set. In \PaperTwo we
+investigate this further by assessing the performance of the \SW
+system against the (small) set of real lens candidates known to lie in
+the field; for now, we note that the training set used in this work
+constitutes a valid sample of objects for any alternative machine
+learning lens detection method to be tested against. In future, we may
+well find it necessary to employ a larger training set, to enable the
+selection efficiency to be characterised as a function of multiple
+observables. This should not be a problem, since in the current work
+the small training set we used was classified around 20 times more
+than  was the test set: we could have defined a larger training set,
+and collected  many fewer classifications per training image.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -1900,7 +1932,11 @@ galaxy-scale lenses with faint blue galaxy sources, whose lensed features are
 difficult to distinguish from the light from the lens galaxy (consistent
 with what we find also for real lenses, see \PaperTwo). We observed some
 additional scatter, with some simulated lenses accumulating low probability
-simply due to classification noise.
+simply due to classification noise. Future searches will need to address
+of these issues. We expect it to be especially interesting to try
+crowd-sourcing the visual inspection of target systems which have
+had their candidate lens galaxy light automatically subtracted off (as, for example, \RF
+does), in a collaboration between humans and machines.
 
 \end{itemize}
 

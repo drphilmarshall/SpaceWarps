@@ -41,7 +41,7 @@ the circles.
 
     TO DO! Edit SWAP to make red and blue points bigger, red and blue
     trajectories thicker and less alpha'd, red and blue histograms
-    in the foregroun with alpha=1. Issued as #219
+    in the foreground with alpha=1. Issued as #219
 
 Page 12, Figure 6, the different linestyles should be replaced by
 different colors to make the whole plots more readable, and to be able
@@ -94,7 +94,15 @@ II. Nevertheless, I think the authors should at least add a sentence
 or two about it in their conclusion, maybe by completing the last
 indent of Section 7 concerning the missed lenses.
 
-    TO DO.
+    We have added the following to the last conclusion bullet, to
+    close this loop as the referee suggests:
+
+    "Future searches will need to address of these issues. We expect
+    it to be especially interesting to try crowd-sourcing the visual
+    inspection of target systems which have had their candidate lens
+    galaxy light automatically subtracted off (as, for example,
+    RingFinder does), in a collaboration between humans and
+    machines."
 
 Page 18, I think the title of subsection 6.3 : "Increasing capacity"
 should be changed to "Increasing crowd capacity" to avoid confusion.
@@ -110,4 +118,10 @@ The authors should add a discussion about the complexity of computing
 of a selection function in the case of visual inspection compared to
 the automated methods.
 
-    TO DO.
+    We are happy to provide a new paragraph on this topic at the end
+    of Section 5.1 (Results: Sample Properties). In short, we believe
+    that computing a selection function based on the quantitative,
+    probabilistic classification labels produced by the Space Warps
+    system should be no more difficult or complex than doing so based
+    on the outputs of a machine classifier, which would correspond
+    exactly in character.

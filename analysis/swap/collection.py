@@ -327,7 +327,7 @@ class Collection(object):
 
             bins = np.linspace(np.log10(swap.pmin),np.log10(swap.pmax),32,endpoint=True)
             bins = 10.0**bins
-            colors = ['blue','red','dimgray']
+            colors = ['dimgray','blue','red']
             labels = ['Test: Survey','Training: Sims','Training: Duds']
             thresholds = self.thresholds()
 
@@ -347,7 +347,7 @@ class Collection(object):
 
                 # Pylab histogram:
                 plt.hist(p, bins=bins, histtype='stepfilled', color=colors[j], alpha=1.0, label=labels[j])
-                plt.legend(prop={'size':10})
+                plt.legend(prop={'size':10}, framealpha=1.0)
 
         if t is not None:
             # Add timestamp in top righthand corner:

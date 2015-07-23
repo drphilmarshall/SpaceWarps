@@ -344,12 +344,12 @@ class Subject(object):
             colour = 'blue'
             linewidth = 1.5
             alpha = 0.3
-            size = 30
+            size = 40
         elif self.kind == 'dud':
             colour = 'red'
             linewidth = 1.5
             alpha = 0.3
-            size = 30
+            size = 40
         elif self.kind == 'test':
             colour = 'black'
             linewidth = 1.0
@@ -365,7 +365,7 @@ class Subject(object):
             # Thicker, darker line:
             plt.plot(mdn_trajectory,N,color=colour,alpha=0.5,linewidth=2.0, linestyle="-")
             # Bigger point:
-            size = 40
+            size = 60
         else:
             # Thinner, fainter line:
             plt.plot(mdn_trajectory,N,color=colour,alpha=alpha,linewidth=linewidth, linestyle="-")
@@ -374,11 +374,11 @@ class Subject(object):
         if NN > swap.Ncmax: NN = swap.Ncmax
         if highlight:
             # Heavier symbol:
-            plt.scatter(mdn_trajectory[-1], NN, s=size, edgecolors=colour, facecolors=facecolour, alpha=0.8);
+            plt.scatter(mdn_trajectory[-1], NN, s=size, edgecolors=colour, facecolors=colour, alpha=1.0);
             plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=0.5);
         else:
             # Fainter symbol:
-            plt.scatter(mdn_trajectory[-1], NN, s=size, edgecolors=colour, facecolors=facecolour, alpha=alpha+0.4);
+            plt.scatter(mdn_trajectory[-1], NN, s=size, edgecolors=colour, facecolors=colour, alpha=1.0);
             plt.plot([mdn_trajectory[-1]-sigma_trajectory_m[-1],mdn_trajectory[-1]+sigma_trajectory_p[-1]],[NN,NN],color=colour,alpha=alpha);
 
 

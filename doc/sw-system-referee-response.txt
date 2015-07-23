@@ -3,6 +3,14 @@ We thank the referee for their very helpful comments, all of which we
 address below.  Their comments are shown unindented, while our
 responses are shown indented.
 
+In addition, we clarified the purity calculation with the assumptions
+we made about the expected number of lenses present in the survey, and
+also made it clear that the purity of the Stage 1 sample (15%) was
+chosen to be lower than the maximum purity obtainable. The abstract
+and conclusions remain unchanged, as these refer to the final purity,
+after Stage 2 refinement. We include a PDF version of the paper with
+all changes highlighted, for the referee's convenience.
+
  - - - - - - - - - - - - - - - - - - - -
 
 This work merits publication after some minor revisions.
@@ -39,9 +47,7 @@ Page 11, Figure 5, the figure is interesting but it should be better
 highlighted with clearer color contrasts, for the histograms and for
 the circles.
 
-    TO DO! Edit SWAP to make red and blue points bigger, red and blue
-    trajectories thicker and less alpha'd, red and blue histograms
-    in the foreground with alpha=1. Issued as #219
+    Done.
 
 Page 12, Figure 6, the different linestyles should be replaced by
 different colors to make the whole plots more readable, and to be able
@@ -50,8 +56,7 @@ threshold of 0.95 in each case. Still for this figure, in the caption,
 "Lens probability varies along the curve" should be replaced by "Lens
 probability threshold varies..."
 
-     TO DO! Plot edits issued as #220.
-     Caption: Done.
+     Done.
 
 Page 12, in the caption of Figure 7, the authors should add a sentence
 about the inset as in the caption of Figure 6 : "The inset shows a

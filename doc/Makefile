@@ -1,8 +1,9 @@
-                                                                                                                                                               
+# ----------------------------------------------------------------------------
+
 all: papers
 
 clean:
-	-rm -f *.aux *.log *.dvi *.blg *.out *.bbl sw-system.pdf sw-cfhtls.pdf
+	-rm -f *.aux *.log *.dvi *.blg *.out
 
 papers: system cfhtls
 
@@ -23,11 +24,11 @@ sw-system.pdf: sw-system.tex macros.tex
 # sw-system.bbl: sw-system.tex references.bib
 # 	bubble -f sw-system.tex references.bib >& sw-system.bbl.log
 # 	cat sw-system.bbl.log
-# 
+#
 # sw-system.dvi: sw-system.tex sw-system.bbl macros.tex
 # 	latex sw-system.tex
 # 	latex sw-system.tex
-# 
+#
 # sw-system.pdf: sw-system.dvi
 # 	\dvipdf -sPAPERSIZE=a4 sw-system.dvi
 

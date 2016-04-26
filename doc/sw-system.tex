@@ -50,30 +50,33 @@
 We describe \SW, a novel gravitational lens discovery service that yields
 samples of high purity and completeness through crowd-sourced visual inspection.
 Carefully produced colour composite images are displayed to volunteers via a
-web-based classification interface, which records their estimates of the positions of
-candidate lensed features. Simulated lenses, and expert-classified images which
-lack lenses, are inserted into the image stream at random intervals; this
-training set is used to give the volunteers feedback on their performance, as
-well as to calibrate a model of the system that provides
-dynamical updates to the probability of containing a lens
-of every image they classify. Low probability systems are
-retired from the site periodically, concentrating the sample towards a set of
-candidates. Having divided 160 square degrees of Canada-France-Hawaii Telescope
-Legacy Survey (\cfhtls) imaging into some 430,000 overlapping 84 by 84 arcsecond
-tiles and displaying them on the site, we were joined by around 37,000
-volunteers who contributed 11~million image classifications over the course of 8
-months. The sample was reduced to 3368 \StageOne candidates; these were then
-refined to yield a sample that we expect to be over 90\% complete and 30\% pure.
-We comment on the scalability of the \SW system to the wide field survey era,
-based on our finding that searches of $10^5$ images can be performed by a
-crowd of $10^5$ volunteers in 6 days.
+web-based classification interface, which records their estimates of the
+positions of candidate lensed features. Images of simulated lenses, as
+well as real
+images which lack lenses, are inserted into the image stream at random
+intervals; this training set is used to give the volunteers instantaneous
+feedback on their performance, as well as to calibrate a model of the system
+that provides dynamical updates to the probability that a classified image
+contains a lens. Low probability systems are retired from the site periodically,
+concentrating the sample towards a set of lens candidates. Having divided 160
+square degrees of Canada-France-Hawaii Telescope Legacy Survey (\cfhtls) imaging
+into some 430,000 overlapping 82 by 82 arcsecond tiles and displaying them on
+the site, we were joined by around 37,000 volunteers who contributed 11~million
+image classifications over the course of 8 months. This \StageOne search reduced
+the sample to 3381 images containing candidates; these were then refined in
+\StageTwo to yield a sample that we expect to be over 90\% complete and 30\%
+pure, based on our analysis of the volunteers performance on training images.
+We comment on the scalability of the \SW system to the wide field
+survey era, based on our projection that searches of $10^5$ images could be performed
+by a crowd of $10^5$ volunteers in 6 days.
+
 \end{abstract}
 
 % Full list of options at http://www.journals.uchicago.edu/ApJ/instruct.key.html
 
 \begin{keywords}
-  gravitational lensing   --
-  methods: statistical    --
+  gravitational lensing: strong   --
+  methods: statistical            --
   methods: citizen science
 \end{keywords}
 
@@ -92,13 +95,12 @@ background objects due to the deflection of light by  massive foreground
 objects -- is a very powerful astrophysical tool, enabling a wide range of
 science projects. The image separations and distortions provide information
 about the mass distribution in the lens \citep[e.g.][]{AugerEtal2010,
-SonnenfeldEtal2012,MoreEtal2012,SonnenfeldEtal2013}, including on sub-galactic scales
+SonnenfeldEtal2012,MoreEtal2012,SonnenfeldEtal2015}, including on sub-galactic scales
 \citep[e.g.][]{Dalal+Kochanek2002,VegettiEtal2010,HezavehEtal2013}. Any strong
 lens can provide magnification of a factor of 10 or more, providing a deeper,
 higher resolution view of the distant universe through these ``cosmic
 telescopes'' \citep[e.g.][]{StarkEtal2008,NewtonEtal2011}. Lensed quasars
-enable cosmography via the time delays between the multiple images'
-lightcurves \citep[e.g.][]{TewesEtal2013,SuyuEtal2013}, and study of the
+enable cosmography via the time delays between the lightcurves of multiple images \citep[e.g.][]{TewesEtal2013,SuyuEtal2013}, and study of the
 accretion disk itself through the microlensing effect
 \citep[e.g.][]{PoindexterEtal2008}. All of these investigations would
 benefit from being able to draw from a larger and/or more diverse sample of lenses.
@@ -110,17 +112,17 @@ CLASS \citep[e.g.]{BrowneEtal2003}, SDSS \citep[e.g.][]
 {BoltonEtal2006,AugerEtal2010b,TreuEtal2011,InadaEtal2012,
 HennawiEtal2008,BelokurovEtal2009,DiehlEtal2009,FurlanettoEtal2013},
 \cfhtls \citep[e.g.][]{MoreEtal2012,GavazziEtal2014}, Herschel
-\citep[][]{NegrelloEtal2014} and SPT \citep[e.g.][]{VieiraEtal2013}, among
+\citep[][e.g.]{NegrelloEtal2014} and SPT \citep[e.g.][]{VieiraEtal2013}, among
 others.  As the number of known lenses has increased, new types have been
 discovered, leading to entirely new investigations. Compound lenses
 \citep{GavazziEtal2008,CollettEtal2012} and lensed supernovae
 \citep{QuimbyEtal2014,KellyEtal2015} are good examples of this.
 
-Because they are rare, strong lenses are expensive to find. The highest purity
+Strong lenses are expensive to find, because they are rare. The highest purity
 searches to date have made use of relatively clean signals such as the
 presence of emission or absorption features at two distinct redshifts in the
 same optical spectrum \citep[e.g.][]{BoltonEtal2004}, or the strong
-``magnification bias'' towards detecting strongly-lensed sources in the sub-mm
+``magnification bias'' towards detecting strongly-lensed sources in the sub-mm/mm
 waveband \citep[e.g.][]{NegrelloEtal2010}. Such searches have to yield pure samples,
 because they require expensive high resolution imaging follow-up; consequently
 they have so far produced yields of only tens to hundreds of lenses. An alternative
@@ -128,7 +130,7 @@ approach is to search images already of sufficiently high resolution and colour
 contrast, and confirm the systems as gravitational lenses by modeling the
 survey data themselves \citep[][]{MarshallEtal2009}. Several square degrees of
 HST images have been searched, yielding several tens of galaxy-scale lenses
-\citep[e.g.][]{MoustakasEtal2007,FaureEtal2008,Jackson2008,MoreEtal2011,
+\citep[e.g.][]{MoustakasEtal2007,Jackson2008,MoreEtal2011,
 PawaseEtal2014}. Similarly, searches of over a hundred square degrees of CFHT
 Legacy Survey (\cfhtls) ground-based imaging, also with sub-arcsecond image quality,
 have revealed a smaller number of wider image separation group-scale systems
@@ -138,14 +140,16 @@ HST or spectroscopic follow-up to confirm the candidates as lenses
 \citep[e.g.][]{GavazziEtal2014}.
 
 How can we scale these lens searches up to imaging surveys that cover a hundred
-times the sky area, such as the almost-all sky surveys planned with LSST and
+times the sky area, such as the almost-all sky surveys planned with the Large
+Synoptic Survey Telescope (LSST) and
 Euclid?  There are two approaches to detecting lenses in imaging surveys. The
 first one is robotic: automated analysis of the object catalogs and the survey
-images. The candidate samples produced by these methods have, to date, not been
-of high purity  \citep[see
-e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}, with visual inspection
-by teams of humans still required to narrow down the robotically-generated
-samples. In this approach, the image data may or may not be explicitly modelled
+images. The candidate samples produced by these methods have, to date, only
+reached purities of 1-10\%, with visual inspection
+by teams of humans still required to reduce the robotically-generated
+samples by factors of 10-100 \citep[see
+e.g.][]{MarshallEtal2009,MoreEtal2012,GavazziEtal2014}.
+In this approach, the image data may or may not be explicitly modelled
 by the robots as if it contained a gravitational lens, but the visual inspection
 can be thought of as a ``mental modeling'' step.  An inspector who classifies an
 object as a lens candidate does so because the features in the image that they
@@ -154,7 +158,8 @@ lenses do.  The second approach simply cuts out the robot middleman:
 \citet{MoustakasEtal2007,FaureEtal2008,Jackson2008} and \citet{PawaseEtal2014}
 all performed successful visual searches for lenses in HST imaging.
 
-Visual image inspection thus seems, at present, unavoidable at some level when
+Until this problem is solved by machine learning tools,
+at present visual image inspection seems unavoidable at some level when
 searching for gravitational lenses. The technique has some drawbacks, however.
 The first is that humans make mistakes. A solution to this is for the inspectors
 to operate in teams, providing multiple classifications of the same images in
@@ -206,7 +211,7 @@ large surveys by ``crowd-sourcing'' it to a community of citizen scientists.
 Implemented as a Zooniverse \citep{SimpsonEtal2014}
 project, it is designed to provide a {\it gravitational lens discovery service}
 to survey teams looking for lenses in wide field imaging data. In a companion
-paper \citep[][hereafter \PaperTwo](PaperII) we will present the new
+paper \citep[][hereafter \PaperTwo]{MoreEtal2015} we will present the new
 gravitational lenses discovered in our first lens search, and
 begin to investigate the differences between lens detections made in \SW and
 those made with automated techniques. Here though, we simply try to answer the
@@ -285,18 +290,19 @@ from \texttt{https://github.com/zooniverse/Lens-Zoo}.  The project was renamed
 during development to avoid the question of  who ``Len'' is.} The focus of the
 CI is a large display of a pre-prepared PNG image of the ``subject'' being
 inspected. When the image is clicked on by the volunteer, a marker symbol
-appears at that position.  Several markers can be placed, and they can be
-removed by the user if they change their mind.
+appears at that position.  Multiple markers can be placed, and they can be moved or
+removed by the classifier if they change their mind.
 
 The next image moves rapidly in from a queue formed at the right hand side of
-the screen when the ``Finished marking'' button is pressed. Gravitational lenses
+the screen when the ``Next'' or ``Finished Marking'' button is pressed (If a marker is placed somewhere in the image, the Next button changes to a ``Finished marking'' button). Gravitational lenses
 are rare: typically, most of the images will not contain a lens candidate, and
 these need to be quickly rejected by the inspector. The queue allows several
 images to be pre-loaded while the volunteer is classifying the current subject,
-and the rapid movement is designed to encourage volunteers to classify rapidly.
-After each classification, the positions of the markers are written out to the
+and the rapid movement is deliberately designed to encourage volunteers to classify quickly. There is no ``back'' button in the CI: each volunteer may only classify a given
+subject once and subjects cannot be returned to after the `Next or Finished marking' button has been pressed (this can be a source of missed lens candidates when classifying at speed). Note that by `classify' we mean that we interpret no markers being placed as a rejection, and placing at least one marker to mean a possible lensing event has been identified.
+After each classification, the positions of any markers are written out to the
 classification database, in an entry that also stores metadata including the ID
-of the subject, the username of the volunteer  (or IP address if thy are not
+of the subject, the username of the volunteer (or IP address if thy are not
 logged in), and a timestamp.
 
 For the more interesting subjects, the CI offers two features that enable their
@@ -310,12 +316,10 @@ the project discussion forum (known as
 ``\Talk\footnote{\texttt{http://talk.spacewarps.org}}'').
 Here, volunteers can discuss the features they have seen either
 before they submit their classification, or after, if they ``favourite'' the
-subject. There is no ``back'' button: each volunteer may only classify a given
-subject once. However, the presence of an option to see what others think
-about any given subject before submitting your own classification means that
+subject. The option of reading other opinions on any given image or lens candidate before submitting a classification means that
 the classifications may not be strictly independent; however, the advantage of this
 system is that volunteers can learn from others what constitutes a good lens
-candidate. This is not, however, the primary educational resource; we describe
+candidate (we are not able to track who visited talk before pressing ``Finished marking''). This is not, however, the primary educational resource; we describe
 the explicit training that we provide for the volunteers in the next section.
 The FITS images of the subject can be further explored with Zooniverse
 ``Dashboard Tools,'' which include a
@@ -372,10 +376,15 @@ finishes marking a training subject, a pop-up
 message is generated, containing either congratulations for a successful
 classification (for example, ``Well done! You spotted a simulated lens,'' as
 in \Fref{fig:screenshot}) or feedback for an unsuccessful one (for
-example, ``There is no gravitational lens in this field!'').
+example, ``There is no gravitational lens in this field!''). A successful
+classification of a simulated lens requires a marker to be placed fairly
+precisely on the lensed features, so as to avoid misinforming the classifier.
+The pixels in the lensed features are flagged via a mask contained in the
+PNG image transparency ``alpha'' channel. (The mask is not visible in the image.)
 
-Because we include a training set of images in amongst the survey ``test''
-images, \sw can be viewed as a {\it supervised learning} system. Consequently,
+\sw can be viewed as a {\it supervised learning} system,
+because we include a training set of images in amongst the survey ``test''
+images. Consequently,
 we should expect to find lens candidates that look like the sims that we put in
 the training set, and so the design of this training set is quite important. The
 training images must look realistic, in two ways. First, apart from the
@@ -412,21 +421,23 @@ the predicted multiple images of the source using the \gravlens ray-tracing
 code \citep{Keeton2000}.
 
 At this point, we applied several cuts to the simulated lens pool, in order to
-reject sims that were likely to be difficult to spot. While this ensured that
-the educational value of the sims when feedback was given, it means that we
-should not necessarily expect to detect real lens candidates that would not pass
-these cuts (although human classifiers do possess the key advantage of  being
-able to go beyond their training\footnote{Any real lens candidates we find with
-properties outside the ranges of the training set will be of particular
-interest, being a product of the {\it imagination} of the crowd in extrapolating
-their understanding of gravitational lenses into a regime that they have not
-been trained for.  \citet{GeachEtal2015}, for example, report the discovery of a
-red lensed arc  by volunteers who had only been trained primarily on blue
-examples. We investigate this aspect of the \SW approach in \PaperTwo.}).
+reject sims that were likely to be difficult to spot. While this ensured
+that the sims had high educational value, it means that we
+should not necessarily expect to be able to
+detect real lens candidates that would not pass these cuts.
+However, human classifiers do possess the key advantage of being
+able to {\it imagine} lens systems beyond what they were shown during their training.
+Indeed, any real lens candidates we find with
+properties outside the ranges of the training set could be of particular
+interest, if the training set is indeed completely representative of lenses that
+we already know about.
+\citet{GeachEtal2015}, for example, report the discovery of a
+red lensed arc  by volunteers who had only been trained primarily on blue/green
+examples. We investigate this aspect of the \SW approach further in \PaperTwo.
 In the present project, the most important selection cuts we made were to only
-keep sims with a) second brightest image brighter that $i = 23$ and b) total
+keep sims with a) second brightest image having $i < 23$ and b) total
 combined image magnitude fainter than 19--20 (\PaperTwo, Table~1). The
-combination of these two cuts resulted in a sample of visible lensed image
+combination of these two reductions resulted in a sample of visible lensed image
 configurations.
 
 Volunteers were initially shown training images at
@@ -435,8 +446,10 @@ consisting of (at first) 20\% sims, 20\% duds, and 60\% test images,
 and such that no volunteer ever
 saw a given image more than once. As the number of classifications made by the
 volunteer increased, the training frequency was decreased from 40\% to
-$2/(5\times2^{(\textrm{int}(N_c/20)+1)/2})$ ($\approx 30\%$ for the second 20
-subjects, $20\%$ for the third 20 subjects, and so on).
+$2/(5\times2^{(\textrm{int}(N_c/20)+1)/2})$, $\approx 30\%$ for the second 20
+subjects, $20\%$ for the third 20 subjects, and the minimum rate of 10\%
+after that. We did not reduce the training frequency to zero because we wanted
+to ensure that the inspectors remained alert.
 
 This training regime meant that in the first 60 images viewed, each volunteer
 was shown (on average) 9 simulated gravitational lenses (as well as 9
@@ -462,19 +475,20 @@ task. This ``Spotter's Guide'' is a set of webpages showing example lenses, both
 real and simulated, and also some common false positives, drawn from the pool of
 survey images. The false positives were identified during the selection of the
 ``dud'' training images (previous section). For easy reference, the lenses are
-divided by type (for example, ``lensed galaxies,'' ``lensed quasars'' and
-``cluster lenses''), as are the false positives (for example, ``Rings and
+divided by type (for example, ``Lensed Galaxies,'' ``Lensed Quasars'' and
+``Cluster Lenses''), as are the false positives (for example, ``Rings and
 Spirals,'' ``Mergers,'' ``Artifacts'' and so on). The example images are
 accompanied by explanatory text. The Spotter's Guide is reached via a button on
 the left hand side, or the hyperlinked thumbnail images of the ``Quick
 Reference'' provided on the right hand side, of the classification interface.
 
-Most of the text of the Spotter's Guide focuses on what kinds of image features
-gravitational lenses do or don't produce;
-the website ``Science page'' contains a very brief introduction to how
+Most of the text of the Spotter's Guide focuses on the kinds of features that
+gravitational lenses do or don't produce. To complement this,
+the website ``Science'' section contains a very brief introduction to how
 gravitational lensing works, which is fleshed out a little on the ``FAQ'' page.
-The FAQ also contains answers to frequently asked questions about the interface
+The FAQ also contains answers to questions about the interface
 and the task set.
+
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -505,9 +519,9 @@ many non-lenses must first be rejected, and several classifications by
 different inspectors are needed in either case.
 
 The \StageOne training set was chosen to be quite clear cut, in order to err on
-the side of inclusivity, and so ensure high completeness. When defining the
-training duds we discarded anything that could be considered a lens candidate
-(see \Sref{sec:design:training:guide}): this meant that objects that look
+the side of high completeness. When defining the
+training duds, we discarded anything that could be considered a lens candidate
+(see \Sref{sec:design:training:guide}). This meant that objects that look
 similar to lenses, such as galaxy mergers, tidal tails and spiral arms, pairs of
 blue stars and so on, were specifically excluded from the training set, and
 therefore we expect some of those types of object to appear in the \StageOne
@@ -519,7 +533,7 @@ selected to be relatively straightforward to spot.
 \label{sec:design:stages:two}
 
 The design of a \StageOne classification task, and its training set, should
-lead to sample of lens candidates that has high completeness but may have low
+lead to a sample of lens candidates that has high completeness but may have low
 purity. To refine this sample to higher purity, we need to reject more
 non-lenses, which means providing the volunteers with a more realistic and
 challenging training set as they re-classify it. The more demanding \StageTwo
@@ -548,7 +562,7 @@ and~\ref{fig:training-gallery:duds} show some example images from the resulting
 \end{minipage} \hfill
 \caption{Typical \SW ``sims'' from the \StageTwo training set.
 The top right-hand corner insets indicate the
-location of the simulated lens in each of these training images. Users needed to
+location of the simulated lens in each of these training images. Volunteers needed to
 click on these specific features in order to make a correct classification.}
 \label{fig:training-gallery:sims}
 \end{figure*}
@@ -603,17 +617,21 @@ With high and homogeneous image quality (the mean seeing in the $g$-band is
 0.78''), and reaching limiting magnitudes of around 25 across the $ugriz$ filter
 set, this survey has yielded several dozen new gravitational lenses on both
 galaxy and group scales
-\citep{GavazziEtal2014,SonnenfeldEtal13,CabanacEtal2007,MoreEtal2012}. The
+\citep{GavazziEtal2014,SonnenfeldEtal2013a,CabanacEtal2007,MoreEtal2012}. The
 quality of the data, combined with the presence of these comparison ``known
 lens'' samples, makes this a natural choice against which to develop and test
 the \SW system. The \cfhtls is also well-representative of the data quality
 expected from several next-generation sky surveys, such as DES, KiDS, HSC and
-LSST.
+LSST. We use the stacked images
+from the final T0007 release taken from the Terapix
+website\footnote{\texttt{ftp://t07.terapix.fr/pub/T07/}} for this
+work.
 
-In order to investigate the completeness of the previous, semi-automated, lens
-searches in the \cfhtls area, we designed a ``blind search.'' We divided the
+In order to investigate the completeness of the previous semi-automated lens
+searches in the \cfhtls area, we designed a ``blind search'' as follows.
+We divided the
 \cfhtls pointings into some 430,000 equal size, overlapping tiles, approximately
-84~arcsec on a side. We refer to these images as ``test images.'' The ``training
+82~arcsec on a side. We refer to these images as ``test images.'' The ``training
 images'' were derived from a small subset of these, as  discussed above. In
 future, larger area, projects we expect to implement a somewhat different
 strategy of producing image tiles centred on particular pre-selected
@@ -632,7 +650,7 @@ images for similar features.
 The \cfhtls $g$, $r$ and $i$-band images have the greatest average
 depth and highest average image
 quality of the survey,
-and we chose to focus on this subset. (The remaining $u$ and $z$-band images
+and we chose to focus on this subset. (The $u$ and $z$-band images
 were also made available for perusal in \Talk). We made colour composite PNG
 format images following the prescription of \citet{LuptonEtal2004} \citep[with
 extensions by][and some particular choices of our own]{WherryEtal2004}, using
@@ -640,7 +658,7 @@ the \humvi software.\footnote{The \humvi colour image composition code used in
 this work is open source and available from
 \texttt{http://github.com/drphilmarshall/HumVI}} Specifically, we first rescaled
 the pixel values of each image, in the notation of \citeauthor{LuptonEtal2004},
-into flux units (``picomaggies,''), via the image AB zeropoint $m_0$ and the
+into flux units (``picomaggies''), via the image AB zeropoint $m_0$ and the
 pixel value calibration factor $f$  given by $\log_{10}{f} = 0.4(30.0 - m_0)$.
 We then multiplied these calibrated images by further aesthetic ``scales''
 $s_{i,r,g}$ before computing the total intensity image $I$ and applying an
@@ -665,7 +683,7 @@ scale factor) until the background noise was just visible. Then we tuned the
 colour scales $s$ to find a balance between exposing the low surface
 brightness blue features (important for lens spotting!), and having the noise
 appear to have equal red, green and blue components. Non-linearity sets in at
-about $1/(Q \alpha)$ in the  scaled intensity image: finally, tuning $Q$ at
+about $1/(Q \alpha)$ in the  scaled intensity image. Finally, tuning $Q$ at
 fixed $\alpha$ determines the appearance of bright galaxies, which we need to
 be suppressed enough to allow the low surface brightness features to show
 through, but not so much that they no longer looked like massive galaxies.
@@ -673,14 +691,13 @@ through, but not so much that they no longer looked like massive galaxies.
 These parameters were then fixed during the production of all the tiles, in
 order to allow straightforward comparison between one image and another, and
 for intuition to be built up about the appearance of stars and galaxies across
-the survey. Alternative algorithms, such as adjusting the stretch and scale
+the survey. (Alternative algorithms, such as adjusting the stretch and scale
 dynamically according to, for example, the root-mean-square pixel value in
 each image, can lead to better presentation of bright objects, but in doing so
 they tend to hide the faint features in those images: we needed to optimize
-the detectability of these faint features.   Examples of \cfhtls training set
-images prepared in this way can be seen in the galleries of the previous
-section (Figures~\ref{fig:training-gallery:sims}
-and~\ref{fig:training-gallery:duds}). We also defined two alternative sets of
+the detectability of these faint features.)   Examples of \cfhtls training set
+images prepared in this way can be seen in Figures~\ref{fig:training-gallery:sims}
+and~\ref{fig:training-gallery:duds}. We also defined two alternative sets of
 visualization parameters, to display a ``bluer'' image and a ``brighter''
 image in the classification interface Quick Dashboard
 (\Sref{sec:design:interface}). The QD code performs the same image composition
@@ -715,34 +732,36 @@ a starting point for image exploration. Our parameter choices are given in
 \label{sec:swap}
 
 Having described the classification interface, the training images and the
-test images,  we now outline our methodology for interpreting the interactions
-of the volunteers with the identification interface, and then describe how we
-applied this methodology in the two classification stages in the \cfhtls
+test images,  we now outline our methodology for interpreting the
+classifications made by the
+volunteers, and describe how we
+applied this methodology in the two classification stages of the \cfhtls
 project in the \SW Analysis Pipeline (SWAP) code.\footnote{The open source
 SWAP code is available from
 \texttt{https://github.com/drphilmarshall/SpaceWarps}}
 
-Each classification made is logged in a database, storing subject IDs,
-(anonymous) volunteer IDs, a timestamp and the classification results (the image
-pixel-coordinate positions of every marker placed).  The ``category'' of subject --
+Each classification made is logged in a database that stores the subject ID,
+volunteer ID, a timestamp and the results of each classification: the image
+pixel-coordinate positions of every marker placed.  The ``category'' of subject --
 whether it is a ``training'' subject (a simulated lens or a known non-lens) or a
 ``test'' subject (an unseen image drawn from the survey) -- is also recorded.
 For training subjects, we also store the ``kind'' of the subject as
 a lens (``sim''), or a non-lens (``dud''), and also the ``flavour'' of lens
 object if one is present in the image (``lensed galaxy'', ``lensed quasar'' or
-``cluster lens'').  This classification is used to provide instant feedback, but
-is also the basic measurement used in a probabilistic classification of every
+``cluster lens'').  This information is used to provide the instant feedback, but
+is also the basic data used in a probabilistic classification of every
 subject based on all image views to date. Not all
 volunteers register with the Zooniverse (although all are prompted to do so);
 in these cases we record their IP addresses as substitute IDs.
 
-While the \SW web app is live, and classifications are being made, we perform an
-online analysis of the classifications,  updating a probabilistic model of every
-(anonymous) volunteer's data, and also updating the posterior probability that
-each subject (in both the training and test sets) contains a lens, on a daily
-basis. This gives us a dynamic estimate of the posterior probability for  any
+While the \SW web app was live, and classifications were being made, we
+performed a daily online analysis of the classifications,
+updating a probabilistic model of every
+anonymous volunteer's data, and also updating the posterior probability that
+each subject (in both the training and test sets) contains a lens.
+This gave us a dynamic estimate of the posterior probability for  any
 given  subject being a lens, given all classifications of it to date. Assigning
-thresholds in this lens probability then allows us to make good decisions about
+thresholds in this lens probability then allowed us to make good decisions about
 whether or not to retire a subject from the system, in order to focus attention
 on new images.
 
@@ -756,7 +775,8 @@ probabilities, as estimated by the agent, that the volunteer is going to be 1)
 correct when they report that an image contains a lens when it really does
 contain a lens, $\PL = \pr(\saidLENS|\LENS,T)$, and 2) correct when they report that
 an image does not contain a lens when it really doesn't contain a lens,
-$\PD = \pr(\saidNOT|\NOT,T)$.
+$\PD = \pr(\saidNOT|\NOT,T)$. The confusion matrix contains all the information
+the agent has about how good its volunteer is at classifying images.
 
 \item Each agent updates its confusion matrix elements based on the number of
 times its volunteer has been right in each way (about both the sims and the
@@ -772,8 +792,8 @@ set of all classifications made of this subject.)
 \end{itemize}
 
 For a detailed derivation of this analysis pipeline, please continue reading
-through \Sref{sec:swap:details} below. Alternatively, \Sref{sec:swap:practicalities}
-contains illustrations of the calculation.
+through \Sref{sec:swap:details} below. Alternatively,
+\Sref{sec:swap:practicalities} contains illustrations of the calculation.
 
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
@@ -797,7 +817,7 @@ classification $\saidLENS$ or $\saidNOT$ after viewing (blindly) a member of
 the training set of subjects.
 
 How should we model these compressed data? The circumstances of each
-classification are quite complex, as are the human classifiers in general: the
+classification are quite complex, as are the human classifiers themselves: the
 volunteers learn more about the problem as they go, but also inevitably make
 occasional mistakes (especially when classifying at high speed).
 To cope with this uncertainty, we assign a
@@ -805,12 +825,10 @@ simple software {\it agent} to partner each volunteer. The agent's task is to
 interpret their volunteer's classification data as best it can, using a model
 that makes a number of necessary approximations. These interpretations will
 then include uncertainty arising as a result of the volunteer's efforts and
-also the agent's approximations, but they will have two important redeeming
-features. First, the interpretations will be quantitative (where before they
-were qualititative),  and thus will be useful in decision-making. Second, the
-agent will be able to predict, using its model, the probability of a test
-subject being a $\LENS$, given both its volunteer's classification, and its
-volunteer's experience. In this section we describe how these agents work,
+also the agent's approximations.
+The agent will be able to predict, using its model, the probability of a test
+subject being a $\LENS$ or an empty field given both its volunteer's classification and its
+volunteer's past experience. In this section we describe how these agents work,
 and other aspects of the \SW analysis pipeline (SWAP).
 
 
@@ -835,7 +853,8 @@ very simple estimate:
 Here, $X$ stands for the true classification of the subject, \ie either
 $\LENS$ or $\NOT$, while $``X''$ is the corresponding classification
 made by the volunteer on viewing the subject. $N_X$ is the number of
-lenses the volunteer has been shown, while $N_{``X"}$ is the number of
+training subjects of the relevant type the volunteer has been shown,
+while $N_{``X"}$ is the number of
 times the volunteer got their classifications of this type of training subject
 right. $\training$ stands for all
 $N_{\LENS} + N_{\NOT}$ training data that the agent has heard about to
@@ -859,7 +878,7 @@ Note that these probabilities are normalized, such that
 $\pr(\saidNOT |\NOT) = 1 - \pr(\saidLENS|\NOT)$.
 
 Now, when this volunteer views a test subject,
-it is this confusion matrix that will allow their agent to update the
+it is this confusion matrix that will allow their software agent to update the
 probability of that test subject being a $\LENS$. Let us suppose that
 this subject has never been seen before: the agent assigns a
 prior probability that it is (or contains) a lens is
@@ -882,11 +901,7 @@ update this prior probability into a posterior one using this new information:
 which can be evaluated numerically using the elements of the confusion
 matrix.
 
-
-\subsubsection{Examples}
-\label{sec:swap:details:examples}
-
-Suppose we have a volunteer who is always right about the true
+For example, suppose we have a volunteer who is always right about the true
 nature of a training subject.
 Their agent's confusion matrix would be
 \be
@@ -916,7 +931,7 @@ classification would have an agent with the column-swapped confusion matrix
 \ee
 and would submit $C = \saidNOT$ for this subject. However, such a volunteer
 would nevertheless be submitting useful information, since given the above
-confusion matrix, their agent would calculate
+confusion matrix, their software agent would calculate
 \begin{align}
   \pr(\LENS|\saidNOT,T_k) &= \frac{1.0 \cdot p_0}
            {\left[ 1.0\cdot p_0 + 0.0\cdot(1 - p_0) \right]}
@@ -947,9 +962,10 @@ classifications, and the set of training subjects seen by each of those
 volunteers.
 $\pr(\LENS|\data)$ is the fundamental property of each test subject that
 we are trying to infer. We track $\pr(\LENS|\data)$ as a function of time,
-and by comparing it to a lower or upper thresholds, make decisions about
-whether to retire the subject from the classification interface or
-promote it in \Talk, respectively.
+as it is updated;
+by comparing it to a lower or upper threshold, we can make decisions about
+whether to retire the subject from the classification interface, or
+flag it for further study, respectively.
 
 Finally, the confusion matrix obtained from the application of
 \Eref{eq:app:fraction} has some inherent noise which reduces as the
@@ -977,7 +993,7 @@ sample of lens candidates as a function of $\pr(\LENS|C,T)$ threshold.
 The probabilistic model described above does not need to be implemented as an
 online inference. Indeed, it might be more appropriate to perform the inference
 of all agent confusion matrix elements and subject probabilities simultaneously.
-Such a joint analysis would implement in full the agents' basic model assumption
+Such a joint analysis would implement in full the software agents' basic model assumption
 that their volunteers have innate and unchanging talent for lens spotting, that
 is parameterised by two constant confusion matrix elements which simply need to
 be inferred given the data.
@@ -989,9 +1005,11 @@ inference, the effect will be that of applying the time-averaged confusion
 matrices to each classification,  rather than a set that evolves as the agents
 (and in the real world, the volunteers) learn. This will mean  that the early
 classifications will effectively not be downweighted as a result of the agent's
-ignorance. On the other hand, this ignorance could also have provided some
-conservatism, reducing the noise due to early classifications if they are
-unreliable. Whether or not an offline analysis out-performs an online one is a
+ignorance. On the other hand, this ignorance provides some conservatism,
+reducing the noise due to early classifications if they are unreliable: in
+practice we do downweight (via Laplace/add-one smoothing)
+the early classifications made by each volunteer, for
+this reason. Whether or not an offline analysis out-performs an online one is a
 matter for experiment.
 
 The mechanics of how we carry out the offline inference  will be presented
@@ -1010,7 +1028,7 @@ in  \Sref{sec:results:sample} below.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Practicalities}
+\subsection{Application to the CFHTLS Classifications}
 \label{sec:swap:practicalities}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1020,22 +1038,22 @@ in  \Sref{sec:results:sample} below.
 snapshot, 200 randomly-selected agents are shown distributed over the unit plane, with a
 tendency to move towards the ``astute'' region in the upper right hand
 quadrant as each agent's volunteer views more images. Yellow point size is
-proprtional to the number of images classified; green point size shows
+proportional to the number of images classified; green point size shows
 agent-perceived ``skill'' (\Aref{appendix:swap}).}
 \label{fig:swap:agent-probabilities}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \Fref{fig:swap:agent-probabilities} shows the confusion matrix elements of 200
-randomly-selected agents, as they were on a particular day during the
-\StageOne online analysis. Many volunteers classify  only a small number of images, and
-so their agents' confusion matrix elements have remained close to their initial values
-of (0.5,0.5). As more images are classified (shown by the yellow point size),
-the agents' matrix elements tend to move towards higher values, partly as the
-volunteers attain greater skill levels (green point sizes, see
-\Sref{sec:results} below) but mostly as
-the agent learns more about them. In this upper
-right-hand quadrant, the agents perceive their volunteers to be ``astute.''
+randomly-selected agents, as they were on a particular day during the \StageOne
+online analysis. Many volunteers classify  only a small number of images, and so
+their software agents' confusion matrix elements have remained close to their
+initial values of (0.5,0.5). As more images are classified (shown by the yellow
+point size), the agents' matrix elements tend to move towards higher values,
+partly as the volunteers attain greater skill levels (green point sizes, see
+\Sref{sec:results} below) but mostly as the agent updates its confusion matrix.
+In this upper right-hand quadrant, the agents perceive their volunteers to be
+``astute.''
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
@@ -1046,7 +1064,9 @@ right in probability by the agents as they interpret the volunteers input. The
 dotted vertical lines show (left to right) the retirement threshold, prior
 probability, and the detection threshold. Different colours denote the different
 kinds of subject. Bottom panel: histograms of all the subject probabilities
-computed to date, sub-divided by subject kind.}
+computed to date, sub-divided by subject kind. The blue bar (of correctly-detected
+sims) hides a grey bar of around 3000 new lens candidates, which are the
+subject of \PaperTwo.}
 \label{fig:swap:subject-trajectories}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1060,14 +1080,14 @@ images' posterior probability, $\pr(\LENS|C,T)$, to define ``detection'' and
 symmetrically in the logarithm of probability), $10^{-7}$. Subjects that
 attained probability of less than the rejection threshold were scheduled for
 retirement and subsequently ignored by the analysis code. Subjects crossing the
-detection threshold were also subsequently ignored, but they were not
+$P=0.95$ detection threshold were also subsequently ignored, but they were not
 retired from the website, just so that more volunteers could see them.
 
 The progress of the subjects during the online analysis is illustrated in
 \Fref{fig:swap:subject-trajectories}. Subjects appear on this plot at the tip of
 the arrow, at zero classifications and prior probability; they then drift
 downwards as they are classified by the crowd, with each agent applying the
-appropriate kick in probability based on what it hears its volunteer say.
+appropriate ``kick'' in probability based on what it hears its volunteer say.
 Encouragingly, sims (blue) tend to end up with high probability, while duds
 (red) pile up at low probability; test subjects (black) mostly drift to low
 probability, but some go the other way. The latter will help make up the
@@ -1083,7 +1103,8 @@ As subjects were retired from the site, more subjects were activated. In this
 way, the volunteers who down-voted images for not containing any lensed
 features enabled new images to be shown to other members of the community.
 
-When all the subjects had either been retired, or classified around 10 times or
+When all the subjects had either been retired, or at least
+classified around 10 times or
 more, the web app was paused and reconfigured for \StageTwo. The sample of
 subjects classified during \StageTwo was selected to be all those that passed
 the detection threshold ($\pr(\LENS|C,T) > 0.95$) at \StageOne. These were
@@ -1098,6 +1119,30 @@ section, to improve the pipeline performance.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{figure*}
+\begin{minipage}{0.48\linewidth}
+  \centering\includegraphics[width=\linewidth]{stage1_ROC.pdf}
+\end{minipage}\hfill
+\begin{minipage}{0.48\linewidth}
+  \centering\includegraphics[width=\linewidth]{stage2_ROC.pdf}
+\end{minipage}
+\caption{Receiver operating characteristic curves for the \SW system, using
+the \cfhtls training set. Left: \StageOne, right: \StageTwo. Insets show a
+magnified view of the top lefthand corner of each plot. Linestyles illustrate
+the software agent properties (initial confusion matrix elements, learning or not)
+discussed in the text, as well as the difference between the online and offline
+analyses. The \StageTwo sample was defined using the online \StageOne results
+(solid blue curve), while the offline analysis was chosen for the final
+\StageTwo results (dot-dashed orange curve).
+Lens probability threshold varies along the curves: the symbols
+indicate the points where
+the value of this quantity is 0.95. In the lefthand panel, the circle
+point is masked by the square point.}
+\label{fig:results:sample:roc}
+\end{figure*}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \section{Results}
 \label{sec:results}
@@ -1119,24 +1164,25 @@ lenses, and 450 duds; at \StageTwo, we used 152 images of simulated lenses and
 curves for \cfhtls \StageOne and \StageTwo. These plots show the true positive
 rate (TPR, the number of sims correctly detected divided by the total number of
 sims in the training set), and the false positive rate (FPR, the number of duds
-incorrectly detected  divided by the total number of duds in the training set), both
+incorrectly detected divided by the total number of duds in the training set), both
 for a given sample of detections defined by a particular probability threshold,
 which varies along the curves.  In both stages, these curves show that true
 positive rates of  around 90\% were achieved, at very low false positive rates.
 The probability threshold that was used for retirement during the \StageOne online analysis
-was 0.95; this point is marked with a star on each curve.
+was 0.95; this point is marked with a symbol on each curve.
 This turned out to be close to optimal (although a better approach would be to
 keep track of the ROC curve as the survey progressed!).
 
 For comparison we show the results of an analysis where the classifications of
 training images were ignored, and the agents' confusion matrix elements
-were instead all simply assigned initial values of 0.75
+were instead all simply assigned initial values of 0.75,
 which then remained constant. This set-up emulates a
 very simple unweighted voting scheme, where all classifications are treated
-equally.  In this case, the TPR remains under 80\% in \StageOne and 60\% in
+equally.  In this case, the TPR never reaches 80\% in \StageOne or 60\% in
 \StageTwo, thus illustrating the benefit of including training images and
 allowing the agents to learn via their Bayesian updates.
-When the agents are allowed to update their confusion matrices, the choice of
+When the software agents are allowed to update their confusion matrices,
+the choice of
 initial confusion matrix is not very important: the same 0.75 initial values
 applied to normal, learning agents resulted in only a slightly lower TPR than
 the default case.
@@ -1155,8 +1201,8 @@ making less noisy probability estimates. This could be consistent with
 other citizen science/crowdsourcing projects where,
 in the absence of high quality information about classifiers,
 sophisticated strategies tend to under-perform naive but simpler
-ones \citep{Waterhouse} (although we note that this rule of thumb seems not to extend
-to simple voting in this case!).
+ones \citep[][although we note that this rule of thumb seems not to extend
+to simple voting in this case!]{Waterhouse}.
 
 Assuming Poisson statistics for the
 fluctuations in the numbers of recovered lenses, the uncertainty in the measured
@@ -1168,23 +1214,17 @@ test these algorithmic choices more rigorously. At \StageOne, high TPR can be
 measured to better than 1\%.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure*}
-\begin{minipage}{0.48\linewidth}
-  \centering\includegraphics[width=\linewidth]{stage1_ROC.pdf}
-\end{minipage}\hfill
-\begin{minipage}{0.48\linewidth}
-  \centering\includegraphics[width=\linewidth]{stage2_ROC.pdf}
-\end{minipage}
-\caption{Receiver operating characteristic curves for the \SW system, using
-the \cfhtls training set. Left: \StageOne, right: \StageTwo. Insets show a
-magnified view of the top lefthand corner of each plot. Linestyles illustrate
-the agent properties (initial confusion matrix elements, learning or not)
-discussed in the text, as well as the difference between the online and offline
-analyses. The \StageTwo sample was defined using the online \StageOne results
-(solid blue curve), while the offline analysis was chosen for the final
-\StageTwo results (dot-dashed orange curve). }
-\label{fig:results:sample:roc}
-\end{figure*}
+\begin{figure}
+\centering\includegraphics[width=\linewidth]{completeness_purity_simple.pdf}
+\caption{Completeness-estimated purity curves for the \sw system, using
+the \cfhtls training set. The curves are truncated at the high purity end by
+the ``detection'' limit subject probability (subjects in the online
+\StageOne analysis were
+deemed to be detected at $p=0.95$, while at \StageTwo rounding error led to
+an upper limit of $p=1.0$). The inset shows a magnified view of the
+bottom righthand corner of the plot.}
+\label{fig:results:sample:CP}
+\end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 Adopting the online \StageOne analysis, and the offline \StageTwo analysis, we
@@ -1196,22 +1236,35 @@ detected sims divided by the total number of sims in the training set, while
 purity is the number of correct detections divided by the total number of
 detections.\footnote{The completeness is equivalent to the TPR and is also
 known elsewhere as the ``recall.''  The purity is also known as the
-``precision.''} If the training set samples from the same systems as the test
-set, then the completeness of the training set will be equivalent to the
-completeness of the test set. The purity depends on the proportion of sims to
-duds, and so the purity of the test set must be approximated by rescaling the
-training set to the expected proportion of lens systems to not-lens systems in
-the survey. First we compute the expected number of false positives by
-multiplying the FPR by the expected number of non-lenses in the survey. Then
-we multiply the TPR by the expected number of lenses in the survey, to get the
-expected number of true positives. The sum of the true positives and the false
-positives gives the expected sample size; dividing the expected number of true
-positives by this sample size gives the purity. Note that the completeness is
-invariant to this transformation.
-The \StageOne curves are truncated by the retirement of subjects in this phase,
-which sets the minimum size of this sample. We see from the solid blue curve
-that over 90\% completeness was reached, albeit in a sample with 30\%
-purity.
+``precision.''}
+%
+If the training set were to be sampled fairly from test set, the
+completeness of the training set would be equal to the completeness of
+the test set. (In practice this will likely only be approximately
+true, as simulated lenses [and the distributions of their properties]
+are used instead of real ones.)
+
+The purity depends on the proportion of sims to duds, and so the
+purity of the test set must be approximated by rescaling the training
+set to the expected proportion of lens systems to not-lens systems in
+the survey. We expect there to be around 90 lenses in the CFHTLS
+already (a rate of 1 lens in every 5000 images or so); to a very good
+approximation  the number of non-lens images in the survey is just the
+number of images in  the survey (some 430,000). First we compute the
+expected number of false positives by multiplying the FPR by the
+expected number of non-lenses in the survey (430,000).  Then we
+multiply the TPR by the expected number of lenses in the survey (90),
+to get the expected number of true positives. The sum of the true
+positives and the false positives gives the expected sample size;
+dividing the expected number of true positives by this sample size
+gives the purity. Note that the completeness is invariant to this
+transformation. The \StageOne curves are truncated by the retirement
+of subjects in this phase, which sets the minimum size of this sample.
+We see from the solid blue curve that over 90\% completeness was
+able to be reached, albeit in samples with not more than 30\% purity.
+We set the detection threshold for \StageOne to be 0.95 (shown by the blue star
+in \Fref{fig:results:sample:CP}), leading to a sample with 94\% completeness
+and 15\% purity.
 
 Does this performance level vary between the different types of gravitational
 lens? To investigate the completeness to the three different types of lens in
@@ -1233,16 +1286,41 @@ and 90\% completeness, it would have contained around 89 lens candidates.
 However, we remind the reader that all these values are dependent on the
 properties of the training subjects, which were chosen to be fairly
 visible: we expect the completeness to real lenses to be somewhat lower, as a
-result.
+result (see \PaperTwo).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{figure}
-\centering\includegraphics[width=\linewidth]{completeness_purity_simple.pdf}
-\caption{Completeness-estimated purity curves for the \sw system, using
-the \cfhtls training set.}
-\label{fig:results:sample:CP}
-\end{figure}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Finally, it is worth noting the implications of the results in this
+section for future studies of samples of lenses (and lens candidates)
+discovered through visual inspection at \SW. The ROC curve analysis we
+have carried out should be very familiar to those working in machine
+classification, and in fact is identical to that which would be
+performed on the classifications made by a new automated method.
+Supervised machine learning methods and the \SW system as described
+here both require a training set, and both return quantitative,
+probabilistic classifications (consisting of a ``label'' and some measure
+of confidence in that label) that can be used in further analysis. A
+good example of where such quantitification is important is in the
+derivation of the selection function for a given sample. While such a
+derivation is beyond the scope of this work, it is sufficient to note
+that from the point of view of an astronomer seeking to derive a
+selection function, {\it the labels produced by \SW and those produced
+by a machine learning method can be treated equivalently}: that is, we
+have succeeded in elevating visual inspection to a quantitative
+science. Indeed, the discussion of completeness given above is all in
+terms of recovery of a large set of simulated lenses, just as it would
+be in the case of an automated method---and in both cases, the
+limiting factor is the realism of the training set. In \PaperTwo we
+investigate this limit further by assessing the performance of the \SW
+system against the (small) set of real lens candidates known to lie in
+the field; for now, we note that the training set used in this work
+constitutes a valid sample of objects for any alternative machine
+learning lens detection method to be tested against. In future, we
+could employ a larger training set, to enable the
+selection efficiency to be characterised as a function of multiple
+observables. This will be achievable, since
+the small training set we used in the current study
+was classified around 20 times more
+than  was the test set: we could therefore collect many fewer
+classifications per training image in a much larger training set.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -1281,7 +1359,7 @@ in \StageTwo (where the training image frequency was set higher) it was 34.
 per classification (in bits) by that volunteer,  $\skill$, for subjects which
 have lens probability 0.5 (\Aref{appendix:swap}). Random classifiers have
 $\skill = 0.0$~bits, while perfect classifiers have $\skill = 1.0$~bit.
-All agents start
+All software agents start
 with $\skill = 0.0$~bits. The skill of  an agent increases as training subjects are
 classified, and the agent's estimates of its confusion matrix elements improve.
 In \StageOne, the mean skill per agent was 0.04 bits; in  \StageTwo it was
@@ -1296,11 +1374,11 @@ contribution.  In \StageOne, the mean  contribution per agent was
 34.9 bits; in \StageTwo it was 33.5.
 %
 \item{\noindent\bf ``Information:''} The total information $\information$
-generated by the agent during the volunteer's classification activity. This
+generated by the software agent during the volunteer's classification activity. This
 quantity depends on the value of each subject's lens probability when that
 subject was presented to the volunteer (simply because information gain is
 defined in terms of posterior relative to prior probabilities,
-\Aref{appendix:swap}).  Because of this, we expect this raw quantity to be noisier
+\Aref{appendix:swap}).  As a result, we expect this raw quantity to be noisier
 than the ``contribution'' defined above. The lower righthand panel of
 \Fref{fig:crowd:cornerplot} confirms this: there is a strong, linear correlation
 between contribution and information gain, but at a given contribution, the
@@ -1341,7 +1419,7 @@ determining ``well-designed'' implementations of citizen science projects.
 We found that the distributions for the \StageTwo agents to be qualitatively
 very similar to those for the \StageOne agents. The differences are: 1) the
 maximum effort possible at \StageTwo is smaller, simply because fewer subjects
-were available to be classifed, and 2) the information generated per agent was
+were available to be classified, and 2) the information generated per agent was
 slightly higher at \StageTwo, just because the subjects had (on average) higher
 probability.
 
@@ -1371,14 +1449,13 @@ However, it is not the case that only these small groups were {\it capable} of
 making large contributions. The cumulative distribution of agent skill is shown
 in \Fref{fig:crowd:cumulskillplot}: these distributions are significantly
 broader than the corresponding distributions of agent contribution, in
-\Fref{fig:crowd:cumulplot}. For example,
-the most skilled 20\% of agents possess around 80\% of the skill.
-
+\Fref{fig:crowd:cumulplot}. For example, 80\% of the skill is distributed among
+20\% of the agents.
 The inexperienced volunteers also possess a significant fraction of the skill.
 We find that dividing the crowd into ``experienced volunteers'' (who have seen
 10 or more training images), and ``inexperienced volunteers'' (the rest),
 results in two groups containing approximately equal total skill (see the dashed
-curve in \Fref{fig:crowd:cumulskillplot}). The most skillful 20\% of {\it
+curve in \Fref{fig:crowd:cumulskillplot}): the most skillful 20\% of {\it
 experienced} volunteers (1824 people) only possess 43\% of the total skill.
 The breadth of the skill distributions suggests that  the high level of
 contribution made at \SW by experienced volunteers is largely a matter of choice
@@ -1404,7 +1481,7 @@ classified 10 or more training subjects.}
 \subsection{Classification Speed}
 \label{sec:results:speed}
 
-How fast does the \SW crowd classify subjects? Each agent records the timestamp
+How fast does the \SW crowd classify subjects? Each software agent records the timestamp
 of each classification its volunteer makes; by measuring the time lags between
 successive classifications, we can make estimates of the crowd's classification
 and contribution speed. We plot the former quantity for both \StageOne and
@@ -1422,16 +1499,17 @@ lifetime of \StageOne, leading to a contribution rate that tracks closely the
 classification rate. (A 10\% increase in average skill was seen over the first
 40 days, and a decrease of the same amount in the last 40 days -- not enough to
 cause a significant difference between classification and contribution rate
-behavior, but perhaps reflecting a learning period at the start and then a
+behaviour, but perhaps reflecting a learning period at the start and then a
 decrease
-in participation late on.) \StageTwo (3700 subjects) was completed in around 600
+in participation later on.)
+\StageTwo (nearly 3400 subjects) was completed in around 600
 hours by around 2000 participants, with classification rates starting at
 $~\sim2000$ per hour and decaying to $\sim100$ per hour.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{figure}
 \centering\includegraphics[width=\linewidth]{rate_classification.pdf}
-\caption{Fractional classification rate in the \SW \cfhtls survey. Fractional classification rate is the number
+\caption{Fractional classification rate in the \SW$-$\cfhtls survey. Fractional classification rate is the number
 of classifications per unit time, divided by the final total number of
 classifications. Fractional survey time is the time elapsed since the beginning
 of the survey, divided by the total length of the survey. The unit of time in
@@ -1441,9 +1519,10 @@ integrals under the curves are both one. }
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-The similarities between \StageOne and 2, suggest that these numbers could be
-scaled to estimate the speed of future \SW projects (or at least those following
-a similar blind search strategy). For example, the completion time for a \SW
+The similarities between \StageOne and 2 regarding the results above,
+and despite the difference in the task set,
+suggest that these numbers can be scaled to estimate cautiously
+the speed of future \SW projects. For example, the completion time for a \SW
 project may be approximated as
 \begin{equation}
     \tau \approx \tau_0 \left(\frac{10^4}{N_p}\right)
@@ -1463,7 +1542,7 @@ we expect this to be significantly shorter in future projects.
 
 What can we learn from the results of the previous section, for future
 projects? Potential improvements to the \SW system can be divided into three
-categories, performance, efficiency and capacity.
+categories: performance, efficiency and capacity.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
@@ -1510,18 +1589,19 @@ categories, performance, efficiency and capacity.
 \end{minipage}
 \caption{Illustrative examples of
 false negatives (blue) and false positives (red) from the classification of
-the \SW \cfhtls training set. The trajectory plot for each of the 4 subjects is
+the \SW$-$\cfhtls training set. The trajectory plot for each of the 4 subjects is
 shown to the right of its image. Lefthand panels show the most common types of
-trajectories: short step random walks resulting from no high skill classifiers
+trajectories: random walks with short steps resulting from no high skill classifiers
 viewing the subject. The righthand panels show examples where higher skill
-classifiers have been involved, causing random walks with longer step lengths
-(top) and catastrophic mis-classifications (bottom right). Note that both these
+classifiers have been involved, causing larger, more efficient ``kicks''
+(top) but also catastrophic mis-classifications (bottom right).
+Note that both these
 subjects were {\it very nearly} detected but didn't quite reach the threshold
 set (marked by the blue dashed line). Insets for the false
 negatives show the lens feature. The inset for the lower righthand panel shows
-where most users believed a lens was located. There is no corresponding inset
-for the lower left panel because no particular feature stood out to users.
-Instead, users clicked many different features.}
+where most volunteers believed a lens was located. There is no corresponding inset
+for the lower left panel because no particular feature stood out to the
+citizens. Instead, the volunteers clicked many different features.}
 \label{fig:discuss:performance:trajectories}
 \end{figure*}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -1530,38 +1610,42 @@ Instead, users clicked many different features.}
 \label{sec:discuss:performance}
 
 We investigated the source of the incompleteness and impurity visible in
-\Fref{fig:results:sample:CP}, by examining the \StageTwo false negatives and
-false positives, and their behaviour as they are classified using the online
+\Fref{fig:results:sample:CP}, by examining the \StageTwo ``false negatives''
+(simulated lenses that incorrectly acquired $P < 10^{-7}$) and
+false positives (duds or impostors that incorrectly acquired $P > 0.95$),
+and their behaviour as they are classified using the online
 analysis trajectory plots introduced in \Sref{sec:swap}
 (\Fref{fig:swap:subject-trajectories}).
 \Fref{fig:discuss:performance:trajectories} shows 2 example simulated lenses
-that were missed ($\pr(\LENS|C,T) < 10^{-5}$) by the \SW system (top row),
+that were missed ($\pr(\LENS|C,T) < 10^{-7}$) by the \SW system (top row),
 and 2 example
 non-lenses that were incorrectly flagged as candidates ($\pr(\LENS|C,T) >
 0.95$) by the \SW system (bottom row).
 
 In some cases the rejection of the false negatives is understandable: the
-lensed features are faint, or in some cases, appear somewhat unrealistic compared to real lenses.
+lensed features are faint, or in some cases, appear somewhat unrealistic
+compared to real lenses.
 However, in other cases a reasonably obvious lens was passed over.  This
 mainly seems to be due to noise in the system: when only low-skill classifiers
 view a subject, all the updates to its posterior probability are small, and if
 none are very confident about the presence of lensing, the subject follows a
 random walk down its trajectory plot. This can be seen in the top left panel
 of \Fref{fig:discuss:performance:trajectories}.
-
 The false positives show similar behaviour, for example in the bottom lefthand
-panel of the figure. As well as subjects being ``unlucky'' in this way, there
+panel of the figure.
+
+As well as subjects being ``unlucky'' in this way, there
 are two less common failure modes associated with mistakes made by higher skill
-users, illustrated in the righthand column of the figure. In the false negative
+volunteers, illustrated in the righthand column of the figure. In the false negative
 subject shown in the top right-hand panel, several high skill classifiers update
 the subject upwards in log probability by some way each time, but other,
 comparable skill classifiers mis-classify the system to lower probability.   The
-trajectory looks like a random walk, but with bigger steps; this particular
+trajectory looks like a random walk, but with bigger step sizes; this particular
 subject came very close to crossing the detection  threshold three times, but
 didn't quite make it. The bottom right-hand panel shows an example of a final,
 apparently rare, failure mode: we see some short-step random walk behaviour,
 followed by a mis-classification by a very high skill ``expert'' classifier
-after 20 classifications that promotes the subject to high probability.
+after 20 classifications that ``kicks'' the subject to high probability.
 
 There are a number of places where we can address these problems and
 improve system performance: adding flexibility to the classification
@@ -1571,12 +1655,8 @@ classification, and interpreting the classification data.
 Some of  the mistakes made by reasonably high skill classifiers working at high
 speed could have perhaps been corrected by those classifiers themselves, had
 they had access to a ``go back'' option. While clearly enabling error reduction,
-we might worry about such a mechanism enabling classifiers to have a guess, then
-go and read the \Talk discussion, and then return to the classification
-interface to change their mind to agree with the forum. In fact, this is already
-possible on the current interface -- and indeed, it is not obvious that such
-correlations would necessarily lead to poorer system performance. There may well
-also be effects on user confidence; it may be that encouraging this sort of
+we might worry about such a mechanism having a negative effect on
+volunteer confidence: it may be that encouraging this sort of
 checking would result in increased and not necessarily productive caution. This
 could be tested by presenting a fraction of the volunteers with a version of the
 site that actively suggested that they take this approach, and then tracking the
@@ -1589,8 +1669,8 @@ more training images available to those who want or need it. A basic level of
 training images are needed for SWAP to build up an accurate picture of each
 classifier's skill -- but one could imagine volunteers {\it choosing} to see
 more training images (still at random) in their stream. We could also experiment
-with providing greater training rates early on for all volunteers; the risk
-associated with this is that retention rates may drop if too few ``fresh'' test
+with providing greater training rates early on for all volunteers, although
+this carries significant risk: retention rates may drop if too few ``fresh'' test
 images are shown early on. Another way of improving the training could be to
 provide more information about what gravitational lens systems look like. In
 this project, the Spotter's Guide, and the Science, FAQ and About pages were
@@ -1614,19 +1694,19 @@ while dashed lines are drawn at the mean values for each sample.}
 \end{figure}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-However, identification failures (around 60\%, from inspection of a random sample)
-seem to be due to the statistical noise associated with
-the many short, semi-random direction steps arising from classifications made by
-low skill, inexperienced
-classifiers (\Sref{sec:results:crowd}).
-While improved training will help reduce this effect, it is here
-that targeted task assignment could also help improve system performance, by
-bringing higher skill volunteers in when needed. We
-advertised \StageTwo of the current project to all registered users; it was
-taken up by \StageOne veterans with a broad range of skill, and also picked up a
-significant number of new users who did not have enough time to aquire high
-skill (since \StageTwo was quite short): of the 1964 volunteers who took part in
-the \StageTwo classification round, only 774 were veterans from \StageOne.
+However, many false negatives (around 60\%, from inspection of a random sample)
+seem to be due to the statistical noise associated with the many short,
+semi-random direction kicks arising from classifications made by low skill,
+inexperienced classifiers (\Sref{sec:results:crowd}). While improved training
+will help reduce this effect, it is here that targeted task assignment could
+also help improve system performance, by bringing higher skill volunteers in
+when needed. We advertised \StageTwo of the current project to all registered
+users; it was taken up by \StageOne veterans with a broad range of skill, and
+also picked up a significant number of new users who did not have enough time to
+acquire high skill (since \StageTwo was quite short): of the 1964 volunteers who
+took part in the \StageTwo classification round, only 774 were veterans from
+\StageOne. This issue is discussed further in \PaperTwo, where we investigate
+the known lenses missed by the \SW system.
 
 \Fref{fig:discuss:performance:stage1vstage2} shows how the \StageOne
 skill maps on to \StageTwo skill and contribution. This figure suggests
@@ -1636,20 +1716,23 @@ benefit to opening \StageTwo on the basis of \StageOne agent skill, in
 order to reduce the noise in the system generated by new and low skill
 volunteers in this more difficult classification stage.  In future,
 dynamically allocating subjects to volunteers according to their agents'
-skill could alleviate this issue. This is something we plan to
+skill could alleviate this issue. In particular one can imagine doing this
+for subjects that have classification histories that indicate that they
+are worthy of further study.
+These are things we plan to
 experiment with in future.
 
 Finally, there could be some performance gains to be made by improving the SWAP
-agent model, or its implementation. Low skill is typically a result  of
-inexperience (\Sref{sec:results:crowd}), but it could be the agent that is
-inexperienced as well as the classifier or its agent. In a future paper we plan
-to investigate the use of the test images as well as the training images in
-accelerating the agent's learning (Davis et al, in preparation). We also plan to
-investigate the use of offline analysis at \StageOne, partly for the same reason
-(see also \Sref{sec:discuss:efficiency} below.) Given the above findings  about
-the effects of noise in the SWAP system, we are also motivated to explore
-further the possible noise-reducing effects of the doing the analysis offline
-(\Sref{sec:results:sample}).
+agent model, or its implementation.
+Low skill is typically a result  of inexperience (\Sref{sec:results:crowd}) --
+but it could be the agent that is inexperienced, as much the classifier.  In a
+future paper we plan to investigate the use of the test images as well as the
+training images in accelerating the agent's learning (Davis et al, in
+preparation). We also plan to investigate the use of offline analysis at
+\StageOne, partly for the same reason (see also \Sref{sec:discuss:efficiency}
+below.) Given the above findings  about the effects of noise in the SWAP system,
+we are also motivated to explore further the possible noise-reducing effects of
+the doing the analysis offline (\Sref{sec:results:sample}).
 
 One might also consider looking at
 introducing more conditional dependences in the confusion matrix elements, to
@@ -1662,7 +1745,7 @@ plane. A hierarchical
 model for the crowd, with hyper-parameters describing the distribution of
 confusion matrix elements across the population, may well accelerate the agent
 learning process by including the notion of one agent being likely to be
-similar to its neighbours. Finally, it is worth noting that the model of
+similar to its neighbours in the parameter space. Finally, it is worth noting that the model of
 \citet{IBCC} explicitly avoids the assumption of the agent confusion matrix
 elements being constant in time (as was assumed in \Sref{sec:swap}),
 allowing the development of volunteer skill
@@ -1689,7 +1772,7 @@ is an interesting challenge for future work.
   \hline {Stage} & Subjects & Contribution                          & Agents & Skill      & Classifications          & Candidates & Information \\
                            & $\Ns$    & $\sum_k^{\Nv} \contribution_k$ (bits) & $\Nv$  & $\sum_k^{\Nv} \skill_k$ (bits) & $\sum_k^{\Nv} \thiseffort$ & $\Ncands$  & $\sum_j^{\Ns}\sum_k^{\Nv} \information_{j,k}$ (bits) \\
             \hline
-                      1    & $427064$ & $1292016.3$ & $36982$ & $1471.9$ & $10802125$ & $3368$ & $91122.6$ \\
+                      1    & $427064$ & $1292016.3$ & $36982$ & $1471.9$ & $10802125$ & $3381$ & $91122.6$ \\
                       2    & $3679$   &   $21895.8$ &  $1964$ &  $102.4$ &   $224745$ &   $89$ &  $1640.4$ \\
   \hline \hline
 \end{tabular}
@@ -1701,7 +1784,7 @@ is an interesting challenge for future work.
 
 
 \Tref{tab:crowd:contributions} shows the total effort, contribution, skill and
-information generated in both \StageOne and 2 of the \cfhtls project, with the
+information generated in both \StageOne and \StageTwo of the \cfhtls project, with the
 total numbers of agents and subjects for comparison.   These numbers allow us
 to quantify the efficiency of the system.
 
@@ -1714,7 +1797,7 @@ ratio of this hypothetical optimum to the actual total contribution is
 therefore a measure of the stage's inefficiency. We find our inefficiency (by
 dividing column 2 by column 3) to be 33\% and 17\% in \StageOne and \StageTwo
 respectively. In \StageOne, this inefficiency is due to the daily processing: we
-were not able to retire subjects fast enough, and so they, remained in the
+were not able to retire subjects fast enough, and so they remained in the
 system, being over-classified. Indeed, only 3705745 classifications were
 needed to retire all the subjects: the ratio of this to the total number made
 is 34\%. (The remaining 1\% is due to not all subjects being classified to 1
@@ -1731,13 +1814,13 @@ classifications in real time. This is under investigation for future projects.
 There may still be a place for a daily or weekly offline analysis: this could
 potentially reduce the false negative and false positive rates by
 ``resurrecting'' subjects that had been retired by the online system before the
-agents had time to learn enough about their classifier's high skill.
+software agents had time to learn enough about their classifier's high skill.
 
 If, as expected, the system efficiency could indeed be improved by a factor of
 three via real-time classification analysis, we would expect the characteristic
 completion time $\tau_0$  in \Eref{eq:speed} to decrease by roughly the same
-factor, suggesting that a dataset of $10^4$~images could be searched for lenses
-by a crowd of $10^4$ volunteers in about 6 days.
+factor, suggesting that a dataset of $10^5$~images could be searched for lenses
+by a crowd of $10^5$ volunteers in about 6 days.
 
 The futuristic lens-finding problem sketched in \Sref{sec:intro}, where $10^5$
 lenses are to be found in a $10^4$ square degree wide field imaging survey, is
@@ -1748,15 +1831,19 @@ citizen scientists at \SW play in lens searching in the next decade? From
 \SW crowd to be able to classify $10^8$ images of  photometrically-selected
 massive galaxies and groups in approximately 60 days, it would need to contain
 $10^7$ volunteers. This is only  a factor of ten larger than the current size of
-the Zooniverse userbase. Alternatively, suppose that automated  lens finding
-algorithms are able to select as few as $10^6$ targets for visual inspection (a
-sample with 10\% purity). Increasing $\tau_0$ by a factor of three to allow for
-more inspection time per subject,  we find that \SW could enable a crowd of just
-$10^6$ volunteers to assess them in about three  weeks.
+the Zooniverse userbase.
+Alternatively, suppose that automated  lens finding algorithms were able to
+select as few as $10^5$ targets for visual inspection, corresponding to a sample
+with 10\% purity and a surface density of $\sim10$ per square degree \citep[a
+rate within reach of \RF, for example:][]{GavazziEtal2014}. Now
+increasing $\tau_0$
+by a factor of three to allow for more inspection time per subject,  we find
+that in this case \SW could enable a crowd of just $10^5$ volunteers to assess
+them in about three weeks.
 
 % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
 
-\subsection{Increasing capacity}
+\subsection{Increasing crowd capacity}
 \label{sec:discuss:capacity}
 
 Finally, we comment on the size of the first \SW crowd, and how the system might
@@ -1764,10 +1851,10 @@ be scaled up for future surveys. In \Sref{sec:results:crowd} and
 \Tref{tab:crowd:contributions}, the following rough picture emerged for the \SW
 crowd in this project: it consisted of a few $10^4$ volunteers, with a few
 $10^3$ achieving considerable skill, and a few $10^2$ having the time to make a
-significant contribution. Slightly more quantitively, we might note that  the
+significant contribution. Slightly more quantitatively, we might note that  the
 total skill of the crowd, computed by summing the skill of all the agents, is a
 measure of the effective crowd size, in the sense that a crowd of perfect
-classifiers would be of this size. By this measure,the \StageOne crowd was
+classifiers would be of this size. By this measure, the \StageOne crowd was
 equivalent to a team of 1470 perfect classifiers, while the \StageTwo crowd was
 equivalent to a team of 102 perfect classifiers. With this same crowd, we saw in
 \Sref{sec:results:speed}  that surveys providing a few $10^4$ subjects would be
@@ -1781,13 +1868,13 @@ volunteers make large contributions. Greater exposure of the website to the
 public through mass media would help. Another option is to advertise the
 project to new groups of volunteers by translating the website into other
 languages (something which is now supported by the Zooniverse). A
-multi-lingual user base would come with its own set of challenges, especially
+multi-lingual userbase would come with its own set of challenges, especially
 in terms of volunteers' continuing training and interactions on \Talk.
 
 The second way to scale up the number of high contribution classifiers is to
 increase the rate at which new volunteers become dedicated volunteers. Based on
 feedback from the wider \SW community, this could potentially be achieved
-through closer collaboration with the science team. It's also possible that
+through closer collaboration with the science team. It is also possible that
 dynamically assigning subjects on the basis of the volunteer's skill could act
 as an incentive to some volunteers to increase their contribution, although any
 such approach would need to take into account the need to optimise not only for efficiency but also for the most interesting or pleasurable volunteer experience; a solution which gave every volunteer a very uniform experience, for example, is unlikely to succeed even if it appears optimally efficient.  Reducing the
@@ -1795,7 +1882,7 @@ rate at which new volunteers lose interest could also play a role. Anecdotally,
 it seems fairly common for new volunteers to be wary of classifying at all, for
 fear of introducing errors. Better explanation of how their early
 classifications are analyzed could help assuage these fears:
-\Sref{sec:results:crowd} shows that effectively down-weighting new users'
+\Sref{sec:results:crowd} shows that effectively down-weighting new volunteers'
 classifications (by setting their agents' initial confusion matrix elements to
 those of a random classifier) leads to best performance, a result which should
 be of some comfort to the nervous volunteer.
@@ -1807,13 +1894,13 @@ be of some comfort to the nervous volunteer.
 \section{Conclusions}
 \label{sec:conclude}
 
-We have designed, implemented and tested a system for   detecting new strong
+We have designed, implemented and tested a system for detecting new strong
 gravitational lens candidates in wide field imaging surveys by crowd-sourced
 visual inspection. The \SW web-based classification interface presents carefully
 prepared colour composite sky images to volunteers, who mark features they
 propose to  have been lensed. The participants receive ongoing training with a
 mixture of simulated lens and known-to-be-empty images, and we use this
-information to inform the automated interpretation of their markers. In our
+information to automate the interpretation of their markers. In our
 first lens search we simply divided the \cfhtls imaging into some 430,000 tiles,
 and collected over 11~million volunteer image classifications.
 
@@ -1823,11 +1910,11 @@ the following specific ways:
 
 \begin{itemize}
 
-\item Participation levels were high (over 36,000 volunteers, contributing
+\item Participation levels were high (about 37,000 volunteers, contributing
 classifications at rates between $10^3$ and $10^4$ images per hour), suggesting
 that if this can be maintained, visual inspection of tens of thousands of images
-could be performed just a few weeks. An expanded crowd of $10^6$ volunteers
-(which has already been reached in the Galaxy Zoo project) would
+could be performed in just a few weeks. An expanded crowd of $10^6$ volunteers
+(which has already been reached in Zooniverse) would
 be able to inspect a plausible sample of $10^6$ LSST or Euclid targets
 on similar time scales.
 
@@ -1839,13 +1926,15 @@ a few hundred), enough for an expert team to take over.
 images they have classified.  Quantifying the ``contribution'' as the integrated
 skill over the test subjects classified, we find that about 90\% of the
 contribution was made by a few hundred volunteers ($1\%$ of the crowd) -- but
-that the width of the skill distribution means that a  few thousand volunteers
+that the broad width of the skill distribution means that a few thousand volunteers
 could have made comparable contributions had they classified more images.
 
 \item The optimal true positive rate (completeness) and false positive rate in
-the training set were estimated to be around $91--93\%$ and $<1\%$ (Stages 1 and
-2). This FPR translates to an approximate purity of 30\%. We find a
-higher purity at \StageTwo (perhaps as a result of the least visible candidates already
+the training set were estimated to be around $92-94\%$ and $<1\%$
+(in both classification stages).
+This FPR translates to a purity of approximately $15-30$\%. We find that even
+higher purities were achievable at \StageTwo
+(perhaps as a result of the least visible candidates already
 being discarded): here, 100\% purity was reached at just under $90\%$
 completeness. Because \SW is a supervised learning system, these numbers should
 be taken to be upper limits to what we should expect for real lenses (which have
@@ -1853,9 +1942,14 @@ not been selected for a high visibility training set).
 
 \item The simulated gravitational lenses that were missed were predominantly
 galaxy-scale lenses with faint blue galaxy sources, whose lensed features are
-difficult to distinguish from the light from the lens galaxy. We observed some
+difficult to distinguish from the light from the lens galaxy (consistent
+with what we find also for real lenses, see \PaperTwo). We observed some
 additional scatter, with some simulated lenses accumulating low probability
-simply due to classification noise.
+simply due to classification noise. Future searches will need to address
+of these issues. We expect it to be especially interesting to try
+crowd-sourcing the visual inspection of target systems which have
+had their candidate lens galaxy light automatically subtracted off (as, for example, \RF
+does), in a collaboration between humans and machines.
 
 \end{itemize}
 
@@ -1874,11 +1968,15 @@ their wide-field imaging data to contact us if they would like our help.
 
 \section*{Acknowledgements}
 
-We thank Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons,
-David Hogg, Thomas Jennings, Layne  Wright, Cecile Faure, Jonathan Coles, Stuart
-Lowe and Jean-Paul Kneib for many useful conversations about citizen science and
-gravitational lens detection, and to the Dark Energy Survey and Pan-STARRS strong
-lensing science teams for their suggestions and encouragement.
+We thank Matthias Tecza, Stuart Lynn, Kelly Borden, Laura Whyte, Brooke Simmons, David Hogg,
+Daniel Foreman-Mackey, Thomas Jennings, Layne Wright, Cecile Faure, Jonathan
+Coles, Stuart Lowe, Alexander Fritz and Jean-Paul Kneib for many useful conversations about
+citizen science and gravitational lens detection, and for helping guide the
+discussion at \SW \Talk,
+and to the Dark Energy Survey
+and Pan-STARRS strong lensing science teams for their suggestions and
+encouragement. We are grateful to the anonymous referee, whose comments
+and suggestions helped improve the paper significantly.
 
 PJM and ES also thank the Institute of Astronomy and Astrophysics, Academia Sinica
 (ASIAA) and Taiwan's Ministry of Science and Technology (MOST) for their
@@ -1965,7 +2063,7 @@ $\information$ over  the possible classifications that could be made:
 \end{align}
 where $\mathcal{S}(x) = x \log_2{x}$. If we choose to
 evaluate $\langle\information\rangle$ at $p = 0.5$, the result has some
-useful properties. While random classifiers presented with  $p = 0.5$
+pleasing properties. While random classifiers presented with  $p = 0.5$
 subjects have $\skill = 0.0$  as expected, perfect classifiers appear to
 the agents to have  $\skill = 1.0$. This suggests that  $\skill$, the
 amount of information we expect to  gain when a classifier is presented
@@ -1980,7 +2078,8 @@ measure of that classifier's
 \emph{contribution} to the lens search.
 
 We conservatively initialize both elements of each  agent's confusion
-matrix to be $\CM^0_{LL} = \CM^0_{NN} = 0.5$, that of a maximally ambivalent  random classifier, so
+matrix to be $\CM^0_{LL} = \CM^0_{NN} = 0.5$, that of a maximally ambivalent
+random classifier, so
 that all agents start with zero skill. While  this makes no allowance
 for volunteers that actually do have previous experience of what
 gravitational lenses look like, we might expect it to help mitigate

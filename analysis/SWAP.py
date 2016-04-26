@@ -378,8 +378,9 @@ def SWAP(argv):
         # some settings that I guess you could configure but these work fine enough
         initialPL = tonights.parameters['initialPL']
         initialPD = tonights.parameters['initialPD']
-        N_min = 10   # min number of EM steps required
+        N_min = 40   # min number of EM steps required
         N_max = 100  # max number of EM steps allowed
+        # TODO: make the epsilons be in logit terms?
         epsilon_min = 1e-6  # average change in probabilities before we claim convergence
         epsilon_taus = 10  # initial value
         N_try = 0  # initial value
@@ -406,7 +407,14 @@ def SWAP(argv):
                 classifications = annotationhistory['ItWas']
                 if len(names) > 0:
                     old_probability = sample.member[ID].mean_probability
-                    sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False)  # not doing the binomial realization
+                    if supervised_and_unsupervised:
+                        laplace_smoothing = 0
+                    elif supervised:
+                        laplace_smoothing = 0
+                    else:
+                        laplace_smoothing = 0
+
+                    sample.member[ID].was_described_many_times(bureau, names, classifications, realize_confusion=False, laplace_smoothing=laplace_smoothing)  # not doing the binomial realization
                     epsilon_taus += (sample.member[ID].mean_probability - old_probability) ** 2
                     num_taus += 1
 
@@ -421,8 +429,16 @@ def SWAP(argv):
                     # supervised learning AND unsupervised
                     # use perfect training in M step
                     # use test info in M step
-                    probabilities_train = agent.traininghistory['ActuallyItWas']
                     classifications_train = agent.traininghistory['ItWas']
+                    probabilities_train = []
+                    for Subj_ID in agent.traininghistory['ID']:
+                        if sample.member[Subj_ID].kind == 'test':
+                            probabilities_train.append(sample.member[Subj_ID].mean_probability)
+                        elif sample.member[Subj_ID].kind == 'sim':
+                            probabilities_train.append(1.0)
+                        elif sample.member[Subj_ID].kind == 'dud':
+                            probabilities_train.append(0)
+                    probabilities_train = np.array(probabilities_train)
 
                     classifications_test = agent.testhistory['ItWas']
                     probabilities_test = []
@@ -489,7 +505,8 @@ def SWAP(argv):
         tonights.parameters['survey']+'_'+tonights.parameters['finish']
 
     tonights.parameters['dir'] = os.getcwd()+'/'+tonights.parameters['trunk']
-    subprocess.call(["mkdir","-p",tonights.parameters['dir']])
+    if not os.path.exists(tonights.parameters['dir']):
+        os.makedirs(tonights.parameters['dir'])
 
     # ------------------------------------------------------------------
     # Pickle the bureau, sample, and database, if required. If we do

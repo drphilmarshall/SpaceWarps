@@ -10,7 +10,7 @@ Two papers on the first dataset we searched for lenses, the CFHTLS, have been pu
 * [Marshall et al. 2016: *"Space Warps I: Crowd-sourcing the Discovery of Gravitational Lenses"*, *MNRAS*, 455, 1171](https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-system-published.pdf)
 * [More et al. 2016: *"Space Warps II: New Gravitational Lens Candidates from the CFHTLS Discovered through Citizen Science"*, *MNRAS*, 455, 1191](https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-cfhtls-published.pdf)
 
-The web app itself is being developed [here](https://github.com/zooniverse/Lens-Zoo) as part of the [Zooniverse](http://zooniverse.org) project. If you are interested in building a site like Space Warps using Zooniverse techology, keep an eye on their website or drop them a line.
+The web app itself is being developed [here](https://github.com/zooniverse/Lens-Zoo) as part of the [Zooniverse](http://zooniverse.org) project. The simulated lenses used in the training sample are created with [SIMCT](https://github.com/anupreeta27/SIMCT). If you are interested in building a site like Space Warps using Zooniverse techology, keep an eye on their website or drop them a line.
 
 See also, for fun:
 * [LensToy](http://github.com/slowe/LensToy/)

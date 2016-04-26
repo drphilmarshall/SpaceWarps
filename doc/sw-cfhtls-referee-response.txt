@@ -1,0 +1,87 @@
+We thank the referee for providing useful comments on the manuscript. We have implemented all of the suggestions and the textual changes are shown in bold in the revised version of the manuscript. Below are our answers to referee's comments. 
+
+-------------
+In the abstract, I would replace "albeit at the cost of a higher false positive rates" by "albeit at the cost of a lower purity", the purity is a quantity well known by the astronomers and I think it makes things clearer here (especially for an abstract).
+
+Ans: Done
+
+The short Section 4 should become the 4th subsection of Section 3 with slight changes in the titles, like :
+          3. Training Sample
+                  3.1.  Methodology to simulate lenses
+                  3.2. Simulated lens sample and catalog description [no change]
+                  3.3. Limitation of the simulated lens sample [no change]
+                  3.4. Duds and impostors
+and by adding a word about duds at the end of the introduction of Section 3.
+
+Ans: Done. This means that Sections 5,6,7 and 8 now become 4,5,6 and 7, respectively.
+
+There is sometimes a confusion between real lensing galaxies and real galaxies chosen to be lensing galaxies in the training set of simulations. For example, in the last paragraph before subsubsection 3.1.2., in the sentence "the simulated image is added to the real CFHTLS image centered on the lensing galaxy", the authors should write 'lensing galaxy' between quotes or rephrase it : "..centered on the galaxy chosen to act as a lens". The same remarks applies to other occurrences in the same paragraph (and maybe others in the rest of the text).
+
+Ans: Done.
+
+The caption of Figure 2 should be completed : "Einsten radius and total magnification distributions..."
+
+Ans: Done.
+
+Last paragraph before subsection 3.3, first sentence, I would precise : "We produce catalogs with lens and source properties for each of the three types of SIMULATED lenses."
+
+Ans: Done.
+
+There is sometimes a confusion between the (evolving) posterior probability after each classification and the final posterior probability after stage 2, and both are noted P (even if I understand that somehow this is the same quantity). Maybe the authors could note the final posterior Pf and/or be more specific in the text. For example, in the caption of Figure 4, or, in subsection 5, paragraph 3, line 5 : "Each subject, after Stage 2, has a FINAL posterior probability P".
+
+Ans: Done.
+
+In Figure 4, there should be a better color contrast between the new candidates and the known candidates to make the results more readable.
+
+Ans:  The low color contrast was chosen on purpose to suggest that these are all Space Warps identified candidates and the slight difference is to point out that one of them is a new sample and the other is a known one. The figure is modified to increase the color contrast but both are still shades of blue.
+
+Page 9, subsection 5, 4 lines before the end of paragraph 2, I would precise "In stage 1, ..." before "...those images which cross these threshold values are 'retired'"
+
+Ans: Done.
+
+Maybe the authors should re-explain (Paper I) quickly at this stage of the article (3rd paragraph of subsection 5) that the stage 1 favors completeness while the stage 2 favors purity of the final sample.
+
+Ans: Done.
+
+Subsection 6.2, paragraph 3, penultimate sentence, I would precise : "...the atypical color and structure of the LENS galaxy"
+
+Ans: Done.
+
+At the end of subsection 6.4., as well as in the conclusion, the authors quickly deal with the subject of the deflector subtraction. I would like them to make clearer in their article that this is not a trivial issue in the detection of galaxy-scale lenses, and that solutions are being actively sought for a better subtraction of this foreground light.
+
+Ans: A sentence is added, as per the suggestion, towards the end of subsection 5.4 (which was 6.4 earlier). The conclusion part is left unchanged as the galaxy subtraction is mentioned only for completeness, to merely point out the main difference between Space Warps and Ringfinder.
+
+
+There is sometimes a confusion between the various subsamples considered in the article. For example, in Subsection 6.5, paragraph 2, lines 4-5, it is hard to distinguish in the text if the "known" samples considered refer to confirmed lenses or the whole candidates.
+
+Ans: Done.
+
+In subsection 6.5, describing Figure 7, could the authors say one word about the few points at lower image separation which are not consistent with the "total" profile?
+
+Ans: Done.
+
+There is some overlap between Section 6 and Section 7, even if the developments are interesting. But maybe Section 7 should be somehow shortened for clarity?
+
+Ans: We have removed the 2nd and 3rd paragraph from the Discussion, Sect. 6.1 (which was 7.1 earlier) to avoid repetition 
+
+
+The title of subsubsection 7.3.2. "Blind lens search" seems a bit too general and maybe not relevant. It should be replaced by something more specific like "Lens positions in the image cutouts".
+
+Ans: Done.
+
+
+In Figure 11 and its description in the text (subsubsection 7.3.3, paragraphs 4 and 5), the distinction between the red and green curves is unclear, especially for what concerns the detected lenses. There should be a word about it in the caption of the figure too.
+
+Ans: The text in para 4 is modified to explain better the difference for the missed sample. The beginning and the end of para 5 state the difference between the green and the red for the detected sample. The caption of the figure is modified too.
+
+Subsubsection 7.3.3, paragraph 7, I think there is a mistake in "i) The ratio of large positive kicks to small positive kicks for the detected sample is higher than in the missed sample"... I think the authors meant "negative" instead of the second "positive"?!
+
+Ans: Text is corrected.
+
+Last paragraph before Section 8, I would again replace "increase the rate of false positives" by "decrease the purity".
+
+Ans: Done.
+
+The authors could mention EUCLID with the other future surveys in their conclusion.
+
+Ans: Done.

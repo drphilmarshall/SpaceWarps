@@ -1,0 +1,378 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Space Warps Guidelines & Policy
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[a4paper,twocolumn]{article}
+
+% Packages:
+\usepackage{xspace}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+% Macros:
+\input{macros.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+             
+\title{Guidelines and Policy for the KIDS Strong Lensing Science Team using \SW}
+\author{Aprajita Verma, Phil Marshall \& Anupreeta More}
+\date{May 23, 2016}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{abstract} 
+\noindent \SW was conceived as a strong lens discovery {\it service}
+that harnesses the power of citizen scientists. The KIDS strong
+lensing group (hereafter KIDS survey science team or KIDS SST) can
+make use of \SW within the logistical constraints. In this document,
+we discuss how the KIDS SST might become involved with \SW and the
+relationship between the KIDS SST and the \SW collaboration.  This
+document includes guidelines for proposing projects, data provision,
+data policy and for publications of \SW-enabled discoveries.
+\end{abstract}
+
+\setcounter{footnote}{0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Introduction to \sw}
+
+The \SW website is designed to motivate and enable tens of thousands
+of people to perform the scientific tasks of strong gravitational lens
+identification.  \SW comprises a primary `classification' interface
+(\texttt{http://spacewarps.org}) that allows citizen scientists to
+inspect images and mark those that contain potential gravitational
+lenses. A mandatory part of this inspection is the classification of
+simulated lenses (appropriate for the survey being conducted). The
+classification of simulated lenses acts as an interactive training
+activity that also allows us to establish the citizens' likelihood of
+identifying potential lenses and blank fields. This is fed into the
+\SW Analysis Pipeline (SWAPR) that analyses the classifications made
+per image (or subject in Zooniverse terms) giving a probability of
+whether an image contains a lens candidate or not.
+
+A key part of the \SW project is the ability for all members of the
+\SW collaboration (see Section \ref{sec:members}) to communicate with
+each other and discuss interesting candidates through
+\Talk\footnote{\Talk (found at \texttt{http://talk.spacewarps.org}) is
+  a forum for \SW collaborators to discuss individual sources and the
+  \SW project in general. Bugs can also be reported. This is the
+  direct portal for communication with the \SW community.}.
+
+In order to use the \SW interface, the KIDS Survey Science Team
+\textbf{must define and propose a project to the \SW PIs} who will
+discuss whether the project is suitable with the KIDS SST. The \SW PIs will
+then liaise further with the SST to implement the project in the \SW
+interface. Details are given in Section \ref{sec:project}.
+
+\vspace{4mm} The PIs of the \SW project are the authors of this
+document, P.\,Marshall, A.\,More and A.\,Verma, please do not hesitate
+to contact us if you require any further information or have any
+questions. The PIs may be collectively contacted via the email address
+\href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Definition of collaboration member types}
+\label{sec:members}
+
+In this document, we will refer to the entirety of the KIDS strong
+lensing science group as the KIDS Survey Science Team (KIDS SST) to
+encompass all of the KIDS strong lensing community.
+
+We now discuss the relationship between the \SW collaboration and the
+KIDS SST, who wish to use the \SW interface to investigate their
+data. The KIDS SSTs will liaise with the \SW science and development
+teams to ingest their survey data into the \SW interface. There may be
+some overlap between current \SW members and SSTs. 
+
+In the case of KIDS, \SW PI Anupreeta More is a member of both the \SW
+collaboration and the KIDS Strong Lensing Science Group.
+
+When we refer to the \SW collaboration, it comprises the \SW science
+team, \SW development team, and all the volunteers who have logged
+in\footnote{with a Zooniverse ID. It is possible to classify
+  anonymously, and we count those classification but as we don't know
+  who they are, we are unable to collaborate with them directly.} and
+contributed classifications to the project.
+
+If required, an expanded definition of the \SW membership is given in
+the document ``\SW Publication Policy: CFHT-LS''\footnote{available
+  from
+  \texttt{\url{https://github.com/drphilmarshall/SpaceWarps/blob/master/doc/sw-publication-policy-cfhtls.pdf}}},
+however this will not be relevant for \SW-KIDS publications, see
+Section \ref{sec:papers} for details.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Defining a suitable \sw science project}
+\label{sec:project}
+
+The KIDS SST is expected to propose a project to the \SW collaboration
+that can be best or only be done using the power of citizen
+scientists. Typically, this involves visual inspection tasks that are
+too time consuming for the SST themselves to execute. As such, any
+science programme conducted through \SW should be complementary, not
+in competition, to the lens finding activities being carried out by
+the SST.
+
+For example, in the first \SW project, the collaboration conducted a
+lens finding search with \SW over the entire CFHT-LS survey area. The
+goal was to increase the completeness of strong lenses in the survey
+areas. Both RingFinder and ArcFinder algorithms had been used to
+discover lenses of different types. \SW complemented these searches
+with the potential to find strong lenses missed by these
+algorithms. The method, proposed by Anupreeta More (who served as the
+SST for this project), was to inspect the entire survey area by
+getting citizens to view $\sim$430,000 tiles of the survey area. This
+was a \textit{blind} search. Such a search could not be conducted by a
+normal sized SST.
+
+\textit{Targeted} searches are also possible, as we performed in the
+second \SW project on the VICS82 survey area. Here we inspected
+$\sim$40,000 images from the VICS82 survey centred on likely strong
+lens targets, e.g. LRGs, groups, clusters, quasars.  Again, this was
+more images than the VICS82 SST could manage to inspect alone.
+
+Another approach is to use the \SW service to inspect the normally
+large candidate lists generated by automated algorithms or searches,
+which are typically dominated by false positives.
+
+\subsection{KIDS specific thoughts}
+
+\begin{enumerate}
+\item The \SW facility should be used for science projects that cannot be completed by the Strong Lens Group itself. 
+\item Any \SW search should be complementary, not in competition, to the lens finding being conducted by the KIDS SST.
+\item While \SW uses citizen science, its primary goal is \textbf{not outreach}, it is harnessing citizen power for visual classifications (and eventually modelling) to perform science.
+\item A duplicate project is not encouraged unless there is sufficient scientific motivation and justification to do so.
+\item \SW requires volunteers/citizens to give up their personal time to conduct the experiment, this should not be taken lightly, the crowd are motivated by contributing to real science not just doing things for the sake of them. This is the reason the suitability of the project for citizen scientists should be carefully considered. The \SW PIs will be able to discuss any planned \SW-KIDS projects with the KIDS SST. The crowd needs to be engaged and feel like they are contributing while the entire \SW-KIDS project runs.
+\item The success of \SW-KIDS will rely on input from the KIDS SST working with the \SW collaboration, dedicated effort is required for this and the KIDS SST should identify team members who can commit time to the \SW-KIDS tasks for this before embarking on a project. The \SW PIs will help to establish the main efforts required, these will depend on the actual project put forward by the KIDS SST (e.g.\ image preparation, simulations, interacting with volunteers on \Talk).
+\end{enumerate}
+
+\textbf{As such, \SW should be considered to be an integral/complementary part of the KIDS SST lens finding strategy, rather than an alternative method.}
+
+The scientific project, process and outcome is the domain of the
+SST. The \SW collaboration enables this work by making it a live
+project on the website. We do not, per se, expect the \SW
+collaboration lead the resultant papers, we just request some of us
+are included on discovery papers in return for our help, please see
+Section \ref{sec:papers} for more details on the publication policy.
+
+The goal of the \SW PIs and the \SW collaboration is to enable the
+KIDS SST's science project in \sw and make it work. Using the
+automatic analysis pipeline (SWAPR), the \SW PIs we will send the KIDS
+SST lists of the candidates selected by the citizens (at some regular
+intervals or at the end of a project), we will then discuss strategies
+for further analysis based on our experience of previous
+projects. Some members of the \SW PIs and team may become more
+involved in analysis steps such as grading of the \sw candidates or
+assist with any scientific investigations and follow-up of the
+candidates, at the KIDS SST's request.
+
+\subsection{Possible \SW-KIDS survey strategies}
+
+In our experience, a citizen science project like SW cannot function
+successfully without significant support and co-ordination of the
+SST. Thus, we recommend that all KIDS members with an interest in
+strong lensing are told about \SW and how it can complement their lens
+finding effort. Our goal is to enable your science.
+
+We also encourage the KIDS SST to consider the timing for when they
+wish to ingest the images into \SW so that it is in line with the
+interests of the KIDS SST and those of the KIDS consortium.
+
+Possible projects for the KIDS SST could consider (just to get a flavour of what can be done)
+\begin{itemize}
+\item \textbf{New Data}: Inspection of areas (targeted or blind) that the SST has not had time to inspect, i.e. use the crowd to increase the speed at which potential lens candidates are discovered
+\item \textbf{Comparison of Expert vs Citizen Classification}: KIDS SST and citizen's view images in parallel (targeted or blind)
+\item \textbf{Completeness of Expert Classification}: Citizen's classify images already inspected by the KIDS SST (targeted or blind)
+\item \textbf{Helping the robots}: Use citizens to weed out false positives from candidate samples generated by algorithm-based or machine learning searches
+\item \textbf{Training sets}: Blind inspection to generate a large training set for machine learning algorithms.
+\end{itemize}
+
+Note that the projects that are proposed to \SW need not be one of the
+above. Multiple projects could also be  run in a mixture or phased set
+of experiments. Please do consider the KIDS timeline with reference to
+data release and the searches the KIDS SST want to make themselves.
+
+If the KIDS SST wants to inspect targets within the consortium and is
+concerned about being scooped by the crowd, please be assured that
+there is little scope or motivation to do this. If the project is well
+defined, the goal of \SW-KIDS will be a complementary part of the KIDS
+SST lens finding strategy. By definition this means that \SW is
+working with the KIDS SST as it is designed to do. In addition, the
+images could be stripped of WCS info (described in Section
+\ref{sec:data}), meaning that no-one other than the SST can follow-up
+or catalogue the targets\footnote{We cannot exclude the possibility
+  that individual sources might be serendipitously identified e.g. by
+  recognisable morphologies.}.  The KIDS SST could also perform their
+inspection before the images are passed to \SW. Any lens candidates
+discovered by the SST would then be labelled as `known lens
+candidates' in \sw\,\Talk. This applies to candidates discovered
+through visual inspection or algorithm based searches.
+
+\subsection{What to do next: Project Proposals}
+Once the KIDS SST have narrowed down what search to be conducted \SW,
+please approach the \SW PIs (Phil Marshall, Anupreeta More, Aprajita
+Verma, collectively contacted via
+\href{mailto:spacewarpspi@googlegroups.com}{spacewarpspi@googlegroups.com})
+with a short description of the project that includes the following
+information.
+
+\begin{itemize}
+\item Survey area
+\item Bands that could be included
+\item Total number of images to be viewed (approx.)
+\item Targeted survey or blind field search\footnote{Targeted: inspection of a list of candidates; Blind: inspection of tiles of a survey area}
+\item Brief outline of the overall goal(s) of that inspection, highlighting how this is complementary (not competing) with the goals of the KIDS lens finding group
+\item Proprietary data issues 
+\item Identify an initial core team who will lead and work closely with \SW
+\end{itemize}
+
+
+The \SW PIs will then arrange a telecon with the KIDS SST to discuss
+the project further. This includes discussing the initial effort
+required and roles for the the SST team for expected tasks.
+
+The original \SW papers, by definition, provide a complete description of the system, and its results from the CFHT-LS survey. The SST will be able
+to read these papers before designing their own \SW project, and cite them as justification for some of their experimental decisions. 
+See \href{https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-system-published.pdf}{Paper I} \& \href{https://github.com/drphilmarshall/SpaceWarps/raw/master/doc/sw-cfhtls-published.pdf}{Paper II}.
+
+
+
+In the remaining sections we look at discovery publications that might
+arise from future \SW projects, and suggest reasonable guidelines for
+deciding on their authorship. First, however, we remind ourselves about data
+access via \SW.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\section{Survey Data Policy}
+\label{sec:data}
+
+\SW is a public website. All images displayed there are by definition in the
+public domain, and so must be expected to be downloaded, copied and
+redistributed by any \SW user. This is a \textbf{good thing}: images of the sky taken
+with publicly-funded telescopes belong to everyone. 
+
+However, some surveys, including KIDS, come with their own proprietary
+access policy. It is the responsibility of the KIDS SST to provide
+images to \SW in a way that is consistent with their own data access
+rules. There are two things that SSTs can do to in order to respect
+any proprietary period that they have imposed on themselves:
+\begin{enumerate}
+
+\item Add a ``LICENSE'' keyword to the FITS and PNG image headers, explaining
+what the rules for redistribution of these images are. This will almost
+certainly be ignored, but it would be a nice reminder that nothing comes free
+of either cost or responsibility. Other keywords could also be included as
+well: data provenance is important, and links to useful survey webpages would
+be most welcome!
+
+\item Remove all WCS information from all images provided. The \SW interface ``dashboards'' do allow FITS and JPG files to be downloaded. If images from a proprietary dataset being made available is a concern for an SST, they should remove the WCS. This also has the consequence that it minimises the potential ``scooping'' of  lens candidates by anyone other than the SST. 
+In practice, the objects contained in the \SW images will be too faint
+for anyone without access to a large telescope to observe, and may also be
+absent from any public catalogs, so the opportunities for follow-up will be
+quite limited. Images
+with field of view less than about 3~arcminutes in diameter are not solvable
+by \texttt{astrometry.net}. \textbf{Please note}, however, that we cannot exclude the possibility that object co-ordinates are posted in \Talk. For example, co-ordinates of previously published lens candidates or recognisable fields from CFHT-LS have been posted in \Talk by a very small number of citizens.
+
+\end{enumerate}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Data Preparation \& the \SW interface}
+\label{sec:data}
+
+\subsection{Collaborating with \SW Science Team}
+
+Implementing a new project based on different survey data will require support from the \SW consortium, in four respects: 
+
+\begin{enumerate}
+
+\item In {\bf preparing data} for the site, and uploading it onto the
+Zooniverse servers. There is a reasonable amount of work in preparing data and images by the KIDS SST for delivery to \SW. The \SW team will provide assistance to the KIDS SST in data preparation. The benefits of using the \SW service will far outweigh the time needed to prepare data.  The \SW Science Team can advise on suitable Training
+Subjects (images of simulations and false positives) and image display settings, and also on formatting the data
+ready for ingestion and display. A mandatory element of the training subjects is the production of large samples of simulated lenses. \SW will provide resources to assist generating these simulations. 
+
+\item In {\bf reconfiguring the site itself} ready for the new data. The KIDS
+SST will need to include new Spotter's Guide images and text,
+modified tutorial content, and additional survey-specific site content;
+the \SW Science Team can help with all of this.
+
+\item In {\bf maintaining the site} so that it continues to function and deliver
+correctly. This will involve technical support from the Zooniverse and \SW science teams,
+but will also require the continued engagement of the wider
+collaboration by the SST in \Talk. Since this social filter is
+a key part of the sample refinement, the latter may involve a
+significant time commitment.
+
+\item In {\bf running the \SW analysis pipeline} (SWAPR) which will be the \sw PIs responsibility. This will provide citizen selected candidates to be sent to the KIDS SST.
+
+\end{enumerate}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Resulting publications for \SW-KIDS }
+\label{sec:series}
+
+\subsection{Journal Papers}
+\label{sec:papers}
+In return for the work outlined in Section \ref{sec:data} in setting up the new surveys, the \SW PIs will nominate a core \SW collaboration members as authors on \textbf{papers that
+present discovery of a lens or sample of lenses enabled by the \SW system}. A ``discovery'' is defined by the announcement of the source(s) to the astronomical community in a journal paper. We would expect the \SW author list to be a small number (approx. ten), primarily the Principal Investigators, a few others working on the ingestion of the new data or moderating \Talk. All post-discovery follow-up papers would of course be exempt from this (unless individuals from \sw team had contributed sufficiently such that the lead author wished to include them). 
+
+We request that authors of \SW-enabled discovery papers should circulate drafts to the list of \SW authors and, if possible, allow a minimum of two weeks to give time for comments. We also request that any papers based on \SW enabled discoveries should cite the \SW system papers. This policy document will be updated with the correct citations to the \SW system papers when available.
+
+\SW runs an analysis pipeline (SWAPR) that will be tailored to the science goals of each new survey. Any large changes to the analysis code will be documented  by the \SW Science Team. The \SW Science Team reserve the right to update the \SW methodology papers.
+
+
+
+\subsection{Zooniverse \Letters}
+\label{sec:comm}
+
+Any \SW collaboration member, simply by virtue of their Zooniverse
+registration, may write a Zooniverse
+Letter\footnote{\texttt{http://letters.zooniverse.org}} describing their
+investigation of any lens candidate they find in \SW. This, along with
+posts in  \Talk, is the primary means by which we expect \SW-KIDS collaboration
+members (citizens participating in the project) will communicate their findings to the rest of the
+astronomical community. The investigation of any \SW images that are
+provided without world coordinate system (WCS) information will be
+necessarily limited but the \SW Zooniverse \Letters will contribute to the collective knowledge and understanding of the presented system(s). Zooniverse \Letters are citable \SW
+objects.
+
+
+As \SW classifications are a community wide activity, it is impossible to attribute the discovery of a candidate to a single community member, or group  of members. Therefore, in recognition of their contribution to the \SW project, \SW community members will be listed (on their approval) on the \SW members web page. This web page will be linked in every ensuing \SW publication. If a community member makes a significant contribution e.g.\ in the further investigation of a lens candidate with modelling tools, they are strongly encouraged to write Zooniverse \Letters. This may lead to them being invited to join journal publications by the lead author of a ``discovery'' publication. 
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Summary of Publication Guidelines}
+\label{sec:publ}
+Any \SW series and \SW enabled discovery papers should include
+\begin{itemize}
+\item citations to the \SW system papers, \SW I \& II
+\item a small number of \SW authors proposed by the \SW PIs (see \ref{sec:papers}).
+\item the collaboration should be acknowledged in the acknowledgement section with a link to the collaboration membership page (e.g. \href{https://spacewarps.org/#/projects/CFHTLS/contributors}{List of Contributors to CFHT-LS}).
+\end{itemize}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
